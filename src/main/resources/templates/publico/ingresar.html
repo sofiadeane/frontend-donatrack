@@ -15,7 +15,17 @@
       <p>Para ver esa página primero tenés que ingresar.</p>
     </div>
 
-    <form th:action="@{/ingresar}" method="post" novalidate>
+    <!-- Versión estática (GitHub Pages): sin servidor no hay sesión; cada panel quedó prerenderizado con una identidad demo. -->
+    <nav class="opciones" th:if="${exportEstatico}" aria-label="Paneles de demostración">
+      <a class="opcion" th:href="@{/donante}"><span class="opcion__nodo" aria-hidden="true"></span>
+        <span class="opcion__texto"><span class="opcion__titulo">Persona donante</span><span class="opcion__detalle">Panel de Nicolás Pérez · demo</span></span></a>
+      <a class="opcion" th:href="@{/entidad}"><span class="opcion__nodo" aria-hidden="true"></span>
+        <span class="opcion__texto"><span class="opcion__titulo">Entidad beneficiaria</span><span class="opcion__detalle">Panel de Comedor Los Girasoles · demo</span></span></a>
+      <a class="opcion" th:href="@{/admin}"><span class="opcion__nodo" aria-hidden="true"></span>
+        <span class="opcion__texto"><span class="opcion__titulo">Administración</span><span class="opcion__detalle">Panel del depósito · demo</span></span></a>
+    </nav>
+
+    <form th:unless="${exportEstatico}" th:action="@{/ingresar}" method="post" novalidate>
       <p class="campo-error" id="error-identidad" role="alert" th:if="${error}" th:text="${error}">Error</p>
       <fieldset class="fieldset" th:each="grupo : ${grupos}" th:if="${!grupo.identidades.isEmpty()}"
                 th:attr="aria-describedby=${error} ? 'error-identidad' : null">

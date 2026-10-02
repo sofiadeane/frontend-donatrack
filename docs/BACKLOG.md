@@ -22,19 +22,20 @@ Prioridad: **M** Must · **S** Should · **C** Could. Estado inicial: Backlog.
 ### E0 Fundaciones
 | ID | Historia | Prio | Estado |
 |---|---|---|---|
-| H0.1 | Como equipo, quiero tokens y componentes base del design system para construir pantallas consistentes | M | En curso (tokens, botones, tarjeta, cabecera, avisos, opciones listos) |
+| H0.1 | Como equipo, quiero tokens y componentes base del design system para construir pantallas consistentes | M | Revisión (tokens, fuente, botones, tarjeta, cabecera, avisos, opciones, pill de estado) |
 | H0.2 | Como usuaria, quiero un shell público y uno privado con navegación por rol, accesible y responsive | M | Revisión |
 | H0.3 | Como usuaria, quiero ingresar eligiendo rol e identidad demo para recorrer mi panel | M | Revisión (identidades desde fixtures; desde API en H0.4) |
-| H0.4 | Como equipo, quiero adapters por servicio con manejo de errores estándar para integrar sin acoplar vistas | M | Listo (próximo incremento) |
-| H0.5 | Como usuaria, quiero estados de carga, vacío, error y éxito coherentes en toda la app | M | Backlog |
+| H0.4 | Como equipo, quiero adapters por servicio con manejo de errores estándar para integrar sin acoplar vistas | M | Revisión (infraestructura + donaciones; el resto de servicios se suma con cada épica) |
+| H0.6 | Como usuaria, quiero páginas de error propias (404, 403, 500) con la identidad de DonaTrack en lugar de la respuesta por defecto de `/error` | C | Backlog (pedido 2026-10-01, no prioritario) |
+| H0.5 | Como usuaria, quiero estados de carga, vacío, error y éxito coherentes en toda la app | M | Revisión (vacío, error, cargando y demo; éxito llega con el primer formulario) |
 
 ### E1 Público
 | ID | Historia | Prio | Estado |
 |---|---|---|---|
-| H1.1 | Como visitante, quiero entender qué es DonaTrack desde el inicio | M | Backlog |
+| H1.1 | Como visitante, quiero entender qué es DonaTrack desde el inicio | M | Revisión |
 | H1.2 | Como visitante, quiero leer la información legal y de privacidad | M | Backlog |
 | H1.3 | Como visitante, quiero registrarme como donante humano, jurídico o como entidad | M | Backlog |
-| H1.4 | Como visitante, quiero ver las donaciones destacadas del último mes con datos reales | S | Backlog |
+| H1.4 | Como visitante, quiero ver las donaciones destacadas del último mes con datos reales | S | Revisión (adapter real listo; donante vía `/api/donaciones/{id}`; sin foto: el backend no la trae) |
 | H1.5 | Como visitante, quiero ver una galería de donaciones entregadas sin iniciar sesión | S | Backlog |
 
 ### E2 Donante

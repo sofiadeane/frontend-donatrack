@@ -4,13 +4,165 @@
 <head><title>DonaTrack — Gestión y trazabilidad de donaciones</title></head>
 <body>
 <th:block th:fragment="contenido">
-  <!-- Provisorio (E0). La landing del Figma se construye en la épica E1. -->
-  <section class="cabecera hero-provisorio" aria-labelledby="titulo-inicio">
-    <span class="eyebrow">Trazabilidad de donaciones con impacto social</span>
-    <h1 id="titulo-inicio">DonaTrack</h1>
-    <p>Una plataforma para registrar donaciones, asignarlas a necesidades reales y seguir su recorrido hasta la entrega final.</p>
-    <div class="cabecera__acciones">
-      <a class="boton boton--primario" th:href="@{/ingresar}">Ingresar</a>
+
+  <!-- Hero + Cómo funciona. El lado derecho queda libre para la animación interactiva (Etapa 6). -->
+  <section class="hero" data-hero aria-labelledby="titulo-hero">
+    <div class="hero__grilla">
+      <div class="hero__texto">
+        <span class="eyebrow">Trazabilidad de donaciones con impacto social</span>
+        <h1 id="titulo-hero">DonaTrack</h1>
+        <p class="hero__bajada">Gestión y trazabilidad de donaciones con impacto social.</p>
+        <p class="hero__cuerpo">Una plataforma para registrar donaciones, asignarlas a necesidades reales y seguir su recorrido hasta la entrega final.</p>
+        <div class="hero__acciones">
+          <a class="boton boton--primario" th:href="@{/registro(tipo='humana')}">
+            <span th:replace="~{fragments/iconos :: icono('corazon', 17)}"></span>Quiero donar
+          </a>
+          <a class="boton boton--fantasma" th:href="@{/registro(tipo='entidad')}">
+            <span th:replace="~{fragments/iconos :: icono('casa', 17)}"></span>Soy entidad beneficiaria
+          </a>
+        </div>
+      </div>
+      <div class="hero__escena" data-hero-escena aria-hidden="true"></div>
+    </div>
+
+    <div class="como-funciona" data-fondo-claro>
+      <div class="como-funciona__encabezado">
+        <h2 id="titulo-como">Cómo funciona</h2>
+        <p>Un recorrido claro y trazable, desde el registro de la donación hasta su entrega a quienes la necesitan.</p>
+      </div>
+      <ol class="ruta-pasos" aria-labelledby="titulo-como">
+        <li><span class="ruta-pasos__nodo" aria-hidden="true">1</span><h3>Registro</h3><p>Personas donantes y entidades beneficiarias crean su perfil.</p></li>
+        <li><span class="ruta-pasos__nodo" aria-hidden="true">2</span><h3>Recepción</h3><p>Una persona administradora registra las donaciones recibidas en depósito.</p></li>
+        <li><span class="ruta-pasos__nodo" aria-hidden="true">3</span><h3>Asignación</h3><p>El sistema vincula donaciones con necesidades materiales concretas.</p></li>
+        <li><span class="ruta-pasos__nodo" aria-hidden="true">4</span><h3>Trazabilidad</h3><p>Las donaciones pueden seguirse hasta su entrega final.</p></li>
+      </ol>
+    </div>
+
+    <a class="boton boton--primario hero__mapa" th:href="@{/mapa-de-impacto}">
+      <span th:replace="~{fragments/iconos :: icono('mapa', 17)}"></span>Ver mapa de impacto
+    </a>
+  </section>
+
+  <!-- Donaciones destacadas del último mes (R1) -->
+  <section class="destacadas" aria-labelledby="titulo-destacadas">
+    <div class="destacadas__encabezado">
+      <h2 id="titulo-destacadas">Donaciones destacadas del último mes</h2>
+      <span th:replace="~{fragments/estados :: demo(${destacadas})}"></span>
+    </div>
+
+    <div class="carrusel" th:if="${destacadas.ok()}" data-carrusel>
+      <button class="carrusel__boton carrusel__boton--anterior" type="button" data-carrusel-anterior hidden
+              aria-label="Ver donaciones anteriores">
+        <span th:replace="~{fragments/iconos :: icono('chevron-izq', 22)}"></span>
+      </button>
+      <ul class="carrusel__pista" data-carrusel-pista tabindex="0"
+          aria-label="Donaciones destacadas, deslizá para ver más">
+        <li th:each="d : ${destacadas.datos}" class="tarjeta-donacion">
+          <div class="tarjeta-donacion__imagen">
+            <img th:src="${d.fotoUrl != null} ? ${d.fotoUrl} : @{/img/donacion-ilustrativa.jpg}"
+                 th:alt="${d.fotoUrl != null} ? ${'Foto de la donación: ' + d.titulo} : ''"
+                 loading="lazy" width="330" height="244">
+            <span class="tarjeta-donacion__categoria">
+              <span th:replace="~{fragments/iconos :: icono(${d.iconoCategoria}, 16)}"></span>
+              <span th:text="${d.categoria}">Alimentos</span>
+            </span>
+          </div>
+          <div class="tarjeta-donacion__cuerpo">
+            <p class="tarjeta-donacion__donante" th:if="${d.donante != null}">
+              <img th:src="@{/img/icono-donante.svg}" alt="" width="20" height="15">
+              <span><span class="sr-only">Donó: </span><span th:text="${d.donante}">Cooperativa La Huerta</span></span>
+            </p>
+            <h3 data-ajustar-titulo th:text="${d.titulo}">Cajas de arroz</h3>
+            <time th:datetime="${#temporals.formatISO(d.entregadaEl)}"
+                  th:text="${#temporals.format(d.entregadaEl, 'd ''de'' MMMM, yyyy')}">12 de septiembre, 2026</time>
+          </div>
+        </li>
+      </ul>
+      <button class="carrusel__boton carrusel__boton--siguiente" type="button" data-carrusel-siguiente hidden
+              aria-label="Ver más donaciones">
+        <span th:replace="~{fragments/iconos :: icono('chevron-der', 22)}"></span>
+      </button>
+    </div>
+
+    <th:block th:if="${destacadas.vacia()}">
+      <p class="destacadas__mensaje">Este mes todavía no hay entregas registradas. Volvé pronto para ver las próximas.</p>
+    </th:block>
+    <th:block th:if="${destacadas.conError()}">
+      <p class="destacadas__mensaje" role="alert" th:text="${destacadas.error.mensaje}">No pudimos cargar las donaciones.</p>
+    </th:block>
+
+    <a class="boton boton--contorno-claro" th:href="@{/donaciones-entregadas}">Ver donaciones</a>
+  </section>
+
+  <!-- Transparencia en números: tiles iguales que se despliegan desde arriba (alternativa A) -->
+  <section class="numeros" aria-labelledby="titulo-numeros">
+    <div class="numeros__encabezado">
+      <h2 id="titulo-numeros">Transparencia en números</h2>
+      <span class="demo" th:if="${metricas.demo}">Cifras de demostración</span>
+    </div>
+    <ul class="numeros__grilla">
+      <li class="cifra" th:each="m : ${metricas.valores}">
+        <span class="cifra__valor" th:text="${#numbers.formatInteger(m.valor, 1, 'POINT')}">128</span>
+        <span class="cifra__etiqueta" th:text="${m.etiqueta}">Donaciones entregadas</span>
+        <div class="desplegable desplegable--arriba" data-desplegable>
+          <button class="desplegable__boton" type="button" aria-expanded="false"
+                  th:attr="aria-controls='detalle-' + ${m.clave}" th:aria-label="'Más sobre ' + ${#strings.toLowerCase(m.etiqueta)}">
+            <span th:replace="~{fragments/iconos :: icono('flecha-abajo', 20)}"></span>
+          </button>
+          <div class="desplegable__contenido" th:id="'detalle-' + ${m.clave}">
+            <b th:text="${m.detalleTitulo}">+23 este mes</b>
+            <p th:text="${m.detalleTexto}">Detalle</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Sumate según tu rol -->
+  <section class="roles" aria-labelledby="titulo-roles">
+    <div class="roles__encabezado">
+      <h2 id="titulo-roles">Sumate según tu rol</h2>
+      <p>Elegí cómo querés participar.</p>
+    </div>
+    <div class="roles__grilla">
+      <article class="rol rol--oscuro" aria-labelledby="rol-donante">
+        <h3 id="rol-donante">Quiero donar</h3>
+        <p>Llevá tu donación al depósito y seguí su recorrido hasta que llega.</p>
+        <a class="boton boton--claro" th:href="@{/registro(tipo='humana')}">Registrarme como donante</a>
+        <div class="desplegable desplegable--lado" data-desplegable>
+          <button class="desplegable__boton" type="button" aria-expanded="false" aria-controls="detalle-rol-donante"
+                  aria-label="Qué podés hacer como donante">
+            <span th:replace="~{fragments/iconos :: icono('flecha', 20)}"></span>
+          </button>
+          <div class="desplegable__contenido" id="detalle-rol-donante">
+            <ul>
+              <li>Seguí cada donación hasta que llega</li>
+              <li>Cumplí misiones y ganá insignias</li>
+              <li>Mirá a qué entidades ayudaste</li>
+            </ul>
+            <a class="boton boton--oscuro" th:href="@{/registro(tipo='humana')}">Registrarme como donante</a>
+          </div>
+        </div>
+      </article>
+      <article class="rol rol--marca" aria-labelledby="rol-entidad">
+        <h3 id="rol-entidad">Necesitamos ayuda</h3>
+        <p>Registrá tu organización y contanos qué necesitás.</p>
+        <a class="boton boton--oscuro" th:href="@{/registro(tipo='entidad')}">Registrar mi entidad</a>
+        <div class="desplegable desplegable--lado" data-desplegable>
+          <button class="desplegable__boton" type="button" aria-expanded="false" aria-controls="detalle-rol-entidad"
+                  aria-label="Qué puede hacer una entidad beneficiaria">
+            <span th:replace="~{fragments/iconos :: icono('flecha', 20)}"></span>
+          </button>
+          <div class="desplegable__contenido" id="detalle-rol-entidad">
+            <ul>
+              <li>Registrá necesidades recurrentes o urgentes</li>
+              <li>Mirá las donaciones asignadas</li>
+              <li>Confirmá cada recepción</li>
+            </ul>
+            <a class="boton boton--claro" th:href="@{/registro(tipo='entidad')}">Registrar mi entidad</a>
+          </div>
+        </div>
+      </article>
     </div>
   </section>
 </th:block>

@@ -1,0 +1,60 @@
+# Publica una versión estática del prototipo (datos de demostración) en GitHub Pages.
+# Requisito único en el repo: Settings → Pages → Source: "GitHub Actions".
+name: Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+
+      - name: Compilar y probar
+        run: mvn -B verify
+
+      - name: Levantar la app en modo export
+        run: |
+          java -jar target/cliente-liviano-*.jar --spring.profiles.active=export \
+            --BASE_PATH="/${{ github.event.repository.name }}" > app.log 2>&1 &
+          for i in $(seq 1 60); do
+            curl -sf "http://localhost:8095/${{ github.event.repository.name }}/" > /dev/null && exit 0
+            sleep 2
+          done
+          cat app.log
+          exit 1
+
+      - name: Exportar HTML estático
+        run: python3 scripts/exportar_estatico.py --base "http://localhost:8095/${{ github.event.repository.name }}" --salida dist
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  publicar:
+    needs: exportar
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

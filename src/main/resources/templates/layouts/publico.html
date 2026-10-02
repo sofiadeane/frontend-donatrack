@@ -1,21 +1,72 @@
 <!DOCTYPE html>
-<!-- Layout público. Uso: <html th:replace="~{layouts/publico :: layout(~{::title}, ~{::main})}"> -->
+<!-- Layout público. Uso: <html th:replace="~{layouts/publico :: layout(~{::title}, ~{::contenido})}"> -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
 <head th:replace="~{fragments/cabeza :: cabeza(${titulo}, 'publico')}"></head>
-<body>
+<body class="publico">
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
-<div class="publico">
-  <header class="publico__barra">
-    <a class="marca" th:href="@{/}" aria-label="DonaTrack, ir al inicio">
-      <span class="marca__simbolo"><img th:src="@{/img/logo.svg}" alt=""></span>
-      <span class="marca__nombre">Dona<em>Track</em></span>
-    </a>
-    <nav class="publico__acciones" aria-label="Acceso">
-      <a th:if="${sesion == null}" th:href="@{/ingresar}">Iniciar sesión</a>
-      <a th:if="${sesion != null}" class="boton boton--primario" th:href="@{${sesion.rol.inicio}}">Ir a mi panel</a>
+
+<header class="barra-publica" data-barra-publica>
+  <a class="marca" th:href="@{/}" aria-label="DonaTrack, ir al inicio">
+    <span class="marca__simbolo"><img th:src="@{/img/logo.svg}" alt=""></span>
+    <span class="marca__nombre">Dona<em>Track</em></span>
+  </a>
+
+  <button class="barra-publica__abrir" type="button" data-menu-publico hidden
+          aria-expanded="false" aria-controls="menu-publico">
+    <span th:replace="~{fragments/iconos :: icono('menu', 20)}"></span>
+    <span>Menú</span>
+  </button>
+  <div class="barra-publica__panel" id="menu-publico">
+    <nav aria-label="Secciones">
+      <ul class="barra-publica__links">
+        <li><a th:href="@{/donaciones-entregadas}" th:attr="aria-current=${rutaActual == '/donaciones-entregadas'} ? 'page' : null">Donaciones entregadas</a></li>
+        <li><a th:href="@{/mapa-de-impacto}" th:attr="aria-current=${rutaActual == '/mapa-de-impacto'} ? 'page' : null">Mapa de impacto</a></li>
+        <li><a th:href="@{/privacidad}" th:attr="aria-current=${rutaActual == '/privacidad'} ? 'page' : null">Privacidad</a></li>
+      </ul>
     </nav>
-  </header>
-  <main class="publico__main" id="contenido" tabindex="-1" th:insert="${contenido}"></main>
-</div>
+    <div class="barra-publica__sesion">
+      <th:block th:if="${sesion == null}">
+        <a class="barra-publica__ingresar" th:href="@{/ingresar}">Iniciar sesión</a>
+        <a class="boton boton--primario boton--chico" th:href="@{/registro}">Registrarse</a>
+      </th:block>
+      <a th:if="${sesion != null}" class="boton boton--primario boton--chico" th:href="@{${sesion.rol.inicio}}">Ir a mi panel</a>
+    </div>
+  </div>
+</header>
+
+<main class="publico__main" id="contenido" tabindex="-1" th:insert="${contenido}"></main>
+
+<footer class="pie">
+  <div class="pie__contenido">
+    <div class="pie__marca">
+      <a class="marca marca--grande" th:href="@{/}" aria-label="DonaTrack, ir al inicio">
+        <span class="marca__simbolo"><img th:src="@{/img/logo.svg}" alt=""></span>
+        <span class="marca__nombre">Dona<em>Track</em></span>
+      </a>
+      <p>DonaTrack es una plataforma de gestión y trazabilidad de donaciones para organizaciones solidarias universitarias. Conecta donantes, entidades beneficiarias y administración en un solo lugar.</p>
+    </div>
+    <nav class="pie__columnas" aria-label="Pie de página">
+      <div>
+        <h2>Plataforma</h2>
+        <ul>
+          <li><a th:href="@{/ingresar}">Iniciar sesión</a></li>
+          <li><a th:href="@{/registro}">Registrarse</a></li>
+          <li><a th:href="@{/privacidad}">Privacidad</a></li>
+        </ul>
+      </div>
+      <div>
+        <h2>Contacto</h2>
+        <ul>
+          <li><a href="mailto:contacto@donatrack.edu">contacto@donatrack.edu</a></li>
+          <li>Proyecto académico universitario</li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <div class="pie__legal">
+    <p>© 2026 DonaTrack. Maqueta académica.</p>
+    <p>Construido para fines educativos.</p>
+  </div>
+</footer>
 </body>
 </html>

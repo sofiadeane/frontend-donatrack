@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exploración · Landing v3 · DonaTrack</title>
+<!-- Exploración servida en dev: /exploraciones/landing-v3.html (CSS real de la app). -->
+<link rel="stylesheet" href="/css/fuentes.css">
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/componentes.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/publico.css">
+<style>
+/* ===== Controles de la exploración ===== */
+.controles{position:fixed;right:12px;bottom:12px;z-index:60;display:flex;gap:6px;align-items:center;padding:6px;border-radius:var(--r-pill);background:var(--surface-dark);color:var(--text-on-dark);font-size:var(--fs-xs);font-weight:700;box-shadow:var(--shadow-float)}
+.controles button{border:0;border-radius:var(--r-pill);padding:6px 12px;background:transparent;color:var(--text-on-dark-soft);font:inherit;cursor:pointer}
+.controles button[aria-pressed="true"]{background:var(--brand-bright);color:var(--text-on-brand)}
+.alternativa-titulo{display:inline-flex;align-items:center;gap:8px;margin:0 auto;padding:6px 14px;border-radius:var(--r-pill);background:var(--surface-dark);color:var(--text-on-dark);font-size:var(--fs-xs);font-weight:700;letter-spacing:.02em}
+
+/* ===== Navbar: variante vidrio ===== */
+.nav-vidrio .barra-publica{background:var(--surface-topbar);border:1px solid var(--border-glass);backdrop-filter:blur(16px) saturate(140%);box-shadow:var(--shadow-float)}
+
+/* ===== Hero: lado derecho libre para la animación interactiva de la Etapa 6 ===== */
+.hero__libre{min-height:380px}
+
+/* ===== Cómo funciona como ruta ===== */
+.nodo{position:relative;z-index:1;flex:none;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:1.25rem;font-weight:900;border:2px solid var(--brand-bright);background:var(--surface);color:var(--text-strong)}
+.ruta-pasos{list-style:none;margin:0;padding:0;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;position:relative}
+.ruta-pasos::before{content:"";position:absolute;left:12.5%;right:12.5%;top:23px;border-top:2px dashed var(--route-dash)}
+.ruta-pasos li{position:relative;display:grid;justify-items:center;gap:10px;text-align:center}
+.ruta-pasos li:last-child .nodo{background:var(--brand-bright);box-shadow:var(--glow-node)}
+.ruta-pasos h3{font-size:1.375rem;font-weight:800;color:var(--brand)}
+.ruta-pasos p{margin:0;font-size:1.0625rem;font-weight:500;line-height:1.35}
+
+/* ===== Destacadas: tarjeta como la foto ===== */
+.carrusel--v3 .carrusel__pista{gap:28px;-webkit-mask-image:linear-gradient(90deg,transparent 0,var(--white) 6%,var(--white) 94%,transparent 100%);mask-image:linear-gradient(90deg,transparent 0,var(--white) 6%,var(--white) 94%,transparent 100%)}
+.carrusel--v3::after{display:none}
+.carrusel--v3 .carrusel__boton--anterior{left:var(--space-5)}
+.carrusel--v3 .carrusel__boton--siguiente{right:var(--space-5)}
+.tarjeta-v3{flex:0 0 330px;height:420px;display:grid;grid-template-rows:58% 1fr;overflow:hidden;border-radius:var(--r-lg);background:var(--surface-card-muted);box-shadow:var(--shadow-tarjeta-donacion);scroll-snap-align:center;color:var(--ink)}
+.tarjeta-v3__imagen{position:relative;margin-bottom:-2px}
+.tarjeta-v3__imagen img{width:100%;height:100%;object-fit:cover;display:block}
+.tarjeta-v3__imagen::after{content:"";position:absolute;inset:auto 0 0 0;height:60%;background:var(--grad-fade-card)}
+.tarjeta-v3__categoria{position:absolute;top:16px;right:16px;z-index:1;padding:7px 16px;border-radius:var(--r-pill);background:var(--surface-dark);border:1.5px solid var(--white);color:var(--text-on-dark);font-size:var(--fs-sm);font-weight:700}
+.tarjeta-v3__cuerpo{display:grid;grid-template-rows:auto 1fr auto;gap:6px;padding:4px 22px 18px;min-height:0}
+.tarjeta-v3__donante{display:flex;align-items:center;gap:8px;font-size:var(--fs-sm);font-weight:500;color:var(--brand);min-width:0}
+.tarjeta-v3__donante img{width:20px;height:15px;flex:none}
+.tarjeta-v3__donante span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tarjeta-v3 h3{margin:0;min-height:0;overflow:hidden;display:flex;align-items:center;font-size:1.25rem;font-weight:800;line-height:1.12;letter-spacing:-.01em;color:var(--ink)}
+.tarjeta-v3 time{font-size:var(--fs-sm);font-weight:500;color:var(--text-meta)}
+
+/* ===== Números: base común ===== */
+.alternativas{display:grid;gap:70px;width:min(1088px,calc(100% - 32px));margin:0 auto}
+.alternativa{display:grid;gap:22px;justify-items:center}
+
+/* Alternativa A: tiles iguales con semicírculo desde arriba */
+.grilla-a{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.tile-a{container-type:inline-size;position:relative;overflow:hidden;isolation:isolate;min-height:250px;padding:64px 22px 22px;border-radius:var(--r-lg);background:var(--grad-impulso);color:var(--text-on-brand);display:flex;flex-direction:column;justify-content:flex-end}
+.tile-a .valor{font-size:clamp(56px,30cqi,120px);font-weight:900;letter-spacing:-.05em;line-height:.9}
+.tile-a .etiqueta{margin-top:10px;font-size:1rem;font-weight:700}
+.desplegar{position:absolute;inset:0;padding:64px 22px 22px;background:var(--grad-hero);color:var(--text-on-dark);clip-path:circle(40px at 50% 0%);transition:clip-path .45s var(--ease-out);display:flex;flex-direction:column;justify-content:flex-end;gap:6px;border-radius:inherit;isolation:isolate}
+.desplegar::before{content:"";position:absolute;inset:-200px -300px auto auto;width:1281px;height:700px;background:url("/img/topografico.svg") no-repeat;opacity:.9;z-index:-1}
+.desplegar__boton{position:absolute;top:0;left:50%;translate:-50% 0;width:80px;height:40px;border:0;padding:0 0 6px;background:transparent;color:var(--brand-bright);font:inherit;font-size:20px;cursor:pointer;display:grid;place-items:center;transition:opacity .2s}
+.desplegar__boton:focus-visible{outline:3px solid var(--focus-ring-on-dark);outline-offset:-4px;border-radius:0 0 40px 40px}
+.desplegar__contenido{opacity:0;transform:translateY(-6px);transition:opacity .25s .15s,transform .25s .15s;display:grid;gap:6px}
+.desplegar__contenido b{font-size:1.125rem}
+.desplegar__contenido p{margin:0;font-size:var(--fs-sm);color:var(--text-on-dark-soft)}
+.desplegar.is-abierto,.desplegar:focus-within{clip-path:circle(160% at 50% 0%)}
+.desplegar.is-abierto .desplegar__contenido,.desplegar:focus-within .desplegar__contenido{opacity:1;transform:none}
+.desplegar.is-abierto .desplegar__boton,.desplegar:hover .desplegar__boton{opacity:0}
+@media (hover:hover){.desplegar:hover{clip-path:circle(160% at 50% 0%)}.desplegar:hover .desplegar__contenido{opacity:1;transform:none}}
+
+/* Alternativa B: un solo panel oscuro con las cifras sobre una ruta */
+.panel-b{position:relative;overflow:hidden;isolation:isolate;width:100%;padding:56px clamp(20px,4vw,56px);border-radius:var(--r-xl);background:var(--grad-hero);color:var(--text-on-dark);box-shadow:var(--shadow-lift)}
+.panel-b::before{content:"";position:absolute;inset:-300px -100px auto auto;width:1281px;height:1295px;background:url("/img/topografico.svg") no-repeat;z-index:-1}
+.panel-b ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;position:relative}
+.panel-b ul::before{content:"";position:absolute;left:12.5%;right:12.5%;top:7px;border-top:2px dashed var(--route-dash)}
+.panel-b li{display:grid;justify-items:center;gap:14px;text-align:center}
+.panel-b li::before{content:"";position:relative;z-index:1;width:16px;height:16px;border-radius:8px;background:var(--brand-bright);box-shadow:var(--glow-node)}
+.panel-b b{font-size:clamp(48px,5.5vw,84px);font-weight:900;letter-spacing:-.04em;line-height:.95}
+.panel-b span{font-size:1.0625rem;color:var(--text-on-dark-soft)}
+
+/* Alternativa C: cifras grandes sin contenedores, fondo claro */
+.fila-c{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+.cifra-c{display:grid;gap:10px;padding-top:20px;border-top:2px dashed var(--route-dash);position:relative}
+.cifra-c::before{content:"";position:absolute;top:-9px;left:0;width:16px;height:16px;border-radius:8px;background:var(--brand-bright);box-shadow:var(--glow-node)}
+.cifra-c b{font-size:clamp(56px,6vw,96px);font-weight:900;letter-spacing:-.05em;line-height:.9;color:var(--text-strong)}
+.cifra-c span{font-size:1.0625rem;font-weight:500;color:var(--text-muted)}
+
+/* ===== Sumate según tu rol (simplificado) ===== */
+.roles{width:min(1088px,calc(100% - 32px));margin:0 auto;display:grid;gap:24px;padding:20px 0 90px}
+.roles__enc{text-align:center;display:grid;gap:10px}
+.roles__enc h2{font-size:clamp(2rem,1.4rem + 1.9vw,2.975rem);color:var(--text-title-dark)}
+.roles__enc p{margin:0;color:var(--text-muted);font-size:var(--fs-body-lg)}
+.roles__grilla{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.rol{position:relative;overflow:hidden;isolation:isolate;min-height:280px;padding:32px 96px 32px 32px;border-radius:var(--r-lg);display:flex;flex-direction:column;gap:12px}
+.rol--oscuro{background:var(--grad-hero);color:var(--text-on-dark);box-shadow:var(--shadow-lift)}
+.rol--oscuro::before{content:"";position:absolute;inset:-120px -300px auto auto;width:1281px;height:700px;background:url("/img/topografico.svg") no-repeat;z-index:-1}
+.rol--marca{background:var(--grad-impulso);color:var(--text-on-brand)}
+.rol h3{font-size:1.75rem;font-weight:800}
+.rol p{margin:0;font-size:1.0625rem;max-width:36ch}
+.rol .boton{margin-top:auto;align-self:flex-start;padding:16px 30px;font-size:1rem}
+.boton--claro{background:var(--white);color:var(--text-on-brand)}
+.boton--oscuro{background:var(--surface-dark);color:var(--text-on-dark)}
+.revelar{position:absolute;inset:0;padding:32px 64px 32px 32px;clip-path:circle(44px at 100% 50%);transition:clip-path .45s var(--ease-out);display:flex;flex-direction:column;justify-content:center;gap:14px;border-radius:inherit;isolation:isolate}
+.rol--oscuro .revelar{background:var(--grad-impulso);color:var(--text-on-brand)}
+.rol--marca .revelar{background:var(--grad-hero);color:var(--text-on-dark)}
+.revelar__flecha{position:absolute;right:0;top:50%;translate:0 -50%;width:44px;height:88px;border:0;padding:0 0 0 12px;background:transparent;color:inherit;font:inherit;font-size:20px;cursor:pointer;display:grid;place-items:center;transition:opacity .2s}
+.revelar__contenido{opacity:0;transform:translateY(6px);transition:opacity .25s .15s,transform .25s .15s;display:grid;gap:16px;width:100%}
+.revelar__contenido ul{margin:0;padding:0;list-style:none;display:grid;gap:12px}
+.revelar__contenido li{display:flex;align-items:center;gap:12px;font-size:1.0625rem;font-weight:500;line-height:1.3}
+.revelar__contenido li::before{content:"";flex:none;width:10px;height:10px;border-radius:5px;background:currentColor;opacity:.85}
+.revelar__contenido .boton{justify-self:start;padding:16px 30px;font-size:1rem}
+.revelar.is-abierto,.revelar:focus-within{clip-path:circle(150% at 100% 50%)}
+.revelar.is-abierto .revelar__contenido,.revelar:focus-within .revelar__contenido{opacity:1;transform:none}
+.revelar.is-abierto .revelar__flecha,.revelar:hover .revelar__flecha{opacity:0}
+@media (hover:hover){.revelar:hover{clip-path:circle(150% at 100% 50%)}.revelar:hover .revelar__contenido{opacity:1;transform:none}}
+
+@media (max-width:1100px){.grilla-a{grid-template-columns:repeat(2,minmax(0,1fr))}.panel-b ul,.fila-c{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px}.panel-b ul::before{display:none}}
+@media (max-width:900px){.hero__libre{display:none}.roles__grilla{grid-template-columns:1fr}}
+@media (max-width:700px){.ruta-pasos{grid-template-columns:1fr;gap:28px}.ruta-pasos::before{left:23px;right:auto;top:24px;bottom:24px;border-top:0;border-left:2px dashed var(--route-dash)}.ruta-pasos li{grid-template-columns:48px 1fr;justify-items:start;text-align:left;column-gap:16px}.ruta-pasos .nodo{grid-row:span 2}.rol{padding:28px 72px 28px 24px}.tarjeta-v3{flex-basis:min(330px,84vw)}}
+@media (max-width:520px){.grilla-a,.fila-c{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.desplegar,.desplegar__contenido,.revelar,.revelar__contenido{transition:none}}
+</style>
+</head>
+<body class="publico">
+
+<div class="controles" role="group" aria-label="Variante de la barra de navegación">
+  <span>Navbar</span>
+  <button type="button" data-nav="figma" aria-pressed="true">Figma</button>
+  <button type="button" data-nav="vidrio" aria-pressed="false">Vidrio</button>
+</div>
+
+<header class="barra-publica" data-barra-publica>
+  <a class="marca" href="/"><span class="marca__simbolo"><img src="/img/logo.svg" alt=""></span><span class="marca__nombre">Dona<em>Track</em></span></a>
+  <button class="barra-publica__abrir" type="button" data-menu-publico hidden aria-expanded="false" aria-controls="menu-publico"><span>Menú</span></button>
+  <div class="barra-publica__panel" id="menu-publico">
+    <nav aria-label="Secciones"><ul class="barra-publica__links"><li><a href="#">Donaciones entregadas</a></li><li><a href="#">Mapa de impacto</a></li><li><a href="#">Privacidad</a></li></ul></nav>
+    <div class="barra-publica__sesion"><a class="barra-publica__ingresar" href="#">Iniciar sesión</a><a class="boton boton--primario boton--chico" href="#">Registrarse</a></div>
+  </div>
+</header>
+
+<main class="publico__main">
+  <section class="hero" aria-labelledby="t1">
+    <div class="hero__grilla">
+      <div class="hero__texto">
+        <span class="eyebrow">Trazabilidad de donaciones con impacto social</span>
+        <h1 id="t1">DonaTrack</h1>
+        <p class="hero__bajada">Gestión y trazabilidad de donaciones con impacto social.</p>
+        <p class="hero__cuerpo">Una plataforma para registrar donaciones, asignarlas a necesidades reales y seguir su recorrido hasta la entrega final.</p>
+        <div class="hero__acciones"><a class="boton boton--primario" href="#">Quiero donar</a><a class="boton boton--fantasma" href="#">Soy entidad beneficiaria</a></div>
+      </div>
+      <div class="hero__libre" aria-hidden="true"></div>
+    </div>
+    <div class="como-funciona">
+      <div class="como-funciona__encabezado"><h2 id="t2">Cómo funciona</h2><p>Un recorrido claro y trazable, desde el registro de la donación hasta su entrega a quienes la necesitan.</p></div>
+      <ol class="ruta-pasos" aria-labelledby="t2">
+        <li><span class="nodo">1</span><h3>Registro</h3><p>Personas donantes y entidades beneficiarias crean su perfil.</p></li>
+        <li><span class="nodo">2</span><h3>Recepción</h3><p>Una persona administradora registra las donaciones recibidas en depósito.</p></li>
+        <li><span class="nodo">3</span><h3>Asignación</h3><p>El sistema vincula donaciones con necesidades materiales concretas.</p></li>
+        <li><span class="nodo">4</span><h3>Trazabilidad</h3><p>Las donaciones pueden seguirse hasta su entrega final.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="destacadas" aria-labelledby="t3">
+    <div class="destacadas__encabezado"><h2 id="t3">Donaciones destacadas del último mes</h2></div>
+    <div class="carrusel carrusel--v3" data-carrusel>
+      <button class="carrusel__boton carrusel__boton--anterior" type="button" data-carrusel-anterior hidden aria-label="Ver donaciones anteriores">‹</button>
+      <ul class="carrusel__pista" data-carrusel-pista tabindex="0" aria-label="Donaciones destacadas">
+        <li class="tarjeta-v3"><div class="tarjeta-v3__imagen"><img src="/img/donacion-ilustrativa.jpg" alt=""><span class="tarjeta-v3__categoria">Alimentos no perecederos</span></div><div class="tarjeta-v3__cuerpo"><p class="tarjeta-v3__donante"><img src="/figma-assets/icono-donante-card.svg" alt=""><span>Cooperativa La Huerta</span></p><h3 data-ajustar>Cajas de arroz, fideos, conservas y legumbres destinadas a meriendas comunitarias</h3><time datetime="2026-09-22">22 de septiembre, 2026</time></div></li>
+        <li class="tarjeta-v3"><div class="tarjeta-v3__imagen"><img src="/img/donacion-ilustrativa.jpg" alt=""><span class="tarjeta-v3__categoria">Mobiliario</span></div><div class="tarjeta-v3__cuerpo"><p class="tarjeta-v3__donante"><img src="/figma-assets/icono-donante-card.svg" alt=""><span>Nicolás Pérez</span></p><h3 data-ajustar>Pupitres y sillas reacondicionadas</h3><time datetime="2026-09-20">20 de septiembre, 2026</time></div></li>
+        <li class="tarjeta-v3"><div class="tarjeta-v3__imagen"><img src="/img/donacion-ilustrativa.jpg" alt=""><span class="tarjeta-v3__categoria">Vestimenta</span></div><div class="tarjeta-v3__cuerpo"><p class="tarjeta-v3__donante"><img src="/figma-assets/icono-donante-card.svg" alt=""><span>Panadería El Molino</span></p><h3 data-ajustar>Frazadas y mantas para personas mayores</h3><time datetime="2026-09-19">19 de septiembre, 2026</time></div></li>
+        <li class="tarjeta-v3"><div class="tarjeta-v3__imagen"><img src="/img/donacion-ilustrativa.jpg" alt=""><span class="tarjeta-v3__categoria">Útiles escolares</span></div><div class="tarjeta-v3__cuerpo"><p class="tarjeta-v3__donante"><img src="/figma-assets/icono-donante-card.svg" alt=""><span>Cooperativa La Huerta</span></p><h3 data-ajustar>Cuadernos</h3><time datetime="2026-09-18">18 de septiembre, 2026</time></div></li>
+        <li class="tarjeta-v3"><div class="tarjeta-v3__imagen"><img src="/img/donacion-ilustrativa.jpg" alt=""><span class="tarjeta-v3__categoria">Alimentos</span></div><div class="tarjeta-v3__cuerpo"><p class="tarjeta-v3__donante"><img src="/figma-assets/icono-donante-card.svg" alt=""><span>Nicolás Pérez</span></p><h3 data-ajustar>Fideos secos tipo mostachol</h3><time datetime="2026-09-13">13 de septiembre, 2026</time></div></li>
+      </ul>
+      <button class="carrusel__boton carrusel__boton--siguiente" type="button" data-carrusel-siguiente hidden aria-label="Ver más donaciones">›</button>
+    </div>
+    <a class="boton boton--contorno-claro" href="#">Ver donaciones</a>
+  </section>
+
+  <section class="numeros" aria-labelledby="t4">
+    <div class="numeros__encabezado"><h2 id="t4">Transparencia en números</h2></div>
+    <div class="alternativas">
+      <div class="alternativa">
+        <span class="alternativa-titulo">Alternativa A · tiles iguales, se despliegan desde arriba</span>
+        <div class="grilla-a">
+          <article class="tile-a"><span class="valor">128</span><span class="etiqueta">Donaciones entregadas</span>
+            <div class="desplegar"><button class="desplegar__boton" type="button" aria-expanded="false" aria-label="Más sobre donaciones entregadas">↓</button><div class="desplegar__contenido"><b>+23 este mes</b><p>La mayoría fueron alimentos y útiles escolares.</p></div></div></article>
+          <article class="tile-a"><span class="valor">34</span><span class="etiqueta">Entidades ayudadas</span>
+            <div class="desplegar"><button class="desplegar__boton" type="button" aria-expanded="false" aria-label="Más sobre entidades ayudadas">↓</button><div class="desplegar__contenido"><b>Comedores, escuelas y hogares</b><p>De Ciudad de Buenos Aires y el conurbano.</p></div></div></article>
+          <article class="tile-a"><span class="valor">2.450</span><span class="etiqueta">Kg de alimentos distribuidos</span>
+            <div class="desplegar"><button class="desplegar__boton" type="button" aria-expanded="false" aria-label="Más sobre kilos distribuidos">↓</button><div class="desplegar__contenido"><b>Equivale a ~9.800 meriendas</b><p>Estimación de demostración.</p></div></div></article>
+          <article class="tile-a"><span class="valor">86</span><span class="etiqueta">Donantes activos</span>
+            <div class="desplegar"><button class="desplegar__boton" type="button" aria-expanded="false" aria-label="Donantes por categoría">↓</button><div class="desplegar__contenido"><b>Por categoría</b><p>52 Colaboradores · 26 Sostenedores · 8 Transformadores</p></div></div></article>
+        </div>
+      </div>
+
+      <div class="alternativa">
+        <span class="alternativa-titulo">Alternativa B · un solo panel, las cifras sobre la ruta</span>
+        <div class="panel-b"><ul>
+          <li><b>128</b><span>Donaciones entregadas</span></li>
+          <li><b>34</b><span>Entidades ayudadas</span></li>
+          <li><b>2.450</b><span>Kg de alimentos distribuidos</span></li>
+          <li><b>86</b><span>Donantes activos</span></li>
+        </ul></div>
+      </div>
+
+      <div class="alternativa">
+        <span class="alternativa-titulo">Alternativa C · cifras grandes, sin contenedores</span>
+        <div class="fila-c">
+          <div class="cifra-c"><b>128</b><span>Donaciones entregadas</span></div>
+          <div class="cifra-c"><b>34</b><span>Entidades ayudadas</span></div>
+          <div class="cifra-c"><b>2.450</b><span>Kg de alimentos distribuidos</span></div>
+          <div class="cifra-c"><b>86</b><span>Donantes activos</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="roles" aria-labelledby="t5">
+    <div class="roles__enc"><h2 id="t5">Sumate según tu rol</h2><p>Elegí cómo querés participar.</p></div>
+    <div class="roles__grilla">
+      <article class="rol rol--oscuro"><h3>Quiero donar</h3><p>Llevá tu donación al depósito y seguí su recorrido hasta que llega.</p><a class="boton boton--claro" href="#">Registrarme como donante</a>
+        <div class="revelar"><button class="revelar__flecha" type="button" aria-expanded="false" aria-label="Qué podés hacer como donante">→</button>
+          <div class="revelar__contenido"><ul><li>Seguí cada donación hasta que llega</li><li>Cumplí misiones y ganá insignias</li><li>Mirá a qué entidades ayudaste</li></ul><a class="boton boton--oscuro" href="#">Registrarme como donante</a></div></div>
+      </article>
+      <article class="rol rol--marca"><h3>Necesitamos ayuda</h3><p>Registrá tu organización y contanos qué necesitás.</p><a class="boton boton--oscuro" href="#">Registrar mi entidad</a>
+        <div class="revelar"><button class="revelar__flecha" type="button" aria-expanded="false" aria-label="Qué puede hacer una entidad">→</button>
+          <div class="revelar__contenido"><ul><li>Registrá necesidades recurrentes o urgentes</li><li>Mirá las donaciones asignadas</li><li>Confirmá cada recepción</li></ul><a class="boton boton--claro" href="#">Registrar mi entidad</a></div></div>
+      </article>
+    </div>
+  </section>
+</main>
+<script src="/js/app.js" defer></script>
+<script>
+// Variante de navbar
+document.querySelectorAll("[data-nav]").forEach(b=>b.addEventListener("click",()=>{document.body.classList.toggle("nav-vidrio",b.dataset.nav==="vidrio");document.querySelectorAll("[data-nav]").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));}));
+// Despliegues (toque en celular, clic con teclado)
+document.querySelectorAll(".desplegar__boton,.revelar__flecha").forEach(b=>b.addEventListener("click",()=>{const c=b.parentElement;const a=c.classList.toggle("is-abierto");b.setAttribute("aria-expanded",String(a));}));
+// Título que llena su espacio: el tamaño más grande que entra en el alto disponible (máx. 30 px, mín. 17 px)
+function ajustarTitulos(){document.querySelectorAll("[data-ajustar]").forEach(h=>{let min=17,max=34;const alto=h.clientHeight,ancho=h.clientWidth;while(max-min>.5){const m=(min+max)/2;h.style.fontSize=m+"px";if(h.scrollHeight<=alto&&h.scrollWidth<=ancho){min=m}else{max=m}}h.style.fontSize=Math.floor(min)+"px";});}
+document.fonts.ready.then(ajustarTitulos);addEventListener("resize",ajustarTitulos);
+</script>
+</body>
+</html>

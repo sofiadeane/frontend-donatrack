@@ -33,9 +33,10 @@
           <div class="cuenta__nombre" th:text="${sesion.nombre}">Nombre</div>
           <div class="cuenta__rol" th:text="${sesion.rol.etiqueta} + ' · sesión de demostración'">Rol</div>
         </div>
-        <form th:action="@{/salir}" method="post">
+        <form th:unless="${exportEstatico}" th:action="@{/salir}" method="post">
           <button class="boton boton--texto" type="submit">Salir</button>
         </form>
+        <a th:if="${exportEstatico}" class="boton boton--texto" th:href="@{/ingresar}">Cambiar de perfil</a>
       </div>
     </details>
   </div>

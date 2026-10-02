@@ -37,3 +37,105 @@
     });
   });
 })();
+
+// Carrusel de la landing: botones anterior/siguiente sobre una pista con scroll-snap.
+// Sin JS la pista se desplaza igual (táctil, rueda o teclado con foco).
+(() => {
+  "use strict";
+  document.querySelectorAll("[data-carrusel]").forEach((carrusel) => {
+    const pista = carrusel.querySelector("[data-carrusel-pista]");
+    const anterior = carrusel.querySelector("[data-carrusel-anterior]");
+    const siguiente = carrusel.querySelector("[data-carrusel-siguiente]");
+    if (!pista || !anterior || !siguiente) return;
+    const paso = () => {
+      const tarjeta = pista.querySelector("li");
+      return tarjeta ? tarjeta.getBoundingClientRect().width + 41 : pista.clientWidth * 0.8;
+    };
+    const actualizar = () => {
+      const max = pista.scrollWidth - pista.clientWidth - 2;
+      anterior.hidden = pista.scrollLeft <= 2;
+      siguiente.hidden = pista.scrollLeft >= max;
+    };
+    anterior.addEventListener("click", () => pista.scrollBy({ left: -paso(), behavior: "smooth" }));
+    siguiente.addEventListener("click", () => pista.scrollBy({ left: paso(), behavior: "smooth" }));
+    pista.addEventListener("scroll", actualizar, { passive: true });
+    window.addEventListener("resize", actualizar);
+    actualizar();
+  });
+})();
+
+// Menú de la barra pública en celular.
+(() => {
+  "use strict";
+  const barra = document.querySelector("[data-barra-publica]");
+  const boton = document.querySelector("[data-menu-publico]");
+  if (!barra || !boton) return;
+  barra.classList.add("is-plegable");
+  boton.hidden = false;
+  boton.addEventListener("click", () => {
+    const abierta = barra.classList.toggle("is-abierta");
+    boton.setAttribute("aria-expanded", String(abierta));
+  });
+})();
+
+// Desplegables (semicírculo que se expande): toque en celular y teclado.
+// En escritorio también se abren con hover y al recibir foco (CSS).
+(() => {
+  "use strict";
+  document.querySelectorAll("[data-desplegable]").forEach((desplegable) => {
+    const boton = desplegable.querySelector(".desplegable__boton");
+    if (!boton) return;
+    boton.addEventListener("click", () => {
+      const abierto = desplegable.classList.toggle("is-abierto");
+      boton.setAttribute("aria-expanded", String(abierto));
+    });
+  });
+})();
+
+// Títulos que llenan su espacio: el tamaño más grande (17–34 px) que entra en el alto disponible.
+(() => {
+  "use strict";
+  const titulos = document.querySelectorAll("[data-ajustar-titulo]");
+  if (!titulos.length) return;
+  const ajustar = () => {
+    titulos.forEach((h) => {
+      let min = 17;
+      let max = 34;
+      h.style.fontSize = "";
+      const alto = h.clientHeight;
+      const ancho = h.clientWidth;
+      while (max - min > 0.5) {
+        const medio = (min + max) / 2;
+        h.style.fontSize = medio + "px";
+        if (h.scrollHeight <= alto && h.scrollWidth <= ancho) min = medio;
+        else max = medio;
+      }
+      h.style.fontSize = Math.floor(min) + "px";
+    });
+  };
+  (document.fonts ? document.fonts.ready : Promise.resolve()).then(ajustar);
+  window.addEventListener("resize", ajustar);
+})();
+
+// Barra pública: vidrio oscuro solo mientras detrás hay fondo del hero, para que el logo se lea.
+// Si una superficie clara (p. ej. la tarjeta "Cómo funciona", dentro del hero) toca la barra,
+// vuelve al vidrio claro para que el menú siga legible.
+(() => {
+  "use strict";
+  const barra = document.querySelector("[data-barra-publica]");
+  const hero = document.querySelector("[data-hero]");
+  if (!barra || !hero) return;
+  const claras = [...document.querySelectorAll("[data-fondo-claro]")];
+  const toca = (el, arriba, abajo) => {
+    const r = el.getBoundingClientRect();
+    return r.top < abajo && r.bottom > arriba;
+  };
+  const actualizar = () => {
+    const { top, bottom } = barra.getBoundingClientRect();
+    const oscuro = toca(hero, top, bottom) && !claras.some((el) => toca(el, top, bottom));
+    barra.classList.toggle("sobre-oscuro", oscuro);
+  };
+  window.addEventListener("scroll", actualizar, { passive: true });
+  window.addEventListener("resize", actualizar);
+  actualizar();
+})();

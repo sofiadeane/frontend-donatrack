@@ -102,7 +102,7 @@ Filtros y paginación en query string (`?estado=EN_TRASLADO&categoria=…`) para
 ```
 frontend-donatrack/
 ├─ pom.xml
-├─ src/main/java/grupo5/clienteliviano/{web,application,integration/{http,fixtures},session,config}
+├─ src/main/java/grupo5/clienteliviano/{web,aplicacion,integracion/{http,fixtures,error,<servicio>},session,navegacion,config}
 ├─ src/main/resources/
 │  ├─ templates/{layouts,fragments,publico,donante,entidad,admin}
 │  ├─ static/{css,js,img,fonts}

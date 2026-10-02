@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico :: layout(~{::title}, ~{::contenido})}">
+<head><title th:text="${titulo} + ' · DonaTrack'">Próximamente · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <section class="pagina-publica" aria-labelledby="titulo-pagina">
+    <div class="cabecera">
+      <span class="eyebrow">Próximamente</span>
+      <h1 id="titulo-pagina" th:text="${titulo}">Título</h1>
+    </div>
+    <div class="tarjeta proximamente">
+      <div class="proximamente__ruta" aria-hidden="true"><span></span><span></span><span></span></div>
+      <p th:text="${texto}">Texto</p>
+      <a class="boton boton--primario" th:if="${enlace != null}" th:href="@{${enlace}}" th:text="${enlaceTexto}">Acción</a>
+    </div>
+  </section>
+</th:block>
+</body>
+</html>

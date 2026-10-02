@@ -85,7 +85,7 @@
   z-index: -1;
   width: 1281px;
   height: 1295px;
-  background: url("/img/topografico.svg") no-repeat;
+  background: url("../img/topografico.svg") no-repeat;
 }
 
 .cabecera h1 {
@@ -146,6 +146,7 @@
   font-size: var(--fs-xs);
   font-weight: 500;
   color: var(--text-accent);
+  white-space: nowrap;
 }
 
 /* ===== Avisos ===== */
@@ -251,7 +252,14 @@
   border: 1px solid var(--border-input);
   border-radius: 14px;
   background: var(--surface);
+  color: inherit;
+  text-decoration: none;
   cursor: pointer;
+}
+
+a.opcion:hover {
+  border-color: var(--brand);
+  background: var(--surface-brand-soft);
 }
 
 .opcion input {
@@ -297,4 +305,325 @@
 .opcion:has(input:focus-visible) {
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* ===== Encabezado de tarjeta ===== */
+.tarjeta__encabezado {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+/* ===== Lista de donaciones ===== */
+.lista-donaciones {
+  list-style: none;
+  margin: 0 0 var(--space-2);
+  padding: 0;
+  display: grid;
+  gap: 2px;
+}
+
+.lista-donaciones__fila {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-2);
+  border-radius: 12px;
+}
+
+.lista-donaciones__fila:hover {
+  background: var(--surface-page);
+}
+
+.lista-donaciones__texto {
+  display: grid;
+  min-width: 0;
+}
+
+.lista-donaciones__titulo {
+  font-weight: 700;
+  color: var(--text-strong);
+  overflow-wrap: anywhere;
+}
+
+.lista-donaciones__detalle,
+.lista-donaciones__fecha {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.lista-donaciones__fecha {
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .lista-donaciones__fila {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "texto texto"
+      "pill fecha";
+    row-gap: var(--space-2);
+    column-gap: var(--space-3);
+  }
+
+  .lista-donaciones__texto {
+    grid-area: texto;
+  }
+
+  .lista-donaciones__fila .estado-pill {
+    grid-area: pill;
+  }
+
+  .lista-donaciones__fecha {
+    grid-area: fecha;
+  }
+}
+
+/* ===== Pill de estado (forma del punto según la fase; colores de estado pendientes) ===== */
+.estado-pill {
+  display: inline-flex;
+  align-items: center;
+  width: var(--ancho-pill-estado);
+  gap: var(--space-2);
+  padding: 5px 12px 5px 10px;
+  border-radius: var(--r-pill);
+  background: var(--surface-dark);
+  color: var(--text-on-dark);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.estado-pill::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.estado-pill--en-espera::before {
+  border: 2px solid var(--brand-soft);
+}
+
+.estado-pill--asignada::before {
+  background: var(--brand-alt);
+}
+
+.estado-pill--en-camino::before {
+  background: var(--brand-bright);
+  box-shadow: var(--glow-node-sm);
+}
+
+.estado-pill--completada::before {
+  background: var(--brand);
+}
+
+.estado-pill--interrumpida::before {
+  border: 2px dashed var(--text-on-dark-muted);
+}
+
+/* ===== Estados de sección ===== */
+.estado-vacio,
+.estado-error {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-2);
+}
+
+.estado-vacio p,
+.estado-error p {
+  margin: 0;
+}
+
+.estado-vacio__titulo,
+.estado-error__texto {
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.estado-vacio__texto,
+.estado-error__ref {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.estado-error {
+  padding: var(--space-4);
+  border: 1px dashed var(--border-input);
+  border-radius: var(--r-sm);
+}
+
+.estado-cargando {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-2);
+}
+
+.esqueleto {
+  display: block;
+  height: 14px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(90deg, var(--surface-muted), var(--surface-page), var(--surface-muted));
+  background-size: 200% 100%;
+  animation: esqueleto 1.2s ease-in-out infinite;
+}
+
+.esqueleto--corto {
+  width: 60%;
+}
+
+@keyframes esqueleto {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+/* ===== Desplegable: semicírculo que se expande y cubre el tile =====
+   El contenedor padre necesita position: relative, overflow: hidden y border-radius.
+   Variantes: --arriba (semicírculo en el borde superior) y --lado (borde derecho).
+   Se abre con hover (solo dispositivos con mouse), con el botón (toque o teclado) o al recibir foco. */
+.desplegable {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding: inherit;
+  border-radius: inherit;
+  background: var(--grad-hero);
+  color: var(--text-on-dark);
+  transition: clip-path 0.45s var(--ease-out);
+}
+
+.desplegable::before {
+  content: "";
+  position: absolute;
+  inset: -200px -300px auto auto;
+  z-index: -1;
+  width: 1281px;
+  height: 700px;
+  background: url("../img/topografico.svg") no-repeat;
+  opacity: 0.9;
+}
+
+.desplegable--arriba {
+  clip-path: circle(40px at 50% 0%);
+}
+
+.desplegable--lado {
+  justify-content: center;
+  clip-path: circle(44px at 100% 50%);
+}
+
+.desplegable__boton {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--brand-bright);
+  cursor: pointer;
+  transition: opacity var(--dur-base);
+}
+
+.desplegable--arriba .desplegable__boton {
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: 80px;
+  height: 40px;
+  padding-bottom: 4px;
+}
+
+.desplegable--lado .desplegable__boton {
+  right: 0;
+  top: 50%;
+  translate: 0 -50%;
+  width: 44px;
+  height: 88px;
+  padding-left: 12px;
+}
+
+.desplegable__boton:focus-visible {
+  outline: 3px solid var(--focus-ring-on-dark);
+  outline-offset: -4px;
+}
+
+.desplegable__contenido {
+  display: grid;
+  gap: var(--space-2);
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity 0.25s 0.15s, transform 0.25s 0.15s;
+}
+
+.desplegable__contenido p {
+  margin: 0;
+}
+
+.desplegable.is-abierto,
+.desplegable:focus-within {
+  clip-path: circle(160% at 50% 0%);
+}
+
+.desplegable--lado.is-abierto,
+.desplegable--lado:focus-within {
+  clip-path: circle(150% at 100% 50%);
+}
+
+.desplegable.is-abierto .desplegable__contenido,
+.desplegable:focus-within .desplegable__contenido {
+  opacity: 1;
+  transform: none;
+}
+
+.desplegable.is-abierto .desplegable__boton {
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .desplegable--arriba:hover {
+    clip-path: circle(160% at 50% 0%);
+  }
+
+  .desplegable--lado:hover {
+    clip-path: circle(150% at 100% 50%);
+  }
+
+  .desplegable:hover .desplegable__contenido {
+    opacity: 1;
+    transform: none;
+  }
+
+  .desplegable:hover .desplegable__boton {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .desplegable,
+  .desplegable__contenido,
+  .desplegable__boton {
+    transition: none;
+  }
+}
+
+/* Botones en negativo según el fondo */
+.boton--claro {
+  background: var(--surface);
+  color: var(--text-on-brand);
+}
+
+.boton--oscuro {
+  background: var(--surface-dark);
+  color: var(--text-on-dark);
 }

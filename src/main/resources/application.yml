@@ -11,8 +11,47 @@ server:
 spring:
   application:
     name: cliente-liviano
+  web:
+    locale: es_AR
+    locale-resolver: fixed
   thymeleaf:
     cache: true
+
+# Backend: modo FIXTURE (demo, sin backend) o HTTP (servicio real) por servicio.
+donatrack:
+  backend:
+    servicios:
+      donaciones:
+        modo: ${DONACIONES_MODO:fixture}
+        url: ${DONACIONES_URL:http://localhost:8080}
+        timeout: 3s
+      notificaciones:
+        modo: ${NOTIFICACIONES_MODO:fixture}
+        url: ${NOTIFICACIONES_URL:http://localhost:8081}
+      incentivos:
+        modo: ${INCENTIVOS_MODO:fixture}
+        url: ${INCENTIVOS_URL:http://localhost:8082}
+      logistica:
+        modo: ${LOGISTICA_MODO:fixture}
+        url: ${LOGISTICA_URL:http://localhost:8083}
+
+---
+# Perfil local: todos los servicios reales en localhost (backend levantado con Docker).
+spring:
+  config:
+    activate:
+      on-profile: local
+donatrack:
+  backend:
+    servicios:
+      donaciones:
+        modo: http
+      notificaciones:
+        modo: http
+      incentivos:
+        modo: http
+      logistica:
+        modo: http
 
 ---
 spring:
@@ -25,6 +64,22 @@ spring:
     prefix: file:src/main/resources/templates/
   web:
     resources:
-      static-locations: file:src/main/resources/static/
+      # design/ se sirve solo en dev para ver las exploraciones con el CSS real (/exploraciones/...).
+      static-locations: file:src/main/resources/static/, file:design/
       cache:
         period: 0
+
+---
+# Export estático para GitHub Pages (scripts/exportar-estatico.sh). Sitio de proyecto: /<repo>/.
+spring:
+  config:
+    activate:
+      on-profile: export
+server:
+  port: 8095
+  servlet:
+    context-path: ${BASE_PATH:/frontend-donatrack}
+donatrack:
+  export-estatico: true
+  reloj:
+    fijo: ${RELOJ_FIJO:2026-10-01T12:00:00-03:00}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/privado :: layout(~{::title}, ~{::contenido})}">
+<head><title>Inicio · Persona donante · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <div class="aviso" role="status" th:if="${aviso == 'sin-permiso'}">
+    <p>Esa sección no corresponde a tu perfil, así que te trajimos a tu inicio.</p>
+  </div>
+
+  <section class="cabecera" aria-labelledby="titulo-pagina">
+    <span class="eyebrow">Tu impacto</span>
+    <h1 id="titulo-pagina" th:text="'Hola, ' + ${sesion.primerNombre}">Hola</h1>
+    <p>Seguí el recorrido de tus donaciones hasta que llegan a quienes las necesitan.</p>
+    <div class="cabecera__acciones">
+      <a class="boton boton--primario" th:href="@{/donante/seguimiento}">Ver seguimiento</a>
+      <a class="boton boton--fantasma" th:href="@{/donante/donaciones}">Mis donaciones</a>
+    </div>
+  </section>
+
+  <section class="tarjeta" aria-labelledby="titulo-ultimas">
+    <div class="tarjeta__encabezado">
+      <div>
+        <h2 id="titulo-ultimas">Tus últimas donaciones</h2>
+        <p class="tarjeta__bajada">Las más recientes primero</p>
+      </div>
+      <span th:replace="~{fragments/estados :: demo(${ultimas})}"></span>
+    </div>
+
+    <ul class="lista-donaciones" th:if="${ultimas.ok()}">
+      <li th:each="d : ${ultimas.datos}" class="lista-donaciones__fila">
+        <span class="lista-donaciones__texto">
+          <span class="lista-donaciones__titulo" th:text="${d.descripcion}">Arroz</span>
+          <span class="lista-donaciones__detalle" th:text="${d.detalle}">Arroz · 50 kg</span>
+        </span>
+        <span th:replace="~{fragments/estados :: pillEstado(${d.estado})}"></span>
+        <time class="lista-donaciones__fecha" th:datetime="${#temporals.formatISO(d.fechaRegistro)}"
+              th:text="${#temporals.format(d.fechaRegistro, 'd MMM yyyy')}">1 oct 2026</time>
+      </li>
+    </ul>
+
+    <th:block th:if="${ultimas.vacia()}">
+      <div th:replace="~{fragments/estados :: vacio('Todavía no registraste donaciones', 'Cuando lleves una donación al depósito, vas a poder seguirla desde acá.', null, null)}"></div>
+    </th:block>
+
+    <th:block th:if="${ultimas.conError()}">
+      <div th:replace="~{fragments/estados :: error(${ultimas.error}, '/donante')}"></div>
+    </th:block>
+
+    <a class="boton boton--texto" th:if="${ultimas.ok()}" th:href="@{/donante/donaciones}">Ver todas</a>
+  </section>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,156 @@
+[
+  {
+    "id": "0d000000-0000-4000-8000-000000000001",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000001",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+      "persona": {
+        "tipo": "HUMANA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+        "nombre": "Nicolás",
+        "apellido": "Pérez",
+        "razonSocial": null
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000002",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000001",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+      "persona": {
+        "tipo": "HUMANA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+        "nombre": "Nicolás",
+        "apellido": "Pérez",
+        "razonSocial": null
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000003",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000001",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+      "persona": {
+        "tipo": "HUMANA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+        "nombre": "Nicolás",
+        "apellido": "Pérez",
+        "razonSocial": null
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000004",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000001",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+      "persona": {
+        "tipo": "HUMANA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+        "nombre": "Nicolás",
+        "apellido": "Pérez",
+        "razonSocial": null
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000005",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000001",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+      "persona": {
+        "tipo": "HUMANA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+        "nombre": "Nicolás",
+        "apellido": "Pérez",
+        "razonSocial": null
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000006",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000001",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+      "persona": {
+        "tipo": "HUMANA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+        "nombre": "Nicolás",
+        "apellido": "Pérez",
+        "razonSocial": null
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000007",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000002",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000002",
+      "persona": {
+        "tipo": "JURIDICA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000002",
+        "nombre": null,
+        "apellido": null,
+        "razonSocial": "Cooperativa La Huerta"
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000008",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000002",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000002",
+      "persona": {
+        "tipo": "JURIDICA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000002",
+        "nombre": null,
+        "apellido": null,
+        "razonSocial": "Cooperativa La Huerta"
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000009",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000003",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000003",
+      "persona": {
+        "tipo": "JURIDICA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000003",
+        "nombre": null,
+        "apellido": null,
+        "razonSocial": "Panadería El Molino"
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000010",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000003",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000003",
+      "persona": {
+        "tipo": "JURIDICA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000003",
+        "nombre": null,
+        "apellido": null,
+        "razonSocial": "Panadería El Molino"
+      }
+    }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000011",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000002",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000002",
+      "persona": {
+        "tipo": "JURIDICA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000002",
+        "nombre": null,
+        "apellido": null,
+        "razonSocial": "Cooperativa La Huerta"
+      }
+    }
+  }
+]

@@ -206,7 +206,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: url("/img/topografico.svg") center / 1281px 1295px no-repeat;
+  background: url("../img/topografico.svg") center / 1281px 1295px no-repeat;
   opacity: 0.9;
 }
 

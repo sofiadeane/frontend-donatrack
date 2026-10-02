@@ -1,0 +1,30 @@
+[
+  {
+    "clave": "donaciones-entregadas",
+    "valor": 128,
+    "etiqueta": "Donaciones entregadas",
+    "detalleTitulo": "+23 este mes",
+    "detalleTexto": "La mayoría fueron alimentos y útiles escolares."
+  },
+  {
+    "clave": "entidades-ayudadas",
+    "valor": 34,
+    "etiqueta": "Entidades ayudadas",
+    "detalleTitulo": "Comedores, escuelas y hogares",
+    "detalleTexto": "De la Ciudad de Buenos Aires y el conurbano."
+  },
+  {
+    "clave": "kg-alimentos",
+    "valor": 2450,
+    "etiqueta": "Kg de alimentos distribuidos",
+    "detalleTitulo": "Unas 9.800 meriendas",
+    "detalleTexto": "Estimado a 250 g por merienda."
+  },
+  {
+    "clave": "donantes-activos",
+    "valor": 86,
+    "etiqueta": "Donantes activos",
+    "detalleTitulo": "Por categoría",
+    "detalleTexto": "52 Colaboradores · 26 Sostenedores · 8 Transformadores"
+  }
+]

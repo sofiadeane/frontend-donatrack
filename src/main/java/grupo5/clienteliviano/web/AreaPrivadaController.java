@@ -25,7 +25,7 @@ public class AreaPrivadaController {
     this.catalogo = catalogo;
   }
 
-  @GetMapping({"/donante", "/entidad", "/admin"})
+  @GetMapping({"/entidad", "/admin"})
   public String inicio(@RequestParam(required = false) String aviso, Model model) {
     model.addAttribute("aviso", aviso);
     return "privado/inicio";

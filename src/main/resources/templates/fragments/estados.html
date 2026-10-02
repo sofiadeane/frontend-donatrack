@@ -1,0 +1,32 @@
+<!-- Estados de UI comunes (spec §5). Uso: th:replace="~{fragments/estados :: vacio('Título', 'Texto', '/ruta', 'Acción')}" -->
+
+<!-- Etiqueta de datos de demostración: solo si la sección viene de fixtures -->
+<span th:fragment="demo(seccion)" class="demo" th:if="${seccion.demo}">Datos de demostración</span>
+
+<!-- Vacío: invitación a la siguiente acción -->
+<div th:fragment="vacio(titulo, texto, href, accion)" class="estado-vacio">
+  <div class="proximamente__ruta" aria-hidden="true"><span></span><span></span><span></span></div>
+  <p class="estado-vacio__titulo" th:text="${titulo}">Todavía no hay nada acá</p>
+  <p class="estado-vacio__texto" th:text="${texto}" th:if="${texto != null}">Texto</p>
+  <a class="boton boton--primario" th:if="${href != null}" th:href="@{${href}}" th:text="${accion}">Acción</a>
+</div>
+
+<!-- Error de una sección: el resto de la página sigue usable -->
+<div th:fragment="error(error, reintentar)" class="estado-error" role="alert">
+  <p class="estado-error__texto" th:text="${error.mensaje}">No pudimos cargar esta información.</p>
+  <p class="estado-error__ref" th:if="${error.referencia != null}">
+    Referencia para soporte: <code th:text="${error.referencia}">abc123</code>
+  </p>
+  <a class="boton boton--texto" th:if="${reintentar != null}" th:href="@{${reintentar}}">Reintentar</a>
+</div>
+
+<!-- Cargando: para contenido que se pide con JS (las páginas se renderizan completas en el servidor) -->
+<div th:fragment="cargando(texto)" class="estado-cargando" aria-busy="true" role="status">
+  <span class="sr-only" th:text="${texto}">Cargando…</span>
+  <span class="esqueleto" aria-hidden="true"></span>
+  <span class="esqueleto esqueleto--corto" aria-hidden="true"></span>
+</div>
+
+<!-- Pill de estado de una donación -->
+<span th:fragment="pillEstado(estado)" class="estado-pill" th:classappend="'estado-pill--' + ${estado.claseFase()}"
+      th:text="${estado.etiqueta}">En traslado</span>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exploración · Landing v2 · DonaTrack</title>
+<!-- Exploración: se sirve desde la app en dev (/exploraciones/landing-v2.html) para usar el CSS real. -->
+<link rel="stylesheet" href="/css/fuentes.css">
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/componentes.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/publico.css">
+<style>
+/* ===== Nuevo en v2 (solo tokens) ===== */
+.nota-exploracion{position:fixed;left:12px;bottom:12px;z-index:50;padding:6px 12px;border-radius:var(--r-pill);background:var(--surface-dark);color:var(--text-on-dark);font-size:var(--fs-xs);font-weight:700}
+
+/* Hero: recorrido en vivo (componente "Recorrido" del área privada) */
+.vivo{position:relative;justify-self:end;width:min(420px,100%);padding:22px 24px;border-radius:var(--r-lg);background:var(--surface-glass);border:1px solid var(--border-glass);backdrop-filter:blur(14px);display:grid;gap:16px}
+.vivo__enc{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.vivo__titulo{margin:0;font-size:1.25rem;font-weight:700}
+.vivo__sub{margin:2px 0 0;font-size:var(--fs-sm);color:var(--text-on-dark-soft)}
+.vivo__ruta{list-style:none;margin:0;padding:0;display:grid;gap:14px;position:relative}
+.vivo__ruta::before{content:"";position:absolute;left:14px;top:14px;bottom:14px;border-left:2px dashed var(--route-dash)}
+.vivo__ruta li{display:flex;align-items:center;gap:14px;font-size:var(--fs-sm);color:var(--text-on-dark-soft)}
+.vivo__ruta small{margin-left:auto;font-size:var(--fs-xs);color:var(--text-on-dark-60)}
+.nodo{position:relative;z-index:1;flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;border:2px solid var(--brand-bright);background:var(--surface-dark);color:var(--text-on-dark)}
+.hecho .nodo{background:var(--brand-bright);color:var(--text-on-brand)}
+.ahora{color:var(--text-on-dark)!important;font-weight:700}
+.ahora .nodo{box-shadow:var(--glow-node)}
+.siguiente .nodo{border-style:dashed;color:var(--text-on-dark-60)}
+.vivo__kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vivo__kpi{padding:10px 14px;border-radius:16px;background:var(--surface-glass-weak);border:1px solid var(--border-glass-soft)}
+.vivo__kpi b{display:block;font-size:1.375rem}
+.vivo__kpi span{font-size:var(--fs-xs);color:var(--text-on-dark-60)}
+
+/* Cómo funciona como ruta (mismo lenguaje que el recorrido) */
+.ruta-pasos{list-style:none;margin:0;padding:0;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;position:relative}
+.ruta-pasos::before{content:"";position:absolute;left:12.5%;right:12.5%;top:23px;border-top:2px dashed var(--route-dash)}
+.ruta-pasos li{position:relative;display:grid;justify-items:center;gap:10px;text-align:center}
+.ruta-pasos .nodo{width:48px;height:48px;font-size:1.25rem;font-weight:900;background:var(--surface);color:var(--text-strong)}
+.ruta-pasos li:last-child .nodo{background:var(--brand-bright);box-shadow:var(--glow-node)}
+.ruta-pasos h3{font-size:1.375rem;font-weight:800;color:var(--brand)}
+.ruta-pasos p{margin:0;font-size:1.0625rem;font-weight:500;line-height:1.35}
+
+/* Destacadas: pill de estado del área privada */
+.tarjeta-donacion__estado{position:absolute;right:14px;top:18px;z-index:1;width:auto}
+
+/* Números como tiles del panel del donante */
+.kpis-landing{width:min(1088px,calc(100% - 32px));display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.kpi{container-type:inline-size;position:relative;overflow:hidden;isolation:isolate;border-radius:var(--r-lg);min-height:230px;display:flex;flex-direction:column;padding:22px}
+.kpi-oscuro{background:var(--grad-hero);color:var(--text-on-dark);box-shadow:var(--shadow-lift)}
+.kpi-oscuro::before{content:"";position:absolute;inset:-120px -300px auto auto;width:1281px;height:700px;background:url("/img/topografico.svg") no-repeat;z-index:-1}
+.kpi .lbl{display:flex;align-items:center;gap:12px;font-size:var(--fs-xs);font-weight:500;padding-left:4px}
+.kpi-oscuro .lbl{color:var(--text-on-dark-soft)}
+.kpi-oscuro .lbl::before{content:"";width:8px;height:8px;border-radius:4px;background:var(--brand-bright);box-shadow:var(--glow-node);flex:none}
+.kpi .val{font-size:clamp(40px,20cqi,64px);font-weight:800;letter-spacing:-.04em;line-height:1;margin-top:14px}
+.kpi .delta{display:inline-flex;margin-top:10px;font-size:var(--fs-xs);font-weight:500;padding:5px 11px;border-radius:var(--r-pill);background:var(--surface-glass);border:1px solid var(--border-glass);align-self:flex-start}
+.barras{display:flex;align-items:flex-end;justify-content:flex-end;gap:7px;height:64px;margin-top:auto}
+.barras i{width:12px;border-radius:4px;background:var(--brand-soft);opacity:.28}
+.barras i:last-child{opacity:1;background:var(--brand-bright);filter:var(--glow-icon)}
+.kpi-claro{background:var(--surface);box-shadow:var(--shadow-card);color:var(--text)}
+.kpi-claro::after{content:"";position:absolute;left:-60px;top:-60px;width:250px;height:250px;border-radius:50%;background:var(--grad-halo);z-index:-1}
+.kpi-claro .lbl{font-weight:700;color:var(--text-strong);font-size:var(--fs-sm);padding:0}
+.moneda{width:96px;aspect-ratio:1;border-radius:50%;background:var(--grad-impulso);display:grid;place-items:center;position:relative;box-shadow:var(--shadow-coin);margin:16px 0 8px 9px}
+.moneda::before{content:"";position:absolute;inset:-9px;border-radius:50%;border:2px dashed var(--route-dash)}
+.moneda::after{content:"";position:absolute;width:12px;height:12px;border-radius:6px;background:var(--brand-bright);box-shadow:var(--glow-node);top:4px;right:4px}
+.moneda b{font-size:2rem;font-weight:900;letter-spacing:-.03em;color:var(--text-on-brand)}
+.seg{display:flex;gap:3px;height:9px;margin-top:auto;border-radius:var(--r-pill);overflow:hidden}
+.seg i{display:block}
+.leyenda{display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:8px;font-size:var(--fs-xs);color:var(--text-muted)}
+.leyenda span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px;background:var(--c)}
+.kpi-marca{background:var(--grad-impulso);color:var(--text-on-brand);padding-right:72px}
+.kpi-marca .lbl{color:var(--text-on-brand)}
+
+/* Semicírculo que se expande (tile de categoría del área privada) */
+.revelar{position:absolute;inset:0;padding:22px;color:var(--text-on-dark);background:var(--grad-hero);clip-path:circle(44px at 100% 50%);transition:clip-path .45s var(--ease-out);display:flex;flex-direction:column;justify-content:flex-end;gap:8px;border-radius:inherit;isolation:isolate}
+.revelar::before{content:"";position:absolute;inset:-200px -300px auto auto;width:1281px;height:700px;background:url("/img/topografico.svg") no-repeat;z-index:-1}
+.revelar__flecha{position:absolute;right:0;top:50%;translate:0 -50%;width:44px;height:88px;border:0;padding:0 0 0 12px;background:transparent;cursor:pointer;display:grid;place-items:center;color:var(--brand-bright);font:inherit;font-size:20px;transition:opacity .2s}
+.revelar__flecha:focus-visible{outline:3px solid var(--focus-ring-on-dark);outline-offset:-6px;border-radius:44px 0 0 44px}
+.revelar__contenido{opacity:0;transform:translateY(6px);transition:opacity .25s .15s,transform .25s .15s;display:grid;gap:6px}
+.revelar__contenido .boton{justify-self:start;margin-top:6px}
+.revelar__contenido ul{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:var(--fs-sm);color:var(--text-on-dark-soft)}
+.revelar__contenido b{font-size:1.25rem}
+.revelar:focus-within,.revelar.is-abierto{clip-path:circle(150% at 100% 50%)}
+.revelar:focus-within .revelar__contenido,.revelar.is-abierto .revelar__contenido{opacity:1;transform:none}
+.revelar.is-abierto .revelar__flecha,.revelar:hover .revelar__flecha{opacity:0}
+@media (hover:hover){.revelar:hover{clip-path:circle(150% at 100% 50%)}.revelar:hover .revelar__contenido{opacity:1;transform:none}.revelar:hover .revelar__flecha{opacity:0}}
+
+.kpi-oscuro .revelar{background:var(--grad-impulso);color:var(--text-on-brand)}
+.kpi-oscuro .revelar::before{opacity:.35}
+.kpi-oscuro .revelar__flecha{color:var(--text-on-brand)}
+.kpi-oscuro .revelar__contenido ul{color:var(--text-on-brand)}
+/* Roles: tiles con semicírculo */
+.roles{width:min(1088px,calc(100% - 32px));margin:0 auto;display:grid;gap:24px;padding:20px 0 90px}
+.roles__enc{text-align:center;display:grid;gap:10px}
+.roles__enc h2{font-size:clamp(2rem,1.4rem + 1.9vw,2.975rem);color:var(--text-title-dark)}
+.roles__enc p{margin:0;color:var(--text-muted);font-size:var(--fs-body-lg)}
+.roles__grilla{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.rol{min-height:260px;padding-right:72px}
+.rol h3{font-size:1.75rem;margin-top:14px}
+.rol p{margin:8px 0 0;max-width:34ch}
+.rol .boton{margin-top:auto;align-self:flex-start}
+
+@media (max-width:1100px){.kpis-landing{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.vivo{justify-self:stretch;width:100%}.roles__grilla{grid-template-columns:1fr}}
+@media (max-width:700px){.ruta-pasos{grid-template-columns:1fr;gap:28px}.ruta-pasos::before{left:23px;right:auto;top:24px;bottom:24px;border-top:0;border-left:2px dashed var(--route-dash)}.ruta-pasos li{grid-template-columns:48px 1fr;justify-items:start;text-align:left;column-gap:16px}.ruta-pasos .nodo{grid-row:span 2}.kpis-landing{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.revelar,.revelar__contenido,.revelar__flecha{transition:none}}
+</style>
+</head>
+<body class="publico">
+<span class="nota-exploracion">Exploración · landing v2 · datos de demostración</span>
+
+<header class="barra-publica" data-barra-publica>
+  <a class="marca" href="/"><span class="marca__simbolo"><img src="/img/logo.svg" alt=""></span><span class="marca__nombre">Dona<em>Track</em></span></a>
+  <button class="barra-publica__abrir" type="button" data-menu-publico hidden aria-expanded="false" aria-controls="menu-publico"><span>Menú</span></button>
+  <div class="barra-publica__panel" id="menu-publico">
+    <nav aria-label="Secciones"><ul class="barra-publica__links"><li><a href="#">Donaciones entregadas</a></li><li><a href="#">Mapa de impacto</a></li><li><a href="#">Privacidad</a></li></ul></nav>
+    <div class="barra-publica__sesion"><a class="barra-publica__ingresar" href="#">Iniciar sesión</a><a class="boton boton--primario boton--chico" href="#">Registrarse</a></div>
+  </div>
+</header>
+
+<main class="publico__main">
+  <!-- 1. Hero: el recorrido de una donación reemplaza a los chips sueltos -->
+  <section class="hero" aria-labelledby="t1">
+    <div class="hero__grilla">
+      <div class="hero__texto">
+        <span class="eyebrow">Trazabilidad de donaciones con impacto social</span>
+        <h1 id="t1">DonaTrack</h1>
+        <p class="hero__bajada">Gestión y trazabilidad de donaciones con impacto social.</p>
+        <p class="hero__cuerpo">Una plataforma para registrar donaciones, asignarlas a necesidades reales y seguir su recorrido hasta la entrega final.</p>
+        <div class="hero__acciones">
+          <a class="boton boton--primario" href="#">Quiero donar</a>
+          <a class="boton boton--fantasma" href="#">Soy entidad beneficiaria</a>
+        </div>
+      </div>
+      <div class="vivo" aria-label="Ejemplo del recorrido de una donación">
+        <div class="vivo__enc"><span class="eyebrow">Recorrido en vivo</span><span class="estado-pill estado-pill--en-camino" style="width:auto">En traslado</span></div>
+        <div><p class="vivo__titulo">Arroz · 50 kg</p><p class="vivo__sub">para Comedor Los Girasoles</p></div>
+        <ol class="vivo__ruta">
+          <li class="hecho"><span class="nodo">1</span>En depósito<small>01/10</small></li>
+          <li class="hecho"><span class="nodo">2</span>Asignada<small>02/10</small></li>
+          <li class="hecho"><span class="nodo">3</span>Lista para entregar<small>02/10</small></li>
+          <li class="ahora"><span class="nodo">4</span>En traslado<small>hoy 08:05</small></li>
+          <li class="siguiente"><span class="nodo">5</span>Entregada<small>pendiente</small></li>
+        </ol>
+        <div class="vivo__kpis">
+          <div class="vivo__kpi"><b>128</b><span>entregadas este mes</span></div>
+          <div class="vivo__kpi"><b>12</b><span>entregas en curso</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. Cómo funciona como una ruta con nodos -->
+    <div class="como-funciona">
+      <div class="como-funciona__encabezado"><h2 id="t2">Cómo funciona</h2><p>Un recorrido claro y trazable, desde el registro de la donación hasta su entrega a quienes la necesitan.</p></div>
+      <ol class="ruta-pasos" aria-labelledby="t2">
+        <li><span class="nodo">1</span><h3>Registro</h3><p>Personas donantes y entidades beneficiarias crean su perfil.</p></li>
+        <li><span class="nodo">2</span><h3>Recepción</h3><p>Una persona administradora registra las donaciones recibidas en depósito.</p></li>
+        <li><span class="nodo">3</span><h3>Asignación</h3><p>El sistema vincula donaciones con necesidades materiales concretas.</p></li>
+        <li><span class="nodo">4</span><h3>Trazabilidad</h3><p>Las donaciones pueden seguirse hasta su entrega final.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 3. Destacadas con el pill de estado -->
+  <section class="destacadas" aria-labelledby="t3">
+    <div class="destacadas__encabezado"><h2 id="t3">Donaciones destacadas del último mes</h2></div>
+    <div class="carrusel"><ul class="carrusel__pista" tabindex="0" aria-label="Donaciones destacadas">
+      <li class="tarjeta-donacion"><div class="tarjeta-donacion__imagen"><img src="/img/donacion-ilustrativa.jpg" alt="" width="306" height="242"><span class="tarjeta-donacion__categoria">Mobiliario</span><span class="estado-pill estado-pill--completada tarjeta-donacion__estado">Entregada</span></div><div class="tarjeta-donacion__cuerpo"><h3>Pupitres y sillas reacondicionadas para dos aulas</h3><p>Entregada el 22 de septiembre, 2026</p></div></li>
+      <li class="tarjeta-donacion"><div class="tarjeta-donacion__imagen"><img src="/img/donacion-ilustrativa.jpg" alt="" width="306" height="242"><span class="tarjeta-donacion__categoria">Vestimenta</span><span class="estado-pill estado-pill--completada tarjeta-donacion__estado">Entregada</span></div><div class="tarjeta-donacion__cuerpo"><h3>Frazadas y mantas para personas mayores</h3><p>Entregada el 19 de septiembre, 2026</p></div></li>
+      <li class="tarjeta-donacion"><div class="tarjeta-donacion__imagen"><img src="/img/donacion-ilustrativa.jpg" alt="" width="306" height="242"><span class="tarjeta-donacion__categoria">Útiles escolares</span><span class="estado-pill estado-pill--completada tarjeta-donacion__estado">Entregada</span></div><div class="tarjeta-donacion__cuerpo"><h3>Cuadernos y lápices para el inicio de clases</h3><p>Entregada el 18 de septiembre, 2026</p></div></li>
+      <li class="tarjeta-donacion"><div class="tarjeta-donacion__imagen"><img src="/img/donacion-ilustrativa.jpg" alt="" width="306" height="242"><span class="tarjeta-donacion__categoria">Alimentos</span><span class="estado-pill estado-pill--completada tarjeta-donacion__estado">Entregada</span></div><div class="tarjeta-donacion__cuerpo"><h3>Fideos secos tipo mostachol</h3><p>Entregada el 13 de septiembre, 2026</p></div></li>
+    </ul></div>
+    <a class="boton boton--contorno-claro" href="#">Ver donaciones</a>
+  </section>
+
+  <!-- 4. Transparencia en números con los tiles del panel -->
+  <section class="numeros" aria-labelledby="t4">
+    <div class="numeros__encabezado"><h2 id="t4">Transparencia en números</h2></div>
+    <div class="kpis-landing">
+      <article class="kpi kpi-oscuro"><span class="lbl">Donaciones entregadas</span><span class="val">128</span><span class="delta">+23 este mes</span><div class="barras" role="img" aria-label="Entregas por mes: mayo 14, junio 19, julio 11, agosto 21, septiembre 26, octubre 23"><i style="height:54%"></i><i style="height:73%"></i><i style="height:42%"></i><i style="height:81%"></i><i style="height:100%"></i><i style="height:88%"></i></div></article>
+      <article class="kpi kpi-claro"><span class="lbl">Entidades ayudadas</span><div class="moneda"><b>34</b></div><div class="seg" aria-hidden="true"><i style="flex:14;background:var(--brand)"></i><i style="flex:11;background:var(--brand-alt)"></i><i style="flex:9;background:var(--brand-soft)"></i></div><div class="leyenda"><span style="--c:var(--brand)">14 comedores</span><span style="--c:var(--brand-alt)">11 escuelas</span><span style="--c:var(--brand-soft)">9 hogares</span></div></article>
+      <article class="kpi kpi-claro"><span class="lbl">Kg de alimentos distribuidos</span><div class="moneda"><b style="font-size:1.45rem">2.450</b></div><div class="seg" aria-hidden="true"><i style="flex:12;background:var(--brand)"></i><i style="flex:8;background:var(--brand-alt)"></i><i style="flex:5;background:var(--brand-soft)"></i></div><div class="leyenda"><span style="--c:var(--brand)">secos</span><span style="--c:var(--brand-alt)">conservas</span><span style="--c:var(--brand-soft)">otros</span></div></article>
+      <article class="kpi kpi-marca"><span class="lbl">Donantes activos</span><span class="val">86</span>
+        <div class="revelar"><button class="revelar__flecha" type="button" aria-expanded="false" aria-label="Ver donantes por categoría">→</button><span class="revelar__contenido"><b>Por categoría</b><ul><li>52 Colaboradores</li><li>26 Sostenedores</li><li>8 Transformadores</li></ul></span></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- 5. Nuevo: según tu rol (semicírculo que se expande) -->
+  <section class="roles" aria-labelledby="t5">
+    <div class="roles__enc"><h2 id="t5">Sumate según tu rol</h2><p>Elegí cómo querés participar.</p></div>
+    <div class="roles__grilla">
+      <article class="kpi kpi-oscuro rol"><span class="lbl">Persona donante</span><h3>Quiero donar</h3><p>Llevá tu donación al depósito y seguí su recorrido hasta que llega.</p><a class="boton boton--primario" href="#">Registrarme como donante</a>
+        <div class="revelar"><button class="revelar__flecha" type="button" aria-expanded="false" aria-label="Qué podés hacer como donante">→</button><span class="revelar__contenido"><b>Como donante podés</b><ul><li>Seguir cada donación en el mapa</li><li>Cumplir misiones y ganar insignias</li><li>Ver a qué entidades ayudaste</li></ul><a class="boton boton--fantasma" style="color:var(--text-on-brand);border-color:var(--text-on-brand)" href="#">Registrarme como donante</a></span></div>
+      </article>
+      <article class="kpi kpi-marca rol"><span class="lbl">Entidad beneficiaria</span><h3>Necesitamos ayuda</h3><p>Registrá tu organización y declará qué necesitás.</p><a class="boton boton--fantasma" style="color:var(--text-on-brand);border-color:var(--text-on-brand)" href="#">Registrar mi entidad</a>
+        <div class="revelar"><button class="revelar__flecha" type="button" aria-expanded="false" aria-label="Qué puede hacer una entidad">→</button><span class="revelar__contenido"><b>Como entidad podés</b><ul><li>Registrar necesidades recurrentes o urgentes</li><li>Ver las donaciones asignadas</li><li>Confirmar cada recepción</li></ul><a class="boton boton--primario" href="#">Registrar mi entidad</a></span></div>
+      </article>
+    </div>
+  </section>
+</main>
+<script src="/js/app.js" defer></script>
+<script>
+document.querySelectorAll(".revelar__flecha").forEach(b=>b.addEventListener("click",()=>{const r=b.closest(".revelar");const abierto=r.classList.toggle("is-abierto");b.setAttribute("aria-expanded",String(abierto));}));
+</script>
+</body>
+</html>

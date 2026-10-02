@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Componente guardado · Recorrido en vivo · DonaTrack</title>
+<!-- Guardado el 2026-10-01 a pedido de la usuaria: formato a reutilizar en los mapas interactivos
+     (R2, R9, R14) como panel lateral del seguimiento de una entrega. Se sirve en dev: /exploraciones/recorrido-en-vivo.html -->
+<link rel="stylesheet" href="/css/fuentes.css"><link rel="stylesheet" href="/css/tokens.css"><link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/componentes.css"><link rel="stylesheet" href="/css/publico.css">
+<style>
+body{background:var(--grad-hero);min-height:100vh;display:grid;place-items:center;padding:40px;color:var(--text-on-dark)}
+/* Hero: recorrido en vivo (componente "Recorrido" del área privada) */
+.vivo{position:relative;justify-self:end;width:min(420px,100%);padding:22px 24px;border-radius:var(--r-lg);background:var(--surface-glass);border:1px solid var(--border-glass);backdrop-filter:blur(14px);display:grid;gap:16px}
+.vivo__enc{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.vivo__titulo{margin:0;font-size:1.25rem;font-weight:700}
+.vivo__sub{margin:2px 0 0;font-size:var(--fs-sm);color:var(--text-on-dark-soft)}
+.vivo__ruta{list-style:none;margin:0;padding:0;display:grid;gap:14px;position:relative}
+.vivo__ruta::before{content:"";position:absolute;left:14px;top:14px;bottom:14px;border-left:2px dashed var(--route-dash)}
+.vivo__ruta li{display:flex;align-items:center;gap:14px;font-size:var(--fs-sm);color:var(--text-on-dark-soft)}
+.vivo__ruta small{margin-left:auto;font-size:var(--fs-xs);color:var(--text-on-dark-60)}
+.nodo{position:relative;z-index:1;flex:none;width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:800;border:2px solid var(--brand-bright);background:var(--surface-dark);color:var(--text-on-dark)}
+.hecho .nodo{background:var(--brand-bright);color:var(--text-on-brand)}
+.ahora{color:var(--text-on-dark)!important;font-weight:700}
+.ahora .nodo{box-shadow:var(--glow-node)}
+.siguiente .nodo{border-style:dashed;color:var(--text-on-dark-60)}
+.vivo__kpis{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.vivo__kpi{padding:10px 14px;border-radius:16px;background:var(--surface-glass-weak);border:1px solid var(--border-glass-soft)}
+.vivo__kpi b{display:block;font-size:1.375rem}
+.vivo__kpi span{font-size:var(--fs-xs);color:var(--text-on-dark-60)}
+
+
+</style></head><body>
+<div class="vivo" aria-label="Ejemplo del recorrido de una donación">
+        <div class="vivo__enc"><span class="eyebrow">Recorrido en vivo</span><span class="estado-pill estado-pill--en-camino" style="width:auto">En traslado</span></div>
+        <div><p class="vivo__titulo">Arroz · 50 kg</p><p class="vivo__sub">para Comedor Los Girasoles</p></div>
+        <ol class="vivo__ruta">
+          <li class="hecho"><span class="nodo">1</span>En depósito<small>01/10</small></li>
+          <li class="hecho"><span class="nodo">2</span>Asignada<small>02/10</small></li>
+          <li class="hecho"><span class="nodo">3</span>Lista para entregar<small>02/10</small></li>
+          <li class="ahora"><span class="nodo">4</span>En traslado<small>hoy 08:05</small></li>
+          <li class="siguiente"><span class="nodo">5</span>Entregada<small>pendiente</small></li>
+        </ol>
+        <div class="vivo__kpis">
+          <div class="vivo__kpi"><b>128</b><span>entregadas este mes</span></div>
+          <div class="vivo__kpi"><b>12</b><span>entregas en curso</span></div>
+        </div>
+      </div>
+    </div>
+
+
+</body></html>

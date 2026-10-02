@@ -92,6 +92,16 @@ class SesionYNavegacionTest {
         .andExpect(status().isOk())
         .andExpect(content().string(containsString("Camiones")));
     mvc.perform(get("/admin/no-existe").session(session)).andExpect(status().isNotFound());
+    // La campana de la barra superior apunta a /<rol>/notificaciones en todos los roles.
+    for (String identidad :
+        new String[] {"donante-nicolas", "entidad-girasoles", "admin-deposito"}) {
+      MockHttpSession s = ingresarComo(identidad);
+      String inicio =
+          identidad.startsWith("donante")
+              ? "/donante"
+              : identidad.startsWith("entidad") ? "/entidad" : "/admin";
+      mvc.perform(get(inicio + "/notificaciones").session(s)).andExpect(status().isOk());
+    }
   }
 
   @Test

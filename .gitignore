@@ -6,3 +6,4 @@ e2e/playwright-report/
 *.iml
 .vscode/
 .DS_Store
+dist/

@@ -38,7 +38,9 @@ public class CatalogoNavegacion {
               new ItemNavegacion("Donaciones", "/admin/donaciones", "donaciones", true),
               new ItemNavegacion("Asignaciones", "/admin/asignaciones", "asignaciones", true),
               new ItemNavegacion("Camiones", "/admin/camiones", "camiones", true),
-              new ItemNavegacion("Rankings", "/admin/rankings", "incentivos", true)));
+              new ItemNavegacion("Rankings", "/admin/rankings", "incentivos", true),
+              new ItemNavegacion(
+                  "Notificaciones", "/admin/notificaciones", "notificaciones", false)));
 
   public List<ItemNavegacion> de(Rol rol) {
     return ITEMS.get(rol);

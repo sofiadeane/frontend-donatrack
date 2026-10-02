@@ -25,16 +25,24 @@ public class ModeloComunAdvice {
 
   private final SessionPort sessionPort;
   private final CatalogoNavegacion catalogo;
+  private final boolean exportEstatico;
 
-  public ModeloComunAdvice(SessionPort sessionPort, CatalogoNavegacion catalogo) {
+  public ModeloComunAdvice(
+      SessionPort sessionPort,
+      CatalogoNavegacion catalogo,
+      @org.springframework.beans.factory.annotation.Value("${donatrack.export-estatico:false}")
+          boolean exportEstatico) {
     this.sessionPort = sessionPort;
     this.catalogo = catalogo;
+    this.exportEstatico = exportEstatico;
   }
 
   @ModelAttribute
   public void agregar(HttpServletRequest request, Model model) {
     String ruta = request.getRequestURI().substring(request.getContextPath().length());
     model.addAttribute("rutaActual", ruta);
+    // En el export para GitHub Pages no hay servidor: las acciones POST se reemplazan por enlaces.
+    model.addAttribute("exportEstatico", exportEstatico);
     SesionDemo sesion = sessionPort.actual(request).orElse(null);
     model.addAttribute("sesion", sesion);
     if (sesion != null) {
