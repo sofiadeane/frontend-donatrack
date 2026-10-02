@@ -8,39 +8,169 @@
     <p>Esa sección no corresponde a tu perfil, así que te trajimos a tu inicio.</p>
   </div>
 
-  <section class="cabecera" aria-labelledby="titulo-pagina">
-    <span class="eyebrow">Tu impacto</span>
-    <h1 id="titulo-pagina" th:text="'Hola, ' + ${sesion.primerNombre}">Hola</h1>
-    <p>Seguí el recorrido de tus donaciones hasta que llegan a quienes las necesitan.</p>
-    <div class="cabecera__acciones">
-      <a class="boton boton--primario" th:href="@{/donante/seguimiento}">Ver seguimiento</a>
-      <a class="boton boton--fantasma" th:href="@{/donante/donaciones}">Mis donaciones</a>
-    </div>
-  </section>
+  <th:block th:with="p=${panel}, e=${panel.entregas}, i=${panel.impacto}, r=${panel.recorrido}">
+  <span class="demo" th:if="${e.demo or i.demo or p.notificaciones.demo}">Datos de demostración</span>
 
-  <section class="tarjeta" aria-labelledby="titulo-ultimas">
-    <div class="tarjeta__encabezado">
-      <div>
-        <h2 id="titulo-ultimas">Tus últimas donaciones</h2>
-        <p class="tarjeta__bajada">Las más recientes primero</p>
+  <!-- Mini-hero con la red de ruta y las cifras principales -->
+  <section class="panel-hero" aria-labelledby="titulo-pagina">
+    <div>
+      <span class="eyebrow">Tu impacto</span>
+      <h1 id="titulo-pagina" th:text="'Hola, ' + ${sesion.primerNombre}">Hola</h1>
+      <p th:text="${p.mensaje}">Tu última donación ya está en camino.</p>
+      <div class="cabecera__acciones">
+        <a class="boton boton--primario" th:href="@{/donante/seguimiento}">Ver seguimiento</a>
+        <a class="boton boton--fantasma" th:href="@{/donante/donaciones}">Mis donaciones</a>
       </div>
-      <span th:replace="~{fragments/estados :: demo(${ultimas})}"></span>
     </div>
-
-    <ul class="lista-donaciones" th:if="${ultimas.ok()}">
-      <th:block th:each="d : ${ultimas.datos}"><li th:replace="~{fragments/donacion :: fila(${d})}"></li></th:block>
-    </ul>
-
-    <th:block th:if="${ultimas.vacia()}">
-      <div th:replace="~{fragments/estados :: vacio('Todavía no registraste donaciones', 'Cuando lleves una donación al depósito, vas a poder seguirla desde acá.', null, null)}"></div>
-    </th:block>
-
-    <th:block th:if="${ultimas.conError()}">
-      <div th:replace="~{fragments/estados :: error(${ultimas.error}, '/donante')}"></div>
-    </th:block>
-
-    <a class="boton boton--texto" th:if="${ultimas.ok()}" th:href="@{/donante/donaciones}">Ver todas</a>
+    <div class="panel-hero__red" aria-hidden="true">
+      <svg viewBox="0 0 360 200" preserveAspectRatio="none">
+        <path d="M18 168 C 80 150, 110 110, 160 102 S 270 60, 340 14" />
+      </svg>
+      <span class="panel-hero__nodo" style="left:13px;top:163px"></span>
+      <span class="panel-hero__nodo" style="left:155px;top:97px"></span>
+      <div class="panel-hero__chip" style="left:8px;top:84px" th:if="${e.ok()}"><b th:text="${e.datos.total}">6</b><span>donaciones</span></div>
+      <div class="panel-hero__chip" style="left:186px;top:118px" th:if="${i.ok() and i.datos.entidadesAyudadas != null}"><b th:text="${i.datos.entidadesAyudadas}">2</b><span>entidades ayudadas</span></div>
+      <div class="panel-hero__chip" style="right:-6px;top:-8px" th:if="${e.ok()}"><b th:text="${e.datos.entregadas}">2</b><span>entregadas</span></div>
+    </div>
   </section>
+
+  <div class="kpis">
+    <!-- A · Donaciones realizadas con mini gráfico real (previsualiza la futura sección Estadísticas) -->
+    <a class="kpi kpi--ruta" th:if="${i.ok()}" th:href="@{/donante/donaciones}"
+       th:attr="aria-label=${'Donaciones realizadas: ' + i.datos.realizadas + ', ' + i.datos.chip + '. Ver mis donaciones'}">
+      <span class="kpi__etiqueta">Donaciones realizadas</span>
+      <span class="kpi__ir" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span>
+      <div class="kpi__cuerpo">
+        <div>
+          <div class="kpi__valor" th:text="${i.datos.realizadas}">6</div>
+          <span class="kpi-chip" th:text="${i.datos.chip}">+3 este mes</span>
+        </div>
+        <svg class="minichart" role="img" th:attr="viewBox=${'0 0 ' + i.datos.anchoGrafico + ' 84'},aria-label=${i.datos.graficoDescripcion}">
+          <rect th:each="b : ${i.datos.grafico}" th:classappend="${b.actual} ? 'actual'"
+                th:attr="x=${b.x},y=${b.y},height=${b.alto}" width="17" rx="4"></rect>
+        </svg>
+      </div>
+    </a>
+    <section class="kpi kpi--estado" th:unless="${i.ok()}" aria-label="Donaciones realizadas">
+      <span class="kpi__etiqueta">Donaciones realizadas</span>
+      <p th:if="${i.conError()}" th:text="${i.error.mensaje}">No pudimos conectarnos.</p>
+      <p th:if="${i.vacio()}">Tus totales aparecen cuando registres tu primera donación.</p>
+    </section>
+
+    <!-- B · Entregadas: moneda y barra segmentada -->
+    <article class="kpi kpi--entregas" th:if="${e.ok()}" aria-labelledby="titulo-entregadas">
+      <div class="kpi--entregas__cabecera">
+        <div class="moneda"><b th:text="${e.datos.entregadas}">2</b></div>
+        <h2 class="kpi--entregas__titulo" id="titulo-entregadas">Donaciones <span>entregadas</span></h2>
+      </div>
+      <div class="segmentos" aria-hidden="true">
+        <i class="segmentos--entregadas" th:style="'flex:' + ${e.datos.entregadas}"></i>
+        <i class="segmentos--camino" th:style="'flex:' + ${e.datos.enCamino}"></i>
+        <i class="segmentos--proceso" th:style="'flex:' + ${e.datos.enProceso}"></i>
+        <i class="segmentos--interrumpidas" th:style="'flex:' + ${e.datos.interrumpidas}"></i>
+      </div>
+      <ul class="leyenda">
+        <li class="segmentos--entregadas" th:text="${e.datos.entregadas == 1} ? '1 entregada' : ${e.datos.entregadas + ' entregadas'}">2 entregadas</li>
+        <li class="segmentos--camino" th:text="${e.datos.enCamino + ' en camino'}">1 en camino</li>
+        <li class="segmentos--proceso" th:text="${e.datos.enProceso + ' en proceso'}">2 en proceso</li>
+        <li class="segmentos--interrumpidas" th:text="${e.datos.interrumpidas + ' sin entregar'}">1 sin entregar</li>
+      </ul>
+    </article>
+    <section class="kpi kpi--estado" th:unless="${e.ok()}" aria-label="Entregadas">
+      <span class="kpi__etiqueta">Entregadas</span>
+      <p th:text="${e.error.mensaje}">No pudimos conectarnos.</p>
+    </section>
+
+    <!-- C · Categoría actual: el semicírculo revela la próxima -->
+    <section class="kpi kpi--categoria" th:if="${i.ok()}" aria-labelledby="titulo-categoria">
+      <span class="kpi__etiqueta" id="titulo-categoria">Categoría actual</span>
+      <span class="kpi__categoria" th:text="${i.datos.categoria}">Colaborador</span>
+      <div class="desplegable desplegable--lado" data-desplegable>
+        <button class="desplegable__boton" type="button" aria-expanded="false" aria-controls="detalle-categoria"
+                aria-label="Ver próxima categoría">
+          <span th:replace="~{fragments/iconos :: icono('flecha', 20)}"></span>
+        </button>
+        <div class="desplegable__contenido" id="detalle-categoria">
+          <th:block th:if="${i.datos.proximaCategoria != null}">
+            <span class="kpi__etiqueta">Próxima categoría</span>
+            <span class="kpi__categoria" th:text="${i.datos.proximaCategoria}">Sostenedor</span>
+          </th:block>
+          <th:block th:if="${i.datos.proximaCategoria == null}">
+            <span class="kpi__etiqueta">Llegaste a la categoría más alta</span>
+            <span class="kpi__categoria">¡Gracias!</span>
+          </th:block>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="panel-grilla">
+    <!-- Recorrido de la última donación (la ruta como firma visual) -->
+    <section class="tarjeta" aria-labelledby="titulo-recorrido">
+      <div class="recorrido__cabecera">
+        <div>
+          <h2 id="titulo-recorrido">Recorrido de tu última donación</h2>
+          <p class="tarjeta__bajada" th:if="${r.ok()}" th:text="${r.datos.descripcion + ' · ' + r.datos.detalle}">Arroz · 50 kg</p>
+        </div>
+        <th:block th:if="${r.ok()}"><span th:replace="~{fragments/estados :: pillEstado(${r.datos.estado})}"></span></th:block>
+      </div>
+      <ol class="recorrido" th:if="${r.ok()}">
+        <li th:each="s : ${r.datos.pasos}" class="recorrido__paso" th:classappend="${'recorrido__paso--' + s.clase}"
+            th:attr="aria-current=${s.actual()} ? 'step' : null">
+          <span class="recorrido__nodo" th:text="${s.numero}">1</span>
+          <span><span th:text="${s.etiqueta}">En depósito</span><small th:text="${s.cuando}">01/10</small></span>
+        </li>
+      </ol>
+      <a class="boton boton--texto" th:if="${r.ok()}" th:href="@{/donante/donaciones/{id}(id=${r.datos.id})}">Ver el detalle</a>
+      <th:block th:if="${r.vacio()}">
+        <div th:replace="~{fragments/estados :: vacio('Todavía no registraste donaciones', 'Cuando lleves una donación al depósito, vas a poder seguir su recorrido desde acá.', null, null)}"></div>
+      </th:block>
+      <th:block th:if="${r.conError()}">
+        <div th:replace="~{fragments/estados :: error(${r.error}, '/donante')}"></div>
+      </th:block>
+    </section>
+
+    <!-- Misión actual -->
+    <section class="tarjeta mision" aria-labelledby="titulo-mision">
+      <h2 id="titulo-mision">Tu misión actual</h2>
+      <th:block th:if="${i.ok() and i.datos.mision != null}" th:with="m=${i.datos.mision}">
+        <p class="tarjeta__bajada" th:text="${m.ascenso}">Colaborador → Sostenedor</p>
+        <div class="mision__sello-fila">
+          <span class="mision__sello" th:text="${m.progreso + '/' + m.objetivo}">2/3</span>
+          <div><b th:text="${m.nombre}">Donante constante</b><span th:text="${m.descripcion}">Doná tres meses seguidos</span></div>
+        </div>
+        <div class="mision__barra" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+             th:attr="aria-valuenow=${m.porcentaje}" aria-label="Progreso de la misión">
+          <i th:style="'width:' + ${m.porcentaje} + '%'"></i>
+        </div>
+        <div class="mision__pie"><span th:text="${m.porcentaje + ' %'}">66 %</span><span th:text="${m.falta}">falta 1 paso</span></div>
+      </th:block>
+      <p class="mision__vacia" th:if="${i.ok() and i.datos.mision == null}">No tenés misiones activas por ahora.</p>
+      <p class="mision__vacia" th:if="${i.vacio()}">Tus misiones aparecen cuando registres tu primera donación.</p>
+      <p class="mision__vacia" th:if="${i.conError()}" th:text="${i.error.mensaje}">No pudimos conectarnos.</p>
+      <a class="boton boton--fantasma" th:href="@{/donante/incentivos}">Ver incentivos</a>
+    </section>
+  </div>
+
+  <!-- Notificaciones recientes -->
+  <section class="tarjeta" aria-labelledby="titulo-notificaciones">
+    <h2 id="titulo-notificaciones">Notificaciones recientes</h2>
+    <p class="tarjeta__bajada">Lo último que pasó con tus donaciones</p>
+    <ul class="notas" th:if="${p.notificaciones.ok()}">
+      <li th:each="n : ${p.notificaciones.datos}">
+        <span class="notas__punto" aria-hidden="true"></span>
+        <p th:text="${n.mensaje}">Tu donación salió del depósito.</p>
+        <time th:datetime="${#temporals.formatISO(n.fecha)}" th:text="${n.cuando}">hace 2 h</time>
+      </li>
+    </ul>
+    <th:block th:if="${p.notificaciones.vacia()}">
+      <div th:replace="~{fragments/estados :: vacio('No tenés notificaciones', 'Te avisamos acá cada vez que tu donación avance.', null, null)}"></div>
+    </th:block>
+    <th:block th:if="${p.notificaciones.conError()}">
+      <div th:replace="~{fragments/estados :: error(${p.notificaciones.error}, '/donante')}"></div>
+    </th:block>
+  </section>
+  </th:block>
 </th:block>
 </body>
 </html>

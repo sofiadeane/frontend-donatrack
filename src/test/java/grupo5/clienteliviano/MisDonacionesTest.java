@@ -51,7 +51,7 @@ class MisDonacionesTest {
     void lista() throws Exception {
       mvc.perform(get("/donante/donaciones").session(ingresar(mvc)))
           .andExpect(status().isOk())
-          .andExpect(content().string(containsString("6 donaciones")))
+          .andExpect(content().string(containsString("7 donaciones")))
           .andExpect(
               content()
                   .string(
@@ -74,7 +74,7 @@ class MisDonacionesTest {
           .andExpect(content().string(containsString("2 donaciones")))
           .andExpect(content().string(containsString("Limpiar filtros")));
       mvc.perform(get("/donante/donaciones").param("categoria", ALIMENTOS).session(sesion))
-          .andExpect(content().string(containsString("2 donaciones")))
+          .andExpect(content().string(containsString("3 donaciones")))
           .andExpect(content().string(containsString("Arroz largo fino")))
           .andExpect(content().string(containsString("Fideos secos tipo mostachol")));
       mvc.perform(
@@ -89,7 +89,7 @@ class MisDonacionesTest {
                   .param("categoria", ALIMENTOS)
                   .param("subcategoria", CAMPERAS)
                   .session(sesion))
-          .andExpect(content().string(containsString("2 donaciones")));
+          .andExpect(content().string(containsString("3 donaciones")));
       mvc.perform(
               get("/donante/donaciones")
                   .param("estado", "VENCIDA")

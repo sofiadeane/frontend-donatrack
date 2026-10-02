@@ -129,6 +129,7 @@
   --surface-circle: var(--turquoise-500);
   --surface-card-muted: var(--gray-100);
   --surface-glass-weak: var(--white-a08);
+  --surface-progreso: var(--white-a14);
   --border-light: var(--gray-50);
   --text-light: var(--gray-50);
   --text-badge: var(--gray-75);
@@ -153,8 +154,11 @@
   --shadow-cta: 0 -10px 15px var(--green-500-a20);
   --shadow-btn: 0 10px 15px var(--teal-a06);
   --shadow-coin: 0 12px 24px var(--turquoise-a35);
-  --glow-node: 0 0 0 8px var(--green-a28), 0 0 24px 6px var(--green-a40);
-  --glow-node-sm: 0 0 0 3px var(--green-a30);
+  /* Aura del nodo encendido: los espacios entre nodos se miden desde su borde, no desde el centro */
+  --aura-nodo: 8px;
+  --glow-node: 0 0 0 var(--aura-nodo) var(--green-a28), 0 0 24px 6px var(--green-a40);
+  --aura-nodo-sm: 3px;
+  --glow-node-sm: 0 0 0 var(--aura-nodo-sm) var(--green-a30);
   --glow-icon: drop-shadow(0 0 6px var(--green-a80));
   --backdrop: var(--teal-a45);
 
@@ -185,8 +189,10 @@
   --topbar-h: 68px;
   --sidebar-w: 248px;
   --sidebar-w-collapsed: 84px;
-  /* Ancho único de los pills de estado: entra cómodo "Lista para entregar" (160 px medidos) */
-  --ancho-pill-estado: 11rem;
+  /* Columnas fijas de las listas: el pill abraza su texto alineado a la izquierda de la suya
+     (entra "Lista para entregar" con ícono) y la fecha se alinea a la derecha de la suya */
+  --ancho-columna-estado: 11.5rem;
+  --ancho-columna-fecha: 6.5rem;
 
   /* Movimiento */
   --dur-fast: 120ms;

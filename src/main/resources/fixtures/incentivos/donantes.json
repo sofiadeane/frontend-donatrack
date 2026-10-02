@@ -1,0 +1,270 @@
+[
+  {
+    "perfil": {
+      "donanteId": "a3b40000-0000-4000-8000-000000000001",
+      "idPersona": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+      "nombre": "Nicolás Pérez",
+      "categoria": "COLABORADOR",
+      "fechaRegistro": "2026-04-12",
+      "misionesCompletadas": 1,
+      "insigniasGanadas": 1
+    },
+    "metricas": {
+      "donanteId": "a3b40000-0000-4000-8000-000000000001",
+      "categoria": "COLABORADOR",
+      "totalDonacionesHistoricas": 7,
+      "totalOrganizacionesAyudadas": 2,
+      "totalDonacionesExitosas": 2,
+      "ultimaDonacion": "2026-10-01",
+      "misionesCompletadasTotal": 1,
+      "misionActiva": {
+        "nombre": "Donante constante",
+        "descripcion": "Doná durante tres meses seguidos",
+        "progresoActual": 2,
+        "objetivo": 3,
+        "porcentaje": 66,
+        "distanciaAlObjetivo": 1
+      },
+      "donacionesPorPeriodo": {
+        "2026-05": 0,
+        "2026-06": 0,
+        "2026-07": 1,
+        "2026-08": 1,
+        "2026-09": 4,
+        "2026-10": 1
+      },
+      "donacionesMesActual": 1,
+      "donacionesMesAnterior": 4,
+      "posicionEnRanking": 7
+    },
+    "misiones": [
+      {
+        "nombre": "Primer paso",
+        "descripcion": "Registrá tu primera donación",
+        "categoria": "COLABORADOR",
+        "progresoActual": 1,
+        "objetivo": 1,
+        "porcentaje": 100,
+        "distanciaAlObjetivo": 0,
+        "completada": true,
+        "fechaCompletada": "2026-04-20",
+        "insignia": {
+          "nombre": "Primer paso",
+          "descripcion": "Tu primera donación llegó al depósito",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": "2026-04-20"
+        }
+      },
+      {
+        "nombre": "Donante constante",
+        "descripcion": "Doná durante tres meses seguidos",
+        "categoria": "COLABORADOR",
+        "progresoActual": 2,
+        "objetivo": 3,
+        "porcentaje": 66,
+        "distanciaAlObjetivo": 1,
+        "completada": false,
+        "fechaCompletada": null,
+        "insignia": {
+          "nombre": "Constancia",
+          "descripcion": "Tres meses seguidos donando",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": null
+        }
+      },
+      {
+        "nombre": "Red solidaria",
+        "descripcion": "Ayudá a cinco entidades distintas",
+        "categoria": "SOSTENEDOR",
+        "progresoActual": 2,
+        "objetivo": 5,
+        "porcentaje": 40,
+        "distanciaAlObjetivo": 3,
+        "completada": false,
+        "fechaCompletada": null,
+        "insignia": {
+          "nombre": "Red solidaria",
+          "descripcion": "Cinco entidades ayudadas",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": null
+        }
+      },
+      {
+        "nombre": "Diez donaciones",
+        "descripcion": "Llegá a diez donaciones registradas",
+        "categoria": "SOSTENEDOR",
+        "progresoActual": 7,
+        "objetivo": 10,
+        "porcentaje": 70,
+        "distanciaAlObjetivo": 3,
+        "completada": false,
+        "fechaCompletada": null,
+        "insignia": {
+          "nombre": "Diez de diez",
+          "descripcion": "Diez donaciones registradas",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": null
+        }
+      },
+      {
+        "nombre": "Impacto sostenido",
+        "descripcion": "Doná durante doce meses seguidos",
+        "categoria": "TRANSFORMADOR",
+        "progresoActual": 2,
+        "objetivo": 12,
+        "porcentaje": 16,
+        "distanciaAlObjetivo": 10,
+        "completada": false,
+        "fechaCompletada": null,
+        "insignia": {
+          "nombre": "Impacto sostenido",
+          "descripcion": "Un año entero donando",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": null
+        }
+      }
+    ],
+    "ascensos": []
+  },
+  {
+    "perfil": {
+      "donanteId": "a3b40000-0000-4000-8000-000000000002",
+      "idPersona": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000002",
+      "nombre": "Cooperativa La Huerta",
+      "categoria": "SOSTENEDOR",
+      "fechaRegistro": "2025-11-03",
+      "misionesCompletadas": 3,
+      "insigniasGanadas": 3
+    },
+    "metricas": {
+      "donanteId": "a3b40000-0000-4000-8000-000000000002",
+      "categoria": "SOSTENEDOR",
+      "totalDonacionesHistoricas": 3,
+      "totalOrganizacionesAyudadas": 2,
+      "totalDonacionesExitosas": 2,
+      "ultimaDonacion": "2026-09-25",
+      "misionesCompletadasTotal": 3,
+      "misionActiva": {
+        "nombre": "Red solidaria",
+        "descripcion": "Ayudá a cinco entidades distintas",
+        "progresoActual": 2,
+        "objetivo": 5,
+        "porcentaje": 40,
+        "distanciaAlObjetivo": 3
+      },
+      "donacionesPorPeriodo": {
+        "2026-07": 0,
+        "2026-08": 1,
+        "2026-09": 2,
+        "2026-10": 0
+      },
+      "donacionesMesActual": 0,
+      "donacionesMesAnterior": 2,
+      "posicionEnRanking": 3
+    },
+    "misiones": [
+      {
+        "nombre": "Primer paso",
+        "descripcion": "Registrá tu primera donación",
+        "categoria": "COLABORADOR",
+        "progresoActual": 1,
+        "objetivo": 1,
+        "porcentaje": 100,
+        "distanciaAlObjetivo": 0,
+        "completada": true,
+        "fechaCompletada": "2025-11-10",
+        "insignia": {
+          "nombre": "Primer paso",
+          "descripcion": "Tu primera donación llegó al depósito",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": "2025-11-10"
+        }
+      },
+      {
+        "nombre": "Donante constante",
+        "descripcion": "Doná durante tres meses seguidos",
+        "categoria": "COLABORADOR",
+        "progresoActual": 3,
+        "objetivo": 3,
+        "porcentaje": 100,
+        "distanciaAlObjetivo": 0,
+        "completada": true,
+        "fechaCompletada": "2026-02-28",
+        "insignia": {
+          "nombre": "Constancia",
+          "descripcion": "Tres meses seguidos donando",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": "2026-02-28"
+        }
+      },
+      {
+        "nombre": "Diez donaciones",
+        "descripcion": "Llegá a diez donaciones registradas",
+        "categoria": "SOSTENEDOR",
+        "progresoActual": 10,
+        "objetivo": 10,
+        "porcentaje": 100,
+        "distanciaAlObjetivo": 0,
+        "completada": true,
+        "fechaCompletada": "2026-06-02",
+        "insignia": {
+          "nombre": "Diez de diez",
+          "descripcion": "Diez donaciones registradas",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": "2026-06-02"
+        }
+      },
+      {
+        "nombre": "Red solidaria",
+        "descripcion": "Ayudá a cinco entidades distintas",
+        "categoria": "SOSTENEDOR",
+        "progresoActual": 2,
+        "objetivo": 5,
+        "porcentaje": 40,
+        "distanciaAlObjetivo": 3,
+        "completada": false,
+        "fechaCompletada": null,
+        "insignia": {
+          "nombre": "Red solidaria",
+          "descripcion": "Cinco entidades ayudadas",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": null
+        }
+      },
+      {
+        "nombre": "Impacto sostenido",
+        "descripcion": "Doná durante doce meses seguidos",
+        "categoria": "TRANSFORMADOR",
+        "progresoActual": 4,
+        "objetivo": 12,
+        "porcentaje": 33,
+        "distanciaAlObjetivo": 8,
+        "completada": false,
+        "fechaCompletada": null,
+        "insignia": {
+          "nombre": "Impacto sostenido",
+          "descripcion": "Un año entero donando",
+          "imagenUrl": null,
+          "visible": true,
+          "fechaObtenida": null
+        }
+      }
+    ],
+    "ascensos": [
+      {
+        "categoriaAnterior": "COLABORADOR",
+        "categoriaNueva": "SOSTENEDOR",
+        "fecha": "2026-03-15"
+      }
+    ]
+  }
+]

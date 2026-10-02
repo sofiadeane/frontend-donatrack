@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exploración · Estados, contraste y errores · DonaTrack</title>
+<!-- Exploración servida en dev: /exploraciones/estados-y-contraste.html (CSS real de la app). Datos de demostración. -->
+<link rel="stylesheet" href="/css/fuentes.css">
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/componentes.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/privado.css">
+<style>
+/* Colores candidatos SOLO de esta exploración: si se aprueban, pasan a tokens.css. Ratios AA calculados. */
+:root{
+  --cand-espera-bg:#e3f1ef; --cand-espera-fg:#163a3a;        /* 10,6:1 */
+  --cand-asignada-bg:#d7f4f0; --cand-asignada-fg:#0f5e55;    /* 6,6:1 */
+  --cand-camino-bg:#eafbf3; --cand-camino-fg:#1d6b45;        /* 6,0:1 */
+  --cand-entregada-bg:#50d794; --cand-entregada-fg:#163a3a;  /* 6,8:1 */
+  --cand-corte-bg:#fdf1ef; --cand-corte-fg:#b9443b;          /* 4,8:1 */
+  --cand-verde-oscuro:#27885a;                               /* blanco encima: 4,4:1 (texto grande AA) */
+  --cand-nav:rgb(41 41 40 / .78);                            /* 6,8:1 sobre la página */
+}
+body{background:var(--grad-page);color:var(--text)}
+.expl{width:min(1120px,calc(100% - 32px));margin:32px auto 80px;display:grid;gap:36px}
+.expl>header h1{font-size:var(--fs-h1);color:var(--text-strong)}
+.expl>header p{margin:6px 0 0;color:var(--text-muted);max-width:70ch}
+.expl h2{font-size:1.5rem;color:var(--text-strong)}
+.bloque-expl{display:grid;gap:16px}
+.bloque-expl>p{margin:0;color:var(--text-muted);max-width:80ch}
+.alts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.alt{display:grid;gap:12px;align-content:start;padding:20px;border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-card)}
+.alt h3{display:flex;align-items:center;gap:10px;font-size:1.0625rem;color:var(--text-strong)}
+.alt h3 b{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--surface-dark);color:var(--text-on-dark);font-size:13px}
+.alt>p{margin:0;font-size:var(--fs-sm);color:var(--text-muted)}
+.filas{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.filas li{display:grid;grid-template-columns:minmax(0,1fr) 11.5rem;align-items:center;gap:10px;font-size:var(--fs-sm);font-weight:700;color:var(--text-strong)}
+
+/* Pill base para las alternativas */
+.p{display:inline-flex;align-items:center;gap:6px;justify-self:start;padding:5px 12px 5px 9px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:700;white-space:nowrap}
+.p svg{flex:none}
+/* A · Tinte por fase */
+.a .p{border:1px solid transparent}
+.a .espera{background:var(--cand-espera-bg);color:var(--cand-espera-fg)}
+.a .asignada{background:var(--cand-asignada-bg);color:var(--cand-asignada-fg)}
+.a .camino{background:var(--cand-camino-bg);color:var(--cand-camino-fg);border-color:var(--brand)}
+.a .entregada{background:var(--cand-entregada-bg);color:var(--cand-entregada-fg)}
+.a .corte{background:var(--cand-corte-bg);color:var(--cand-corte-fg);border-color:var(--cand-corte-fg)}
+/* B · Oscuro con sello de color */
+.b .p{background:var(--surface-dark);color:var(--text-on-dark);padding-left:4px}
+.b .p .sello{display:grid;place-items:center;width:22px;height:22px;border-radius:50%}
+.b .espera .sello{background:var(--surface-dark-raised);color:var(--brand-soft);outline:1.5px dashed var(--brand-soft);outline-offset:-3px}
+.b .asignada .sello{background:var(--brand-alt);color:var(--text-on-brand)}
+.b .camino .sello{background:var(--brand-bright);color:var(--text-on-brand);box-shadow:var(--glow-node-sm)}
+.b .entregada .sello{background:var(--surface);color:var(--text-strong)}
+.b .corte .sello{background:var(--danger);color:var(--text-on-danger)}
+/* C · Progreso: el relleno avanza con el recorrido */
+.c .p{position:relative;overflow:hidden;isolation:isolate;border:1.5px solid var(--brand);color:var(--text-strong);background:var(--surface)}
+.c .p::before{content:"";position:absolute;inset:0 auto 0 0;z-index:-1;width:var(--avance);background:var(--grad-impulso)}
+.c .espera{--avance:12%}
+.c .asignada{--avance:36%}
+.c .lista{--avance:58%}
+.c .camino{--avance:78%}
+.c .entregada{--avance:100%}
+.c .corte{--avance:0%;border-color:var(--danger);color:var(--danger);background:var(--surface-danger-soft)}
+
+/* Contraste */
+.contraste{display:grid;gap:12px}
+.caso{display:grid;grid-template-columns:200px repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+.caso>b{align-self:center;color:var(--text-strong);font-size:var(--fs-sm)}
+.muestra{display:grid;gap:6px;align-content:center;min-height:86px;padding:14px 16px;border-radius:var(--r-md);box-shadow:var(--shadow-card)}
+.muestra .r{justify-self:start;padding:2px 9px;border-radius:var(--r-pill);font-size:11px;font-weight:800}
+.r.mal{background:var(--danger);color:var(--text-on-danger)}
+.r.bien{background:var(--surface-dark);color:var(--text-on-dark)}
+.r.bien::before{content:"✓ "}
+.r.mal::before{content:"✕ "}
+.banda{background:var(--surface-band);color:var(--white);font-size:24px;font-weight:800}
+.banda.teal{color:var(--text-strong)}
+.banda.oscura{background:var(--cand-verde-oscuro)}
+.circulo{background:var(--surface);}
+.circulo i{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--surface-circle);font-style:normal;font-weight:900;font-size:20px;color:var(--white)}
+.circulo.teal i{color:var(--text-strong)}
+.nav-m{background:var(--surface-page);font-weight:500;color:var(--text-nav)}
+.nav-m.ok{color:var(--cand-nav)}
+.fecha-m{background:var(--surface);font-size:var(--fs-sm);color:var(--text-meta)}
+.fecha-m.ok{color:var(--text-muted)}
+.chip-m{background:var(--surface-dark);color:var(--text-on-dark-60);font-size:var(--fs-xs)}
+.etq{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-muted)}
+
+/* Tiles con error */
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.tiles .kpi{min-height:196px}
+/* A · Tarjeta blanca (la actual) */
+/* B · El tile conserva su forma, apagado, con ruta cortada */
+.err-b{padding:22px;background:var(--grad-hero);color:var(--text-on-dark);box-shadow:var(--shadow-lift);justify-content:space-between}
+.err-b.claro{background:var(--surface);color:var(--text-strong);box-shadow:var(--shadow-card)}
+.err-b .kpi__etiqueta{opacity:.8}
+.corte-ruta{display:flex;align-items:center;gap:8px}
+.corte-ruta i{width:10px;height:10px;border-radius:50%;border:2px dashed var(--route-dash)}
+.corte-ruta i.rota{border:0;background:var(--danger);box-shadow:0 0 0 var(--aura-nodo-sm) var(--ring-danger);margin-inline:var(--aura-nodo-sm)}
+.err-b p{margin:0;font-size:var(--fs-sm);color:inherit;opacity:.85}
+.err-b a{font-weight:700;font-size:var(--fs-sm);color:inherit}
+/* C · Esqueleto con aviso */
+.err-c{padding:22px;background:var(--surface);box-shadow:var(--shadow-card);gap:12px}
+.hueso{display:block;border-radius:8px;background:var(--surface-muted)}
+.aviso-err{display:inline-flex;align-items:center;gap:8px;justify-self:start;align-self:flex-start;padding:5px 12px;border-radius:var(--r-pill);background:var(--surface-danger-soft);color:var(--danger);font-size:var(--fs-xs);font-weight:800}
+.aviso-err::before{content:"!";display:grid;place-items:center;width:16px;height:16px;border-radius:50%;background:var(--danger);color:var(--text-on-danger);font-size:11px}
+.err-c a{font-weight:700;font-size:var(--fs-sm);color:var(--text-strong)}
+@media (max-width:900px){.tiles{grid-template-columns:1fr}.caso{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="expl">
+  <header>
+    <span class="demo">Exploración · datos de demostración</span>
+    <h1>Estados, contraste y errores</h1>
+    <p>Alternativas para los puntos 8 (colores de estado y contraste) y 10 (cómo se ve un tile cuando falla su servicio). Los ratios son de contraste WCAG; AA pide 4,5:1 para texto normal y 3:1 para texto grande.</p>
+  </header>
+
+  <!-- ===== 1. Pills ===== -->
+  <section class="bloque-expl" aria-labelledby="t1">
+    <h2 id="t1">1 · Pills de estado</h2>
+    <p>Hoy todas son oscuras y solo cambia el ícono. Tres formas de reconocerlas de un vistazo, todas con ícono y texto (nunca solo color):</p>
+    <div class="alts">
+      <article class="alt a"><h3><b>A</b>Tinte por fase</h3><p>Fondo claro con el color de la fase; la entregada queda sólida y la interrumpida en rojo. Más legible en listas largas.</p><ul class="filas" data-filas></ul></article>
+      <article class="alt b"><h3><b>B</b>Oscura con sello de color</h3><p>Mantiene el pill oscuro de la identidad; el ícono va en un círculo del color de la fase. Cambio mínimo sobre lo actual.</p><ul class="filas" data-filas></ul></article>
+      <article class="alt c"><h3><b>C</b>Relleno que avanza</h3><p>El pill se llena con el degradé de marca a medida que la donación avanza en su recorrido. Cuenta el progreso sin leer.</p><ul class="filas" data-filas></ul></article>
+    </div>
+  </section>
+
+  <!-- ===== 2. Contraste ===== -->
+  <section class="bloque-expl" aria-labelledby="t2">
+    <h2 id="t2">2 · Contraste (fallas AA que vienen del Figma)</h2>
+    <p>Izquierda, como está hoy; derecha, la propuesta. Para la banda verde hay dos caminos: texto teal (no cambia el verde) o un verde más profundo (cambia la marca).</p>
+    <div class="contraste">
+      <div class="caso"><b>Título sobre la banda verde (destacadas)</b>
+        <div class="muestra banda"><span class="etq">Hoy</span>Donaciones destacadas<span class="r mal">1,8:1</span></div>
+        <div class="muestra banda teal"><span class="etq">Propuesta A · texto teal</span>Donaciones destacadas<span class="r bien">6,8:1</span></div>
+      </div>
+      <div class="caso"><b></b>
+        <div class="muestra" style="box-shadow:none;background:none"></div>
+        <div class="muestra banda oscura"><span class="etq" style="color:inherit">Propuesta B · verde profundo</span>Donaciones destacadas<span class="r bien">4,4:1 · texto grande</span></div>
+      </div>
+      <div class="caso"><b>Número en los círculos turquesa (cómo funciona)</b>
+        <div class="muestra circulo"><span class="etq">Hoy</span><i>3</i><span class="r mal">2,1:1</span></div>
+        <div class="muestra circulo teal"><span class="etq">Propuesta · número teal</span><i>3</i><span class="r bien">5,9:1</span></div>
+      </div>
+      <div class="caso"><b>Enlaces de la barra pública</b>
+        <div class="muestra nav-m"><span class="etq">Hoy · tinta 62 %</span>Donaciones entregadas<span class="r mal">4,2:1</span></div>
+        <div class="muestra nav-m ok"><span class="etq">Propuesta · tinta 78 %</span>Donaciones entregadas<span class="r bien">6,8:1</span></div>
+      </div>
+      <div class="caso"><b>Fecha de las tarjetas de donación</b>
+        <div class="muestra fecha-m"><span class="etq">Hoy · tinta 40 %</span>22 de septiembre, 2026<span class="r mal">2,4:1</span></div>
+        <div class="muestra fecha-m ok"><span class="etq">Propuesta · gris de texto secundario</span>22 de septiembre, 2026<span class="r bien">5,3:1</span></div>
+      </div>
+      <div class="caso"><b>Etiquetas al 60 % sobre teal oscuro</b>
+        <div class="muestra chip-m"><span class="etq" style="color:inherit">Hoy</span>entidades ayudadas<span class="r bien">5,5:1</span></div>
+        <div class="muestra" style="background:var(--surface)"><span class="etq">Sin cambios</span><span style="font-size:var(--fs-sm)">Revisado: ya cumple sobre el teal. Solo falla si queda sobre la banda verde, y ahí no se usa.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 3. Tiles con error ===== -->
+  <section class="bloque-expl" aria-labelledby="t3">
+    <h2 id="t3">3 · Tiles cuando falla su servicio</h2>
+    <p>Ejemplo: incentivos no responde. Hoy (A) los tiles se reemplazan por una tarjeta blanca con el mensaje. B y C mantienen la forma del tablero para que no "salte".</p>
+
+    <h3 class="etq">A · Tarjeta blanca (actual)</h3>
+    <div class="kpis tiles">
+      <section class="kpi kpi--estado"><span class="kpi__etiqueta">Donaciones realizadas</span><p>No pudimos conectarnos con el servicio de incentivos. Probá de nuevo en unos minutos.</p></section>
+      <section class="kpi kpi--estado"><span class="kpi__etiqueta">Categoría actual</span><p>No pudimos conectarnos con el servicio de incentivos. Probá de nuevo en unos minutos.</p></section>
+      <section class="kpi kpi--estado"><span class="kpi__etiqueta">Tu misión actual</span><p>No pudimos conectarnos con el servicio de incentivos. Probá de nuevo en unos minutos.</p></section>
+    </div>
+
+    <h3 class="etq">B · El tile conserva su forma, con la ruta cortada</h3>
+    <div class="kpis tiles">
+      <section class="kpi err-b"><span class="kpi__etiqueta">Donaciones realizadas</span><div class="corte-ruta" aria-hidden="true"><i></i><i></i><i class="rota"></i></div><p>No pudimos traer tus totales.</p><a href="#">Reintentar</a></section>
+      <section class="kpi err-b claro"><span class="kpi__etiqueta">Categoría actual</span><div class="corte-ruta" aria-hidden="true"><i></i><i></i><i class="rota"></i></div><p>No pudimos traer tu categoría.</p><a href="#">Reintentar</a></section>
+      <section class="kpi err-b"><span class="kpi__etiqueta">Tu misión actual</span><div class="corte-ruta" aria-hidden="true"><i></i><i></i><i class="rota"></i></div><p>No pudimos traer tu misión.</p><a href="#">Reintentar</a></section>
+    </div>
+
+    <h3 class="etq">C · Esqueleto del contenido con aviso</h3>
+    <div class="kpis tiles">
+      <section class="kpi err-c"><span class="aviso-err">Sin conexión con incentivos</span><span class="hueso" style="width:55%;height:14px"></span><span class="hueso" style="width:30%;height:56px"></span><span class="hueso" style="width:100%;height:40px"></span><a href="#">Reintentar</a></section>
+      <section class="kpi err-c"><span class="aviso-err">Sin conexión con incentivos</span><span class="hueso" style="width:40%;height:14px"></span><span class="hueso" style="width:75%;height:44px"></span><a href="#">Reintentar</a></section>
+      <section class="kpi err-c"><span class="aviso-err">Sin conexión con incentivos</span><span class="hueso" style="width:50%;height:14px"></span><span class="hueso" style="width:100%;height:10px"></span><span class="hueso" style="width:35%;height:10px"></span><a href="#">Reintentar</a></section>
+    </div>
+  </section>
+</main>
+<script>
+  // Las mismas siete filas en cada alternativa de pill.
+  const iconos = {
+    donaciones: '<path d="m21 8-9-5-9 5 9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/>',
+    asignaciones: '<path d="M4 7h11M4 7l3-3M4 7l3 3"/><path d="M20 17H9m11 0-3-3m3 3-3 3"/>',
+    necesidades: '<path d="M9 4h6l1 3H8l1-3Z"/><rect x="5" y="7" width="14" height="14" rx="2"/><path d="M9 13h6M9 17h4"/>',
+    camiones: '<path d="M3 6h11v10H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+    check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+    alerta: '<path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.5v.01"/>',
+    reloj: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>'
+  };
+  const estados = [
+    ["Lentejas secas", "En depósito", "espera", "donaciones"],
+    ["Camperas de abrigo", "Asignada", "asignada", "asignaciones"],
+    ["Legumbres surtidas", "Lista para entregar", "camino lista", "necesidades"],
+    ["Arroz largo fino", "En traslado", "camino", "camiones"],
+    ["Fideos secos", "Entregada", "entregada", "check"],
+    ["Conservas", "Entrega fallida", "corte", "alerta"],
+    ["Leche larga vida", "Vencida", "corte", "reloj"]
+  ];
+  const svg = (n) => `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconos[n]}</svg>`;
+  document.querySelectorAll("[data-filas]").forEach((ul) => {
+    const conSello = ul.closest(".b");
+    ul.innerHTML = estados.map(([d, e, c, i]) =>
+      `<li><span>${d}</span><span class="p ${c}">${conSello ? `<span class="sello">${svg(i)}</span>` : svg(i)}${e}</span></li>`).join("");
+  });
+</script>
+</body>
+</html>

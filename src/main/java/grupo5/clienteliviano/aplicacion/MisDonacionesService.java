@@ -104,7 +104,7 @@ public class MisDonacionesService {
                             sesion.donanteId(), filtros.estado(), filtros.subcategoriaId()))
                     .stream()
                     .filter(d -> filtros.categoriaId() == null || esDeCategoria(d, filtros))
-                    .sorted(DonanteInicioService.MAS_RECIENTE_PRIMERO)
+                    .sorted(VistaDonaciones.MAS_RECIENTE_PRIMERO)
                     .map(vista::resumen)
                     .toList());
     List<OpcionEstado> estados =

@@ -77,6 +77,24 @@ class FixturesContratoTest {
   }
 
   @Test
+  @DisplayName("Incentivos y notificaciones de demostración respetan los DTOs del backend")
+  void incentivosYNotificaciones() {
+    assertThat(
+            lector.lista(
+                "incentivos/donantes.json",
+                grupo5.clienteliviano.integracion.incentivos.IncentivosFixtureAdapter
+                    .RegistroFixture.class))
+        .isNotEmpty()
+        .allSatisfy(r -> assertThat(r.perfil().donanteId()).isEqualTo(r.metricas().donanteId()));
+    assertThat(
+            lector.lista(
+                "notificaciones/notificaciones.json",
+                grupo5.clienteliviano.integracion.notificaciones.NotificacionesFixtureAdapter
+                    .RegistroFixture.class))
+        .isNotEmpty();
+  }
+
+  @Test
   @DisplayName("Las identidades de demostración respetan su formato")
   void identidades() {
     assertThat(lector.lista("sesion/identidades.json", IdentidadDemo.class)).isNotEmpty();
@@ -86,7 +104,7 @@ class FixturesContratoTest {
   @DisplayName("El adapter de demostración filtra como el backend")
   void filtros() {
     DonacionesFixtureAdapter adapter = new DonacionesFixtureAdapter(lector);
-    assertThat(adapter.donacionesIndependientes(FiltroDonaciones.delDonante(NICOLAS))).hasSize(6);
+    assertThat(adapter.donacionesIndependientes(FiltroDonaciones.delDonante(NICOLAS))).hasSize(7);
     assertThat(adapter.donacionesIndependientes(new FiltroDonaciones(NICOLAS, "ENTREGADA", null)))
         .hasSize(2);
     assertThat(adapter.donacionesIndependientes(new FiltroDonaciones(null, null, ARROZ)))

@@ -198,6 +198,7 @@
 }
 
 .proximamente__ruta span:last-child {
+  margin-inline: var(--aura-nodo);
   background: var(--brand-bright);
   border: 0;
   box-shadow: var(--glow-node);
@@ -326,7 +327,7 @@ a.opcion:hover {
 
 .lista-donaciones__fila {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) var(--ancho-columna-estado) var(--ancho-columna-fecha);
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-3) var(--space-4) var(--space-3) var(--space-2);
@@ -356,6 +357,7 @@ a.opcion:hover {
 
 .lista-donaciones__fecha {
   white-space: nowrap;
+  text-align: right;
 }
 
 @media (max-width: 600px) {
@@ -381,13 +383,14 @@ a.opcion:hover {
   }
 }
 
-/* ===== Pill de estado (forma del punto según la fase; colores de estado pendientes) ===== */
+/* ===== Pill de estado: abraza su texto; ícono por estado (la forma ayuda a reconocerlo de un vistazo) ===== */
 .estado-pill {
   display: inline-flex;
   align-items: center;
-  width: var(--ancho-pill-estado);
-  gap: var(--space-2);
-  padding: 5px 12px 5px 10px;
+  justify-self: start;
+  width: fit-content;
+  gap: 6px;
+  padding: 5px 12px 5px 9px;
   border-radius: var(--r-pill);
   background: var(--surface-dark);
   color: var(--text-on-dark);
@@ -396,34 +399,25 @@ a.opcion:hover {
   white-space: nowrap;
 }
 
-.estado-pill::before {
-  content: "";
+.estado-pill svg {
   flex: none;
-  width: 8px;
-  height: 8px;
-  border-radius: 4px;
-  box-sizing: border-box;
+  color: var(--brand-bright);
 }
 
-.estado-pill--en-espera::before {
-  border: 2px solid var(--brand-soft);
+.estado-pill--en-espera svg {
+  color: var(--brand-soft);
 }
 
-.estado-pill--asignada::before {
-  background: var(--brand-alt);
+.estado-pill--asignada svg {
+  color: var(--brand-alt);
 }
 
-.estado-pill--en-camino::before {
-  background: var(--brand-bright);
-  box-shadow: var(--glow-node-sm);
+.estado-pill--en-camino svg {
+  filter: var(--glow-icon);
 }
 
-.estado-pill--completada::before {
-  background: var(--brand);
-}
-
-.estado-pill--interrumpida::before {
-  border: 2px dashed var(--text-on-dark-muted);
+.estado-pill--interrumpida svg {
+  color: var(--text-on-dark-muted);
 }
 
 /* ===== Estados de sección ===== */
@@ -728,7 +722,8 @@ a.opcion:hover {
   grid-column: span 6;
 }
 
-.campo label,
+/* Solo la etiqueta directa del campo: no pisa a las tarjetas-radio (.opcion) ni a los chips */
+.campo > label,
 .campo__etiqueta {
   padding: 0;
   font-size: var(--fs-sm);
@@ -890,7 +885,7 @@ a.opcion:hover {
   font-weight: 900;
 }
 
-.campo.con-error label,
+.campo.con-error > label,
 .campo.con-error .campo__etiqueta {
   color: var(--danger);
 }

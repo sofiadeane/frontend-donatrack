@@ -26,6 +26,19 @@ public record EstadoDonacionVista(String codigo, String etiqueta, Fase fase) {
     };
   }
 
+  /** Ícono del pill: refuerza el estado con una forma, no solo con el texto. */
+  public String icono() {
+    return switch (codigo == null ? "" : codigo) {
+      case "EN_DEPOSITO" -> "donaciones";
+      case "ASIGNACION_REALIZADA" -> "asignaciones";
+      case "LISTA_PARA_ENTREGAR" -> "necesidades";
+      case "EN_TRASLADO" -> "camiones";
+      case "ENTREGADA" -> "check";
+      case "VENCIDA" -> "reloj";
+      default -> "alerta";
+    };
+  }
+
   public String claseFase() {
     return fase.name().toLowerCase().replace('_', '-');
   }

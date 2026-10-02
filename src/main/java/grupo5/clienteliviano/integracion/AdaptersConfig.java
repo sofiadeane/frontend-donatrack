@@ -6,6 +6,12 @@ import grupo5.clienteliviano.integracion.donaciones.DonacionesHttpAdapter;
 import grupo5.clienteliviano.integracion.donaciones.DonacionesPort;
 import grupo5.clienteliviano.integracion.fixtures.LectorFixtures;
 import grupo5.clienteliviano.integracion.http.FabricaClientesHttp;
+import grupo5.clienteliviano.integracion.incentivos.IncentivosFixtureAdapter;
+import grupo5.clienteliviano.integracion.incentivos.IncentivosHttpAdapter;
+import grupo5.clienteliviano.integracion.incentivos.IncentivosPort;
+import grupo5.clienteliviano.integracion.notificaciones.NotificacionesFixtureAdapter;
+import grupo5.clienteliviano.integracion.notificaciones.NotificacionesHttpAdapter;
+import grupo5.clienteliviano.integracion.notificaciones.NotificacionesPort;
 import grupo5.clienteliviano.integracion.personas.RegistroFixtureAdapter;
 import grupo5.clienteliviano.integracion.personas.RegistroHttpAdapter;
 import grupo5.clienteliviano.integracion.personas.RegistroPort;
@@ -41,5 +47,23 @@ public class AdaptersConfig {
     return modo == Modo.HTTP
         ? new RegistroHttpAdapter(fabrica.para(Servicio.DONACIONES))
         : new RegistroFixtureAdapter();
+  }
+
+  @Bean
+  IncentivosPort incentivosPort(FabricaClientesHttp fabrica, LectorFixtures lector) {
+    Modo modo = properties.de(Servicio.INCENTIVOS).modo();
+    log.info("incentivos-service: adapter {}", modo);
+    return modo == Modo.HTTP
+        ? new IncentivosHttpAdapter(fabrica.para(Servicio.INCENTIVOS))
+        : new IncentivosFixtureAdapter(lector);
+  }
+
+  @Bean
+  NotificacionesPort notificacionesPort(FabricaClientesHttp fabrica, LectorFixtures lector) {
+    Modo modo = properties.de(Servicio.NOTIFICACIONES).modo();
+    log.info("notificaciones-service: adapter {}", modo);
+    return modo == Modo.HTTP
+        ? new NotificacionesHttpAdapter(fabrica.para(Servicio.NOTIFICACIONES))
+        : new NotificacionesFixtureAdapter(lector);
   }
 }

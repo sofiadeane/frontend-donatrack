@@ -28,5 +28,5 @@
 </div>
 
 <!-- Pill de estado de una donación -->
-<span th:fragment="pillEstado(estado)" class="estado-pill" th:classappend="'estado-pill--' + ${estado.claseFase()}"
-      th:text="${estado.etiqueta}">En traslado</span>
+<span th:fragment="pillEstado(estado)" class="estado-pill" th:classappend="'estado-pill--' + ${estado.claseFase()}"><span
+      th:replace="~{fragments/iconos :: icono(${estado.icono()}, 14)}"></span><span th:text="${estado.etiqueta}">En traslado</span></span>

@@ -3,6 +3,7 @@ package grupo5.clienteliviano.aplicacion;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionIndependienteResponseDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.ItemDonacionIndependienteResponseDTO;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -26,6 +27,13 @@ public class VistaDonaciones {
           "ENTREGADA",
           "ENTREGA_FALLIDA",
           "VENCIDA");
+
+  /** La donación registrada más recientemente primero. */
+  public static final Comparator<DonacionIndependienteResponseDTO> MAS_RECIENTE_PRIMERO =
+      Comparator.comparing(
+              DonacionIndependienteResponseDTO::fechaRegistro,
+              Comparator.nullsFirst(Comparator.<LocalDateTime>naturalOrder()))
+          .reversed();
 
   /** Fila de una lista de donaciones. */
   public record DonacionResumen(

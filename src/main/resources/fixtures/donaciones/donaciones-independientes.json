@@ -677,5 +677,47 @@
       ],
       "cantidad": 120
     }
+  },
+  {
+    "donanteId": "a3b40000-0000-4000-8000-000000000001",
+    "donacion": {
+      "id": "d0000000-0000-4000-8000-000000000012",
+      "donacionOriginalId": "0d000000-0000-4000-8000-000000000012",
+      "descripcion": "Lentejas secas en bolsas de 1 kg",
+      "estadoActual": "EN_DEPOSITO",
+      "fechaRegistro": "2026-10-01T09:30:00",
+      "historial": [
+        {
+          "estadoAnterior": null,
+          "estadoNuevo": "EN_DEPOSITO",
+          "timestamp": "2026-10-01T09:30:00",
+          "justificacion": null,
+          "actor": "SISTEMA"
+        }
+      ],
+      "items": [
+        {
+          "bien": {
+            "bien": {
+              "descripcion": "Lentejas secas en bolsas de 1 kg",
+              "fotoUrl": null,
+              "fechaVencimiento": "2027-06-01",
+              "estado": "NUEVO"
+            },
+            "subcategoria": {
+              "id": "5b000000-0000-4000-8000-000000000007",
+              "nombre": "Legumbres secas"
+            },
+            "categoria": {
+              "id": "c1000000-0000-4000-8000-000000000001",
+              "nombre": "Alimentos",
+              "unidad": "KILOGRAMO"
+            }
+          },
+          "cantidad": 15
+        }
+      ],
+      "cantidad": 15
+    }
   }
 ]

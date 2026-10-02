@@ -1,0 +1,38 @@
+[
+  {
+    "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+    "notificacion": {
+      "id": "a0000000-0000-4000-8000-000000000001",
+      "mensaje": "El camión salió a entregar tu donación de Arroz largo fino en paquetes de 1 kg (50 kg).",
+      "estado": "ENVIADA",
+      "fechaCreacion": "2026-10-01T08:05:00"
+    }
+  },
+  {
+    "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+    "notificacion": {
+      "id": "a0000000-0000-4000-8000-000000000002",
+      "mensaje": "Completaste la misión \"Primer paso\" y ganaste una insignia.",
+      "estado": "ENVIADA",
+      "fechaCreacion": "2026-09-30T19:20:00"
+    }
+  },
+  {
+    "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+    "notificacion": {
+      "id": "a0000000-0000-4000-8000-000000000003",
+      "mensaje": "Tu donación de Camperas de abrigo para adultos (12 unidades) fue asignada a una entidad beneficiaria.",
+      "estado": "ENVIADA",
+      "fechaCreacion": "2026-09-28T11:00:00"
+    }
+  },
+  {
+    "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+    "notificacion": {
+      "id": "a0000000-0000-4000-8000-000000000004",
+      "mensaje": "Tu donación de Fideos secos tipo mostachol (30 kg) llegó a destino. ¡Gracias!",
+      "estado": "ENVIADA",
+      "fechaCreacion": "2026-09-22T16:40:00"
+    }
+  }
+]

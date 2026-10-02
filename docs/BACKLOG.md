@@ -44,8 +44,8 @@ Prioridad: **M** Must · **S** Should · **C** Could. Estado inicial: Backlog.
 | H2.1 | Como donante, quiero filtrar mis donaciones por estado y categoría/subcategoría | M | Revisión (filtros GET; subcategoría dependiente con JS; sin filtros en el export estático) |
 | H2.2 | Como donante, quiero ver el historial de estados de una donación | M | Revisión (solo donaciones propias; justificación en entrega fallida) |
 | H2.3 | Como donante, quiero explorar entidades beneficiarias y sus necesidades | M | Backlog |
-| H2.4 | Como donante, quiero ver mi categoría, misiones e insignias | M | Backlog |
-| H2.5 | Como donante, quiero ver mis notificaciones | M | Backlog |
+| H2.4 | Como donante, quiero ver mi categoría, misiones e insignias | M | Revisión (`/donante/incentivos`: recorrido de categorías, misión activa, insignias ganadas/pendientes, misiones por categoría) |
+| H2.5 | Como donante, quiero ver mis notificaciones | M | En curso (las 3 últimas en el inicio; falta la página completa) |
 | H2.6 | Como donante, quiero seguir las entregas activas (sin mapa) | S | Backlog |
 | H2.7 | Como donante, quiero una sección de Estadísticas con gráficos de mi actividad (`/metricas`); el tile "Donaciones realizadas" del inicio es su previsualización y enlaza a ella | S | Backlog |
 | H2.8 | Como donante, quiero elegir qué insignias son visibles | C | Backlog |

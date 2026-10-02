@@ -219,10 +219,23 @@
 .hero__grilla {
   width: min(1088px, 100%);
   display: grid;
-  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  /* Texto al 50 % en escritorio; el otro 50 % queda para la escena de la Etapa 6 */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 40px;
   align-items: center;
   min-height: 400px;
+}
+
+/* Tablet y celular: el texto ocupa todo el ancho */
+@media (max-width: 1024px) {
+  .hero__grilla {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .hero__escena {
+    display: none;
+  }
 }
 
 /* Lado derecho libre: la escena interactiva llega en la Etapa 6 */
@@ -245,7 +258,6 @@
 
 .hero__bajada {
   margin: 0;
-  max-width: 30ch;
   font-size: clamp(1.25rem, 1rem + 0.8vw, 1.5rem);
   font-weight: 500;
   line-height: 1.32;
@@ -254,7 +266,6 @@
 
 .hero__cuerpo {
   margin: 0;
-  max-width: 46ch;
   font-size: var(--fs-body-lg);
   line-height: 1.55;
   color: var(--text-on-dark-62);
@@ -1422,6 +1433,10 @@
   align-items: center;
   gap: 10px;
   margin: 6px 0;
+}
+
+.resultado__ruta i:not(.pendiente) {
+  margin-inline: var(--aura-nodo-sm);
 }
 
 .resultado__ruta i {

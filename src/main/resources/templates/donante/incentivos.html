@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/privado :: layout(~{::title}, ~{::contenido})}">
+<head><title>Incentivos · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <th:block th:with="b=${incentivos}">
+  <span class="demo" th:if="${b.demo}">Datos de demostración</span>
+
+  <th:block th:if="${b.conError()}">
+    <section class="cabecera cabecera--compacta" aria-labelledby="titulo-pagina">
+      <span class="eyebrow">Tus incentivos</span>
+      <h1 id="titulo-pagina">Incentivos</h1>
+    </section>
+    <section class="tarjeta"><div th:replace="~{fragments/estados :: error(${b.error}, '/donante/incentivos')}"></div></section>
+  </th:block>
+
+  <!-- CA3: el donante todavía no está en incentivos -> vacío explicativo -->
+  <th:block th:if="${b.vacio()}">
+    <section class="cabecera cabecera--compacta" aria-labelledby="titulo-pagina">
+      <span class="eyebrow">Tus incentivos</span>
+      <h1 id="titulo-pagina">Incentivos</h1>
+    </section>
+    <section class="tarjeta">
+      <div th:replace="~{fragments/estados :: vacio('Tus incentivos empiezan con tu primera donación', 'Cuando registremos tu primera donación en el depósito, vas a ver acá tu categoría, tus misiones y tus insignias.', '/donante/donaciones', 'Ver mis donaciones')}"></div>
+    </section>
+  </th:block>
+
+  <th:block th:if="${b.ok()}" th:with="p=${b.datos}">
+  <!-- Hero: la categoría como recorrido (la ruta, firma visual de DonaTrack) -->
+  <section class="panel-hero incentivos-hero" aria-labelledby="titulo-pagina">
+    <div>
+      <span class="eyebrow">Tus incentivos</span>
+      <h1 id="titulo-pagina" th:text="'Sos ' + ${p.categoria}">Sos Colaborador</h1>
+      <p>Cada donación suma a tus misiones. Completalas para ganar insignias y subir de categoría.</p>
+    </div>
+    <ol class="ruta-categorias" aria-label="Recorrido de categorías">
+      <li th:each="c : ${p.recorrido}" class="ruta-categorias__paso" th:classappend="${'ruta-categorias__paso--' + c.estado}"
+          th:attr="aria-current=${c.estado == 'actual'} ? 'step' : null">
+        <span class="ruta-categorias__nodo" aria-hidden="true"></span>
+        <b th:text="${c.etiqueta}">Colaborador</b>
+        <small th:if="${c.desde != null}" th:text="'desde ' + ${#temporals.format(c.desde, 'MMM yyyy')}">desde abr 2026</small>
+        <small th:if="${c.estado == 'siguiente'}">próxima</small>
+      </li>
+    </ol>
+  </section>
+
+  <div class="panel-grilla panel-grilla--incentivos">
+    <!-- Misión activa -->
+    <section class="tarjeta mision" aria-labelledby="titulo-activa">
+      <h2 id="titulo-activa">Tu misión actual</h2>
+      <th:block th:if="${p.activa != null}" th:with="m=${p.activa}">
+        <div class="mision__sello-fila">
+          <span class="mision__sello" th:text="${m.progreso + '/' + m.objetivo}">2/3</span>
+          <div><b th:text="${m.nombre}">Donante constante</b><span th:text="${m.descripcion}">Doná tres meses seguidos</span></div>
+        </div>
+        <div class="mision__barra" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+             th:attr="aria-valuenow=${m.porcentaje}" aria-label="Progreso de la misión actual">
+          <i th:style="'width:' + ${m.porcentaje} + '%'"></i>
+        </div>
+        <div class="mision__pie"><span th:text="${m.porcentaje + ' %'}">66 %</span><span th:text="${m.falta}">falta 1 paso</span></div>
+        <p class="mision__premio" th:if="${m.insignia != null}">Al completarla ganás la insignia <b th:text="${m.insignia}">Constancia</b>.</p>
+      </th:block>
+      <p class="mision__vacia" th:if="${p.activa == null}">No tenés misiones activas por ahora.</p>
+    </section>
+
+    <div class="cifras-incentivos">
+      <div class="cifra-incentivo"><b th:text="${p.misionesCompletadas}">1</b><span th:text="${p.misionesCompletadas == 1} ? 'misión completada' : 'misiones completadas'">misiones completadas</span></div>
+      <div class="cifra-incentivo"><b th:text="${p.insigniasGanadas}">1</b><span th:text="${p.insigniasGanadas == 1} ? 'insignia ganada' : 'insignias ganadas'">insignias ganadas</span></div>
+      <div class="cifra-incentivo">
+        <b th:text="${p.posicionEnRanking != null} ? ${'#' + p.posicionEnRanking} : '—'">#7</b>
+        <span th:text="${p.posicionEnRanking != null} ? 'en el ranking del mes' : 'todavía sin puesto en el ranking'">en el ranking del mes</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Insignias: ganadas vs. pendientes, diferenciadas por forma, ícono y texto (CA2) -->
+    <section class="tarjeta" aria-labelledby="titulo-insignias">
+      <h2 id="titulo-insignias">Insignias</h2>
+      <p class="tarjeta__bajada">Las ganadas brillan; las pendientes muestran qué misión las desbloquea.</p>
+      <ul class="insignias">
+        <li th:each="i : ${p.insignias}" class="insignia" th:classappend="${i.ganada} ? 'insignia--ganada' : 'insignia--pendiente'">
+          <span class="insignia__sello" aria-hidden="true">
+            <img th:if="${i.imagenUrl != null}" th:src="${i.imagenUrl}" alt="" width="40" height="40">
+            <th:block th:if="${i.imagenUrl == null}"><span th:replace="~{fragments/iconos :: icono(${i.ganada} ? 'incentivos' : 'candado', 22)}"></span></th:block>
+          </span>
+          <b th:text="${i.nombre}">Primer paso</b>
+          <span class="insignia__estado" th:if="${i.ganada}"
+                th:text="${i.fechaObtenida != null} ? ${'Ganada el ' + #temporals.format(i.fechaObtenida, 'd MMM yyyy')} : 'Ganada'">Ganada el 20 abr 2026</span>
+          <span class="insignia__estado" th:unless="${i.ganada}" th:text="'Pendiente · ' + ${i.mision}">Pendiente · Donante constante</span>
+        </li>
+      </ul>
+    </section>
+
+  <!-- Misiones por categoría -->
+  <section class="tarjeta" aria-labelledby="titulo-misiones">
+    <h2 id="titulo-misiones">Misiones</h2>
+    <p class="tarjeta__bajada">Cada categoría tiene sus misiones. Las de las próximas ya suman progreso.</p>
+    <div class="grupos-misiones">
+      <section th:each="g : ${p.misiones}" class="grupo-misiones" th:classappend="${'grupo-misiones--' + g.estado}"
+               th:attr="aria-label=${'Misiones de ' + g.categoria}">
+        <h3><span th:text="${g.categoria}">Colaborador</span>
+          <span class="grupo-misiones__chip" th:text="${g.estado == 'actual'} ? 'Tu categoría' : (${g.estado == 'alcanzada'} ? 'Alcanzada' : 'Próxima')">Tu categoría</span></h3>
+        <ol class="misiones">
+          <li th:each="m : ${g.misiones}" class="mision-fila" th:classappend="${m.completada} ? 'mision-fila--completada'">
+            <span class="mision-fila__sello" aria-hidden="true">
+              <th:block th:if="${m.completada}"><span th:replace="~{fragments/iconos :: icono('check', 18)}"></span></th:block>
+              <th:block th:unless="${m.completada}" th:text="${m.numero}">2</th:block>
+            </span>
+            <div class="mision-fila__texto">
+              <b th:text="${m.nombre}">Donante constante</b>
+              <span th:text="${m.descripcion}">Doná durante tres meses seguidos</span>
+              <div class="mision-fila__barra" role="progressbar" aria-valuemin="0" aria-valuemax="100"
+                   th:attr="aria-valuenow=${m.porcentaje},aria-label=${'Progreso de ' + m.nombre}">
+                <i th:style="'width:' + ${m.porcentaje} + '%'"></i>
+              </div>
+            </div>
+            <div class="mision-fila__estado">
+              <b th:text="${m.progreso + '/' + m.objetivo}">2/3</b>
+              <span th:if="${m.completada and m.fechaCompletada != null}" th:text="'Completada el ' + ${#temporals.format(m.fechaCompletada, 'd MMM yyyy')}">Completada</span>
+              <span th:unless="${m.completada}" th:text="${m.falta}">falta 1 paso</span>
+            </div>
+          </li>
+        </ol>
+      </section>
+    </div>
+  </section>
+  </th:block>
+  </th:block>
+</th:block>
+</body>
+</html>

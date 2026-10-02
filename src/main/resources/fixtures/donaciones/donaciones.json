@@ -152,5 +152,19 @@
         "razonSocial": "Cooperativa La Huerta"
       }
     }
+  },
+  {
+    "id": "0d000000-0000-4000-8000-000000000012",
+    "donante": {
+      "idDonante": "a3b40000-0000-4000-8000-000000000001",
+      "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+      "persona": {
+        "tipo": "HUMANA",
+        "id": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+        "nombre": "Nicolás",
+        "apellido": "Pérez",
+        "razonSocial": null
+      }
+    }
   }
 ]

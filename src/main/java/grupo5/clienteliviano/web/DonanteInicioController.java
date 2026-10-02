@@ -1,6 +1,6 @@
 package grupo5.clienteliviano.web;
 
-import grupo5.clienteliviano.aplicacion.DonanteInicioService;
+import grupo5.clienteliviano.aplicacion.PanelDonanteService;
 import grupo5.clienteliviano.session.SessionPort;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class DonanteInicioController {
 
   private final SessionPort sessionPort;
-  private final DonanteInicioService servicio;
+  private final PanelDonanteService servicio;
 
-  public DonanteInicioController(SessionPort sessionPort, DonanteInicioService servicio) {
+  public DonanteInicioController(SessionPort sessionPort, PanelDonanteService servicio) {
     this.sessionPort = sessionPort;
     this.servicio = servicio;
   }
@@ -24,9 +24,7 @@ public class DonanteInicioController {
   public String inicio(
       @RequestParam(required = false) String aviso, HttpServletRequest request, Model model) {
     model.addAttribute("aviso", aviso);
-    sessionPort
-        .actual(request)
-        .ifPresent(s -> model.addAttribute("ultimas", servicio.ultimasDonaciones(s)));
+    sessionPort.actual(request).ifPresent(s -> model.addAttribute("panel", servicio.panel(s)));
     return "donante/inicio";
   }
 }
