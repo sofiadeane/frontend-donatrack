@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/privado :: layout(~{::title}, ~{::contenido})}">
+<head><title th:text="${seccion.etiqueta} + ' · DonaTrack'">Sección · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <section class="cabecera" aria-labelledby="titulo-pagina">
+    <span class="eyebrow" th:text="${sesion.rol.etiqueta}">Rol</span>
+    <h1 id="titulo-pagina" th:text="${seccion.etiqueta}">Sección</h1>
+  </section>
+  <section class="tarjeta proximamente" aria-labelledby="titulo-proximamente">
+    <div class="proximamente__ruta" aria-hidden="true"><span></span><span></span><span></span></div>
+    <h2 id="titulo-proximamente">Esta sección está en construcción</h2>
+    <p>Todavía no está disponible en el prototipo. Se habilita cuando se implemente su recorrido en el backlog.</p>
+  </section>
+</th:block>
+</body>
+</html>

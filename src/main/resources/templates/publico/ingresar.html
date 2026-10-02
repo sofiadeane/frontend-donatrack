@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico :: layout(~{::title}, ~{::contenido})}">
+<head><title>Ingresar · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <section class="ingreso" aria-labelledby="titulo-ingreso">
+    <div class="ingreso__cabecera">
+      <span class="demo" th:if="${identidadesDemo}">Ingreso de demostración</span>
+      <h1 id="titulo-ingreso">Ingresar</h1>
+      <p>Elegí con qué perfil querés recorrer la plataforma.</p>
+    </div>
+
+    <div class="aviso" role="status" th:if="${motivo == 'sin-sesion'}">
+      <p>Para ver esa página primero tenés que ingresar.</p>
+    </div>
+
+    <form th:action="@{/ingresar}" method="post" novalidate>
+      <p class="campo-error" id="error-identidad" role="alert" th:if="${error}" th:text="${error}">Error</p>
+      <fieldset class="fieldset" th:each="grupo : ${grupos}" th:if="${!grupo.identidades.isEmpty()}"
+                th:attr="aria-describedby=${error} ? 'error-identidad' : null">
+        <legend th:text="${grupo.rol.etiqueta}">Rol</legend>
+        <div class="opciones">
+          <label class="opcion" th:each="identidad : ${grupo.identidades}">
+            <input type="radio" name="identidad" th:value="${identidad.id}" required
+                   th:attr="aria-labelledby='op-' + ${identidad.id},aria-describedby='op-' + ${identidad.id} + '-detalle'">
+            <span class="opcion__nodo" aria-hidden="true"></span>
+            <span class="opcion__texto">
+              <span class="opcion__titulo" th:id="'op-' + ${identidad.id}" th:text="${identidad.nombre}">Nombre</span>
+              <span class="opcion__detalle" th:id="'op-' + ${identidad.id} + '-detalle'" th:text="${identidad.detalle}">Detalle</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+      <button class="boton boton--primario boton--bloque" type="submit">Ingresar</button>
+    </form>
+
+    <p class="ingreso__nota">Esta pantalla es provisoria: el acceso con usuario y contraseña llega en la Entrega 6.</p>
+  </section>
+</th:block>
+</body>
+</html>

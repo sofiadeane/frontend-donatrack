@@ -1,0 +1,38 @@
+[
+  {
+    "id": "donante-nicolas",
+    "rol": "DONANTE",
+    "nombre": "Nicolás Pérez",
+    "detalle": "Persona humana · demo",
+    "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000001",
+    "donanteId": "a3b40000-0000-4000-8000-000000000001",
+    "entidadId": null
+  },
+  {
+    "id": "donante-cooperativa",
+    "rol": "DONANTE",
+    "nombre": "Cooperativa La Huerta",
+    "detalle": "Persona jurídica · demo",
+    "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000002",
+    "donanteId": "a3b40000-0000-4000-8000-000000000002",
+    "entidadId": null
+  },
+  {
+    "id": "entidad-girasoles",
+    "rol": "ENTIDAD",
+    "nombre": "Comedor Los Girasoles",
+    "detalle": "Entidad beneficiaria · demo",
+    "personaId": "6f1c2a10-1b7e-4d1a-9f2a-0d1e00000010",
+    "donanteId": null,
+    "entidadId": "e7a10000-0000-4000-8000-000000000001"
+  },
+  {
+    "id": "admin-deposito",
+    "rol": "ADMIN",
+    "nombre": "Administración Depósito",
+    "detalle": "Persona administradora · demo",
+    "personaId": "00000000-0000-0000-0000-000000000001",
+    "donanteId": null,
+    "entidadId": null
+  }
+]

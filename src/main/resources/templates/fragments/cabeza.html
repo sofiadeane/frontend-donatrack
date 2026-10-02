@@ -1,0 +1,15 @@
+<!-- <head> común. Uso: th:replace="~{fragments/cabeza :: cabeza(~{::title}, 'privado')}" -->
+<head th:fragment="cabeza(titulo, area)">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:replace="${titulo}">DonaTrack</title>
+  <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+  <link rel="preload" th:href="@{/fonts/dm-sans-latin.woff2}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" th:href="@{/css/fuentes.css}">
+  <link rel="stylesheet" th:href="@{/css/tokens.css}">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/componentes.css}">
+  <link rel="stylesheet" th:href="@{/css/layout.css}">
+  <link rel="stylesheet" th:href="@{/css/publico.css}" th:if="${area == 'publico'}">
+  <script th:src="@{/js/app.js}" defer></script>
+</head>

@@ -1,0 +1,30 @@
+server:
+  port: 8090
+  servlet:
+    session:
+      # Solo cookie: evita ;jsessionid= en las URLs.
+      tracking-modes: cookie
+      cookie:
+        http-only: true
+        same-site: lax
+
+spring:
+  application:
+    name: cliente-liviano
+  thymeleaf:
+    cache: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  # En desarrollo, plantillas y estáticos se leen de src/ para ver cambios sin recompilar.
+  thymeleaf:
+    cache: false
+    prefix: file:src/main/resources/templates/
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
+      cache:
+        period: 0

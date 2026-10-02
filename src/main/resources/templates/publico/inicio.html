@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico :: layout(~{::title}, ~{::contenido})}">
+<head><title>DonaTrack — Gestión y trazabilidad de donaciones</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <!-- Provisorio (E0). La landing del Figma se construye en la épica E1. -->
+  <section class="cabecera hero-provisorio" aria-labelledby="titulo-inicio">
+    <span class="eyebrow">Trazabilidad de donaciones con impacto social</span>
+    <h1 id="titulo-inicio">DonaTrack</h1>
+    <p>Una plataforma para registrar donaciones, asignarlas a necesidades reales y seguir su recorrido hasta la entrega final.</p>
+    <div class="cabecera__acciones">
+      <a class="boton boton--primario" th:href="@{/ingresar}">Ingresar</a>
+    </div>
+  </section>
+</th:block>
+</body>
+</html>

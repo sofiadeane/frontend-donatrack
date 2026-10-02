@@ -1,0 +1,99 @@
+/* Área pública: barra flotante y páginas de acceso. La landing completa llega en la épica E1. */
+
+.publico {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.publico__barra {
+  position: sticky;
+  top: var(--space-3);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: min(1280px, calc(100% - 24px));
+  min-height: 64px;
+  margin: var(--space-3) auto 0;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.publico__acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.publico__acciones a:not(.boton) {
+  padding: 10px 14px;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+}
+
+.publico__main {
+  flex: 1;
+  width: min(1280px, calc(100% - 24px));
+  margin: var(--space-5) auto var(--space-7);
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.hero-provisorio {
+  min-height: 420px;
+  display: grid;
+  align-content: center;
+  padding: clamp(32px, 6vw, 96px);
+}
+
+.hero-provisorio h1 {
+  font-size: var(--fs-display);
+  letter-spacing: -0.02em;
+}
+
+/* ===== Ingreso ===== */
+.ingreso {
+  width: min(520px, 100%);
+  margin: 0 auto;
+  display: grid;
+  gap: var(--space-5);
+  padding: var(--space-6);
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-lift);
+}
+
+.ingreso__cabecera {
+  display: grid;
+  gap: var(--space-2);
+  text-align: center;
+  justify-items: center;
+}
+
+.ingreso__cabecera h1 {
+  font-size: var(--fs-h1);
+  color: var(--text-strong);
+}
+
+.ingreso__cabecera p {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+.ingreso form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.ingreso__nota {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  text-align: center;
+}

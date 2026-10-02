@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- Layout público. Uso: <html th:replace="~{layouts/publico :: layout(~{::title}, ~{::main})}"> -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
+<head th:replace="~{fragments/cabeza :: cabeza(${titulo}, 'publico')}"></head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+<div class="publico">
+  <header class="publico__barra">
+    <a class="marca" th:href="@{/}" aria-label="DonaTrack, ir al inicio">
+      <span class="marca__simbolo"><img th:src="@{/img/logo.svg}" alt=""></span>
+      <span class="marca__nombre">Dona<em>Track</em></span>
+    </a>
+    <nav class="publico__acciones" aria-label="Acceso">
+      <a th:if="${sesion == null}" th:href="@{/ingresar}">Iniciar sesión</a>
+      <a th:if="${sesion != null}" class="boton boton--primario" th:href="@{${sesion.rol.inicio}}">Ir a mi panel</a>
+    </nav>
+  </header>
+  <main class="publico__main" id="contenido" tabindex="-1" th:insert="${contenido}"></main>
+</div>
+</body>
+</html>

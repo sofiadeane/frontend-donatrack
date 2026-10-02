@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!--
+  Layout del área privada. Uso desde una vista:
+  <html th:replace="~{layouts/privado :: layout(~{::title}, ~{::main})}">
+-->
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
+<head th:replace="~{fragments/cabeza :: cabeza(${titulo}, 'privado')}"></head>
+<body>
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="topbar">
+  <a class="marca" th:href="@{${sesion.rol.inicio}}" aria-label="DonaTrack, ir al inicio">
+    <span class="marca__simbolo"><img th:src="@{/img/logo.svg}" alt=""></span>
+    <span class="marca__nombre">Dona<em>Track</em></span>
+  </a>
+  <div class="topbar__fin">
+    <form class="buscador" role="search" th:action="@{${sesion.rol.inicio} + '/buscar'}" method="get">
+      <label class="sr-only" for="buscar-escritorio">Buscar</label>
+      <span th:replace="~{fragments/iconos :: icono('buscar', 16)}"></span>
+      <input id="buscar-escritorio" name="q" type="search" placeholder="Buscar donaciones…">
+    </form>
+    <a class="boton-icono boton-icono--buscar" th:href="@{${sesion.rol.inicio} + '/buscar'}"
+       data-abrir-busqueda aria-label="Buscar">
+      <span th:replace="~{fragments/iconos :: icono('buscar', 18)}"></span>
+    </a>
+    <a class="boton-icono" th:href="@{${sesion.rol.inicio} + '/notificaciones'}" aria-label="Notificaciones">
+      <span th:replace="~{fragments/iconos :: icono('notificaciones', 18)}"></span>
+    </a>
+    <details class="cuenta">
+      <summary class="avatar" th:aria-label="'Cuenta de ' + ${sesion.nombre}" th:text="${sesion.iniciales}">NP</summary>
+      <div class="cuenta__menu">
+        <div>
+          <div class="cuenta__nombre" th:text="${sesion.nombre}">Nombre</div>
+          <div class="cuenta__rol" th:text="${sesion.rol.etiqueta} + ' · sesión de demostración'">Rol</div>
+        </div>
+        <form th:action="@{/salir}" method="post">
+          <button class="boton boton--texto" type="submit">Salir</button>
+        </form>
+      </div>
+    </details>
+  </div>
+</header>
+
+<div class="shell" data-shell>
+  <aside class="lateral" id="lateral" aria-label="Navegación principal">
+    <button class="lateral__colapsar" type="button" data-colapsar-lateral hidden
+            aria-controls="lateral" aria-expanded="true" aria-label="Colapsar menú">
+      <span th:replace="~{fragments/iconos :: icono('chevron-izq', 18)}"></span>
+    </button>
+    <nav aria-label="Secciones">
+      <ul class="nav-ruta">
+        <li th:each="item : ${nav}">
+          <a th:href="@{${item.href}}" th:title="${item.etiqueta}"
+             th:attr="aria-current=${item.activo} ? 'page' : null">
+            <span class="nav-ruta__nodo" aria-hidden="true"></span>
+            <span class="nav-ruta__icono" th:insert="~{fragments/iconos :: icono(${item.icono}, 20)}"></span>
+            <span class="nav-ruta__texto" th:text="${item.etiqueta}">Sección</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <div class="lateral__pie">Sesión de demostración · el acceso real llega en la Entrega 6.</div>
+  </aside>
+
+  <main class="contenido" id="contenido" tabindex="-1" th:insert="${contenido}"></main>
+</div>
+
+<nav class="nav-inferior" aria-label="Navegación principal">
+  <a th:each="item : ${navMovil}" th:href="@{${item.href}}"
+     th:attr="aria-current=${item.activo} ? 'page' : null">
+    <span th:replace="~{fragments/iconos :: icono(${item.icono}, 22)}"></span>
+    <span th:text="${item.etiquetaMovil}">Sección</span>
+  </a>
+</nav>
+
+<dialog class="hoja-busqueda" data-hoja-busqueda aria-label="Buscar">
+  <form role="search" th:action="@{${sesion.rol.inicio} + '/buscar'}" method="get">
+    <label class="sr-only" for="buscar-movil">Buscar donaciones, entidades o notificaciones</label>
+    <input id="buscar-movil" name="q" type="search" placeholder="Buscar donaciones, entidades…" autofocus>
+    <button type="submit" formmethod="dialog" formnovalidate aria-label="Cerrar búsqueda">
+      <span th:replace="~{fragments/iconos :: icono('cerrar', 18)}"></span>
+    </button>
+  </form>
+</dialog>
+</body>
+</html>

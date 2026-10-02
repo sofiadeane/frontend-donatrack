@@ -1,0 +1,151 @@
+/*
+ * DonaTrack · tokens del design system
+ *
+ * ÚNICA fuente de color del proyecto. Ningún otro CSS, plantilla ni JS puede declarar colores
+ * (hex, rgb, hsl): solo referencian tokens semánticos con var(--…). Lo verifica el test
+ * FuenteUnicaDeColorTest.
+ *
+ * Nivel 1 · Primitivos: valores del Figma (Prototipo v2, nodo 480:1914), sin cambios.
+ * Nivel 2 · Semánticos: lo que usan los componentes. Ajustar un color = editar una línea acá.
+ */
+:root {
+  /* ===== 1. Primitivos (Figma) ===== */
+  --teal-900: #163a3a;
+  --teal-800: #1d4d4d;
+  --teal-750: #1d4c4c;
+  --teal-100: #cfefe7;
+  --green-500: #50d794;
+  --green-400: #54da8e;
+  --green-50: #eafbf3;
+  --turquoise-500: #36c7b4;
+  --slate-green: #364d4a;
+  --ink: #292928;
+  --ink-muted: #6b6b6b;
+  --gray-100: #f3f4f6;
+  --gray-75: #f8f8f8;
+  --gray-50: #f4f6fc;
+  --white: #ffffff;
+
+  /* Transparencias derivadas de los primitivos */
+  --white-a06: rgb(255 255 255 / 0.06);
+  --white-a10: rgb(255 255 255 / 0.1);
+  --white-a14: rgb(255 255 255 / 0.14);
+  --white-a18: rgb(255 255 255 / 0.18);
+  --white-a20: rgb(255 255 255 / 0.2);
+  --white-a72: rgb(255 255 255 / 0.72);
+  --white-a78: rgb(244 246 252 / 0.78);
+  --teal-a06: rgb(22 58 58 / 0.06);
+  --teal-a08: rgb(22 58 58 / 0.08);
+  --teal-a14: rgb(22 58 58 / 0.14);
+  --teal-a15: rgb(22 58 58 / 0.15);
+  --teal-a35: rgb(22 58 58 / 0.35);
+  --teal-a45: rgb(22 58 58 / 0.45);
+  --green-a28: rgb(84 218 142 / 0.28);
+  --green-a30: rgb(84 218 142 / 0.3);
+  --green-a35: rgb(84 218 142 / 0.35);
+  --green-a40: rgb(84 218 142 / 0.4);
+  --green-a55: rgb(84 218 142 / 0.55);
+  --green-a70: rgb(84 218 142 / 0.7);
+  --green-a80: rgb(84 218 142 / 0.8);
+  --green-500-a16: rgb(80 215 148 / 0.16);
+  --turquoise-a35: rgb(54 199 180 / 0.35);
+
+  /* ===== 2. Semánticos ===== */
+  /* Superficies */
+  --surface: var(--white);
+  --surface-muted: var(--gray-100);
+  --surface-page: var(--gray-50);
+  --surface-dark: var(--teal-900);
+  --surface-dark-raised: var(--teal-800);
+  --surface-glass: var(--white-a10);
+  --surface-glass-hover: var(--white-a06);
+  --surface-topbar: var(--white-a78);
+  --surface-brand-soft: var(--green-50);
+
+  /* Texto */
+  --text: var(--ink);
+  --text-muted: var(--ink-muted);
+  --text-strong: var(--teal-900);
+  --text-on-dark: var(--white);
+  --text-on-dark-soft: var(--teal-100);
+  --text-on-dark-muted: var(--white-a72);
+  --text-on-brand: var(--teal-900);
+  --text-brand: var(--green-400);
+  --text-accent: var(--slate-green);
+
+  /* Bordes y foco */
+  --border: var(--teal-a08);
+  --border-input: var(--teal-a15);
+  --border-glass: var(--white-a20);
+  --border-glass-soft: var(--white-a18);
+  --focus-ring: var(--teal-900);
+  --focus-ring-on-dark: var(--green-400);
+
+  /* Acciones */
+  --action-primary-bg: var(--green-400);
+  --action-primary-text: var(--teal-900);
+  --action-ghost-bg: var(--white-a10);
+  --action-ghost-border: var(--white-a20);
+  --action-ghost-text: var(--white);
+
+  /* Marca: nodos, ruta, acentos */
+  --brand: var(--green-500);
+  --brand-bright: var(--green-400);
+  --brand-alt: var(--turquoise-500);
+  --brand-soft: var(--teal-100);
+  --route-line: var(--green-a35);
+  --route-node-ring: var(--green-a55);
+  --route-dash: var(--green-a70);
+
+  /* Gradientes de identidad */
+  --grad-hero: linear-gradient(144.6deg, var(--teal-900) 0%, var(--teal-800) 60%, var(--teal-900) 100%);
+  --grad-sidebar: linear-gradient(170deg, var(--teal-900) 0%, var(--teal-800) 55%, var(--teal-900) 100%);
+  --grad-impulso: linear-gradient(120deg, var(--turquoise-500) 0%, var(--green-500) 100%);
+  --grad-page: radial-gradient(900px 420px at 100% 0%, var(--green-50) 0%, transparent 70%), var(--gray-50);
+  --grad-halo: radial-gradient(circle, var(--green-500-a16) 0%, transparent 70%);
+
+  /* Sombras y resplandores */
+  --shadow-card: 0 1px 15px var(--teal-a08);
+  --shadow-lift: 0 10px 30px var(--teal-a14);
+  --shadow-float: 0 12px 30px var(--teal-a35);
+  --shadow-btn: 0 10px 15px var(--teal-a06);
+  --shadow-coin: 0 12px 24px var(--turquoise-a35);
+  --glow-node: 0 0 0 8px var(--green-a28), 0 0 24px 6px var(--green-a40);
+  --glow-node-sm: 0 0 0 3px var(--green-a30);
+  --glow-icon: drop-shadow(0 0 6px var(--green-a80));
+  --backdrop: var(--teal-a45);
+
+  /* Tipografía: solo DM Sans (decisión 2026-10-01) */
+  --font-sans: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fs-display: clamp(2.5rem, 1.6rem + 3.2vw, 5.25rem);
+  --fs-h1: clamp(2rem, 1.5rem + 1.6vw, 2.75rem);
+  --fs-h2: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  --fs-body-lg: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --fs-body: 1rem;
+  --fs-sm: 0.875rem;
+  --fs-xs: 0.8125rem;
+
+  /* Espaciado, radios, layout */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --r-xs: 5px;
+  --r-sm: 10px;
+  --r-md: 20px;
+  --r-lg: 24px;
+  --r-xl: 40px;
+  --r-pill: 999px;
+  --topbar-h: 68px;
+  --sidebar-w: 248px;
+  --sidebar-w-collapsed: 84px;
+
+  /* Movimiento */
+  --dur-fast: 120ms;
+  --dur-base: 200ms;
+  --dur-slow: 300ms;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+}

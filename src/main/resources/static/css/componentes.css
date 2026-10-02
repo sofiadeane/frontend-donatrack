@@ -1,0 +1,300 @@
+/* Componentes base. Solo tokens semánticos (ver tokens.css). */
+
+/* ===== Botones ===== */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: 11px 20px;
+  border: 1px solid transparent;
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform var(--dur-fast), box-shadow var(--dur-base);
+}
+
+.boton:active {
+  transform: translateY(1px);
+}
+
+.boton--primario {
+  background: var(--action-primary-bg);
+  color: var(--action-primary-text);
+  box-shadow: var(--shadow-btn);
+}
+
+.boton--fantasma {
+  background: var(--action-ghost-bg);
+  border-color: var(--action-ghost-border);
+  color: var(--action-ghost-text);
+}
+
+.boton--texto {
+  min-height: 36px;
+  padding: 8px 12px;
+  background: transparent;
+  color: var(--text-strong);
+}
+
+.boton--bloque {
+  width: 100%;
+}
+
+/* ===== Tarjeta ===== */
+.tarjeta {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 22px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.tarjeta h2 {
+  font-size: 1.0625rem;
+  color: var(--text-strong);
+}
+
+.tarjeta__bajada {
+  margin: 4px 0 var(--space-4);
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* ===== Cabecera de página (mini-hero) ===== */
+.cabecera {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  min-height: 190px;
+  padding: 30px 34px;
+  border-radius: var(--r-lg);
+  background: var(--grad-hero);
+  color: var(--text-on-dark);
+  box-shadow: var(--shadow-lift);
+}
+
+.cabecera::before {
+  content: "";
+  position: absolute;
+  inset: -200px -100px auto auto;
+  z-index: -1;
+  width: 1281px;
+  height: 1295px;
+  background: url("/img/topografico.svg") no-repeat;
+}
+
+.cabecera h1 {
+  margin: 14px 0 var(--space-2);
+  font-size: var(--fs-h1);
+  letter-spacing: -0.02em;
+}
+
+.cabecera p {
+  margin: 0;
+  max-width: 52ch;
+  font-size: var(--fs-body-lg);
+  color: var(--text-on-dark-soft);
+}
+
+.cabecera__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  justify-self: start;
+  width: fit-content;
+  padding: 6px 14px 6px 15px;
+  border-radius: var(--r-pill);
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass-soft);
+  backdrop-filter: blur(9px);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--surface-brand-soft);
+}
+
+.eyebrow::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--brand-bright);
+  box-shadow: var(--glow-node);
+}
+
+/* ===== Etiqueta de datos de demostración ===== */
+.demo {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border: 1px dashed var(--brand);
+  border-radius: var(--r-pill);
+  background: var(--surface-brand-soft);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text-accent);
+}
+
+/* ===== Avisos ===== */
+.aviso {
+  display: flex;
+  gap: var(--space-3);
+  align-items: flex-start;
+  padding: 14px 18px;
+  border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+}
+
+.aviso::before {
+  content: "";
+  flex: none;
+  width: 10px;
+  height: 10px;
+  margin-top: 6px;
+  border-radius: 5px;
+  background: var(--brand-alt);
+  box-shadow: var(--glow-node-sm);
+}
+
+.aviso p {
+  margin: 0;
+}
+
+/* ===== Panel "próximamente" (funcionalidad TBD o en construcción) ===== */
+.proximamente {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-3);
+  padding: var(--space-6);
+}
+
+.proximamente__ruta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.proximamente__ruta span {
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  border: 2px dashed var(--route-dash);
+}
+
+.proximamente__ruta span:last-child {
+  background: var(--brand-bright);
+  border: 0;
+  box-shadow: var(--glow-node);
+}
+
+.proximamente h2 {
+  font-size: var(--fs-h2);
+}
+
+.proximamente p {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--text-muted);
+}
+
+/* ===== Formularios ===== */
+.campo-error {
+  margin: 0;
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--text-strong);
+}
+
+.fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.fieldset legend {
+  padding: 0;
+  margin-bottom: var(--space-2);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+/* Tarjetas de selección (radios estilizados) */
+.opciones {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.opcion {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-input);
+  border-radius: 14px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.opcion input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.opcion__nodo {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  border: 2px solid var(--route-node-ring);
+  background: var(--surface);
+}
+
+.opcion__texto {
+  display: grid;
+}
+
+.opcion__titulo {
+  font-weight: 700;
+  color: var(--text-strong);
+}
+
+.opcion__detalle {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+.opcion:has(input:checked) {
+  border-color: var(--brand);
+  background: var(--surface-brand-soft);
+}
+
+.opcion:has(input:checked) .opcion__nodo {
+  border-color: var(--brand-bright);
+  background: var(--brand-bright);
+  box-shadow: var(--glow-node-sm);
+}
+
+.opcion:has(input:focus-visible) {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
