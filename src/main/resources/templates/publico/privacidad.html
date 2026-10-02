@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico :: layout(~{::title}, ~{::contenido})}">
+<head><title>Información legal y privacidad · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <section class="banda-hero" data-hero aria-labelledby="titulo-legal">
+    <span class="eyebrow">Información legal</span>
+    <h1 id="titulo-legal">Información legal y privacidad</h1>
+    <p>Cómo DonaTrack usa la información, sigue cada donación y cuida los datos de quienes participan.</p>
+  </section>
+
+  <section class="legal-resumen" data-fondo-claro aria-labelledby="titulo-resumen">
+    <h2 id="titulo-resumen" class="sr-only">En pocas palabras</h2>
+    <ul class="legal-resumen__grilla">
+      <li class="legal-resumen__item">
+        <span class="tipo__icono" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('personas', 22)}"></span></span>
+        <b>Pedimos lo justo</b>
+        <span>Datos para identificarte y avisarte sobre tus donaciones. El domicilio es opcional.</span>
+      </li>
+      <li class="legal-resumen__item">
+        <span class="tipo__icono" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('corazon', 22)}"></span></span>
+        <b>Solo para donar</b>
+        <span>Se usan para gestionar donaciones y entregas. No se venden ni se ceden.</span>
+      </li>
+      <li class="legal-resumen__item">
+        <span class="tipo__icono" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('seguimiento', 22)}"></span></span>
+        <b>Trazabilidad abierta</b>
+        <span>Cada donación tiene un historial de estados, desde el depósito hasta la entrega.</span>
+      </li>
+    </ul>
+  </section>
+
+  <div class="registro">
+    <ol class="ruta-form" aria-label="Secciones de la página" data-ruta-form>
+      <li><a href="#finalidad">Finalidad<small>Para qué existe</small></a></li>
+      <li><a href="#datos">Datos que pedimos<small>Al registrarte</small></a></li>
+      <li><a href="#uso">Uso de los datos<small>Para qué los usamos</small></a></li>
+      <li><a href="#publico">Qué se ve públicamente<small>En la página de inicio</small></a></li>
+      <li><a href="#trazabilidad">Trazabilidad<small>Historial de cada donación</small></a></li>
+      <li><a href="#derechos">Tus derechos<small>Consultar, corregir, borrar</small></a></li>
+      <li><a href="#academico">Uso académico<small>Proyecto universitario</small></a></li>
+    </ol>
+
+    <div class="formulario legal">
+      <section class="bloque" id="finalidad" aria-labelledby="t-finalidad">
+        <h2 id="t-finalidad">Finalidad solidaria de la plataforma</h2>
+        <p>DonaTrack tiene un único propósito: facilitar la recepción, la asignación y la entrega de donaciones a entidades beneficiarias. Toda la información se trata para lograr el mayor impacto social posible con un proceso transparente.</p>
+      </section>
+
+      <section class="bloque" id="datos" aria-labelledby="t-datos">
+        <h2 id="t-datos">Qué datos pedimos</h2>
+        <ul>
+          <li><b>Personas donantes:</b> nombre y apellido; de manera opcional, documento, fecha de nacimiento y género.</li>
+          <li><b>Organizaciones y entidades beneficiarias:</b> razón social, tipo de organización, rubro, CUIT y al menos una persona representante.</li>
+          <li><b>Contacto:</b> correo electrónico y, si querés, teléfono y WhatsApp, con el medio que prefieras para recibir avisos.</li>
+          <li><b>Domicilio:</b> opcional.</li>
+          <li><b>Donaciones:</b> lo que entregás en el depósito (qué es, cantidad, estado y vencimiento cuando corresponde).</li>
+        </ul>
+      </section>
+
+      <section class="bloque" id="uso" aria-labelledby="t-uso">
+        <h2 id="t-uso">Para qué usamos los datos</h2>
+        <p>Los datos se usan exclusivamente para gestionar donaciones, vincularlas con necesidades concretas y coordinar entregas. También para enviarte notificaciones sobre el estado de tus donaciones por el medio de contacto que elegiste.</p>
+        <p>No se comercializan ni se ceden a terceros ajenos al circuito solidario de la plataforma.</p>
+      </section>
+
+      <section class="bloque" id="publico" aria-labelledby="t-publico">
+        <h2 id="t-publico">Qué se ve públicamente</h2>
+        <p>La página de inicio muestra donaciones entregadas en el último mes: qué se donó, su categoría y la fecha de entrega, junto con quién donó.</p>
+        <ul>
+          <li><b>Personas:</b> solo el nombre y la inicial del apellido (por ejemplo, "Lucía F.").</li>
+          <li><b>Organizaciones:</b> la razón social.</li>
+          <li>Nunca se muestran documentos, medios de contacto ni domicilios.</li>
+        </ul>
+        <p>Estamos trabajando para que puedas elegir si tu nombre aparece y con qué apodo.</p>
+      </section>
+
+      <section class="bloque" id="trazabilidad" aria-labelledby="t-trazabilidad">
+        <h2 id="t-trazabilidad">Trazabilidad de donaciones</h2>
+        <p>Cada donación queda asociada a un identificador y a un historial de estados, desde que se recibe en el depósito hasta la entrega final. Esa trazabilidad permite auditar el recorrido de los bienes donados.</p>
+      </section>
+
+      <section class="bloque" id="derechos" aria-labelledby="t-derechos">
+        <h2 id="t-derechos">Tus derechos</h2>
+        <p>En cualquier momento podés pedir ver, corregir, actualizar o borrar tus datos, como prevé la Ley 25.326 de Protección de los Datos Personales. Escribinos a <a href="mailto:contacto@donatrack.edu">contacto@donatrack.edu</a>.</p>
+      </section>
+
+      <section class="bloque" id="academico" aria-labelledby="t-academico">
+        <h2 id="t-academico">Responsabilidad de uso académico</h2>
+        <p>Esta plataforma es un prototipo desarrollado con fines académicos universitarios. Los datos y las métricas que se muestran son de demostración y no representan información real de personas ni de organizaciones existentes.</p>
+      </section>
+    </div>
+  </div>
+</th:block>
+</body>
+</html>

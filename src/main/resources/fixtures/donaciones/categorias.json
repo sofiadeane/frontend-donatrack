@@ -1,0 +1,73 @@
+[
+  {
+    "id": "c1000000-0000-4000-8000-000000000001",
+    "nombre": "Alimentos",
+    "unidad": "KILOGRAMO",
+    "subcategorias": [
+      {
+        "id": "5b000000-0000-4000-8000-000000000001",
+        "nombre": "Arroz"
+      },
+      {
+        "id": "5b000000-0000-4000-8000-000000000002",
+        "nombre": "Fideos secos"
+      },
+      {
+        "id": "5b000000-0000-4000-8000-000000000007",
+        "nombre": "Legumbres secas"
+      },
+      {
+        "id": "5b000000-0000-4000-8000-000000000009",
+        "nombre": "Conservas"
+      }
+    ]
+  },
+  {
+    "id": "c1000000-0000-4000-8000-000000000002",
+    "nombre": "Vestimenta",
+    "unidad": "UNIDADES",
+    "subcategorias": [
+      {
+        "id": "5b000000-0000-4000-8000-000000000003",
+        "nombre": "Camperas de abrigo"
+      },
+      {
+        "id": "5b000000-0000-4000-8000-000000000008",
+        "nombre": "Frazadas"
+      }
+    ]
+  },
+  {
+    "id": "c1000000-0000-4000-8000-000000000003",
+    "nombre": "Mobiliario",
+    "unidad": "UNIDADES",
+    "subcategorias": [
+      {
+        "id": "5b000000-0000-4000-8000-000000000004",
+        "nombre": "Sillas"
+      }
+    ]
+  },
+  {
+    "id": "c1000000-0000-4000-8000-000000000004",
+    "nombre": "Útiles escolares",
+    "unidad": "UNIDADES",
+    "subcategorias": [
+      {
+        "id": "5b000000-0000-4000-8000-000000000005",
+        "nombre": "Cuadernos"
+      }
+    ]
+  },
+  {
+    "id": "c1000000-0000-4000-8000-000000000005",
+    "nombre": "Bebidas",
+    "unidad": "LITROS",
+    "subcategorias": [
+      {
+        "id": "5b000000-0000-4000-8000-000000000006",
+        "nombre": "Leche larga vida"
+      }
+    ]
+  }
+]

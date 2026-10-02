@@ -1,5 +1,6 @@
 package grupo5.clienteliviano.integracion.donaciones;
 
+import grupo5.clienteliviano.integracion.donaciones.dto.CategoriaOutputDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionIndependienteResponseDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionOutputDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.ItemDonacionIndependienteResponseDTO;
@@ -17,6 +18,7 @@ public class DonacionesFixtureAdapter implements DonacionesPort {
 
   static final String ARCHIVO = "donaciones/donaciones-independientes.json";
   static final String ARCHIVO_ORIGINALES = "donaciones/donaciones.json";
+  static final String ARCHIVO_CATEGORIAS = "donaciones/categorias.json";
 
   /**
    * Registro del fixture. La respuesta del backend no incluye el donante, así que el fixture lo
@@ -26,10 +28,12 @@ public class DonacionesFixtureAdapter implements DonacionesPort {
 
   private final List<RegistroFixture> registros;
   private final List<DonacionOutputDTO> originales;
+  private final List<CategoriaOutputDTO> categorias;
 
   public DonacionesFixtureAdapter(LectorFixtures lector) {
     this.registros = lector.lista(ARCHIVO, RegistroFixture.class);
     this.originales = lector.lista(ARCHIVO_ORIGINALES, DonacionOutputDTO.class);
+    this.categorias = lector.lista(ARCHIVO_CATEGORIAS, CategoriaOutputDTO.class);
   }
 
   @Override
@@ -54,6 +58,11 @@ public class DonacionesFixtureAdapter implements DonacionesPort {
         .map(ItemDonacionIndependienteResponseDTO::bien)
         .filter(Objects::nonNull)
         .anyMatch(b -> b.subcategoria() != null && subcategoriaId.equals(b.subcategoria().id()));
+  }
+
+  @Override
+  public List<CategoriaOutputDTO> categorias() {
+    return categorias;
   }
 
   @Override

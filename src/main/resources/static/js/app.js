@@ -117,7 +117,7 @@
   window.addEventListener("resize", ajustar);
 })();
 
-// Barra pública: vidrio oscuro solo mientras detrás hay fondo del hero, para que el logo se lea.
+// Barra pública: vidrio oscuro solo mientras el hero cubre toda la barra, para que el logo se lea.
 // Si una superficie clara (p. ej. la tarjeta "Cómo funciona", dentro del hero) toca la barra,
 // vuelve al vidrio claro para que el menú siga legible.
 (() => {
@@ -132,10 +132,62 @@
   };
   const actualizar = () => {
     const { top, bottom } = barra.getBoundingClientRect();
-    const oscuro = toca(hero, top, bottom) && !claras.some((el) => toca(el, top, bottom));
+    const fondo = hero.getBoundingClientRect();
+    const cubre = fondo.top <= top && fondo.bottom >= bottom;
+    const oscuro = cubre && !claras.some((el) => toca(el, top, bottom));
     barra.classList.toggle("sobre-oscuro", oscuro);
   };
   window.addEventListener("scroll", actualizar, { passive: true });
   window.addEventListener("resize", actualizar);
   actualizar();
+})();
+
+// Formularios: con errores, el foco va al resumen (sus enlaces llevan a cada campo).
+// Ruta lateral del registro: marca la sección que se está viendo.
+(() => {
+  "use strict";
+  const resumen = document.querySelector("[data-resumen-errores]");
+  const autofoco = document.querySelector("form [autofocus]");
+  if (resumen) resumen.focus();
+  // Chrome ignora autofocus si la URL tiene ancla (p. ej. al agregar un representante).
+  else if (autofoco && document.activeElement === document.body) autofoco.focus();
+  const ruta = document.querySelector("[data-ruta-form]");
+  if (!ruta || !("IntersectionObserver" in window)) return;
+  const enlaces = [...ruta.querySelectorAll("a")];
+  const observador = new IntersectionObserver(
+    (entradas) =>
+      entradas.forEach((e) => {
+        if (!e.isIntersecting) return;
+        enlaces.forEach((a) => {
+          if (a.hash === "#" + e.target.id) a.setAttribute("aria-current", "step");
+          else a.removeAttribute("aria-current");
+        });
+      }),
+    { rootMargin: "-40% 0px -55% 0px" }
+  );
+  enlaces.forEach((a) => {
+    const seccion = document.getElementById(a.hash.slice(1));
+    if (seccion) observador.observe(seccion);
+  });
+})();
+
+// Filtros de donaciones: la subcategoría solo ofrece las de la categoría elegida (CA2).
+(() => {
+  "use strict";
+  document.querySelectorAll("[data-filtros]").forEach((form) => {
+    const categoria = form.querySelector("[data-filtro-categoria]");
+    const subcategoria = form.querySelector("[data-filtro-subcategoria]");
+    if (!categoria || !subcategoria) return;
+    const sincronizar = () => {
+      [...subcategoria.options].forEach((op) => {
+        if (!op.dataset.categoria) return;
+        const visible = !categoria.value || op.dataset.categoria === categoria.value;
+        op.hidden = !visible;
+        op.disabled = !visible;
+      });
+      if (subcategoria.selectedOptions[0]?.disabled) subcategoria.value = "";
+    };
+    categoria.addEventListener("change", sincronizar);
+    sincronizar();
+  });
 })();

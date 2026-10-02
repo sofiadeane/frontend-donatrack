@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico :: layout(~{::title}, ~{::contenido})}">
+<head><title>Falta un paso · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <div class="banda-hero banda-hero--resultado" data-hero aria-hidden="true"></div>
+  <!-- CA3: la persona ya se creó; solo falta el alta de donante o entidad. -->
+  <section class="resultado" data-fondo-claro aria-labelledby="titulo-pendiente">
+    <div class="resultado__ruta" aria-hidden="true"><i></i><b></b><i class="pendiente"></i></div>
+    <h1 id="titulo-pendiente">Falta un paso</h1>
+    <p th:text="'Guardamos los datos, pero no pudimos terminar de crear el perfil de ' + ${pendiente.tipo.descripcion()} + '. No hace falta volver a completar el formulario.'">Guardamos los datos.</p>
+    <div class="aviso" role="alert" th:if="${error != null}">
+      <p th:text="${error.mensaje}">No pudimos conectarnos.</p>
+    </div>
+    <div class="resultado__acciones">
+      <form th:action="@{/registro/reintentar}" method="post">
+        <button class="boton boton--primario" type="submit">Reintentar</button>
+      </form>
+      <a class="boton boton--texto" th:href="@{/}">Volver al inicio</a>
+    </div>
+  </section>
+</th:block>
+</body>
+</html>

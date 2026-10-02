@@ -26,6 +26,11 @@
   --gray-50: #f4f6fc;
   --white: #ffffff;
 
+  /* Error: única incorporación fuera del Figma (aprobada 2026-10-01). Rojo terroso que acompaña al
+     teal; AA sobre blanco (5,3:1) y sobre su fondo suave (4,8:1). */
+  --red-600: #b9443b;
+  --red-50: #fdf1ef;
+
   /* Transparencias derivadas de los primitivos */
   --white-a06: rgb(255 255 255 / 0.06);
   --white-a10: rgb(255 255 255 / 0.1);
@@ -57,6 +62,7 @@
   --green-a80: rgb(84 218 142 / 0.8);
   --green-500-a16: rgb(80 215 148 / 0.16);
   --turquoise-a35: rgb(54 199 180 / 0.35);
+  --red-600-a16: rgb(185 68 59 / 0.16);
 
   /* ===== 2. Semánticos ===== */
   /* Superficies */
@@ -88,6 +94,12 @@
   --border-glass-soft: var(--white-a18);
   --focus-ring: var(--teal-900);
   --focus-ring-on-dark: var(--green-400);
+
+  /* Error */
+  --danger: var(--red-600);
+  --surface-danger-soft: var(--red-50);
+  --text-on-danger: var(--white);
+  --ring-danger: var(--red-600-a16);
 
   /* Acciones */
   --action-primary-bg: var(--green-400);

@@ -1,5 +1,6 @@
 package grupo5.clienteliviano.integracion.donaciones;
 
+import grupo5.clienteliviano.integracion.donaciones.dto.CategoriaOutputDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionIndependienteResponseDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionOutputDTO;
 import grupo5.clienteliviano.integracion.error.BackendException;
@@ -13,6 +14,9 @@ import org.springframework.core.ParameterizedTypeReference;
 public class DonacionesHttpAdapter implements DonacionesPort {
 
   private static final ParameterizedTypeReference<List<DonacionIndependienteResponseDTO>> LISTA =
+      new ParameterizedTypeReference<>() {};
+
+  private static final ParameterizedTypeReference<List<CategoriaOutputDTO>> CATEGORIAS =
       new ParameterizedTypeReference<>() {};
 
   private final ClienteHttp cliente;
@@ -57,6 +61,13 @@ public class DonacionesHttpAdapter implements DonacionesPort {
       }
       throw e;
     }
+  }
+
+  @Override
+  public List<CategoriaOutputDTO> categorias() {
+    List<CategoriaOutputDTO> respuesta =
+        cliente.ejecutar(rest -> rest.get().uri("/api/categorias").retrieve().body(CATEGORIAS));
+    return respuesta == null ? List.of() : respuesta;
   }
 
   @Override

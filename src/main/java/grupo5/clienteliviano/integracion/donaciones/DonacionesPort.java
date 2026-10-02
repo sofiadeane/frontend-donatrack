@@ -1,5 +1,6 @@
 package grupo5.clienteliviano.integracion.donaciones;
 
+import grupo5.clienteliviano.integracion.donaciones.dto.CategoriaOutputDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionIndependienteResponseDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionOutputDTO;
 import java.util.List;
@@ -29,5 +30,8 @@ public interface DonacionesPort {
   Optional<DonacionOutputDTO> donacion(UUID id);
 
   /** {@code true} si los datos son de demostración y deben mostrarse con su etiqueta. */
+  /** {@code GET /api/categorias}: categorías con sus subcategorías (para filtros). */
+  List<CategoriaOutputDTO> categorias();
+
   boolean esDemo();
 }

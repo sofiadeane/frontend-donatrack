@@ -1,0 +1,11 @@
+<!-- Piezas de formulario. error(campo, id): mensaje del campo si tiene error (id = "error-" + id). -->
+<th:block th:fragment="error(campo, id)">
+  <p class="campo__error" th:if="${errores.tiene(campo)}" th:id="'error-' + ${id}"
+     th:text="${errores.de(campo)}">Revisá este dato.</p>
+</th:block>
+
+<!-- alerta(seccion): pill roja con la cantidad de errores de la sección. -->
+<th:block th:fragment="alerta(seccion)" th:with="n=${errores.enSeccion(seccion)}">
+  <span class="bloque__alerta" th:if="${n > 0}"
+        th:text="${n == 1} ? '1 dato para revisar' : ${n + ' datos para revisar'}">1 dato para revisar</span>
+</th:block>

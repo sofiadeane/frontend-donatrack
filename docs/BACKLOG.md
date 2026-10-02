@@ -33,16 +33,16 @@ Prioridad: **M** Must · **S** Should · **C** Could. Estado inicial: Backlog.
 | ID | Historia | Prio | Estado |
 |---|---|---|---|
 | H1.1 | Como visitante, quiero entender qué es DonaTrack desde el inicio | M | Revisión |
-| H1.2 | Como visitante, quiero leer la información legal y de privacidad | M | Backlog |
-| H1.3 | Como visitante, quiero registrarme como donante humano, jurídico o como entidad | M | Backlog |
+| H1.2 | Como visitante, quiero leer la información legal y de privacidad | M | Revisión (contenido del v0 ampliado con lo que se pide y lo que se ve públicamente) |
+| H1.3 | Como visitante, quiero registrarme como donante humano, jurídico o como entidad | M | Revisión (personas → donantes/entidades; errores por campo y paso parcial reintentable; apodo y consentimiento público sin backend) |
 | H1.4 | Como visitante, quiero ver las donaciones destacadas del último mes con datos reales | S | Revisión (adapter real listo; donante vía `/api/donaciones/{id}`; sin foto: el backend no la trae) |
-| H1.5 | Como visitante, quiero ver una galería de donaciones entregadas sin iniciar sesión | S | Backlog |
+| H1.5 | Como visitante, quiero ver una galería de donaciones entregadas sin iniciar sesión | S | Revisión (24 más recientes, filtro por categoría con enlaces; sin filtro en el export estático) |
 
 ### E2 Donante
 | ID | Historia | Prio | Estado |
 |---|---|---|---|
-| H2.1 | Como donante, quiero filtrar mis donaciones por estado y categoría/subcategoría | M | Backlog |
-| H2.2 | Como donante, quiero ver el historial de estados de una donación | M | Backlog |
+| H2.1 | Como donante, quiero filtrar mis donaciones por estado y categoría/subcategoría | M | Revisión (filtros GET; subcategoría dependiente con JS; sin filtros en el export estático) |
+| H2.2 | Como donante, quiero ver el historial de estados de una donación | M | Revisión (solo donaciones propias; justificación en entrega fallida) |
 | H2.3 | Como donante, quiero explorar entidades beneficiarias y sus necesidades | M | Backlog |
 | H2.4 | Como donante, quiero ver mi categoría, misiones e insignias | M | Backlog |
 | H2.5 | Como donante, quiero ver mis notificaciones | M | Backlog |

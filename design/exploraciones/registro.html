@@ -1,0 +1,492 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exploración · Registro · DonaTrack</title>
+<!-- Exploración servida en dev: /exploraciones/registro.html (CSS real de la app). Datos de demostración. -->
+<link rel="stylesheet" href="/css/fuentes.css">
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/componentes.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/publico.css">
+<style>
+/* ===== Controles de la exploración ===== */
+.controles{position:fixed;right:12px;bottom:12px;z-index:60;display:flex;flex-wrap:wrap;gap:6px;align-items:center;padding:6px;border-radius:var(--r-md);background:var(--surface-dark);color:var(--text-on-dark);font-size:var(--fs-xs);font-weight:700;box-shadow:var(--shadow-float);max-width:calc(100% - 24px)}
+.controles span{padding:0 6px}
+.controles button{border:0;border-radius:var(--r-pill);padding:6px 12px;background:transparent;color:var(--text-on-dark-soft);font:inherit;cursor:pointer}
+.controles button[aria-pressed="true"]{background:var(--brand-bright);color:var(--text-on-brand)}
+
+/* ===== Banda superior con la identidad del hero ===== */
+.registro-banda{position:relative;isolation:isolate;overflow:hidden;margin-top:calc(-64px - var(--space-3));padding:calc(64px + var(--space-3) + 56px) clamp(16px,7vw,96px) 150px;background:var(--grad-hero);color:var(--text-on-dark);display:grid;justify-items:center;gap:18px;text-align:center}
+.registro-banda::before{content:"";position:absolute;inset:0;z-index:-1;background:url("/img/topografico.svg") center top/100% 100% no-repeat}
+.registro-banda h1{font-size:var(--fs-h1);font-weight:900;letter-spacing:-.02em;color:var(--text-on-dark)}
+.registro-banda p{margin:0;max-width:56ch;color:var(--text-on-dark-soft);font-size:var(--fs-body-lg)}
+
+/* ===== Tipo de cuenta: tarjetas-radio sobre la banda ===== */
+.tipo-cuenta{width:min(1088px,100%);margin:-118px auto 0;position:relative;z-index:1;border:0;padding:0 clamp(16px,4vw,0px)}
+.tipo-cuenta legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.tipo-cuenta__grilla{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.tipo{position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto 1fr;column-gap:14px;row-gap:4px;align-items:start;min-height:132px;padding:20px 20px 20px 18px;border-radius:var(--r-lg);background:var(--surface);border:2px solid transparent;box-shadow:var(--shadow-lift);cursor:pointer;transition:border-color var(--dur-base),transform var(--dur-base)}
+.tipo:hover{transform:translateY(-2px)}
+.tipo input{position:absolute;opacity:0;pointer-events:none}
+.tipo__icono{grid-row:span 2;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:var(--surface-brand-soft);color:var(--text-strong);transition:background var(--dur-base),box-shadow var(--dur-base)}
+.tipo__titulo{font-size:1.125rem;font-weight:800;color:var(--text-strong)}
+.tipo__detalle{font-size:var(--fs-sm);color:var(--text-muted);line-height:1.4}
+.tipo__marca{position:absolute;top:16px;right:16px;width:16px;height:16px;border-radius:50%;border:2px solid var(--route-node-ring);background:var(--surface)}
+.tipo:has(input:checked){border-color:var(--brand)}
+.tipo:has(input:checked) .tipo__icono{background:var(--grad-impulso);box-shadow:var(--glow-node-sm)}
+.tipo:has(input:checked) .tipo__marca{border-color:var(--brand-bright);background:var(--brand-bright);box-shadow:var(--glow-node-sm)}
+.tipo:has(input:focus-visible){outline:3px solid var(--focus-ring);outline-offset:3px}
+
+/* ===== Cuerpo: ruta lateral + formulario ===== */
+.registro{width:min(1088px,calc(100% - 32px));margin:40px auto 72px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:40px;align-items:start}
+.ruta-form{position:sticky;top:100px;list-style:none;margin:0;padding:8px 0;display:grid;gap:26px}
+.ruta-form::before{content:"";position:absolute;left:11px;top:20px;bottom:20px;border-left:2px dashed var(--route-dash)}
+.ruta-form a{position:relative;display:grid;grid-template-columns:24px 1fr;align-items:center;column-gap:14px;color:var(--text-muted);font-weight:700;text-decoration:none}
+.ruta-form a::before{content:"";grid-row:span 2;width:24px;height:24px;border-radius:50%;border:2px solid var(--route-node-ring);background:var(--surface-page);box-sizing:border-box}
+.ruta-form a[aria-current="step"]{color:var(--text-strong)}
+.ruta-form a[aria-current="step"]::before{border-color:var(--brand-bright);background:var(--brand-bright);box-shadow:var(--glow-node)}
+.ruta-form small{grid-column:2;display:block;font-weight:500;font-size:var(--fs-xs);color:var(--text-meta)}
+
+.formulario{display:grid;gap:22px}
+.bloque{display:grid;gap:20px;padding:28px;border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-card);border:0;margin:0;min-width:0}
+.bloque__cabecera{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bloque h2{font-size:1.375rem;font-weight:800;color:var(--text-strong)}
+.bloque__nota{font-size:var(--fs-sm);color:var(--text-muted);margin:0}
+.etiqueta-opcional{display:inline-block;padding:3px 10px;border-radius:var(--r-pill);background:var(--surface-muted);font-size:var(--fs-xs);font-weight:700;color:var(--text-muted)}
+
+/* Solo se muestran los datos del tipo elegido (sin JS: :has sobre los radios) */
+body:has(#tipo-humana:checked) .solo-organizacion,
+body:not(:has(#tipo-humana:checked)) .solo-humana{display:none}
+body:not(:has(#tipo-entidad:checked)) .solo-entidad{display:none}
+body:has(#tipo-entidad:checked) .solo-donante{display:none}
+
+/* ===== Campos ===== */
+.campos{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:18px 16px}
+.campo{grid-column:span 3;display:grid;gap:6px;align-content:start;min-width:0}
+.campo--2{grid-column:span 2}.campo--4{grid-column:span 4}.campo--6{grid-column:span 6}.campo--1{grid-column:span 1}
+.campo label,.campo .campo__etiqueta{font-size:var(--fs-sm);font-weight:700;color:var(--text-strong)}
+.formulario abbr{text-decoration:none;color:var(--text-brand);margin-left:2px;border:0}
+.campo legend{padding:0;margin-bottom:6px}
+.campo__ayuda{font-size:var(--fs-xs);color:var(--text-muted);margin:0}
+.campo input,.campo select{width:100%;min-height:50px;padding:12px 14px;border:1px solid var(--border-input);border-radius:14px;background:var(--surface);font:inherit;color:var(--text);transition:border-color var(--dur-fast),box-shadow var(--dur-fast)}
+.campo input::placeholder{color:var(--text-meta)}
+.campo input:hover,.campo select:hover{border-color:var(--brand)}
+.campo input:focus,.campo select:focus{outline:none;border-color:var(--brand);box-shadow:0 0 0 4px var(--green-500-a16)}
+.selector{position:relative}
+.selector select{appearance:none;padding-right:40px}
+.selector::after{content:"";position:absolute;right:18px;top:50%;width:8px;height:8px;margin-top:-6px;border-right:2px solid var(--text-strong);border-bottom:2px solid var(--text-strong);transform:rotate(45deg);pointer-events:none}
+.telefono{display:grid;grid-template-columns:88px 96px minmax(0,1fr);gap:8px}
+
+/* Chips de tipo jurídico (radios) */
+.chips{display:flex;flex-wrap:wrap;gap:8px;border:0;padding:0;margin:0}
+.chips label{position:relative;display:inline-flex;align-items:center;min-height:44px;padding:0 18px;border:1px solid var(--border-input);border-radius:var(--r-pill);font-weight:700;font-size:var(--fs-sm);color:var(--text-strong);cursor:pointer;background:var(--surface)}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label:has(input:checked){background:var(--surface-dark);border-color:var(--surface-dark);color:var(--text-on-dark)}
+.chips label:has(input:focus-visible){outline:3px solid var(--focus-ring);outline-offset:2px}
+
+/* Representantes (organizaciones) */
+.representantes{display:grid;gap:14px}
+.representante{display:grid;gap:16px;padding:20px;border-radius:var(--r-md);background:var(--surface-page);border:1px dashed var(--route-dash)}
+.representante__cabecera{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.representante__cabecera h3{display:flex;align-items:center;gap:10px;font-size:1rem;font-weight:800;color:var(--text-strong)}
+.representante__cabecera h3::before{content:"";width:12px;height:12px;border-radius:50%;background:var(--brand-bright);box-shadow:var(--glow-node-sm)}
+.boton-agregar{justify-self:start;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border:1.5px dashed var(--brand);border-radius:var(--r-pill);background:var(--surface);color:var(--text-strong);font:inherit;font-weight:700;font-size:var(--fs-sm);cursor:pointer}
+.boton-agregar:hover{background:var(--surface-brand-soft)}
+.representante:only-child .boton-quitar{display:none}
+.boton-quitar{border:0;background:none;color:var(--text-muted);font:inherit;font-size:var(--fs-sm);font-weight:700;text-decoration:underline;cursor:pointer;min-height:44px}
+
+/* Perfil público (donantes): pendiente de definir con el equipo de backend */
+.publico-opcion{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border-radius:var(--r-md);background:var(--surface-brand-soft);cursor:pointer}
+.publico-opcion input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--brand);flex:none}
+.publico-opcion b{display:block;color:var(--text-strong)}
+.publico-opcion span{font-size:var(--fs-sm);color:var(--text-muted)}
+.pendiente-backend{display:inline-block;padding:3px 10px;border-radius:var(--r-pill);border:1px dashed var(--route-dash);font-size:var(--fs-xs);font-weight:700;color:var(--text-muted)}
+
+/* Medio preferido */
+.preferido{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+
+/* ===== Errores (sin color de error aprobado todavía: ícono + texto + borde marcado) ===== */
+.campo__error{display:none;align-items:flex-start;gap:8px;margin:0;font-size:var(--fs-sm);font-weight:700;color:var(--danger)}
+.campo__error::before{content:"!";flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;background:var(--danger);color:var(--text-on-danger);font-size:12px;font-weight:900;margin-top:1px}
+.campo.con-error .campo__error{display:flex}
+.campo.con-error label,.campo.con-error .campo__etiqueta{color:var(--danger)}
+.campo.con-error input,.campo.con-error select{border:2px solid var(--danger)}
+.campo.con-error input:focus,.campo.con-error select:focus{box-shadow:0 0 0 4px var(--ring-danger)}
+.resumen-errores{display:none;gap:10px;padding:20px 22px;border-radius:var(--r-lg);background:var(--surface-danger-soft);border:2px solid var(--danger);box-shadow:var(--shadow-card)}
+.resumen-errores h2{font-size:1.125rem;font-weight:800;color:var(--danger)}
+.resumen-errores ul{margin:0;padding-left:20px;display:grid;gap:4px;color:var(--danger)}
+.resumen-errores a{color:var(--danger);font-weight:700}
+/* Secciones con errores: borde y aviso en rojo, y el nodo de la ruta lateral también */
+.bloque__alerta{display:none;align-items:center;gap:8px;padding:5px 12px;border-radius:var(--r-pill);background:var(--danger);color:var(--text-on-danger);font-size:var(--fs-xs);font-weight:800}
+.bloque.con-errores{box-shadow:inset 0 0 0 2px var(--danger),var(--shadow-card)}
+.bloque.con-errores .bloque__alerta{display:inline-flex}
+.bloque.con-errores h2{color:var(--danger)}
+.ruta-form a.con-errores{color:var(--danger)}
+.ruta-form a.con-errores::before{border-color:var(--danger);background:var(--danger);box-shadow:0 0 0 6px var(--ring-danger)}
+.ruta-form a.con-errores small{color:var(--danger)}
+.estado-errores .resumen-errores{display:grid}
+
+/* ===== Envío ===== */
+.envio{display:grid;gap:16px;padding:24px 28px;border-radius:var(--r-lg);background:var(--grad-hero);color:var(--text-on-dark)}
+.envio label{display:flex;gap:12px;align-items:flex-start;font-size:var(--fs-sm);color:var(--text-on-dark-soft);cursor:pointer}
+.envio input{width:20px;height:20px;margin:1px 0 0;accent-color:var(--brand-bright);flex:none}
+.envio a{color:var(--text-on-dark);font-weight:700}
+.envio__fila{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.envio .boton--primario{min-height:54px;padding:0 30px;font-size:1.0625rem}
+.envio .demo{background:var(--surface-glass);color:var(--text-on-dark);border-color:var(--border-glass)}
+
+/* ===== Resultado (éxito / parcial) ===== */
+.resultado{display:none;width:min(620px,calc(100% - 32px));margin:-118px auto 80px;position:relative;z-index:1;padding:40px 36px;border-radius:var(--r-xl);background:var(--surface);box-shadow:var(--shadow-lift);text-align:center;justify-items:center;gap:16px}
+.resultado__nodo{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:var(--grad-impulso);box-shadow:var(--glow-node);color:var(--text-on-brand)}
+.resultado h2{font-size:var(--fs-h1);font-weight:900;color:var(--text-strong);letter-spacing:-.02em}
+.resultado p{margin:0;max-width:46ch;color:var(--text-muted)}
+.resultado__ruta{display:flex;align-items:center;gap:10px;margin:6px 0}
+.resultado__ruta i{width:12px;height:12px;border-radius:50%;background:var(--brand-bright);box-shadow:var(--glow-node-sm)}
+.resultado__ruta i.pendiente{background:var(--surface);border:2px dashed var(--route-dash);box-shadow:none}
+.resultado__ruta b{width:46px;border-top:2px dashed var(--route-dash)}
+.resultado__acciones{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
+.estado-exito .resultado--exito,.estado-parcial .resultado--parcial{display:grid}
+.estado-exito .tipo-cuenta,.estado-exito .registro,.estado-parcial .tipo-cuenta,.estado-parcial .registro{display:none}
+.estado-exito .registro-banda,.estado-parcial .registro-banda{padding-bottom:160px;min-height:320px}
+.estado-exito .registro-banda>*,.estado-parcial .registro-banda>*{visibility:hidden}
+
+/* ===== Responsive ===== */
+@media (max-width:900px){
+  .registro{grid-template-columns:1fr;gap:0}
+  .ruta-form{display:none}
+  .tipo-cuenta__grilla{grid-template-columns:1fr;gap:10px}
+  .tipo{min-height:0;padding:14px 44px 14px 14px;grid-template-rows:auto auto}
+  .tipo__icono{width:42px;height:42px}
+}
+@media (max-width:640px){
+  .registro-banda{padding-bottom:140px}
+  .tipo-cuenta{margin-top:-112px}
+  .bloque{padding:22px 18px}
+  .campos{grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}
+  .campo,.campo--4,.campo--6{grid-column:span 2}
+  .campo--2,.campo--1{grid-column:span 1}
+  .telefono{grid-template-columns:70px 80px minmax(0,1fr)}
+  .preferido{grid-template-columns:1fr}
+  .envio{padding:22px 18px}
+  .envio .boton--primario{width:100%}
+  .resultado{padding:32px 20px}
+}
+@media (prefers-reduced-motion:reduce){.tipo,.tipo:hover{transition:none;transform:none}}
+</style>
+</head>
+<body class="publico">
+
+<header class="barra-publica" data-barra-publica>
+  <a class="marca" href="#" aria-label="DonaTrack, ir al inicio">
+    <span class="marca__simbolo"><img src="/img/logo.svg" alt=""></span>
+    <span class="marca__nombre">Dona<em>Track</em></span>
+  </a>
+  <button class="barra-publica__abrir" type="button" data-menu-publico hidden aria-expanded="false" aria-controls="menu-publico">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    <span>Menú</span>
+  </button>
+  <div class="barra-publica__panel" id="menu-publico">
+    <nav aria-label="Secciones"><ul class="barra-publica__links">
+      <li><a href="#">Donaciones entregadas</a></li><li><a href="#">Mapa de impacto</a></li><li><a href="#">Privacidad</a></li>
+    </ul></nav>
+    <div class="barra-publica__sesion">
+      <a class="barra-publica__ingresar" href="#">Iniciar sesión</a>
+      <a class="boton boton--primario boton--chico" href="#" aria-current="page">Registrarse</a>
+    </div>
+  </div>
+</header>
+
+<main class="publico__main" id="contenido">
+  <section class="registro-banda" data-hero aria-labelledby="titulo-registro">
+    <span class="eyebrow">Sumate a DonaTrack</span>
+    <h1 id="titulo-registro">Creá tu cuenta</h1>
+    <p>Elegí cómo vas a participar. Después completás tus datos en una sola página.</p>
+  </section>
+
+  <form class="formulario-registro" action="#" method="post" novalidate>
+    <!-- 1 · Tipo de cuenta: llega preseleccionado desde el CTA (?tipo=humana|juridica|entidad) -->
+    <fieldset class="tipo-cuenta" id="paso-tipo" data-fondo-claro>
+      <legend>Tipo de cuenta</legend>
+      <div class="tipo-cuenta__grilla">
+        <label class="tipo">
+          <input type="radio" name="tipo" value="humana" id="tipo-humana" checked>
+          <span class="tipo__icono" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-9.2-8.7A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5.3C19 15.6 12 20 12 20Z"/></svg></span>
+          <span class="tipo__titulo">Persona donante</span>
+          <span class="tipo__detalle">Doná a título personal y seguí cada donación.</span>
+          <span class="tipo__marca" aria-hidden="true"></span>
+        </label>
+        <label class="tipo">
+          <input type="radio" name="tipo" value="juridica" id="tipo-juridica">
+          <span class="tipo__icono" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5l8-2v18"/><path d="M12 9h8v12"/><path d="M8 8v.01M8 12v.01M8 16v.01M16 13v.01M16 17v.01"/></svg></span>
+          <span class="tipo__titulo">Organización donante</span>
+          <span class="tipo__detalle">Empresas, ONG, instituciones u organismos que donan.</span>
+          <span class="tipo__marca" aria-hidden="true"></span>
+        </label>
+        <label class="tipo">
+          <input type="radio" name="tipo" value="entidad" id="tipo-entidad">
+          <span class="tipo__icono" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11 12 4l8 7v9H4z"/><path d="M10 20v-5h4v5"/></svg></span>
+          <span class="tipo__titulo">Entidad beneficiaria</span>
+          <span class="tipo__detalle">Comedores, escuelas y organizaciones que reciben donaciones.</span>
+          <span class="tipo__marca" aria-hidden="true"></span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="registro">
+      <ol class="ruta-form" aria-label="Secciones del formulario">
+        <li><a href="#paso-datos" aria-current="step">Datos<small class="solo-humana">Quién sos</small><small class="solo-organizacion">La organización</small></a></li>
+        <li class="solo-organizacion"><a href="#paso-representantes">Representantes<small>Quién habla por ella</small></a></li>
+        <li><a href="#paso-contacto">Contacto<small>Cómo te avisamos</small></a></li>
+        <li><a href="#paso-domicilio">Domicilio<small>Opcional</small></a></li>
+        <li class="solo-donante"><a href="#paso-publico">Perfil público<small>A definir</small></a></li>
+        <li><a href="#paso-envio">Confirmar<small>Crear la cuenta</small></a></li>
+      </ol>
+
+      <div class="formulario">
+        <div class="resumen-errores" role="alert" tabindex="-1" id="resumen-errores">
+          <h2>Revisá 3 datos antes de continuar</h2>
+          <ul>
+            <li><a href="#apellido">Apellido: es obligatorio</a></li>
+            <li><a href="#correo">Correo electrónico: el formato no es válido</a></li>
+            <li><a href="#calle">Calle: es obligatoria si cargás un domicilio</a></li>
+          </ul>
+        </div>
+
+        <!-- 2 · Datos -->
+        <fieldset class="bloque" id="paso-datos">
+          <div class="bloque__cabecera">
+            <h2 class="solo-humana">Tus datos</h2>
+            <h2 class="solo-organizacion">Datos de la organización</h2>
+            <span class="bloque__alerta" data-alerta>1 dato para revisar</span>
+            <p class="bloque__nota">Los campos con <abbr title="obligatorio">*</abbr> son obligatorios.</p>
+          </div>
+
+          <div class="campos solo-humana">
+            <div class="campo"><label for="nombre">Nombre<abbr title="obligatorio">*</abbr></label>
+              <input id="nombre" name="nombre" autocomplete="given-name" required value="Lucía"></div>
+            <div class="campo" data-error="apellido"><label for="apellido">Apellido<abbr title="obligatorio">*</abbr></label>
+              <input id="apellido" name="apellido" autocomplete="family-name" required aria-describedby="error-apellido">
+              <p class="campo__error" id="error-apellido">El apellido es obligatorio.</p></div>
+            <div class="campo campo--2"><label for="tipo-doc">Tipo de documento</label>
+              <div class="selector"><select id="tipo-doc" name="tipoDocumento"><option value="">Elegí</option><option>DNI</option><option>Pasaporte</option><option>Libreta</option><option>CUIT</option></select></div></div>
+            <div class="campo campo--4"><label for="documento">Número de documento</label>
+              <input id="documento" name="documento" inputmode="numeric" aria-describedby="ayuda-documento">
+              <p class="campo__ayuda" id="ayuda-documento">Sin puntos ni espacios.</p></div>
+            <div class="campo"><label for="nacimiento">Fecha de nacimiento</label>
+              <input id="nacimiento" name="fechaNacimiento" type="date" max="2026-10-01" autocomplete="bday"></div>
+            <div class="campo"><label for="genero">Género</label>
+              <div class="selector"><select id="genero" name="genero"><option value="">Elegí</option><option>Prefiero no decir</option><option>Mujer</option><option>Hombre</option><option>No binario</option></select></div></div>
+          </div>
+
+          <div class="campos solo-organizacion">
+            <div class="campo campo--6"><label for="razon">Razón social<abbr title="obligatorio">*</abbr></label>
+              <input id="razon" name="razonSocial" autocomplete="organization" required></div>
+            <fieldset class="campo campo--6" style="border:0;padding:0;margin:0">
+              <legend class="campo__etiqueta">Tipo de organización<abbr title="obligatorio">*</abbr></legend>
+              <div class="chips">
+                <label><input type="radio" name="tipoJuridico" value="ONG" checked>ONG</label>
+                <label><input type="radio" name="tipoJuridico" value="EMPRESA">Empresa</label>
+                <label><input type="radio" name="tipoJuridico" value="INSTITUCION">Institución</label>
+                <label><input type="radio" name="tipoJuridico" value="GUBERNAMENTAL">Gubernamental</label>
+              </div></fieldset>
+            <div class="campo campo--6"><label for="rubro">Rubro</label>
+              <input id="rubro" name="rubro" aria-describedby="ayuda-rubro">
+              <p class="campo__ayuda solo-entidad" id="ayuda-rubro">Por ejemplo: comedor comunitario, escuela, hogar de día.</p></div>
+            <div class="campo campo--2"><label for="tipo-doc-org">Tipo de documento</label>
+              <div class="selector"><select id="tipo-doc-org" name="tipoDocumento"><option>CUIT</option><option value="">Otro</option></select></div></div>
+            <div class="campo campo--4"><label for="cuit">Número de CUIT</label>
+              <input id="cuit" name="documento" inputmode="numeric" placeholder="30-00000000-0"></div>
+          </div>
+        </fieldset>
+
+        <!-- Representantes (organizaciones y entidades): mínimo uno, se pueden agregar más -->
+        <fieldset class="bloque solo-organizacion" id="paso-representantes">
+          <div class="bloque__cabecera"><h2>Representantes</h2>
+            <p class="bloque__nota">Al menos una persona que pueda hablar en nombre de la organización.</p></div>
+          <div class="representantes" data-representantes>
+            <div class="representante" data-representante>
+              <div class="representante__cabecera"><h3>Representante 1</h3>
+                <button class="boton-quitar" type="button" data-quitar>Quitar</button></div>
+              <div class="campos">
+                <div class="campo"><label for="rep1-nombre">Nombre<abbr title="obligatorio">*</abbr></label><input id="rep1-nombre" name="representantes[0].nombre" value="Marta"></div>
+                <div class="campo"><label for="rep1-apellido">Apellido<abbr title="obligatorio">*</abbr></label><input id="rep1-apellido" name="representantes[0].apellido" value="Sosa"></div>
+                <div class="campo campo--2"><label for="rep1-tipodoc">Tipo de documento</label>
+                  <div class="selector"><select id="rep1-tipodoc" name="representantes[0].tipoDocumento"><option value="">Elegí</option><option>DNI</option><option>Pasaporte</option><option>Libreta</option></select></div></div>
+                <div class="campo campo--4"><label for="rep1-doc">Número de documento</label><input id="rep1-doc" name="representantes[0].documento" inputmode="numeric"></div>
+                <div class="campo campo--6"><label for="rep1-correo">Correo electrónico</label><input id="rep1-correo" name="representantes[0].correo" type="email"></div>
+              </div>
+            </div>
+          </div>
+          <button class="boton-agregar" type="button" data-agregar-representante>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            Agregar representante</button>
+        </fieldset>
+
+        <!-- 3 · Contacto -->
+        <fieldset class="bloque" id="paso-contacto">
+          <div class="bloque__cabecera"><h2>Contacto</h2><span class="bloque__alerta">1 dato para revisar</span>
+            <p class="bloque__nota">Lo usamos para avisarte sobre tus donaciones.</p></div>
+          <div class="campos">
+            <div class="campo campo--6" data-error="correo"><label for="correo">Correo electrónico<abbr title="obligatorio">*</abbr></label>
+              <input id="correo" name="correo" type="email" autocomplete="email" required value="lucia@ejemplo" aria-describedby="error-correo">
+              <p class="campo__error" id="error-correo">Escribí un correo con el formato nombre@dominio.com.</p></div>
+            <div class="campo"><span class="campo__etiqueta" id="et-telefono">Teléfono</span>
+              <div class="telefono" role="group" aria-labelledby="et-telefono">
+                <input aria-label="Código de país" name="telefonoCaracteristica" value="+54" inputmode="tel">
+                <input aria-label="Código de área" name="telefonoArea" placeholder="11" inputmode="numeric">
+                <input aria-label="Número de teléfono" name="telefonoNumero" inputmode="tel" autocomplete="tel-local">
+              </div></div>
+            <div class="campo"><span class="campo__etiqueta" id="et-whatsapp">WhatsApp</span>
+              <div class="telefono" role="group" aria-labelledby="et-whatsapp">
+                <input aria-label="Código de país de WhatsApp" name="whatsappCaracteristica" value="+54" inputmode="tel">
+                <input aria-label="Código de área de WhatsApp" name="whatsappArea" placeholder="11" inputmode="numeric">
+                <input aria-label="Número de WhatsApp" name="whatsappNumero" inputmode="tel">
+              </div></div>
+            <fieldset class="campo campo--6" style="border:0;padding:0;margin:0">
+              <legend class="campo__etiqueta">¿Por dónde preferís que te contactemos?</legend>
+              <div class="opciones preferido">
+                <label class="opcion"><input type="radio" name="preferido" value="CORREO" checked><span class="opcion__nodo" aria-hidden="true"></span><span class="opcion__texto"><span class="opcion__titulo">Correo</span></span></label>
+                <label class="opcion"><input type="radio" name="preferido" value="TELEFONO"><span class="opcion__nodo" aria-hidden="true"></span><span class="opcion__texto"><span class="opcion__titulo">Teléfono</span></span></label>
+                <label class="opcion"><input type="radio" name="preferido" value="WHATSAPP"><span class="opcion__nodo" aria-hidden="true"></span><span class="opcion__texto"><span class="opcion__titulo">WhatsApp</span></span></label>
+              </div></fieldset>
+          </div>
+        </fieldset>
+
+        <!-- 4 · Domicilio (opcional; si se carga, el backend pide calle, localidad, provincia y país) -->
+        <fieldset class="bloque" id="paso-domicilio">
+          <div class="bloque__cabecera"><h2>Domicilio <span class="etiqueta-opcional">Opcional</span></h2><span class="bloque__alerta">1 dato para revisar</span>
+            <p class="bloque__nota">Si lo completás, necesitamos calle, localidad, provincia y país.</p></div>
+          <div class="campos">
+            <div class="campo campo--4" data-error="calle"><label for="calle">Calle</label>
+              <input id="calle" name="calle" autocomplete="address-line1" aria-describedby="error-calle">
+              <p class="campo__error" id="error-calle">La calle es obligatoria si cargás un domicilio.</p></div>
+            <div class="campo campo--2"><label for="altura">Altura</label>
+              <input id="altura" name="altura" inputmode="numeric" aria-describedby="ayuda-altura" value="">
+              <p class="campo__ayuda" id="ayuda-altura">Vacía si es sin número.</p></div>
+            <div class="campo campo--1"><label for="piso">Piso</label><input id="piso" name="piso" inputmode="numeric"></div>
+            <div class="campo campo--1"><label for="depto">Depto.</label><input id="depto" name="departamento"></div>
+            <div class="campo campo--4"><label for="cp">Código postal</label><input id="cp" name="codigoPostal" autocomplete="postal-code"></div>
+            <div class="campo"><label for="localidad">Localidad</label><input id="localidad" name="localidad" autocomplete="address-level2" value="Villa Crespo"></div>
+            <div class="campo"><label for="provincia">Provincia</label>
+              <div class="selector"><select id="provincia" name="provincia" autocomplete="address-level1"><option value="">Elegí</option><option selected>Ciudad Autónoma de Buenos Aires</option><option>Buenos Aires</option><option>Córdoba</option><option>Santa Fe</option><option>Mendoza</option><option>…</option></select></div></div>
+            <div class="campo campo--6"><label for="pais">País</label><input id="pais" name="pais" autocomplete="country-name" value="Argentina"></div>
+          </div>
+        </fieldset>
+
+        <!-- Perfil público (solo donantes). Ni el consentimiento ni el apodo existen hoy en el backend:
+             se muestran para conversarlo con el equipo; no se envían. -->
+        <fieldset class="bloque solo-donante" id="paso-publico">
+          <div class="bloque__cabecera"><h2>Cómo te mostramos</h2>
+            <span class="pendiente-backend">A definir con backend</span></div>
+          <label class="publico-opcion"><input type="checkbox" name="mostrarEnDestacadas">
+            <span><b>Mostrar mi nombre en las donaciones destacadas</b>
+              <span class="solo-humana">Aparece tu apodo o, si no cargás uno, tu nombre y la inicial del apellido (por ejemplo, "Lucía F.").</span>
+              <span class="solo-organizacion">Aparece la razón social de la organización.</span></span></label>
+          <div class="campos solo-humana">
+            <div class="campo campo--6"><label for="apodo">Apodo <span class="etiqueta-opcional">Opcional</span></label>
+              <input id="apodo" name="apodo" maxlength="40" aria-describedby="ayuda-apodo">
+              <p class="campo__ayuda" id="ayuda-apodo">Si lo completás, se muestra en lugar de tu nombre.</p></div>
+          </div>
+        </fieldset>
+
+        <!-- 5 · Envío -->
+        <div class="envio" id="paso-envio">
+          <label><input type="checkbox" name="aceptaPrivacidad" required>
+            <span>Leí la <a href="#">política de privacidad</a> y acepto que DonaTrack use estos datos para gestionar mis donaciones.</span></label>
+          <div class="envio__fila">
+            <span class="demo">Modo demostración: no se guarda nada</span>
+            <button class="boton boton--primario" type="submit">Crear cuenta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <!-- Resultado: éxito -->
+  <section class="resultado resultado--exito" aria-labelledby="titulo-exito">
+    <span class="resultado__nodo" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span>
+    <h2 id="titulo-exito">¡Listo, Lucía!</h2>
+    <p>Tu cuenta de persona donante quedó creada. Cuando lleves tu primera donación al depósito, vas a poder seguir su recorrido desde tu panel.</p>
+    <div class="resultado__acciones">
+      <a class="boton boton--primario" href="#">Ingresar</a>
+      <a class="boton boton--texto" href="#">Volver al inicio</a>
+    </div>
+  </section>
+
+  <!-- Resultado: parcial (CA3: la persona se creó pero falló /donantes o /entidades) -->
+  <section class="resultado resultado--parcial" aria-labelledby="titulo-parcial">
+    <div class="resultado__ruta" aria-hidden="true"><i></i><b></b><i class="pendiente"></i></div>
+    <h2 id="titulo-parcial">Falta un paso</h2>
+    <p>Guardamos tus datos, pero no pudimos terminar de crear tu perfil de donante porque el servicio no respondió. No hace falta que vuelvas a completar el formulario.</p>
+    <div class="resultado__acciones">
+      <button class="boton boton--primario" type="button">Reintentar</button>
+      <a class="boton boton--texto" href="#">Volver al inicio</a>
+    </div>
+  </section>
+</main>
+
+<div class="controles" aria-label="Controles de la exploración">
+  <span>Estado</span>
+  <button type="button" data-estado="" aria-pressed="true">Formulario</button>
+  <button type="button" data-estado="estado-errores" aria-pressed="false">Con errores</button>
+  <button type="button" data-estado="estado-exito" aria-pressed="false">Éxito</button>
+  <button type="button" data-estado="estado-parcial" aria-pressed="false">Parcial</button>
+</div>
+
+<script src="/js/app.js"></script>
+<script>
+  // Solo para la exploración: alterna estados de la página.
+  const errores = ["apellido", "correo", "calle"];
+  document.querySelectorAll("[data-estado]").forEach((b) => b.addEventListener("click", () => {
+    document.querySelectorAll("[data-estado]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+    document.body.classList.remove("estado-errores", "estado-exito", "estado-parcial");
+    if (b.dataset.estado) document.body.classList.add(b.dataset.estado);
+    const conErrores = b.dataset.estado === "estado-errores";
+    errores.forEach((id) => {
+      const campo = document.querySelector(`[data-error="${id}"]`);
+      campo.classList.toggle("con-error", conErrores);
+      document.getElementById(id).toggleAttribute("aria-invalid", conErrores);
+    });
+    document.querySelectorAll(".bloque").forEach((bloque) => {
+      const tiene = conErrores && !!bloque.querySelector(".con-error");
+      bloque.classList.toggle("con-errores", tiene);
+      document.querySelectorAll(`.ruta-form a[href="#${bloque.id}"]`).forEach((a) => a.classList.toggle("con-errores", tiene));
+    });
+    window.scrollTo(0, 0);
+    if (conErrores) document.getElementById("resumen-errores").focus({ preventScroll: true });
+  }));
+  // Representantes: agregar / quitar (en la app, sin JS lo resuelve un botón de envío).
+  const lista = document.querySelector("[data-representantes]");
+  const numerar = () => lista.querySelectorAll("[data-representante]").forEach((r, i) => {
+    r.querySelector("h3").textContent = "Representante " + (i + 1);
+  });
+  const molde = lista.querySelector("[data-representante]").cloneNode(true);
+  document.querySelector("[data-agregar-representante]").addEventListener("click", () => {
+    const nuevo = molde.cloneNode(true);
+    const n = lista.children.length + 1;
+    nuevo.querySelectorAll("input").forEach((i) => (i.value = ""));
+    nuevo.querySelectorAll("[id]").forEach((el) => (el.id = el.id.replace(/^rep\d+/, "rep" + n)));
+    nuevo.querySelectorAll("label[for]").forEach((l) => (l.htmlFor = l.htmlFor.replace(/^rep\d+/, "rep" + n)));
+    lista.appendChild(nuevo);
+    numerar();
+    nuevo.querySelector("input").focus();
+  });
+  lista.addEventListener("click", (e) => {
+    if (!e.target.matches("[data-quitar]")) return;
+    e.target.closest("[data-representante]").remove();
+    numerar();
+  });
+  // Ruta lateral: marca la sección visible.
+  const enlaces = [...document.querySelectorAll(".ruta-form a")];
+  const obs = new IntersectionObserver((es) => es.forEach((e) => {
+    if (!e.isIntersecting) return;
+    enlaces.forEach((a) => a.toggleAttribute("aria-current", a.hash === "#" + e.target.id) || a.removeAttribute("aria-current"));
+    enlaces.filter((a) => a.hash === "#" + e.target.id).forEach((a) => a.setAttribute("aria-current", "step"));
+  }), { rootMargin: "-40% 0px -55% 0px" });
+  ["paso-datos", "paso-representantes", "paso-contacto", "paso-domicilio", "paso-publico", "paso-envio"].forEach((id) => obs.observe(document.getElementById(id)));
+</script>
+</body>
+</html>

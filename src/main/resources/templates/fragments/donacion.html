@@ -1,0 +1,34 @@
+<!-- Tarjeta de una donación entregada (landing y galería). Uso: th:replace="~{fragments/donacion :: tarjeta(${d})}" -->
+<li th:fragment="tarjeta(d)" class="tarjeta-donacion">
+  <div class="tarjeta-donacion__imagen">
+    <img th:src="${d.fotoUrl != null} ? ${d.fotoUrl} : @{/img/donacion-ilustrativa.jpg}"
+         th:alt="${d.fotoUrl != null} ? ${'Foto de la donación: ' + d.titulo} : ''"
+         loading="lazy" width="330" height="244">
+    <span class="tarjeta-donacion__categoria">
+      <span th:replace="~{fragments/iconos :: icono(${d.iconoCategoria}, 16)}"></span>
+      <span th:text="${d.categoria}">Alimentos</span>
+    </span>
+  </div>
+  <div class="tarjeta-donacion__cuerpo">
+    <p class="tarjeta-donacion__donante" th:if="${d.donante != null}">
+      <img th:src="@{/img/icono-donante.svg}" alt="" width="20" height="15">
+      <span><span class="sr-only">Donó: </span><span th:text="${d.donante}">Cooperativa La Huerta</span></span>
+    </p>
+    <h3 data-ajustar-titulo th:text="${d.titulo}">Cajas de arroz</h3>
+    <time th:datetime="${#temporals.formatISO(d.entregadaEl)}"
+          th:text="${#temporals.format(d.entregadaEl, 'd ''de'' MMMM, yyyy')}">12 de septiembre, 2026</time>
+  </div>
+</li>
+
+<!-- Fila de una lista de donaciones del donante; lleva al detalle. Uso: th:replace="~{fragments/donacion :: fila(${d})}" -->
+<li th:fragment="fila(d)">
+  <a class="lista-donaciones__fila" th:href="@{/donante/donaciones/{id}(id=${d.id})}">
+    <span class="lista-donaciones__texto">
+      <span class="lista-donaciones__titulo" th:text="${d.descripcion}">Arroz</span>
+      <span class="lista-donaciones__detalle" th:text="${d.detalle}">Arroz · 50 kg</span>
+    </span>
+    <span th:replace="~{fragments/estados :: pillEstado(${d.estado})}"></span>
+    <time class="lista-donaciones__fecha" th:datetime="${#temporals.formatISO(d.fechaRegistro)}"
+          th:text="${#temporals.format(d.fechaRegistro, 'd MMM yyyy')}">1 oct 2026</time>
+  </a>
+</li>

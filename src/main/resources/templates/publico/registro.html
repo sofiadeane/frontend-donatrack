@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico :: layout(~{::title}, ~{::contenido})}">
+<head><title>Crear cuenta · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <section class="banda-hero" data-hero aria-labelledby="titulo-registro">
+    <span class="eyebrow">Sumate a DonaTrack</span>
+    <h1 id="titulo-registro">Creá tu cuenta</h1>
+    <p>Elegí cómo vas a participar. Después completás tus datos en una sola página.</p>
+  </section>
+
+  <!-- Sin JS: el tipo elegido muestra sus campos con :has(); agregar/quitar representantes recarga con lo cargado. -->
+  <form class="registro-form" th:action="@{/registro}" method="post" novalidate>
+    <fieldset class="tipo-cuenta" id="paso-tipo" data-fondo-claro>
+      <legend class="sr-only">Tipo de cuenta</legend>
+      <div class="tipo-cuenta__grilla">
+        <label class="tipo">
+          <input type="radio" name="tipo" value="humana" id="tipo-humana" th:checked="${form.tipo == 'humana'}">
+          <span class="tipo__icono" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('corazon', 22)}"></span></span>
+          <span class="tipo__titulo">Persona donante</span>
+          <span class="tipo__detalle">Doná a título personal y seguí cada donación.</span>
+          <span class="tipo__marca" aria-hidden="true"></span>
+        </label>
+        <label class="tipo">
+          <input type="radio" name="tipo" value="juridica" id="tipo-juridica" th:checked="${form.tipo == 'juridica'}">
+          <span class="tipo__icono" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('entidades', 22)}"></span></span>
+          <span class="tipo__titulo">Organización donante</span>
+          <span class="tipo__detalle">Empresas, ONG, instituciones u organismos que donan.</span>
+          <span class="tipo__marca" aria-hidden="true"></span>
+        </label>
+        <label class="tipo">
+          <input type="radio" name="tipo" value="entidad" id="tipo-entidad" th:checked="${form.tipo == 'entidad'}">
+          <span class="tipo__icono" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('casa', 22)}"></span></span>
+          <span class="tipo__titulo">Entidad beneficiaria</span>
+          <span class="tipo__detalle">Comedores, escuelas y organizaciones que reciben donaciones.</span>
+          <span class="tipo__marca" aria-hidden="true"></span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="registro">
+      <ol class="ruta-form" aria-label="Secciones del formulario" data-ruta-form>
+        <li><a href="#paso-datos" th:classappend="${errores.enSeccion('datos') > 0} ? 'con-errores'">Datos<small>Quién se registra</small></a></li>
+        <li class="solo-organizacion"><a href="#paso-representantes" th:classappend="${errores.enSeccion('representantes') > 0} ? 'con-errores'">Representantes<small>Quién habla por ella</small></a></li>
+        <li><a href="#paso-contacto" th:classappend="${errores.enSeccion('contacto') > 0} ? 'con-errores'">Contacto<small>Cómo te avisamos</small></a></li>
+        <li><a href="#paso-domicilio" th:classappend="${errores.enSeccion('domicilio') > 0} ? 'con-errores'">Domicilio<small>Opcional</small></a></li>
+        <li class="solo-donante"><a href="#paso-publico" th:classappend="${errores.enSeccion('publico') > 0} ? 'con-errores'">Perfil público<small>A definir</small></a></li>
+        <li><a href="#paso-envio" th:classappend="${errores.enSeccion('envio') > 0} ? 'con-errores'">Confirmar<small>Crear la cuenta</small></a></li>
+      </ol>
+
+      <div class="formulario">
+        <div class="aviso" role="alert" th:if="${falla != null}">
+          <p><span th:text="${falla.mensaje}">No pudimos conectarnos.</span>
+            <span th:if="${falla.referencia != null}"> Código de referencia: <span th:text="${falla.referencia}"></span>.</span></p>
+        </div>
+
+        <div class="resumen-errores" role="alert" tabindex="-1" id="resumen-errores" th:unless="${errores.vacio()}" data-resumen-errores>
+          <h2 th:text="${errores.total == 1} ? 'Revisá 1 dato antes de continuar' : ${'Revisá ' + errores.total + ' datos antes de continuar'}">Revisá los datos</h2>
+          <ul>
+            <li th:each="e : ${errores.porCampo}"><a th:href="${'#' + errores.idDe(e.key)}" th:text="${errores.etiqueta(e.key) + ': ' + e.value}">Campo: error</a></li>
+            <li th:each="g : ${errores.generales}" th:text="${g}">Error general</li>
+          </ul>
+        </div>
+
+        <fieldset class="bloque" id="paso-datos" th:classappend="${errores.enSeccion('datos') > 0} ? 'con-errores'">
+          <div class="bloque__cabecera">
+            <h2 class="solo-humana">Tus datos</h2>
+            <h2 class="solo-organizacion">Datos de la organización</h2>
+            <th:block th:replace="~{fragments/formulario :: alerta('datos')}"></th:block>
+            <p class="bloque__nota">Los campos con <abbr class="obligatorio" title="obligatorio">*</abbr> son obligatorios.</p>
+          </div>
+          <div class="campos solo-humana">
+<div class="campo" th:classappend="${errores.tiene('nombre')} ? 'con-error'">
+  <label for="nombre">Nombre<abbr class="obligatorio" title="obligatorio">*</abbr></label>
+  <input id="nombre" name="nombre" type="text" th:value="${form.nombre}" required autocomplete="given-name" th:attr="aria-invalid=${errores.tiene('nombre')} ? 'true' : null, aria-describedby=${errores.tiene('nombre')} ? 'error-nombre' : null">
+  <th:block th:replace="~{fragments/formulario :: error('nombre', 'nombre')}"></th:block>
+</div>
+<div class="campo" th:classappend="${errores.tiene('apellido')} ? 'con-error'">
+  <label for="apellido">Apellido<abbr class="obligatorio" title="obligatorio">*</abbr></label>
+  <input id="apellido" name="apellido" type="text" th:value="${form.apellido}" required autocomplete="family-name" th:attr="aria-invalid=${errores.tiene('apellido')} ? 'true' : null, aria-describedby=${errores.tiene('apellido')} ? 'error-apellido' : null">
+  <th:block th:replace="~{fragments/formulario :: error('apellido', 'apellido')}"></th:block>
+</div>
+<div class="campo" th:classappend="${errores.tiene('fechaNacimiento')} ? 'con-error'">
+  <label for="fechaNacimiento">Fecha de nacimiento</label>
+  <input id="fechaNacimiento" name="fechaNacimiento" type="date" th:value="${form.fechaNacimiento}" autocomplete="bday" th:max="${hoy}" th:attr="aria-invalid=${errores.tiene('fechaNacimiento')} ? 'true' : null, aria-describedby=${errores.tiene('fechaNacimiento')} ? 'error-fechaNacimiento' : null">
+  <th:block th:replace="~{fragments/formulario :: error('fechaNacimiento', 'fechaNacimiento')}"></th:block>
+</div>
+<div class="campo" th:classappend="${errores.tiene('genero')} ? 'con-error'">
+  <label for="genero">Género</label>
+  <div class="selector"><select id="genero" name="genero" th:attr="aria-invalid=${errores.tiene('genero')} ? 'true' : null, aria-describedby=${errores.tiene('genero')} ? 'error-genero' : null"><option value="">Elegí</option><option value="PREFIERO_NO_DECIR" th:selected="${form.genero} == 'PREFIERO_NO_DECIR'">Prefiero no decir</option><option value="MUJER" th:selected="${form.genero} == 'MUJER'">Mujer</option><option value="HOMBRE" th:selected="${form.genero} == 'HOMBRE'">Hombre</option><option value="NO_BINARIO" th:selected="${form.genero} == 'NO_BINARIO'">No binario</option></select></div>
+  <th:block th:replace="~{fragments/formulario :: error('genero', 'genero')}"></th:block>
+</div>
+          </div>
+          <div class="campos solo-organizacion">
+<div class="campo campo--6" th:classappend="${errores.tiene('razonSocial')} ? 'con-error'">
+  <label for="razonSocial">Razón social<abbr class="obligatorio" title="obligatorio">*</abbr></label>
+  <input id="razonSocial" name="razonSocial" type="text" th:value="${form.razonSocial}" required autocomplete="organization" th:attr="aria-invalid=${errores.tiene('razonSocial')} ? 'true' : null, aria-describedby=${errores.tiene('razonSocial')} ? 'error-razonSocial' : null">
+  <th:block th:replace="~{fragments/formulario :: error('razonSocial', 'razonSocial')}"></th:block>
+</div>
+            <fieldset class="campo campo--6" th:classappend="${errores.tiene('tipoJuridico')} ? 'con-error'"
+                      th:attr="aria-describedby=${errores.tiene('tipoJuridico')} ? 'error-tipoJuridico' : null">
+              <legend class="campo__etiqueta">Tipo de organización<abbr class="obligatorio" title="obligatorio">*</abbr></legend>
+              <div class="chips">
+                <label><input type="radio" name="tipoJuridico" value="ONG" id="tipoJuridico" th:checked="${form.tipoJuridico == 'ONG'}">ONG</label>
+                <label><input type="radio" name="tipoJuridico" value="EMPRESA" th:checked="${form.tipoJuridico == 'EMPRESA'}">Empresa</label>
+                <label><input type="radio" name="tipoJuridico" value="INSTITUCION" th:checked="${form.tipoJuridico == 'INSTITUCION'}">Institución</label>
+                <label><input type="radio" name="tipoJuridico" value="GUBERNAMENTAL" th:checked="${form.tipoJuridico == 'GUBERNAMENTAL'}">Gubernamental</label>
+              </div>
+              <th:block th:replace="~{fragments/formulario :: error('tipoJuridico', 'tipoJuridico')}"></th:block>
+            </fieldset>
+<div class="campo campo--6" th:classappend="${errores.tiene('rubro')} ? 'con-error'">
+  <label for="rubro">Rubro</label>
+  <input id="rubro" name="rubro" type="text" th:value="${form.rubro}" th:attr="aria-invalid=${errores.tiene('rubro')} ? 'true' : null, aria-describedby=${errores.tiene('rubro')} ? 'error-rubro ayuda-rubro' : 'ayuda-rubro'">
+  <p class="campo__ayuda" id="ayuda-rubro"><span class="solo-entidad">Por ejemplo: comedor comunitario, escuela, hogar de día.</span><span class="solo-donante">Por ejemplo: alimentación, construcción, educación.</span></p>
+  <th:block th:replace="~{fragments/formulario :: error('rubro', 'rubro')}"></th:block>
+</div>
+          </div>
+          <!-- Documento: un solo par de campos para todos los tipos (DNI, pasaporte, libreta o CUIT) -->
+          <div class="campos">
+<div class="campo campo--2" th:classappend="${errores.tiene('tipoDocumento')} ? 'con-error'">
+  <label for="tipoDocumento">Tipo de documento</label>
+  <div class="selector"><select id="tipoDocumento" name="tipoDocumento" th:attr="aria-invalid=${errores.tiene('tipoDocumento')} ? 'true' : null, aria-describedby=${errores.tiene('tipoDocumento')} ? 'error-tipoDocumento' : null"><option value="">Elegí</option><option value="DNI" th:selected="${form.tipoDocumento} == 'DNI'">DNI</option><option value="PASAPORTE" th:selected="${form.tipoDocumento} == 'PASAPORTE'">Pasaporte</option><option value="LIBRETA" th:selected="${form.tipoDocumento} == 'LIBRETA'">Libreta</option><option value="CUIT" th:selected="${form.tipoDocumento} == 'CUIT'">CUIT</option></select></div>
+  <th:block th:replace="~{fragments/formulario :: error('tipoDocumento', 'tipoDocumento')}"></th:block>
+</div>
+<div class="campo campo--4" th:classappend="${errores.tiene('documento')} ? 'con-error'">
+  <label for="documento">Número de documento</label>
+  <input id="documento" name="documento" type="text" th:value="${form.documento}" inputmode="numeric" th:attr="aria-invalid=${errores.tiene('documento')} ? 'true' : null, aria-describedby=${errores.tiene('documento')} ? 'error-documento ayuda-documento' : 'ayuda-documento'">
+  <p class="campo__ayuda" id="ayuda-documento">Sin puntos ni espacios.</p>
+  <th:block th:replace="~{fragments/formulario :: error('documento', 'documento')}"></th:block>
+</div>
+          </div>
+        </fieldset>
+
+        <fieldset class="bloque solo-organizacion" id="paso-representantes" th:classappend="${errores.enSeccion('representantes') > 0} ? 'con-errores'">
+          <div class="bloque__cabecera">
+            <h2>Representantes</h2>
+            <th:block th:replace="~{fragments/formulario :: alerta('representantes')}"></th:block>
+            <p class="bloque__nota">Al menos una persona que pueda hablar en nombre de la organización.</p>
+          </div>
+          <div class="representantes">
+<div class="representante" th:each="r, i : ${form.representantes}">
+  <div class="representante__cabecera">
+    <h3 th:text="${'Representante ' + i.count}">Representante 1</h3>
+    <button class="boton-quitar" type="submit" name="quitar" th:value="${i.index}" formnovalidate
+            th:formaction="|@{/registro}#paso-representantes|" th:if="${form.representantes.size() > 1}"
+            th:attr="aria-label=${'Quitar representante ' + i.count}">Quitar</button>
+  </div>
+  <div class="campos">
+<div class="campo" th:with="c=${'representantes[' + i.index + '].nombre'}, cid=${'rep-' + i.index + '-nombre'}"
+     th:classappend="${errores.tiene(c)} ? 'con-error'">
+  <label th:for="${cid}">Nombre<abbr class="obligatorio" title="obligatorio">*</abbr></label>
+  <input th:id="${cid}" th:name="${c}" type="text" th:value="${r.nombre}" required th:autofocus="${foco == ('representantes[' + i.index + ']')}"
+         th:attr="aria-invalid=${errores.tiene(c)} ? 'true' : null, aria-describedby=${errores.tiene(c)} ? ${'error-' + cid} : null">
+  <th:block th:replace="~{fragments/formulario :: error(${c}, ${cid})}"></th:block>
+</div>
+<div class="campo" th:with="c=${'representantes[' + i.index + '].apellido'}, cid=${'rep-' + i.index + '-apellido'}"
+     th:classappend="${errores.tiene(c)} ? 'con-error'">
+  <label th:for="${cid}">Apellido<abbr class="obligatorio" title="obligatorio">*</abbr></label>
+  <input th:id="${cid}" th:name="${c}" type="text" th:value="${r.apellido}" required
+         th:attr="aria-invalid=${errores.tiene(c)} ? 'true' : null, aria-describedby=${errores.tiene(c)} ? ${'error-' + cid} : null">
+  <th:block th:replace="~{fragments/formulario :: error(${c}, ${cid})}"></th:block>
+</div>
+<div class="campo campo--2">
+  <label th:for="${'rep-' + i.index + '-tipoDocumento'}">Tipo de documento</label>
+  <div class="selector"><select th:id="${'rep-' + i.index + '-tipoDocumento'}" th:name="${'representantes[' + i.index + '].tipoDocumento'}"><option value="">Elegí</option><option value="DNI" th:selected="${r.tipoDocumento} == 'DNI'">DNI</option><option value="PASAPORTE" th:selected="${r.tipoDocumento} == 'PASAPORTE'">Pasaporte</option><option value="LIBRETA" th:selected="${r.tipoDocumento} == 'LIBRETA'">Libreta</option></select></div>
+</div>
+<div class="campo campo--4" th:with="c=${'representantes[' + i.index + '].documento'}, cid=${'rep-' + i.index + '-documento'}"
+     th:classappend="${errores.tiene(c)} ? 'con-error'">
+  <label th:for="${cid}">Número de documento</label>
+  <input th:id="${cid}" th:name="${c}" type="text" th:value="${r.documento}" inputmode="numeric"
+         th:attr="aria-invalid=${errores.tiene(c)} ? 'true' : null, aria-describedby=${errores.tiene(c)} ? ${'error-' + cid} : null">
+  <th:block th:replace="~{fragments/formulario :: error(${c}, ${cid})}"></th:block>
+</div>
+<div class="campo campo--6" th:with="c=${'representantes[' + i.index + '].correo'}, cid=${'rep-' + i.index + '-correo'}"
+     th:classappend="${errores.tiene(c)} ? 'con-error'">
+  <label th:for="${cid}">Correo electrónico</label>
+  <input th:id="${cid}" th:name="${c}" type="email" th:value="${r.correo}" autocomplete="off"
+         th:attr="aria-invalid=${errores.tiene(c)} ? 'true' : null, aria-describedby=${errores.tiene(c)} ? ${'error-' + cid} : null">
+  <th:block th:replace="~{fragments/formulario :: error(${c}, ${cid})}"></th:block>
+</div>
+  </div>
+</div>
+          </div>
+          <button class="boton-agregar" type="submit" name="accion" value="agregar-representante" formnovalidate
+                  th:formaction="|@{/registro}#paso-representantes|">
+            <span th:replace="~{fragments/iconos :: icono('mas', 18)}"></span>Agregar representante
+          </button>
+        </fieldset>
+
+        <fieldset class="bloque" id="paso-contacto" th:classappend="${errores.enSeccion('contacto') > 0} ? 'con-errores'">
+          <div class="bloque__cabecera">
+            <h2>Contacto</h2>
+            <th:block th:replace="~{fragments/formulario :: alerta('contacto')}"></th:block>
+            <p class="bloque__nota">Lo usamos para avisarte sobre tus donaciones.</p>
+          </div>
+          <div class="campos">
+<div class="campo campo--6" th:classappend="${errores.tiene('correo')} ? 'con-error'">
+  <label for="correo">Correo electrónico<abbr class="obligatorio" title="obligatorio">*</abbr></label>
+  <input id="correo" name="correo" type="email" th:value="${form.correo}" required autocomplete="email" th:attr="aria-invalid=${errores.tiene('correo')} ? 'true' : null, aria-describedby=${errores.tiene('correo')} ? 'error-correo' : null">
+  <th:block th:replace="~{fragments/formulario :: error('correo', 'correo')}"></th:block>
+</div>
+<div class="campo" th:classappend="${errores.tiene('telefono.numero')} ? 'con-error'">
+  <span class="campo__etiqueta" id="et-telefono">Teléfono</span>
+  <div class="telefono" role="group" aria-labelledby="et-telefono">
+    <input name="telefono.caracteristica" th:value="${form.telefono.caracteristica}" inputmode="tel" aria-label="Código de país">
+    <input name="telefono.area" th:value="${form.telefono.area}" inputmode="numeric" placeholder="11" aria-label="Código de área">
+    <input id="telefono-numero" name="telefono.numero" th:value="${form.telefono.numero}" inputmode="tel" aria-label="Número" th:attr="aria-invalid=${errores.tiene('telefono.numero')} ? 'true' : null, aria-describedby=${errores.tiene('telefono.numero')} ? 'error-telefono-numero' : null">
+  </div>
+  <th:block th:replace="~{fragments/formulario :: error('telefono.numero', 'telefono-numero')}"></th:block>
+</div>
+<div class="campo" th:classappend="${errores.tiene('whatsapp.numero')} ? 'con-error'">
+  <span class="campo__etiqueta" id="et-whatsapp">WhatsApp</span>
+  <div class="telefono" role="group" aria-labelledby="et-whatsapp">
+    <input name="whatsapp.caracteristica" th:value="${form.whatsapp.caracteristica}" inputmode="tel" aria-label="Código de país de WhatsApp">
+    <input name="whatsapp.area" th:value="${form.whatsapp.area}" inputmode="numeric" placeholder="11" aria-label="Código de área de WhatsApp">
+    <input id="whatsapp-numero" name="whatsapp.numero" th:value="${form.whatsapp.numero}" inputmode="tel" aria-label="Número de WhatsApp" th:attr="aria-invalid=${errores.tiene('whatsapp.numero')} ? 'true' : null, aria-describedby=${errores.tiene('whatsapp.numero')} ? 'error-whatsapp-numero' : null">
+  </div>
+  <th:block th:replace="~{fragments/formulario :: error('whatsapp.numero', 'whatsapp-numero')}"></th:block>
+</div>
+            <fieldset class="campo campo--6" th:classappend="${errores.tiene('preferido')} ? 'con-error'">
+              <legend class="campo__etiqueta">¿Por dónde preferís que te contactemos?</legend>
+              <div class="opciones preferido">
+                <label class="opcion"><input type="radio" name="preferido" value="CORREO" id="preferido" th:checked="${form.preferido == 'CORREO'}"><span class="opcion__nodo" aria-hidden="true"></span><span class="opcion__texto"><span class="opcion__titulo">Correo</span></span></label>
+                <label class="opcion"><input type="radio" name="preferido" value="TELEFONO" th:checked="${form.preferido == 'TELEFONO'}"><span class="opcion__nodo" aria-hidden="true"></span><span class="opcion__texto"><span class="opcion__titulo">Teléfono</span></span></label>
+                <label class="opcion"><input type="radio" name="preferido" value="WHATSAPP" th:checked="${form.preferido == 'WHATSAPP'}"><span class="opcion__nodo" aria-hidden="true"></span><span class="opcion__texto"><span class="opcion__titulo">WhatsApp</span></span></label>
+              </div>
+              <th:block th:replace="~{fragments/formulario :: error('preferido', 'preferido')}"></th:block>
+            </fieldset>
+          </div>
+        </fieldset>
+
+        <fieldset class="bloque" id="paso-domicilio" th:classappend="${errores.enSeccion('domicilio') > 0} ? 'con-errores'">
+          <div class="bloque__cabecera">
+            <h2>Domicilio<span class="etiqueta-opcional">Opcional</span></h2>
+            <th:block th:replace="~{fragments/formulario :: alerta('domicilio')}"></th:block>
+            <p class="bloque__nota">Si lo completás, necesitamos calle, localidad, provincia y país.</p>
+          </div>
+          <div class="campos">
+<div class="campo campo--4" th:classappend="${errores.tiene('calle')} ? 'con-error'">
+  <label for="calle">Calle</label>
+  <input id="calle" name="calle" type="text" th:value="${form.calle}" autocomplete="address-line1" th:attr="aria-invalid=${errores.tiene('calle')} ? 'true' : null, aria-describedby=${errores.tiene('calle')} ? 'error-calle' : null">
+  <th:block th:replace="~{fragments/formulario :: error('calle', 'calle')}"></th:block>
+</div>
+<div class="campo campo--2" th:classappend="${errores.tiene('altura')} ? 'con-error'">
+  <label for="altura">Altura</label>
+  <input id="altura" name="altura" type="text" th:value="${form.altura}" inputmode="numeric" th:attr="aria-invalid=${errores.tiene('altura')} ? 'true' : null, aria-describedby=${errores.tiene('altura')} ? 'error-altura ayuda-altura' : 'ayuda-altura'">
+  <p class="campo__ayuda" id="ayuda-altura">Vacía si es sin número.</p>
+  <th:block th:replace="~{fragments/formulario :: error('altura', 'altura')}"></th:block>
+</div>
+<div class="campo campo--1" th:classappend="${errores.tiene('piso')} ? 'con-error'">
+  <label for="piso">Piso</label>
+  <input id="piso" name="piso" type="text" th:value="${form.piso}" inputmode="numeric" th:attr="aria-invalid=${errores.tiene('piso')} ? 'true' : null, aria-describedby=${errores.tiene('piso')} ? 'error-piso' : null">
+  <th:block th:replace="~{fragments/formulario :: error('piso', 'piso')}"></th:block>
+</div>
+<div class="campo campo--1" th:classappend="${errores.tiene('departamento')} ? 'con-error'">
+  <label for="departamento">Depto.</label>
+  <input id="departamento" name="departamento" type="text" th:value="${form.departamento}" th:attr="aria-invalid=${errores.tiene('departamento')} ? 'true' : null, aria-describedby=${errores.tiene('departamento')} ? 'error-departamento' : null">
+  <th:block th:replace="~{fragments/formulario :: error('departamento', 'departamento')}"></th:block>
+</div>
+<div class="campo campo--4" th:classappend="${errores.tiene('codigoPostal')} ? 'con-error'">
+  <label for="codigoPostal">Código postal</label>
+  <input id="codigoPostal" name="codigoPostal" type="text" th:value="${form.codigoPostal}" autocomplete="postal-code" th:attr="aria-invalid=${errores.tiene('codigoPostal')} ? 'true' : null, aria-describedby=${errores.tiene('codigoPostal')} ? 'error-codigoPostal' : null">
+  <th:block th:replace="~{fragments/formulario :: error('codigoPostal', 'codigoPostal')}"></th:block>
+</div>
+<div class="campo" th:classappend="${errores.tiene('localidad')} ? 'con-error'">
+  <label for="localidad">Localidad</label>
+  <input id="localidad" name="localidad" type="text" th:value="${form.localidad}" autocomplete="address-level2" th:attr="aria-invalid=${errores.tiene('localidad')} ? 'true' : null, aria-describedby=${errores.tiene('localidad')} ? 'error-localidad' : null">
+  <th:block th:replace="~{fragments/formulario :: error('localidad', 'localidad')}"></th:block>
+</div>
+<div class="campo" th:classappend="${errores.tiene('provincia')} ? 'con-error'">
+  <label for="provincia">Provincia</label>
+  <div class="selector"><select id="provincia" name="provincia" autocomplete="address-level1" th:attr="aria-invalid=${errores.tiene('provincia')} ? 'true' : null, aria-describedby=${errores.tiene('provincia')} ? 'error-provincia' : null"><option value="">Elegí</option><option value="Buenos Aires" th:selected="${form.provincia} == 'Buenos Aires'">Buenos Aires</option><option value="Catamarca" th:selected="${form.provincia} == 'Catamarca'">Catamarca</option><option value="Chaco" th:selected="${form.provincia} == 'Chaco'">Chaco</option><option value="Chubut" th:selected="${form.provincia} == 'Chubut'">Chubut</option><option value="Ciudad Autónoma de Buenos Aires" th:selected="${form.provincia} == 'Ciudad Autónoma de Buenos Aires'">Ciudad Autónoma de Buenos Aires</option><option value="Córdoba" th:selected="${form.provincia} == 'Córdoba'">Córdoba</option><option value="Corrientes" th:selected="${form.provincia} == 'Corrientes'">Corrientes</option><option value="Entre Ríos" th:selected="${form.provincia} == 'Entre Ríos'">Entre Ríos</option><option value="Formosa" th:selected="${form.provincia} == 'Formosa'">Formosa</option><option value="Jujuy" th:selected="${form.provincia} == 'Jujuy'">Jujuy</option><option value="La Pampa" th:selected="${form.provincia} == 'La Pampa'">La Pampa</option><option value="La Rioja" th:selected="${form.provincia} == 'La Rioja'">La Rioja</option><option value="Mendoza" th:selected="${form.provincia} == 'Mendoza'">Mendoza</option><option value="Misiones" th:selected="${form.provincia} == 'Misiones'">Misiones</option><option value="Neuquén" th:selected="${form.provincia} == 'Neuquén'">Neuquén</option><option value="Río Negro" th:selected="${form.provincia} == 'Río Negro'">Río Negro</option><option value="Salta" th:selected="${form.provincia} == 'Salta'">Salta</option><option value="San Juan" th:selected="${form.provincia} == 'San Juan'">San Juan</option><option value="San Luis" th:selected="${form.provincia} == 'San Luis'">San Luis</option><option value="Santa Cruz" th:selected="${form.provincia} == 'Santa Cruz'">Santa Cruz</option><option value="Santa Fe" th:selected="${form.provincia} == 'Santa Fe'">Santa Fe</option><option value="Santiago del Estero" th:selected="${form.provincia} == 'Santiago del Estero'">Santiago del Estero</option><option value="Tierra del Fuego" th:selected="${form.provincia} == 'Tierra del Fuego'">Tierra del Fuego</option><option value="Tucumán" th:selected="${form.provincia} == 'Tucumán'">Tucumán</option></select></div>
+  <th:block th:replace="~{fragments/formulario :: error('provincia', 'provincia')}"></th:block>
+</div>
+<div class="campo campo--6" th:classappend="${errores.tiene('pais')} ? 'con-error'">
+  <label for="pais">País</label>
+  <input id="pais" name="pais" type="text" th:value="${form.pais}" autocomplete="country-name" th:attr="aria-invalid=${errores.tiene('pais')} ? 'true' : null, aria-describedby=${errores.tiene('pais')} ? 'error-pais' : null">
+  <th:block th:replace="~{fragments/formulario :: error('pais', 'pais')}"></th:block>
+</div>
+          </div>
+        </fieldset>
+
+        <!-- Perfil público (donantes). El backend todavía no guarda ni el consentimiento ni el apodo: se piden para
+             conversarlo con el equipo y no se envían. -->
+        <fieldset class="bloque solo-donante" id="paso-publico" th:classappend="${errores.enSeccion('publico') > 0} ? 'con-errores'">
+          <div class="bloque__cabecera">
+            <h2>Cómo te mostramos</h2>
+            <span class="pendiente-backend">A definir con backend</span>
+          </div>
+          <label class="casilla publico-opcion">
+            <input type="checkbox" name="mostrarEnDestacadas" value="true" th:checked="${form.mostrarEnDestacadas}">
+            <span><b>Mostrar mi nombre en las donaciones destacadas</b>
+              <span class="solo-humana">Aparece tu apodo o, si no cargás uno, tu nombre y la inicial del apellido.</span>
+              <span class="solo-organizacion">Aparece la razón social de la organización.</span></span>
+          </label>
+          <div class="campos solo-humana">
+<div class="campo campo--6" th:classappend="${errores.tiene('apodo')} ? 'con-error'">
+  <label for="apodo">Apodo<span class="etiqueta-opcional">Opcional</span></label>
+  <input id="apodo" name="apodo" type="text" th:value="${form.apodo}" maxlength="40" th:attr="aria-invalid=${errores.tiene('apodo')} ? 'true' : null, aria-describedby=${errores.tiene('apodo')} ? 'error-apodo ayuda-apodo' : 'ayuda-apodo'">
+  <p class="campo__ayuda" id="ayuda-apodo">Si lo completás, se muestra en lugar de tu nombre.</p>
+  <th:block th:replace="~{fragments/formulario :: error('apodo', 'apodo')}"></th:block>
+</div>
+          </div>
+        </fieldset>
+
+        <div class="envio" id="paso-envio">
+          <label class="casilla">
+            <input id="aceptaPrivacidad" type="checkbox" name="aceptaPrivacidad" value="true" required th:checked="${form.aceptaPrivacidad}"
+                   th:attr="aria-invalid=${errores.tiene('aceptaPrivacidad')} ? 'true' : null, aria-describedby=${errores.tiene('aceptaPrivacidad')} ? 'error-aceptaPrivacidad' : null">
+            <span>Leí la <a th:href="@{/privacidad}">política de privacidad</a> y acepto que DonaTrack use estos datos para gestionar mis donaciones.</span>
+          </label>
+          <th:block th:replace="~{fragments/formulario :: error('aceptaPrivacidad', 'aceptaPrivacidad')}"></th:block>
+          <div class="envio__fila">
+            <span class="demo" th:if="${demo}">Modo demostración: no se guarda nada</span>
+            <span class="demo" th:if="${exportEstatico}">En esta versión publicada no se pueden crear cuentas</span>
+            <button class="boton boton--primario" type="submit" name="accion" value="crear" th:disabled="${exportEstatico}">Crear cuenta</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</th:block>
+</body>
+</html>

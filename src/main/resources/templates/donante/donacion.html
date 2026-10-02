@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/privado :: layout(~{::title}, ~{::contenido})}">
+<head><title>Detalle de donación · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <a class="volver" th:href="@{/donante/donaciones}">
+    <span th:replace="~{fragments/iconos :: icono('chevron-izq', 18)}"></span>Mis donaciones
+  </a>
+
+  <th:block th:if="${carga.error != null}">
+    <section class="tarjeta">
+      <div th:replace="~{fragments/estados :: error(${carga.error}, '/donante/donaciones')}"></div>
+    </section>
+  </th:block>
+
+  <th:block th:if="${carga.detalle.present}" th:with="d=${carga.detalle.get()}">
+    <section class="cabecera cabecera--compacta" aria-labelledby="titulo-pagina">
+      <span class="eyebrow">Donación</span>
+      <h1 id="titulo-pagina" th:text="${d.descripcion}">Arroz largo fino</h1>
+      <div class="detalle-donacion__meta">
+        <span th:replace="~{fragments/estados :: pillEstado(${d.estado})}"></span>
+        <span>Registrada el <time th:datetime="${#temporals.formatISO(d.fechaRegistro)}"
+              th:text="${#temporals.format(d.fechaRegistro, 'd ''de'' MMMM ''de'' yyyy')}">28 de septiembre de 2026</time></span>
+      </div>
+    </section>
+
+    <div class="detalle-donacion">
+      <!-- H2.2: historial en orden cronológico; ENTREGA_FALLIDA muestra la justificación (CA4) -->
+      <section class="tarjeta" aria-labelledby="titulo-historial">
+        <div class="tarjeta__encabezado">
+          <h2 id="titulo-historial">Recorrido</h2>
+          <span class="demo" th:if="${carga.demo}">Datos de demostración</span>
+        </div>
+        <ol class="historial">
+          <li th:each="p : ${d.historial}" class="historial__paso" th:classappend="${p.actual} ? 'historial__paso--actual'"
+              th:attr="aria-current=${p.actual} ? 'step' : null">
+            <span class="historial__nodo" aria-hidden="true"></span>
+            <div class="historial__texto">
+              <b th:text="${p.estado.etiqueta}">En depósito</b>
+              <time th:if="${p.fecha != null}" th:datetime="${#temporals.formatISO(p.fecha)}"
+                    th:text="${#temporals.format(p.fecha, 'd MMM yyyy, HH:mm')}">28 sep 2026, 10:15</time>
+              <p class="historial__justificacion" th:if="${p.justificacion != null}">
+                <span class="sr-only">Motivo: </span><span th:text="${p.justificacion}">Motivo</span></p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="tarjeta" aria-labelledby="titulo-items">
+        <h2 id="titulo-items" th:text="${d.items.size() == 1} ? 'Qué donaste' : ${'Qué donaste · ' + d.items.size() + ' ítems'}">Qué donaste</h2>
+        <ul class="items-donacion">
+          <li th:each="i : ${d.items}" class="items-donacion__item">
+            <span class="items-donacion__icono" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono(${i.iconoCategoria}, 20)}"></span></span>
+            <div>
+              <b th:text="${i.descripcion != null ? i.descripcion : i.subcategoria}">Arroz largo fino</b>
+              <dl>
+                <div th:if="${i.categoria != null}"><dt>Categoría</dt><dd th:text="${i.categoria + (i.subcategoria != null ? ' · ' + i.subcategoria : '')}">Alimentos · Arroz</dd></div>
+                <div th:if="${i.cantidad != null}"><dt>Cantidad</dt><dd th:text="${i.cantidad + (i.unidad.isEmpty() ? '' : ' ' + i.unidad)}">50 kg</dd></div>
+                <div th:if="${i.estadoBien != null}"><dt>Estado</dt><dd th:text="${i.estadoBien}">Nuevo</dd></div>
+                <div th:if="${i.vencimiento != null}"><dt>Vence</dt><dd th:text="${#temporals.format(i.vencimiento, 'd MMM yyyy')}">1 mar 2027</dd></div>
+              </dl>
+            </div>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </th:block>
+</th:block>
+</body>
+</html>

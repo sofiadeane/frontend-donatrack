@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/privado :: layout(~{::title}, ~{::contenido})}">
+<head><title>Mis donaciones · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <section class="cabecera cabecera--compacta" aria-labelledby="titulo-pagina">
+    <span class="eyebrow">Tu recorrido</span>
+    <h1 id="titulo-pagina">Mis donaciones</h1>
+    <p>Filtrá por estado o por categoría y abrí cada una para ver su historial.</p>
+  </section>
+
+  <!-- Filtros por GET: sin JS se aplican con el botón; con JS, la subcategoría sigue a la categoría (CA2). -->
+  <form class="filtros tarjeta" th:action="@{/donante/donaciones}" method="get" data-filtros th:unless="${exportEstatico}"
+        aria-label="Filtrar donaciones">
+    <div class="campo">
+      <label for="f-estado">Estado</label>
+      <div class="selector">
+        <select id="f-estado" name="estado">
+          <option value="">Todos</option>
+          <option th:each="e : ${mis.estados}" th:value="${e.codigo}" th:text="${e.etiqueta}"
+                  th:selected="${mis.filtros.estado == e.codigo}">En depósito</option>
+        </select>
+      </div>
+    </div>
+    <div class="campo" th:unless="${mis.categorias.isEmpty()}">
+      <label for="f-categoria">Categoría</label>
+      <div class="selector">
+        <select id="f-categoria" name="categoria" data-filtro-categoria>
+          <option value="">Todas</option>
+          <option th:each="c : ${mis.categorias}" th:value="${c.id}" th:text="${c.nombre}"
+                  th:selected="${mis.filtros.categoriaId == c.id}">Alimentos</option>
+        </select>
+      </div>
+    </div>
+    <div class="campo" th:unless="${mis.categorias.isEmpty()}">
+      <label for="f-subcategoria">Subcategoría</label>
+      <div class="selector">
+        <select id="f-subcategoria" name="subcategoria" data-filtro-subcategoria>
+          <option value="">Todas</option>
+          <th:block th:each="c : ${mis.categorias}">
+            <option th:each="s : ${c.subcategorias}" th:value="${s.id}" th:text="${s.nombre}"
+                    th:attr="data-categoria=${c.id}"
+                    th:selected="${mis.filtros.subcategoriaId == s.id}"
+                    th:disabled="${mis.filtros.categoriaId != null and mis.filtros.categoriaId != c.id}">Arroz</option>
+          </th:block>
+        </select>
+      </div>
+    </div>
+    <div class="filtros__acciones">
+      <button class="boton boton--primario" type="submit">Aplicar</button>
+      <a class="boton boton--texto" th:href="@{/donante/donaciones}" th:if="${mis.filtros.activos()}">Limpiar filtros</a>
+    </div>
+  </form>
+
+  <section class="tarjeta" aria-labelledby="titulo-lista">
+    <div class="tarjeta__encabezado">
+      <div>
+        <h2 id="titulo-lista">Tus donaciones</h2>
+        <!-- CA3: el contador se anuncia al cambiar los filtros -->
+        <p class="tarjeta__bajada" role="status" th:if="${mis.donaciones.ok() or mis.donaciones.vacia()}"
+           th:text="${mis.donaciones.datos.size() == 1} ? '1 donación' : ${mis.donaciones.datos.size() + ' donaciones'}">6 donaciones</p>
+      </div>
+      <span th:replace="~{fragments/estados :: demo(${mis.donaciones})}"></span>
+    </div>
+
+    <ul class="lista-donaciones" th:if="${mis.donaciones.ok()}">
+      <th:block th:each="d : ${mis.donaciones.datos}"><li th:replace="~{fragments/donacion :: fila(${d})}"></li></th:block>
+    </ul>
+
+    <th:block th:if="${mis.donaciones.vacia() and mis.filtros.activos()}">
+      <div th:replace="~{fragments/estados :: vacio('Ninguna donación coincide con esos filtros', 'Probá con otro estado o categoría.', '/donante/donaciones', 'Limpiar filtros')}"></div>
+    </th:block>
+    <th:block th:if="${mis.donaciones.vacia() and !mis.filtros.activos()}">
+      <div th:replace="~{fragments/estados :: vacio('Todavía no registraste donaciones', 'Cuando lleves una donación al depósito, vas a poder seguirla desde acá.', null, null)}"></div>
+    </th:block>
+    <th:block th:if="${mis.donaciones.conError()}">
+      <div th:replace="~{fragments/estados :: error(${mis.donaciones.error}, '/donante/donaciones')}"></div>
+    </th:block>
+  </section>
+</th:block>
+</body>
+</html>

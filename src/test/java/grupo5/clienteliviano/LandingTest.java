@@ -102,6 +102,38 @@ class LandingTest {
     }
 
     @Test
+    @DisplayName("Galería: todas las entregas, la más reciente primero, filtrables por categoría")
+    void galeria() throws Exception {
+      var todas = landing.galeria(null);
+      assertThat(todas.total()).isEqualTo(6);
+      assertThat(todas.donaciones().datos().getFirst().titulo())
+          .isEqualTo("Pupitres y sillas reacondicionadas para dos aulas");
+      assertThat(todas.categorias())
+          .extracting(LandingService.CategoriaFiltro::nombre)
+          .contains("Alimentos", "Mobiliario");
+
+      var alimentos = landing.galeria("Alimentos");
+      assertThat(alimentos.categoria()).isEqualTo("Alimentos");
+      assertThat(alimentos.donaciones().datos())
+          .allSatisfy(d -> assertThat(d.categoria()).isEqualTo("Alimentos"));
+      assertThat(landing.galeria("No existe").categoria()).isNull();
+
+      mvc.perform(get("/donaciones-entregadas").param("categoria", "Alimentos"))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("2 donaciones entregadas")))
+          .andExpect(content().string(containsString("aria-current=\"true\"")));
+    }
+
+    @Test
+    @DisplayName("Privacidad: contenido legal con qué se ve públicamente y derechos")
+    void privacidad() throws Exception {
+      mvc.perform(get("/privacidad"))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("Qué se ve públicamente")))
+          .andExpect(content().string(containsString("Ley 25.326")));
+    }
+
+    @Test
     @DisplayName("El mapa de impacto se muestra como pendiente, sin simularlo")
     void mapa() throws Exception {
       mvc.perform(get("/mapa-de-impacto"))
@@ -133,6 +165,10 @@ class LandingTest {
           .andExpect(content().string(containsString("No pudimos conectarnos")))
           .andExpect(content().string(containsString("Transparencia en números")))
           .andExpect(content().string(not(containsString("tarjeta-donacion__cuerpo"))));
+      mvc.perform(get("/donaciones-entregadas"))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("No pudimos conectarnos")))
+          .andExpect(content().string(not(containsString("galeria-filtros"))));
     }
   }
 }

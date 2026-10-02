@@ -55,6 +55,20 @@ class FixturesContratoTest {
   }
 
   @Test
+  @DisplayName("Las categorías de demostración cubren las de las donaciones")
+  void categorias() {
+    DonacionesFixtureAdapter adapter = new DonacionesFixtureAdapter(lector);
+    var subcategorias =
+        adapter.categorias().stream()
+            .flatMap(c -> c.subcategorias().stream())
+            .map(s -> s.id())
+            .toList();
+    assertThat(adapter.donacionesIndependientes(new FiltroDonaciones(null, null, null)))
+        .flatExtracting(d -> d.items())
+        .allSatisfy(i -> assertThat(subcategorias).contains(i.bien().subcategoria().id()));
+  }
+
+  @Test
   @DisplayName("Las métricas públicas de demostración respetan su formato")
   void metricas() {
     assertThat(lector.lista("metricas/publicas.json", Metrica.class))

@@ -57,26 +57,7 @@
       </button>
       <ul class="carrusel__pista" data-carrusel-pista tabindex="0"
           aria-label="Donaciones destacadas, deslizá para ver más">
-        <li th:each="d : ${destacadas.datos}" class="tarjeta-donacion">
-          <div class="tarjeta-donacion__imagen">
-            <img th:src="${d.fotoUrl != null} ? ${d.fotoUrl} : @{/img/donacion-ilustrativa.jpg}"
-                 th:alt="${d.fotoUrl != null} ? ${'Foto de la donación: ' + d.titulo} : ''"
-                 loading="lazy" width="330" height="244">
-            <span class="tarjeta-donacion__categoria">
-              <span th:replace="~{fragments/iconos :: icono(${d.iconoCategoria}, 16)}"></span>
-              <span th:text="${d.categoria}">Alimentos</span>
-            </span>
-          </div>
-          <div class="tarjeta-donacion__cuerpo">
-            <p class="tarjeta-donacion__donante" th:if="${d.donante != null}">
-              <img th:src="@{/img/icono-donante.svg}" alt="" width="20" height="15">
-              <span><span class="sr-only">Donó: </span><span th:text="${d.donante}">Cooperativa La Huerta</span></span>
-            </p>
-            <h3 data-ajustar-titulo th:text="${d.titulo}">Cajas de arroz</h3>
-            <time th:datetime="${#temporals.formatISO(d.entregadaEl)}"
-                  th:text="${#temporals.format(d.entregadaEl, 'd ''de'' MMMM, yyyy')}">12 de septiembre, 2026</time>
-          </div>
-        </li>
+        <th:block th:each="d : ${destacadas.datos}"><li th:replace="~{fragments/donacion :: tarjeta(${d})}"></li></th:block>
       </ul>
       <button class="carrusel__boton carrusel__boton--siguiente" type="button" data-carrusel-siguiente hidden
               aria-label="Ver más donaciones">

@@ -4,6 +4,7 @@ import grupo5.clienteliviano.aplicacion.LandingService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /** Páginas públicas. */
 @Controller
@@ -36,17 +37,17 @@ public class PublicoController {
     return "publico/proximamente";
   }
 
-  @GetMapping({"/privacidad", "/registro", "/donaciones-entregadas"})
-  public String enConstruccion(jakarta.servlet.http.HttpServletRequest request, Model model) {
-    String ruta = request.getRequestURI();
-    model.addAttribute(
-        "titulo",
-        switch (ruta) {
-          case "/privacidad" -> "Información legal y privacidad";
-          case "/registro" -> "Crear cuenta";
-          default -> "Donaciones entregadas";
-        });
-    model.addAttribute("texto", "Esta página se habilita en la próxima iteración del prototipo.");
-    return "publico/proximamente";
+  /** Información legal y privacidad (F04): contenido estático. */
+  @GetMapping("/privacidad")
+  public String privacidad() {
+    return "publico/privacidad";
+  }
+
+  /** Galería pública de donaciones entregadas (H1.5), filtrable por categoría. */
+  @GetMapping("/donaciones-entregadas")
+  public String donacionesEntregadas(
+      @RequestParam(required = false) String categoria, Model model) {
+    model.addAttribute("galeria", landing.galeria(categoria));
+    return "publico/donaciones-entregadas";
   }
 }

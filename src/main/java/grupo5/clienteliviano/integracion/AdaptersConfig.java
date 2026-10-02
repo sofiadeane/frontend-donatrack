@@ -6,6 +6,9 @@ import grupo5.clienteliviano.integracion.donaciones.DonacionesHttpAdapter;
 import grupo5.clienteliviano.integracion.donaciones.DonacionesPort;
 import grupo5.clienteliviano.integracion.fixtures.LectorFixtures;
 import grupo5.clienteliviano.integracion.http.FabricaClientesHttp;
+import grupo5.clienteliviano.integracion.personas.RegistroFixtureAdapter;
+import grupo5.clienteliviano.integracion.personas.RegistroHttpAdapter;
+import grupo5.clienteliviano.integracion.personas.RegistroPort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -30,5 +33,13 @@ public class AdaptersConfig {
     return modo == Modo.HTTP
         ? new DonacionesHttpAdapter(fabrica.para(Servicio.DONACIONES))
         : new DonacionesFixtureAdapter(lector);
+  }
+
+  @Bean
+  RegistroPort registroPort(FabricaClientesHttp fabrica) {
+    Modo modo = properties.de(Servicio.DONACIONES).modo();
+    return modo == Modo.HTTP
+        ? new RegistroHttpAdapter(fabrica.para(Servicio.DONACIONES))
+        : new RegistroFixtureAdapter();
   }
 }

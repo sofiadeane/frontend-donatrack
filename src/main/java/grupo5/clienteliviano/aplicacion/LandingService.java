@@ -13,6 +13,7 @@ import grupo5.clienteliviano.integracion.metricas.MetricasPublicasPort;
 import grupo5.clienteliviano.integracion.metricas.MetricasPublicasPort.Metrica;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -27,6 +28,7 @@ public class LandingService {
 
   private static final Logger log = LoggerFactory.getLogger(LandingService.class);
   private static final int MAX_DESTACADAS = 8;
+  static final int MAX_GALERIA = 24;
   private static final String ENTREGADA = "ENTREGADA";
 
   /**
@@ -41,6 +43,22 @@ public class LandingService {
       String donante,
       LocalDateTime entregadaEl,
       String fotoUrl) {}
+
+  /**
+   * Galería de donaciones entregadas (H1.5).
+   *
+   * @param categorias categorías con al menos una entrega, para filtrar
+   * @param categoria la categoría elegida, o {@code null} para todas
+   * @param total entregas que cumplen el filtro (se muestran hasta {@link #MAX_GALERIA})
+   */
+  public record Galeria(
+      Seccion<DonacionDestacada> donaciones,
+      List<CategoriaFiltro> categorias,
+      String categoria,
+      int total) {}
+
+  /** Opción del filtro de la galería. */
+  public record CategoriaFiltro(String nombre, String icono) {}
 
   /** Métricas con su origen, para mostrar la etiqueta de demostración. */
   public record Metricas(List<Metrica> valores, boolean demo) {}
@@ -70,18 +88,64 @@ public class LandingService {
     return cargador.cargar(
         donaciones.esDemo(),
         () ->
-            donaciones
-                .donacionesIndependientes(new FiltroDonaciones(null, ENTREGADA, null))
-                .stream()
-                .flatMap(d -> fechaEntrega(d).map(f -> new Entrega(d, f)).stream())
+            entregas().stream()
                 .filter(e -> !e.fecha().isBefore(desde))
-                .sorted(Comparator.comparing(Entrega::fecha).reversed())
                 .limit(MAX_DESTACADAS)
                 .map(e -> destacada(e.donacion(), e.fecha()))
                 .toList());
   }
 
+  /** Todas las entregas, la más reciente primero, opcionalmente de una categoría. */
+  public Galeria galeria(String categoria) {
+    List<String> categorias = new ArrayList<>();
+    int[] total = {0};
+    Seccion<DonacionDestacada> seccion =
+        cargador.cargar(
+            donaciones.esDemo(),
+            () -> {
+              List<Entrega> todas = entregas();
+              todas.stream()
+                  .map(e -> categoriaDe(e.donacion()))
+                  .distinct()
+                  .sorted()
+                  .forEach(categorias::add);
+              List<Entrega> filtradas =
+                  todas.stream()
+                      .filter(e -> categoria == null || categoria.equals(categoriaDe(e.donacion())))
+                      .toList();
+              total[0] = filtradas.size();
+              return filtradas.stream()
+                  .limit(MAX_GALERIA)
+                  .map(e -> destacada(e.donacion(), e.fecha()))
+                  .toList();
+            });
+    String elegida = categorias.contains(categoria) ? categoria : null;
+    return new Galeria(
+        seccion,
+        categorias.stream().map(c -> new CategoriaFiltro(c, IconoCategoria.de(c))).toList(),
+        elegida,
+        total[0]);
+  }
+
   private record Entrega(DonacionIndependienteResponseDTO donacion, LocalDateTime fecha) {}
+
+  private List<Entrega> entregas() {
+    return donaciones.donacionesIndependientes(new FiltroDonaciones(null, ENTREGADA, null)).stream()
+        .flatMap(d -> fechaEntrega(d).map(f -> new Entrega(d, f)).stream())
+        .sorted(Comparator.comparing(Entrega::fecha).reversed())
+        .toList();
+  }
+
+  private static String categoriaDe(DonacionIndependienteResponseDTO d) {
+    return primerBien(d).map(b -> b.categoria().nombre()).orElse("Donación");
+  }
+
+  private static Optional<BienNormalizadoDTO> primerBien(DonacionIndependienteResponseDTO d) {
+    return d.items().stream()
+        .map(ItemDonacionIndependienteResponseDTO::bien)
+        .filter(Objects::nonNull)
+        .findFirst();
+  }
 
   public Metricas metricas() {
     return new Metricas(metricas.metricas(), metricas.esDemo());
@@ -96,12 +160,8 @@ public class LandingService {
   }
 
   private DonacionDestacada destacada(DonacionIndependienteResponseDTO d, LocalDateTime f) {
-    Optional<BienNormalizadoDTO> bien =
-        d.items().stream()
-            .map(ItemDonacionIndependienteResponseDTO::bien)
-            .filter(Objects::nonNull)
-            .findFirst();
-    String categoria = bien.map(b -> b.categoria().nombre()).orElse("Donación");
+    Optional<BienNormalizadoDTO> bien = primerBien(d);
+    String categoria = categoriaDe(d);
     String foto = bien.map(b -> b.bien() != null ? b.bien().fotoUrl() : null).orElse(null);
     return new DonacionDestacada(
         d.descripcion(), categoria, IconoCategoria.de(categoria), donante(d), f, foto);

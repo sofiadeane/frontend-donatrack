@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico :: layout(~{::title}, ~{::contenido})}">
+<head><title>Donaciones entregadas · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <section class="banda-hero banda-hero--corta" data-hero aria-labelledby="titulo-galeria">
+    <span class="eyebrow">Transparencia</span>
+    <h1 id="titulo-galeria">Donaciones entregadas</h1>
+    <p>Cada una llegó a una entidad beneficiaria. Las más recientes, primero.</p>
+  </section>
+
+  <!-- Filtro por categoría: enlaces GET (funciona sin JS). En el export estático no hay servidor que filtre. -->
+  <nav class="galeria-filtros" data-fondo-claro aria-label="Filtrar por categoría"
+       th:if="${galeria.donaciones.ok() and !exportEstatico and galeria.categorias.size() > 1}">
+    <a th:href="@{/donaciones-entregadas}" th:attr="aria-current=${galeria.categoria == null} ? 'true' : null">Todas</a>
+    <a th:each="c : ${galeria.categorias}" th:href="@{/donaciones-entregadas(categoria=${c.nombre})}"
+       th:attr="aria-current=${galeria.categoria == c.nombre} ? 'true' : null">
+      <span th:replace="~{fragments/iconos :: icono(${c.icono}, 16)}"></span>
+      <span th:text="${c.nombre}">Alimentos</span>
+    </a>
+  </nav>
+
+  <section class="galeria" aria-labelledby="titulo-galeria">
+    <div class="galeria__encabezado">
+      <p class="galeria__total" role="status" th:if="${galeria.donaciones.ok()}"
+         th:text="${galeria.total == 1} ? '1 donación entregada' : ${galeria.total + ' donaciones entregadas'}">5 donaciones entregadas</p>
+      <span th:replace="~{fragments/estados :: demo(${galeria.donaciones})}"></span>
+    </div>
+
+    <ul class="galeria__grilla" th:if="${galeria.donaciones.ok()}">
+      <th:block th:each="d : ${galeria.donaciones.datos}"><li th:replace="~{fragments/donacion :: tarjeta(${d})}"></li></th:block>
+    </ul>
+    <p class="galeria__nota" th:if="${galeria.total > galeria.donaciones.datos.size()}"
+       th:text="'Mostramos las ' + ${galeria.donaciones.datos.size()} + ' más recientes.'">Mostramos las 24 más recientes.</p>
+
+    <th:block th:if="${galeria.donaciones.vacia()}">
+      <div th:replace="~{fragments/estados :: vacio('Todavía no hay entregas registradas', 'Cuando una donación llegue a su entidad beneficiaria, va a aparecer acá.', null, null)}"></div>
+    </th:block>
+    <th:block th:if="${galeria.donaciones.conError()}">
+      <div th:replace="~{fragments/estados :: error(${galeria.donaciones.error}, '/donaciones-entregadas')}"></div>
+    </th:block>
+  </section>
+</th:block>
+</body>
+</html>
