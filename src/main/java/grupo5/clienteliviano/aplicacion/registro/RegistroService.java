@@ -147,7 +147,7 @@ public class RegistroService {
       FormularioRegistro f, List<String> camposMedios) {
     List<MedioDeContactoInputDTO> medios = new ArrayList<>();
     medios.add(new CorreoInputDTO("CORREO".equals(f.getPreferido()), limpio(f.getCorreo())));
-    camposMedios.add("correo");
+    camposMedios.add(ErroresFormulario.CORREO);
     Telefono tel = f.getTelefono();
     if (conValor(tel.getNumero())) {
       medios.add(
@@ -238,12 +238,12 @@ public class RegistroService {
     Matcher medio = MEDIO.matcher(campoBackend);
     if (medio.matches()) {
       int i = Integer.parseInt(medio.group(1));
-      return i < camposMedios.size() ? camposMedios.get(i) : "correo";
+      return i < camposMedios.size() ? camposMedios.get(i) : ErroresFormulario.CORREO;
     }
     Matcher rep = REPRESENTANTE.matcher(campoBackend);
     if (rep.matches()) {
       String resto = rep.group(2);
-      String campo = resto.startsWith("mediosDeContacto") ? "correo" : resto;
+      String campo = resto.startsWith("mediosDeContacto") ? ErroresFormulario.CORREO : resto;
       return "representantes[" + rep.group(1) + "]." + campo;
     }
     return switch (campoBackend) {

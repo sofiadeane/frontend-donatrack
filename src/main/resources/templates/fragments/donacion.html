@@ -1,4 +1,6 @@
 <!-- Tarjeta de una donación entregada (landing y galería). Uso: th:replace="~{fragments/donacion :: tarjeta(${d})}" -->
+<!-- La lista contenedora solo existe en este archivo para que el marcado sea válido: se quita al renderizar. -->
+<ul th:remove="tag">
 <li th:fragment="tarjeta(d)" class="tarjeta-donacion">
   <div class="tarjeta-donacion__imagen">
     <img th:src="${d.fotoUrl != null} ? ${d.fotoUrl} : @{/img/donacion-ilustrativa.jpg}"
@@ -32,3 +34,4 @@
           th:text="${#temporals.format(d.fechaRegistro, 'd MMM yyyy')}">1 oct 2026</time>
   </a>
 </li>
+</ul>

@@ -184,8 +184,14 @@
   line-height: 0.9;
 }
 
+.kpi-chip b {
+  font-weight: 800;
+  color: var(--brand-bright);
+}
+
 .kpi-chip {
   display: inline-flex;
+  gap: 5px;
   margin-top: 12px;
   padding: 6px 12px;
   border: 1px solid var(--border-glass);
@@ -217,8 +223,8 @@
 
 /* B · Entregadas: moneda + título en dos líneas arriba; barra y leyenda 2×2 debajo (orden de lectura) */
 .kpi--entregas {
-  justify-content: space-between;
-  gap: 16px;
+  justify-content: center;
+  gap: 12px;
   padding: 20px 22px 22px;
   background: var(--surface);
   box-shadow: var(--shadow-card);
@@ -517,8 +523,19 @@
   background: url("../img/topografico.svg") no-repeat;
 }
 
-.mision h2 {
+/* Título arriba a la derecha: aprovecha el espacio libre y despega el sello */
+.mision > h2,
+.mision > .tarjeta__bajada {
+  justify-self: end;
+  text-align: right;
+}
+
+.mision > h2 {
   color: var(--text-on-dark);
+}
+
+.mision__sello-fila {
+  margin-top: 10px;
 }
 
 .mision .tarjeta__bajada,
@@ -892,6 +909,95 @@
   display: grid;
   gap: 22px;
   margin-top: var(--space-4);
+}
+
+.grupo-misiones--alcanzada {
+  border-radius: var(--r-md);
+  background: var(--surface-page);
+}
+
+.grupo-misiones--alcanzada summary {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 10px 16px;
+  border-radius: inherit;
+  font-weight: 800;
+  color: var(--text-strong);
+  cursor: pointer;
+  list-style: none;
+}
+
+.grupo-misiones--alcanzada summary::-webkit-details-marker {
+  display: none;
+}
+
+.grupo-misiones--alcanzada summary::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin-left: 4px;
+  border-right: 2px solid var(--text-strong);
+  border-bottom: 2px solid var(--text-strong);
+  transform: rotate(45deg) translateY(-2px);
+  transition: transform var(--dur-base);
+}
+
+.grupo-misiones--alcanzada[open] summary::after {
+  transform: rotate(-135deg);
+}
+
+.grupo-misiones--alcanzada summary:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.grupo-misiones__resumen {
+  margin-left: auto;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.grupo-misiones--alcanzada .misiones {
+  padding: 0 8px 10px;
+}
+
+.grupo-misiones--siguiente {
+  padding: 18px 18px 10px;
+  border: 1.5px dashed var(--route-dash);
+  border-radius: var(--r-md);
+  background: var(--surface-page);
+}
+
+.grupo-misiones--siguiente h3 {
+  color: var(--text-muted);
+}
+
+.grupo-misiones__candado {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--route-node-ring);
+  color: var(--text-muted);
+}
+
+.grupo-misiones__nota {
+  margin: -4px 0 8px;
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.grupo-misiones--siguiente .mision-fila__texto b,
+.grupo-misiones--siguiente .mision-fila__estado b {
+  color: var(--text-muted);
+}
+
+.grupo-misiones--siguiente .mision-fila__barra i {
+  background: var(--brand-soft);
 }
 
 .grupo-misiones h3 {

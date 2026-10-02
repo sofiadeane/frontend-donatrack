@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Exploración · Pills de estado y cifras de incentivos · DonaTrack</title>
+<!-- Exploración servida en dev: /exploraciones/pills-y-cifras.html (CSS real de la app). Datos de demostración. -->
+<link rel="stylesheet" href="/css/fuentes.css">
+<link rel="stylesheet" href="/css/tokens.css">
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/componentes.css">
+<link rel="stylesheet" href="/css/layout.css">
+<link rel="stylesheet" href="/css/privado.css">
+<style>
+/* Colores candidatos SOLO de esta exploración (si se aprueban pasan a tokens.css). Ratio AA medido de cada par. */
+:root{
+  /* Tinte (fondo claro + texto oscuro del mismo tono) */
+  --t-deposito-bg:#f5ecdc; --t-deposito-fg:#6b4a12;     /* 6,9:1 · arena: se separa del turquesa */
+  --t-asignada-bg:#d7f4f0; --t-asignada-fg:#0f5e55;     /* 6,6:1 */
+  --t-lista-bg:#e4f8ee;    --t-lista-fg:#1d6b45;        /* 5,9:1 */
+  --t-traslado-bg:#eafbf3; --t-traslado-fg:#1d6b45;     /* 6,0:1 + borde verde */
+  --t-entregada-bg:#50d794;--t-entregada-fg:#163a3a;    /* 6,8:1 · sólida: es el final feliz */
+  --t-fallida-bg:#fdf1ef;  --t-fallida-fg:#b9443b;      /* 4,8:1 */
+  --t-vencida-bg:#eceef0;  --t-vencida-fg:#55595f;      /* 6,1:1 · gris: no hay nada más que hacer */
+  /* Sólidos */
+  --s-deposito:#e8c98f;    /* teal 7,8:1 */
+  --s-asignada:#36c7b4;    /* teal 5,9:1 */
+  --s-lista:#9fe6c3;       /* teal 8,6:1 */
+  --s-traslado:#54da8e;    /* teal 6,9:1 */
+  --s-entregada:#1f7a50;   /* blanco 5,3:1 */
+  --s-fallida:#b9443b;     /* blanco 5,3:1 */
+  --s-vencida:#5f646b;     /* blanco 6,0:1 */
+}
+body{background:var(--grad-page);color:var(--text)}
+.expl{width:min(1160px,calc(100% - 32px));margin:32px auto 80px;display:grid;gap:40px}
+.expl>header h1{font-size:var(--fs-h1);color:var(--text-strong)}
+.expl>header p{margin:6px 0 0;color:var(--text-muted);max-width:75ch}
+.expl>section>h2{font-size:1.5rem;color:var(--text-strong)}
+.bloque-expl{display:grid;gap:16px}
+.bloque-expl>p{margin:0;color:var(--text-muted);max-width:85ch}
+.etq{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--text-strong)}
+.etq b{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--surface-dark);color:var(--text-on-dark);font-size:12px;letter-spacing:0}
+.dos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+
+/* ===== Pills ===== */
+/* Columna fija universal; el pill va CENTRADO en su columna */
+.tabla .lista-donaciones__fila{grid-template-columns:minmax(0,1fr) var(--ancho-columna-estado) var(--ancho-columna-fecha)}
+.tabla .p{justify-self:center}
+.p{display:inline-flex;align-items:center;gap:6px;padding:5px 12px 5px 9px;border-radius:var(--r-pill);font-size:var(--fs-xs);font-weight:700;white-space:nowrap;border:1.5px solid transparent}
+.p svg{flex:none}
+.tinte .deposito{background:var(--t-deposito-bg);color:var(--t-deposito-fg)}
+.tinte .asignada{background:var(--t-asignada-bg);color:var(--t-asignada-fg)}
+.tinte .lista{background:var(--t-lista-bg);color:var(--t-lista-fg)}
+.tinte .traslado{background:var(--t-traslado-bg);color:var(--t-traslado-fg);border-color:var(--brand)}
+.tinte .entregada{background:var(--t-entregada-bg);color:var(--t-entregada-fg)}
+.tinte .fallida{background:var(--t-fallida-bg);color:var(--t-fallida-fg);border-color:var(--t-fallida-fg)}
+.tinte .vencida{background:var(--t-vencida-bg);color:var(--t-vencida-fg)}
+.solido .p{color:var(--text-strong)}
+.solido .deposito{background:var(--s-deposito)}
+.solido .asignada{background:var(--s-asignada)}
+.solido .lista{background:var(--s-lista)}
+.solido .traslado{background:var(--s-traslado);box-shadow:var(--glow-node-sm)}
+.solido .entregada{background:var(--s-entregada);color:var(--white)}
+.solido .fallida{background:var(--s-fallida);color:var(--white)}
+.solido .vencida{background:var(--s-vencida);color:var(--white)}
+.leyenda-colores{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0;padding:0;list-style:none;font-size:var(--fs-xs);color:var(--text-muted)}
+
+/* ===== Cifras de incentivos ===== */
+.alt-cifras{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px;align-items:stretch}
+/* Misión con el título a la derecha (corrección pedida) */
+/* X1 · Trayecto: una sola tarjeta, ruta vertical con tres paradas, centrada */
+.trayecto{display:grid;align-content:center;padding:22px 26px;border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-card)}
+.trayecto ol{position:relative;display:grid;gap:18px;margin:0;padding:0;list-style:none}
+.trayecto ol::before{content:"";position:absolute;left:19px;top:20px;bottom:20px;border-left:2px dashed var(--route-dash)}
+.trayecto li{position:relative;display:grid;grid-template-columns:40px auto 1fr;align-items:center;gap:14px}
+.trayecto .nodo{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:2px solid var(--brand-bright);background:var(--surface);color:var(--text-strong)}
+.trayecto li:last-child .nodo{border:0;background:var(--surface-dark);color:var(--brand-bright);box-shadow:var(--glow-node)}
+.trayecto b{font-size:2rem;font-weight:900;letter-spacing:-.03em;color:var(--text-strong);line-height:1}
+.trayecto span{font-size:var(--fs-sm);color:var(--text-muted);line-height:1.2}
+/* X2 · Integradas en la misión: la tarjeta de misión ocupa todo y las cifras son chips de vidrio en su pie */
+.mision-ancha{grid-column:1/-1}
+.mision-ancha .pie-cifras{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:6px;padding-top:16px;border-top:1px dashed var(--border-glass)}
+.pie-cifras div{display:flex;align-items:baseline;gap:10px;padding:12px 16px;border-radius:var(--r-md);background:var(--surface-glass);border:1px solid var(--border-glass)}
+.pie-cifras b{font-size:1.75rem;font-weight:900;letter-spacing:-.03em;color:var(--text-on-dark)}
+.pie-cifras span{font-size:var(--fs-sm);color:var(--text-on-dark-soft)}
+.pie-cifras div:last-child b{color:var(--brand-bright)}
+/* X3 · Tablero de logros: cada cifra con su propia forma (anillo, medallas, podio) */
+.logros{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:center;padding:20px 8px;border-radius:var(--r-lg);background:var(--surface);box-shadow:var(--shadow-card)}
+.logro{display:grid;justify-items:center;gap:8px;padding:0 10px;text-align:center}
+.logro+.logro{border-left:1.5px dashed var(--route-dash)}
+.logro span{font-size:var(--fs-xs);color:var(--text-muted);line-height:1.25}
+.anillo{position:relative;width:84px;height:84px}
+.anillo svg{width:100%;height:100%;transform:rotate(-90deg)}
+.anillo circle{fill:none;stroke-width:9}
+.anillo .base{stroke:var(--surface-muted)}
+.anillo .valor{stroke:var(--brand);stroke-linecap:round}
+.anillo b{position:absolute;inset:0;display:grid;place-items:center;font-size:1.25rem;font-weight:900;color:var(--text-strong)}
+.medallas{display:flex;height:84px;align-items:center}
+.medallas i{width:34px;height:34px;margin-left:-10px;border-radius:50%;border:2px solid var(--surface);display:grid;place-items:center}
+.medallas i:first-child{margin-left:0}
+.medallas .si{background:var(--grad-impulso);box-shadow:var(--glow-node-sm)}
+.medallas .no{background:var(--surface-page);border:2px dashed var(--route-node-ring)}
+.logro .cifra-grande{font-size:1.5rem;font-weight:900;color:var(--text-strong);line-height:1}
+.podio{display:flex;align-items:flex-end;gap:5px;height:84px}
+.podio i{width:20px;border-radius:6px 6px 2px 2px;background:var(--brand-soft)}
+.podio i.yo{background:var(--surface-dark);box-shadow:var(--glow-node-sm);position:relative}
+.podio i.yo::after{content:"vos";position:absolute;top:-18px;left:50%;translate:-50% 0;font-size:10px;font-weight:800;color:var(--text-strong);font-style:normal}
+@media (max-width:900px){.dos,.alt-cifras{grid-template-columns:1fr}.mision-ancha .pie-cifras{grid-template-columns:1fr}.logros{grid-template-columns:1fr;gap:18px}.logro+.logro{border-left:0;border-top:1.5px dashed var(--route-dash);padding-top:18px}}
+</style>
+</head>
+<body>
+<main class="expl">
+  <header>
+    <span class="demo">Exploración · datos de demostración</span>
+    <h1>Pills de estado y cifras de incentivos</h1>
+    <p>Sobre la alternativa A aprobada: pills centrados en su columna, Vencida en gris, En depósito en arena (bien distinta del turquesa de Asignada) y Asignada con corazón. Al lado, la misma paleta en sólidos. Abajo, tres propuestas para las cifras que acompañan a "Tu misión actual".</p>
+  </header>
+
+  <section class="bloque-expl" aria-labelledby="t1">
+    <h2 id="t1">1 · Pills de estado</h2>
+    <div class="dos">
+      <div class="bloque-expl"><span class="etq"><b>A</b>Tinte (transparente)</span><ul class="leyenda-colores tinte" data-pills></ul></div>
+      <div class="bloque-expl"><span class="etq"><b>A′</b>Sólidos</span><ul class="leyenda-colores solido" data-pills></ul></div>
+    </div>
+
+    <span class="etq">Así se ven en la lista de "Mis donaciones"</span>
+    <div class="dos">
+      <section class="tarjeta tabla tinte" aria-label="Lista con pills en tinte">
+        <div class="tarjeta__encabezado"><div><h2 style="font-size:1.0625rem">Tus donaciones · A</h2><p class="tarjeta__bajada">7 donaciones</p></div></div>
+        <ul class="lista-donaciones" data-tabla></ul>
+      </section>
+      <section class="tarjeta tabla solido" aria-label="Lista con pills sólidos">
+        <div class="tarjeta__encabezado"><div><h2 style="font-size:1.0625rem">Tus donaciones · A′</h2><p class="tarjeta__bajada">7 donaciones</p></div></div>
+        <ul class="lista-donaciones" data-tabla></ul>
+      </section>
+    </div>
+  </section>
+
+  <section class="bloque-expl" aria-labelledby="t2">
+    <h2 id="t2">2 · Cifras al lado de "Tu misión actual"</h2>
+    <p>Hoy son tres tarjetas iguales apiladas. Las propuestas usan los recursos propios de DonaTrack (la ruta, el vidrio, los nodos) y le dan a cada cifra una forma que dice algo. La misión ya tiene el título a la derecha.</p>
+
+    <span class="etq"><b>X1</b>Trayecto: una tarjeta con la ruta vertical y tres paradas, centrada</span>
+    <div class="alt-cifras">
+      <section class="tarjeta mision" data-mision></section>
+      <section class="trayecto" aria-label="Tus logros">
+        <ol>
+          <li><span class="nodo" aria-hidden="true" data-icono="check"></span><b>1</b><span>misión<br>completada</span></li>
+          <li><span class="nodo" aria-hidden="true" data-icono="incentivos"></span><b>1</b><span>insignia<br>ganada</span></li>
+          <li><span class="nodo" aria-hidden="true" data-icono="personas"></span><b>#7</b><span>en el ranking<br>del mes</span></li>
+        </ol>
+      </section>
+    </div>
+
+    <span class="etq"><b>X2</b>Integradas en la misión: chips de vidrio en el pie, la tarjeta ocupa todo el ancho</span>
+    <div class="alt-cifras">
+      <section class="tarjeta mision mision-ancha" data-mision data-con-pie></section>
+    </div>
+
+    <span class="etq"><b>X3</b>Tablero de logros: anillo de misiones, medallero e insignias, podio del ranking</span>
+    <div class="alt-cifras">
+      <section class="tarjeta mision" data-mision></section>
+      <section class="logros" aria-label="Tus logros">
+        <div class="logro">
+          <div class="anillo" role="img" aria-label="1 de 5 misiones completadas">
+            <svg viewBox="0 0 84 84"><circle class="base" cx="42" cy="42" r="36"/><circle class="valor" cx="42" cy="42" r="36" stroke-dasharray="45.2 226.2"/></svg>
+            <b>1/5</b>
+          </div>
+          <span>misiones<br>completadas</span>
+        </div>
+        <div class="logro">
+          <div class="medallas" role="img" aria-label="1 insignia ganada de 5"><i class="si"></i><i class="no"></i><i class="no"></i><i class="no"></i><i class="no"></i></div>
+          <span><b class="cifra-grande">1</b><br>insignia ganada</span>
+        </div>
+        <div class="logro">
+          <div class="podio" role="img" aria-label="Puesto 7 del ranking del mes"><i style="height:62px"></i><i style="height:84px"></i><i style="height:50px"></i><i class="yo" style="height:30px"></i></div>
+          <span><b class="cifra-grande">#7</b><br>en el ranking</span>
+        </div>
+      </section>
+    </div>
+  </section>
+</main>
+<script>
+  const iconos = {
+    donaciones: '<path d="m21 8-9-5-9 5 9 5 9-5Z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/>',
+    corazon: '<path d="M12 20s-7-4.4-9.2-8.7A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5.3C19 15.6 12 20 12 20Z"/>',
+    necesidades: '<path d="M9 4h6l1 3H8l1-3Z"/><rect x="5" y="7" width="14" height="14" rx="2"/><path d="M9 13h6M9 17h4"/>',
+    camiones: '<path d="M3 6h11v10H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="2"/><circle cx="17" cy="18" r="2"/>',
+    check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>',
+    alerta: '<path d="M12 3.5 21.5 20h-19z"/><path d="M12 10v4.5M12 17.5v.01"/>',
+    reloj: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/>',
+    incentivos: '<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M7 6H4a3 3 0 0 0 3 4M17 6h3a3 3 0 0 1-3 4"/>',
+    personas: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M21.5 20a6.5 6.5 0 0 0-4-6"/>'
+  };
+  const svg = (n, t = 14) => `<svg viewBox="0 0 24 24" width="${t}" height="${t}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${iconos[n]}</svg>`;
+  const estados = [
+    ["Lentejas secas en bolsas de 1 kg", "Legumbres secas · 15 kg", "En depósito", "deposito", "donaciones", "1 oct 2026"],
+    ["Camperas de abrigo para adultos", "Camperas de abrigo · 12 unidades", "Asignada", "asignada", "corazon", "26 sept 2026"],
+    ["Legumbres secas surtidas", "Legumbres secas · 25 kg", "Lista para entregar", "lista", "necesidades", "24 sept 2026"],
+    ["Arroz largo fino en paquetes de 1 kg", "Arroz · 50 kg", "En traslado", "traslado", "camiones", "28 sept 2026"],
+    ["Fideos secos tipo mostachol", "Fideos secos · 30 kg", "Entregada", "entregada", "check", "10 sept 2026"],
+    ["Conservas de tomate", "Conservas · 40 unidades", "Entrega fallida", "fallida", "alerta", "2 sept 2026"],
+    ["Leche larga vida en cartón", "Leche larga vida · 20 litros", "Vencida", "vencida", "reloj", "15 jul 2026"]
+  ];
+  const pill = ([, , e, c, i]) => `<span class="p ${c}">${svg(i)}${e}</span>`;
+  document.querySelectorAll("[data-pills]").forEach((ul) => ul.innerHTML = estados.map((e) => `<li>${pill(e)}</li>`).join(""));
+  document.querySelectorAll("[data-tabla]").forEach((ul) => ul.innerHTML = estados.map((e) =>
+    `<li><a class="lista-donaciones__fila" href="#"><span class="lista-donaciones__texto"><span class="lista-donaciones__titulo">${e[0]}</span><span class="lista-donaciones__detalle">${e[1]}</span></span>${pill(e)}<time class="lista-donaciones__fecha">${e[5]}</time></a></li>`).join(""));
+
+  const mision = `<h2>Tu misión actual</h2>
+    <div class="mision__sello-fila"><span class="mision__sello">2/3</span><div><b>Donante constante</b><span>Doná durante tres meses seguidos</span></div></div>
+    <div class="mision__barra" role="progressbar" aria-valuenow="66" aria-valuemin="0" aria-valuemax="100" aria-label="Progreso"><i style="width:66%"></i></div>
+    <div class="mision__pie"><span>66 %</span><span>falta 1 paso</span></div>
+    <p class="mision__premio">Al completarla ganás la insignia <b>Constancia</b>.</p>`;
+  const pie = `<div class="pie-cifras"><div><b>1</b><span>misión completada</span></div><div><b>1</b><span>insignia ganada</span></div><div><b>#7</b><span>en el ranking del mes</span></div></div>`;
+  document.querySelectorAll("[data-mision]").forEach((s) => s.innerHTML = mision + (s.hasAttribute("data-con-pie") ? pie : ""));
+  document.querySelectorAll("[data-icono]").forEach((n) => n.innerHTML = svg(n.dataset.icono, 18));
+</script>
+</body>
+</html>

@@ -76,7 +76,7 @@ public class PanelDonanteService {
   /** Datos de incentivos-service. {@code mision} y {@code proximaCategoria} pueden ser nulos. */
   public record Impacto(
       int realizadas,
-      String chip,
+      Comparacion chip,
       List<Barra> grafico,
       String graficoDescripcion,
       double anchoGrafico,
@@ -84,6 +84,14 @@ public class PanelDonanteService {
       String categoria,
       String proximaCategoria,
       Mision mision) {}
+
+  /** "+3 respecto al mes pasado": la cifra va destacada; nula si es igual. */
+  public record Comparacion(String cifra, String texto) {
+    @Override
+    public String toString() {
+      return cifra == null ? texto : cifra + " " + texto;
+    }
+  }
 
   /** Barra del mini gráfico: coordenadas ya calculadas para el SVG (viewBox 0 0 ancho 84). */
   public record Barra(String mes, long valor, double x, double y, double alto, boolean actual) {}
@@ -314,7 +322,7 @@ public class PanelDonanteService {
                 m.misionActiva().objetivo(),
                 Math.max(0, Math.min(100, m.misionActiva().porcentaje())),
                 falta(m.misionActiva().distanciaAlObjetivo()));
-    String chip = comparacion(m.donacionesMesActual() - m.donacionesMesAnterior());
+    Comparacion chip = comparacion(m.donacionesMesActual() - m.donacionesMesAnterior());
     int realizadas = m.totalDonacionesHistoricas() == null ? 0 : m.totalDonacionesHistoricas();
     return new Impacto(
         realizadas,
@@ -329,11 +337,12 @@ public class PanelDonanteService {
   }
 
   /** Diferencia de donaciones de este mes contra el anterior. */
-  public static String comparacion(long diferencia) {
+  public static Comparacion comparacion(long diferencia) {
     if (diferencia == 0) {
-      return "¡Igual que el mes pasado!";
+      return new Comparacion(null, "¡Igual que el mes pasado!");
     }
-    return (diferencia > 0 ? "+" : "−") + Math.abs(diferencia) + " respecto al mes pasado";
+    return new Comparacion(
+        (diferencia > 0 ? "+" : "−") + Math.abs(diferencia), "respecto al mes pasado");
   }
 
   private static String falta(int distancia) {

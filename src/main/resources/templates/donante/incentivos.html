@@ -97,11 +97,38 @@
     <h2 id="titulo-misiones">Misiones</h2>
     <p class="tarjeta__bajada">Cada categoría tiene sus misiones. Las de las próximas ya suman progreso.</p>
     <div class="grupos-misiones">
-      <section th:each="g : ${p.misiones}" class="grupo-misiones" th:classappend="${'grupo-misiones--' + g.estado}"
-               th:attr="aria-label=${'Misiones de ' + g.categoria}">
-        <h3><span th:text="${g.categoria}">Colaborador</span>
-          <span class="grupo-misiones__chip" th:text="${g.estado == 'actual'} ? 'Tu categoría' : (${g.estado == 'alcanzada'} ? 'Alcanzada' : 'Próxima')">Tu categoría</span></h3>
-        <ol class="misiones">
+      <th:block th:each="g : ${p.misiones}">
+        <!-- Categorías alcanzadas: plegadas, son historia -->
+        <details class="grupo-misiones grupo-misiones--alcanzada" th:if="${g.estado == 'alcanzada'}">
+          <summary><span th:text="${g.categoria}">Colaborador</span><span class="grupo-misiones__chip">Alcanzada</span>
+            <span class="grupo-misiones__resumen" th:text="${g.misiones.size() == 1} ? '1 misión' : ${g.misiones.size() + ' misiones'}">2 misiones</span></summary>
+          <ol th:replace="~{donante/incentivos :: listaMisiones(${g})}"></ol>
+        </details>
+        <!-- Categoría actual -->
+        <section class="grupo-misiones grupo-misiones--actual" th:if="${g.estado == 'actual'}"
+                 th:attr="aria-label=${'Misiones de ' + g.categoria}">
+          <h3><span th:text="${g.categoria}">Colaborador</span><span class="grupo-misiones__chip">Tu categoría</span></h3>
+          <ol th:replace="~{donante/incentivos :: listaMisiones(${g})}"></ol>
+        </section>
+        <!-- Próximas categorías: separadas visualmente; ya suman progreso -->
+        <section class="grupo-misiones grupo-misiones--siguiente" th:if="${g.estado == 'siguiente'}"
+                 th:attr="aria-label=${'Próxima categoría: ' + g.categoria}">
+          <h3><span class="grupo-misiones__candado" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('candado', 16)}"></span></span>
+            <span>Próxima categoría · <span th:text="${g.categoria}">Sostenedor</span></span></h3>
+          <p class="grupo-misiones__nota">Estas misiones ya suman progreso con cada donación. Se activan cuando subas a esta categoría.</p>
+          <ol th:replace="~{donante/incentivos :: listaMisiones(${g})}"></ol>
+        </section>
+      </th:block>
+    </div>
+    </div>
+  </section>
+  </th:block>
+  </th:block>
+</th:block>
+
+<!-- Lista de misiones de un grupo (se usa arriba; este bloque no se muestra) -->
+<th:block th:if="false">
+        <ol class="misiones" th:fragment="listaMisiones(g)">
           <li th:each="m : ${g.misiones}" class="mision-fila" th:classappend="${m.completada} ? 'mision-fila--completada'">
             <span class="mision-fila__sello" aria-hidden="true">
               <th:block th:if="${m.completada}"><span th:replace="~{fragments/iconos :: icono('check', 18)}"></span></th:block>
@@ -122,11 +149,6 @@
             </div>
           </li>
         </ol>
-      </section>
-    </div>
-  </section>
-  </th:block>
-  </th:block>
 </th:block>
 </body>
 </html>

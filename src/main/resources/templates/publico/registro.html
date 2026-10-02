@@ -116,7 +116,7 @@
   <th:block th:replace="~{fragments/formulario :: error('rubro', 'rubro')}"></th:block>
 </div>
           </div>
-          <!-- Documento: un solo par de campos para todos los tipos (DNI, pasaporte, libreta o CUIT) -->
+          <!-- Documento: un único par de campos para cualquier tipo de cuenta (DNI, pasaporte, libreta o CUIT) -->
           <div class="campos">
 <div class="campo campo--2" th:classappend="${errores.tiene('tipoDocumento')} ? 'con-error'">
   <label for="tipoDocumento">Tipo de documento</label>
@@ -149,33 +149,33 @@
   <div class="campos">
 <div class="campo" th:with="c=${'representantes[' + i.index + '].nombre'}, cid=${'rep-' + i.index + '-nombre'}"
      th:classappend="${errores.tiene(c)} ? 'con-error'">
-  <label th:for="${cid}">Nombre<abbr class="obligatorio" title="obligatorio">*</abbr></label>
-  <input th:id="${cid}" th:name="${c}" type="text" th:value="${r.nombre}" required th:autofocus="${foco == ('representantes[' + i.index + ']')}"
+  <label for="rep-campo" th:for="${cid}">Nombre<abbr class="obligatorio" title="obligatorio">*</abbr></label>
+  <input id="rep-nombre" th:id="${cid}" th:name="${c}" type="text" th:value="${r.nombre}" required th:autofocus="${foco == ('representantes[' + i.index + ']')}"
          th:attr="aria-invalid=${errores.tiene(c)} ? 'true' : null, aria-describedby=${errores.tiene(c)} ? ${'error-' + cid} : null">
   <th:block th:replace="~{fragments/formulario :: error(${c}, ${cid})}"></th:block>
 </div>
 <div class="campo" th:with="c=${'representantes[' + i.index + '].apellido'}, cid=${'rep-' + i.index + '-apellido'}"
      th:classappend="${errores.tiene(c)} ? 'con-error'">
-  <label th:for="${cid}">Apellido<abbr class="obligatorio" title="obligatorio">*</abbr></label>
-  <input th:id="${cid}" th:name="${c}" type="text" th:value="${r.apellido}" required
+  <label for="rep-campo" th:for="${cid}">Apellido<abbr class="obligatorio" title="obligatorio">*</abbr></label>
+  <input id="rep-apellido" th:id="${cid}" th:name="${c}" type="text" th:value="${r.apellido}" required
          th:attr="aria-invalid=${errores.tiene(c)} ? 'true' : null, aria-describedby=${errores.tiene(c)} ? ${'error-' + cid} : null">
   <th:block th:replace="~{fragments/formulario :: error(${c}, ${cid})}"></th:block>
 </div>
 <div class="campo campo--2">
-  <label th:for="${'rep-' + i.index + '-tipoDocumento'}">Tipo de documento</label>
-  <div class="selector"><select th:id="${'rep-' + i.index + '-tipoDocumento'}" th:name="${'representantes[' + i.index + '].tipoDocumento'}"><option value="">Elegí</option><option value="DNI" th:selected="${r.tipoDocumento} == 'DNI'">DNI</option><option value="PASAPORTE" th:selected="${r.tipoDocumento} == 'PASAPORTE'">Pasaporte</option><option value="LIBRETA" th:selected="${r.tipoDocumento} == 'LIBRETA'">Libreta</option></select></div>
+  <label for="rep-tipoDocumento" th:for="${'rep-' + i.index + '-tipoDocumento'}">Tipo de documento</label>
+  <div class="selector"><select id="rep-tipoDocumento" th:id="${'rep-' + i.index + '-tipoDocumento'}" th:name="${'representantes[' + i.index + '].tipoDocumento'}"><option value="">Elegí</option><option value="DNI" th:selected="${r.tipoDocumento} == 'DNI'">DNI</option><option value="PASAPORTE" th:selected="${r.tipoDocumento} == 'PASAPORTE'">Pasaporte</option><option value="LIBRETA" th:selected="${r.tipoDocumento} == 'LIBRETA'">Libreta</option></select></div>
 </div>
 <div class="campo campo--4" th:with="c=${'representantes[' + i.index + '].documento'}, cid=${'rep-' + i.index + '-documento'}"
      th:classappend="${errores.tiene(c)} ? 'con-error'">
-  <label th:for="${cid}">Número de documento</label>
-  <input th:id="${cid}" th:name="${c}" type="text" th:value="${r.documento}" inputmode="numeric"
+  <label for="rep-campo" th:for="${cid}">Número de documento</label>
+  <input id="rep-documento" th:id="${cid}" th:name="${c}" type="text" th:value="${r.documento}" inputmode="numeric"
          th:attr="aria-invalid=${errores.tiene(c)} ? 'true' : null, aria-describedby=${errores.tiene(c)} ? ${'error-' + cid} : null">
   <th:block th:replace="~{fragments/formulario :: error(${c}, ${cid})}"></th:block>
 </div>
 <div class="campo campo--6" th:with="c=${'representantes[' + i.index + '].correo'}, cid=${'rep-' + i.index + '-correo'}"
      th:classappend="${errores.tiene(c)} ? 'con-error'">
-  <label th:for="${cid}">Correo electrónico</label>
-  <input th:id="${cid}" th:name="${c}" type="email" th:value="${r.correo}" autocomplete="off"
+  <label for="rep-campo" th:for="${cid}">Correo electrónico</label>
+  <input id="rep-correo" th:id="${cid}" th:name="${c}" type="email" th:value="${r.correo}" autocomplete="off"
          th:attr="aria-invalid=${errores.tiene(c)} ? 'true' : null, aria-describedby=${errores.tiene(c)} ? ${'error-' + cid} : null">
   <th:block th:replace="~{fragments/formulario :: error(${c}, ${cid})}"></th:block>
 </div>
@@ -201,21 +201,27 @@
   <th:block th:replace="~{fragments/formulario :: error('correo', 'correo')}"></th:block>
 </div>
 <div class="campo" th:classappend="${errores.tiene('telefono.numero')} ? 'con-error'">
-  <span class="campo__etiqueta" id="et-telefono">Teléfono</span>
-  <div class="telefono" role="group" aria-labelledby="et-telefono">
-    <input name="telefono.caracteristica" th:value="${form.telefono.caracteristica}" inputmode="tel" aria-label="Código de país">
-    <input name="telefono.area" th:value="${form.telefono.area}" inputmode="numeric" placeholder="11" aria-label="Código de área">
-    <input id="telefono-numero" name="telefono.numero" th:value="${form.telefono.numero}" inputmode="tel" aria-label="Número" th:attr="aria-invalid=${errores.tiene('telefono.numero')} ? 'true' : null, aria-describedby=${errores.tiene('telefono.numero')} ? 'error-telefono-numero' : null">
-  </div>
+  <fieldset class="telefono">
+    <legend class="campo__etiqueta">Teléfono</legend>
+    <label class="sr-only" for="telefono-caracteristica">Código de país</label>
+    <input id="telefono-caracteristica" name="telefono.caracteristica" th:value="${form.telefono.caracteristica}" inputmode="tel">
+    <label class="sr-only" for="telefono-area">Código de área</label>
+    <input id="telefono-area" name="telefono.area" th:value="${form.telefono.area}" inputmode="numeric" placeholder="11">
+    <label class="sr-only" for="telefono-numero">Número</label>
+    <input id="telefono-numero" name="telefono.numero" th:value="${form.telefono.numero}" inputmode="tel" th:attr="aria-invalid=${errores.tiene('telefono.numero')} ? 'true' : null, aria-describedby=${errores.tiene('telefono.numero')} ? 'error-telefono-numero' : null">
+  </fieldset>
   <th:block th:replace="~{fragments/formulario :: error('telefono.numero', 'telefono-numero')}"></th:block>
 </div>
 <div class="campo" th:classappend="${errores.tiene('whatsapp.numero')} ? 'con-error'">
-  <span class="campo__etiqueta" id="et-whatsapp">WhatsApp</span>
-  <div class="telefono" role="group" aria-labelledby="et-whatsapp">
-    <input name="whatsapp.caracteristica" th:value="${form.whatsapp.caracteristica}" inputmode="tel" aria-label="Código de país de WhatsApp">
-    <input name="whatsapp.area" th:value="${form.whatsapp.area}" inputmode="numeric" placeholder="11" aria-label="Código de área de WhatsApp">
-    <input id="whatsapp-numero" name="whatsapp.numero" th:value="${form.whatsapp.numero}" inputmode="tel" aria-label="Número de WhatsApp" th:attr="aria-invalid=${errores.tiene('whatsapp.numero')} ? 'true' : null, aria-describedby=${errores.tiene('whatsapp.numero')} ? 'error-whatsapp-numero' : null">
-  </div>
+  <fieldset class="telefono">
+    <legend class="campo__etiqueta">WhatsApp</legend>
+    <label class="sr-only" for="whatsapp-caracteristica">Código de país de WhatsApp</label>
+    <input id="whatsapp-caracteristica" name="whatsapp.caracteristica" th:value="${form.whatsapp.caracteristica}" inputmode="tel">
+    <label class="sr-only" for="whatsapp-area">Código de área de WhatsApp</label>
+    <input id="whatsapp-area" name="whatsapp.area" th:value="${form.whatsapp.area}" inputmode="numeric" placeholder="11">
+    <label class="sr-only" for="whatsapp-numero">Número de WhatsApp</label>
+    <input id="whatsapp-numero" name="whatsapp.numero" th:value="${form.whatsapp.numero}" inputmode="tel" th:attr="aria-invalid=${errores.tiene('whatsapp.numero')} ? 'true' : null, aria-describedby=${errores.tiene('whatsapp.numero')} ? 'error-whatsapp-numero' : null">
+  </fieldset>
   <th:block th:replace="~{fragments/formulario :: error('whatsapp.numero', 'whatsapp-numero')}"></th:block>
 </div>
             <fieldset class="campo campo--6" th:classappend="${errores.tiene('preferido')} ? 'con-error'">

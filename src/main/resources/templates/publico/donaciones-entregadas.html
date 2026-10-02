@@ -23,8 +23,8 @@
 
   <section class="galeria" aria-labelledby="titulo-galeria">
     <div class="galeria__encabezado">
-      <p class="galeria__total" role="status" th:if="${galeria.donaciones.ok()}"
-         th:text="${galeria.total == 1} ? '1 donación entregada' : ${galeria.total + ' donaciones entregadas'}">5 donaciones entregadas</p>
+      <output class="galeria__total" th:if="${galeria.donaciones.ok()}"
+              th:text="${galeria.total == 1} ? '1 donación entregada' : ${galeria.total + ' donaciones entregadas'}">5 donaciones entregadas</output>
       <span th:replace="~{fragments/estados :: demo(${galeria.donaciones})}"></span>
     </div>
 

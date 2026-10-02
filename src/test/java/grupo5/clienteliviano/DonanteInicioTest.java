@@ -54,11 +54,11 @@ class DonanteInicioTest {
     @Test
     @DisplayName("Comparación con el mes pasado: más, menos o igual")
     void comparacion() {
-      org.assertj.core.api.Assertions.assertThat(PanelDonanteService.comparacion(3))
+      org.assertj.core.api.Assertions.assertThat(PanelDonanteService.comparacion(3).toString())
           .isEqualTo("+3 respecto al mes pasado");
-      org.assertj.core.api.Assertions.assertThat(PanelDonanteService.comparacion(-2))
+      org.assertj.core.api.Assertions.assertThat(PanelDonanteService.comparacion(-2).toString())
           .isEqualTo("−2 respecto al mes pasado");
-      org.assertj.core.api.Assertions.assertThat(PanelDonanteService.comparacion(0))
+      org.assertj.core.api.Assertions.assertThat(PanelDonanteService.comparacion(0).toString())
           .isEqualTo("¡Igual que el mes pasado!");
     }
 
@@ -74,7 +74,8 @@ class DonanteInicioTest {
                   .string(
                       containsString(
                           "Donaciones por mes: mayo 0, junio 0, julio 1, agosto 1, septiembre 4, octubre 1")))
-          .andExpect(content().string(containsString("−3 respecto al mes pasado")))
+          .andExpect(
+              content().string(containsString("<b>−3</b><span>respecto al mes pasado</span>")))
           .andExpect(content().string(containsString("2 entregadas")))
           .andExpect(content().string(containsString("3 en proceso")))
           .andExpect(content().string(containsString("1 sin entregar")))

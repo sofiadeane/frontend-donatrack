@@ -59,6 +59,10 @@
   color: var(--text-strong);
 }
 
+output.tarjeta__bajada {
+  display: block;
+}
+
 .tarjeta__bajada {
   margin: 4px 0 var(--space-4);
   font-size: var(--fs-xs);
@@ -802,6 +806,10 @@ a.opcion:hover {
 }
 
 .telefono {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
   display: grid;
   grid-template-columns: 88px 96px minmax(0, 1fr);
   gap: 8px;
@@ -1176,4 +1184,69 @@ a.lista-donaciones__fila:focus-visible {
   .cabecera--compacta {
     padding: 22px 20px;
   }
+}
+
+/* ===== Tile con error (alternativa C): esqueleto + aviso + reintentar ===== */
+.tile-error {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 196px;
+  padding: 22px;
+  border-radius: var(--r-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-card);
+}
+
+.tile-error__aviso {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  border-radius: var(--r-pill);
+  background: var(--surface-danger-soft);
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  color: var(--danger);
+}
+
+.tile-error__aviso::before {
+  content: "!";
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--danger);
+  color: var(--text-on-danger);
+  font-size: 11px;
+}
+
+.hueso {
+  display: block;
+  width: 100%;
+  height: 12px;
+  border-radius: 8px;
+  background: var(--surface-muted);
+}
+
+.hueso--corto {
+  width: 45%;
+}
+
+.hueso--alto {
+  width: 30%;
+  height: 48px;
+}
+
+.tile-error__reintentar {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-top: auto;
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  color: var(--text-strong);
 }

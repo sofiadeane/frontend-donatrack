@@ -11,6 +11,9 @@ import java.util.Map;
  */
 public class ErroresFormulario {
 
+  /** Nombre del campo de correo (también es el del medio de contacto predeterminado). */
+  public static final String CORREO = "correo";
+
   private final Map<String, String> porCampo = new LinkedHashMap<>();
   private final List<String> generales = new ArrayList<>();
 
@@ -76,7 +79,7 @@ public class ErroresFormulario {
       case "razonSocial" -> "Razón social";
       case "tipoJuridico" -> "Tipo de organización";
       case "rubro" -> "Rubro";
-      case "correo" -> "Correo electrónico";
+      case CORREO -> "Correo electrónico";
       case "telefono.numero" -> "Teléfono";
       case "whatsapp.numero" -> "WhatsApp";
       case "preferido" -> "Medio de contacto preferido";
@@ -99,7 +102,7 @@ public class ErroresFormulario {
       return "representantes";
     }
     return switch (campo) {
-      case "correo", "telefono.numero", "whatsapp.numero", "preferido" -> "contacto";
+      case CORREO, "telefono.numero", "whatsapp.numero", "preferido" -> "contacto";
       case "calle",
           "altura",
           "piso",

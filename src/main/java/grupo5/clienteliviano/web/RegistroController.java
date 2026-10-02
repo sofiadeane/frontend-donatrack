@@ -1,5 +1,6 @@
 package grupo5.clienteliviano.web;
 
+import grupo5.clienteliviano.aplicacion.Seccion.ErrorVista;
 import grupo5.clienteliviano.aplicacion.registro.ErroresFormulario;
 import grupo5.clienteliviano.aplicacion.registro.FormularioRegistro;
 import grupo5.clienteliviano.aplicacion.registro.FormularioRegistro.Representante;
@@ -30,6 +31,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class RegistroController {
 
   static final String PENDIENTE = "registroPendiente";
+  private static final String VOLVER_AL_FORMULARIO = "redirect:/registro";
 
   private final RegistroService registro;
   private final Clock reloj;
@@ -70,13 +72,13 @@ public class RegistroController {
 
   @GetMapping("/registro/listo")
   public String listo(Model model) {
-    return model.containsAttribute("exito") ? "publico/registro-listo" : "redirect:/registro";
+    return model.containsAttribute("exito") ? "publico/registro-listo" : VOLVER_AL_FORMULARIO;
   }
 
   @GetMapping("/registro/pendiente")
   public String pendiente(HttpSession sesion, Model model) {
     if (!(sesion.getAttribute(PENDIENTE) instanceof Pendiente pendiente)) {
-      return "redirect:/registro";
+      return VOLVER_AL_FORMULARIO;
     }
     model.addAttribute("pendiente", pendiente);
     return "publico/registro-pendiente";
@@ -85,12 +87,12 @@ public class RegistroController {
   @PostMapping("/registro/reintentar")
   public String reintentar(HttpSession sesion, Model model, RedirectAttributes redirect) {
     if (!(sesion.getAttribute(PENDIENTE) instanceof Pendiente pendiente)) {
-      return "redirect:/registro";
+      return VOLVER_AL_FORMULARIO;
     }
     ResultadoRegistro resultado = registro.completar(pendiente);
-    if (resultado instanceof Parcial parcial) {
-      model.addAttribute("pendiente", pendiente);
-      model.addAttribute("error", parcial.error());
+    if (resultado instanceof Parcial(Pendiente mismo, ErrorVista error)) {
+      model.addAttribute("pendiente", mismo);
+      model.addAttribute("error", error);
       return "publico/registro-pendiente";
     }
     return resolver(resultado, null, model, sesion, redirect);
@@ -108,13 +110,13 @@ public class RegistroController {
         redirect.addFlashAttribute("exito", exito);
         yield "redirect:/registro/listo";
       }
-      case Parcial parcial -> {
-        sesion.setAttribute(PENDIENTE, parcial.pendiente());
+      case Parcial(Pendiente pendiente, ErrorVista error) -> {
+        sesion.setAttribute(PENDIENTE, pendiente);
         yield "redirect:/registro/pendiente";
       }
-      case Invalido invalido -> mostrar(form, invalido.errores(), model);
-      case Fallido fallido -> {
-        model.addAttribute("falla", fallido.error());
+      case Invalido(ErroresFormulario errores) -> mostrar(form, errores, model);
+      case Fallido(ErrorVista error) -> {
+        model.addAttribute("falla", error);
         yield mostrar(form, new ErroresFormulario(), model);
       }
     };

@@ -44,6 +44,7 @@
   --white-a78: rgb(244 246 252 / 0.78);
   --ink-a40: rgb(41 41 40 / 0.4);
   --ink-a62: rgb(41 41 40 / 0.62);
+  --ink-a78: rgb(41 41 40 / 0.78);
   --black-a25: rgb(0 0 0 / 0.25);
   --slate-a39: rgb(54 77 74 / 0.39);
   --green-500-a20: rgb(80 215 148 / 0.2);
@@ -120,10 +121,11 @@
   /* Texto de la landing (valores del Figma) */
   --text-on-dark-62: var(--white-a62);
   --text-on-dark-60: var(--white-a60);
-  --text-nav: var(--ink-a62);
-  --text-meta: var(--ink-a40);
-  --text-on-brand-band: var(--white);
-  --text-on-circle: var(--white);
+  /* Contraste AA aprobado 2026-10-02 (exploración estados-y-contraste) */
+  --text-nav: var(--ink-a78);
+  --text-meta: var(--ink-muted);
+  --text-on-brand-band: var(--teal-900);
+  --text-on-circle: var(--teal-900);
   --text-title-dark: var(--teal-750);
   --surface-band: var(--green-500);
   --surface-circle: var(--turquoise-500);

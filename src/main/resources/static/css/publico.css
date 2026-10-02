@@ -415,7 +415,13 @@
 }
 
 .destacadas .demo {
-  border-color: var(--border-light);
+  border-color: var(--text-on-brand-band);
+}
+
+/* Sobre la banda verde todo el texto va en teal (AA 6,8:1), también el botón */
+.destacadas .boton--contorno-claro {
+  border-color: var(--text-on-brand-band);
+  color: var(--text-on-brand-band);
 }
 
 .destacadas__mensaje {
@@ -1672,6 +1678,7 @@
 }
 
 .galeria__total {
+  display: block;
   margin: 0;
   font-weight: 700;
   color: var(--text-strong);

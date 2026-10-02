@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class ValidadorRegistro {
 
-  private static final Pattern CORREO = Pattern.compile("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
   private static final Pattern NUMERO_TELEFONO = Pattern.compile("^[0-9 ()-]{6,20}$");
   static final int MAX_APODO = 40;
 
@@ -102,17 +101,19 @@ public class ValidadorRegistro {
         errores.agregar(p + "apellido", "El apellido es obligatorio.");
       }
       enumOpcional(r.getTipoDocumento(), TipoDocumento.class, p + "tipoDocumento", errores);
-      if (conValor(r.getCorreo()) && !CORREO.matcher(r.getCorreo().strip()).matches()) {
-        errores.agregar(p + "correo", "Escribí un correo con el formato nombre@dominio.com.");
+      if (conValor(r.getCorreo()) && !esCorreo(r.getCorreo())) {
+        errores.agregar(
+            p + ErroresFormulario.CORREO, "Escribí un correo con el formato nombre@dominio.com.");
       }
     }
   }
 
   private void contacto(FormularioRegistro f, ErroresFormulario errores) {
     if (!conValor(f.getCorreo())) {
-      errores.agregar("correo", "El correo electrónico es obligatorio.");
-    } else if (!CORREO.matcher(f.getCorreo().strip()).matches()) {
-      errores.agregar("correo", "Escribí un correo con el formato nombre@dominio.com.");
+      errores.agregar(ErroresFormulario.CORREO, "El correo electrónico es obligatorio.");
+    } else if (!esCorreo(f.getCorreo())) {
+      errores.agregar(
+          ErroresFormulario.CORREO, "Escribí un correo con el formato nombre@dominio.com.");
     }
     telefono(f.getTelefono(), "telefono.numero", errores);
     telefono(f.getWhatsapp(), "whatsapp.numero", errores);
@@ -122,6 +123,23 @@ public class ValidadorRegistro {
     } else if ("WHATSAPP".equals(preferido) && !conValor(f.getWhatsapp().getNumero())) {
       errores.agregar("preferido", "Cargá un WhatsApp o elegí otro medio preferido.");
     }
+  }
+
+  /**
+   * Formato nombre@dominio.ext sin expresiones regulares (lineal, sin backtracking): una sola
+   * arroba, sin espacios y con un punto en el dominio que no esté en los extremos.
+   */
+  static boolean esCorreo(String valor) {
+    String s = valor.strip();
+    int arroba = s.indexOf('@');
+    if (arroba <= 0
+        || arroba != s.lastIndexOf('@')
+        || s.chars().anyMatch(Character::isWhitespace)) {
+      return false;
+    }
+    String dominio = s.substring(arroba + 1);
+    int punto = dominio.lastIndexOf('.');
+    return punto > 0 && punto < dominio.length() - 1 && !dominio.startsWith(".");
   }
 
   private static void telefono(Telefono t, String campo, ErroresFormulario errores) {

@@ -43,7 +43,7 @@
       <div class="kpi__cuerpo">
         <div>
           <div class="kpi__valor" th:text="${i.datos.realizadas}">6</div>
-          <span class="kpi-chip" th:text="${i.datos.chip}">+3 este mes</span>
+          <span class="kpi-chip"><b th:if="${i.datos.chip.cifra != null}" th:text="${i.datos.chip.cifra}">+3</b><span th:text="${i.datos.chip.texto}">respecto al mes pasado</span></span>
         </div>
         <svg class="minichart" role="img" th:attr="viewBox=${'0 0 ' + i.datos.anchoGrafico + ' 84'},aria-label=${i.datos.graficoDescripcion}">
           <rect th:each="b : ${i.datos.grafico}" th:classappend="${b.actual} ? 'actual'"
@@ -51,10 +51,10 @@
         </svg>
       </div>
     </a>
-    <section class="kpi kpi--estado" th:unless="${i.ok()}" aria-label="Donaciones realizadas">
+    <th:block th:if="${i.conError()}"><section th:replace="~{fragments/estados :: tileError('Donaciones realizadas', ${i.error}, '/donante', 'kpi')}"></section></th:block>
+    <section class="kpi kpi--estado" th:if="${i.vacio()}" aria-label="Donaciones realizadas">
       <span class="kpi__etiqueta">Donaciones realizadas</span>
-      <p th:if="${i.conError()}" th:text="${i.error.mensaje}">No pudimos conectarnos.</p>
-      <p th:if="${i.vacio()}">Tus totales aparecen cuando registres tu primera donación.</p>
+      <p>Tus totales aparecen cuando registres tu primera donación.</p>
     </section>
 
     <!-- B · Entregadas: moneda y barra segmentada -->
@@ -76,11 +76,9 @@
         <li class="segmentos--interrumpidas" th:text="${e.datos.interrumpidas + ' sin entregar'}">1 sin entregar</li>
       </ul>
     </article>
-    <section class="kpi kpi--estado" th:unless="${e.ok()}" aria-label="Entregadas">
-      <span class="kpi__etiqueta">Entregadas</span>
-      <p th:text="${e.error.mensaje}">No pudimos conectarnos.</p>
-    </section>
+    <th:block th:if="${e.conError()}"><section th:replace="~{fragments/estados :: tileError('Donaciones entregadas', ${e.error}, '/donante', 'kpi')}"></section></th:block>
 
+    <th:block th:if="${i.conError()}"><section th:replace="~{fragments/estados :: tileError('Categoría actual', ${i.error}, '/donante', 'kpi')}"></section></th:block>
     <!-- C · Categoría actual: el semicírculo revela la próxima -->
     <section class="kpi kpi--categoria" th:if="${i.ok()}" aria-labelledby="titulo-categoria">
       <span class="kpi__etiqueta" id="titulo-categoria">Categoría actual</span>
@@ -131,7 +129,8 @@
     </section>
 
     <!-- Misión actual -->
-    <section class="tarjeta mision" aria-labelledby="titulo-mision">
+    <th:block th:if="${i.conError()}"><section th:replace="~{fragments/estados :: tileError('Tu misión actual', ${i.error}, '/donante', 'tarjeta')}"></section></th:block>
+    <section class="tarjeta mision" th:unless="${i.conError()}" aria-labelledby="titulo-mision">
       <h2 id="titulo-mision">Tu misión actual</h2>
       <th:block th:if="${i.ok() and i.datos.mision != null}" th:with="m=${i.datos.mision}">
         <p class="tarjeta__bajada" th:text="${m.ascenso}">Colaborador → Sostenedor</p>
@@ -147,7 +146,6 @@
       </th:block>
       <p class="mision__vacia" th:if="${i.ok() and i.datos.mision == null}">No tenés misiones activas por ahora.</p>
       <p class="mision__vacia" th:if="${i.vacio()}">Tus misiones aparecen cuando registres tu primera donación.</p>
-      <p class="mision__vacia" th:if="${i.conError()}" th:text="${i.error.mensaje}">No pudimos conectarnos.</p>
       <a class="boton boton--fantasma" th:href="@{/donante/incentivos}">Ver incentivos</a>
     </section>
   </div>

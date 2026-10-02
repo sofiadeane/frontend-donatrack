@@ -58,8 +58,8 @@
       <div>
         <h2 id="titulo-lista">Tus donaciones</h2>
         <!-- CA3: el contador se anuncia al cambiar los filtros -->
-        <p class="tarjeta__bajada" role="status" th:if="${mis.donaciones.ok() or mis.donaciones.vacia()}"
-           th:text="${mis.donaciones.datos.size() == 1} ? '1 donación' : ${mis.donaciones.datos.size() + ' donaciones'}">6 donaciones</p>
+        <output class="tarjeta__bajada" th:if="${mis.donaciones.ok() or mis.donaciones.vacia()}"
+                th:text="${mis.donaciones.datos.size() == 1} ? '1 donación' : ${mis.donaciones.datos.size() + ' donaciones'}">6 donaciones</output>
       </div>
       <span th:replace="~{fragments/estados :: demo(${mis.donaciones})}"></span>
     </div>

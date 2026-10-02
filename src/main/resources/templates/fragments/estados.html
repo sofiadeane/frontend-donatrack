@@ -20,6 +20,21 @@
   <a class="boton boton--texto" th:if="${reintentar != null}" th:href="@{${reintentar}}">Reintentar</a>
 </div>
 
+<!-- Tile con error (alternativa C aprobada): mantiene la forma del tablero con un esqueleto del contenido,
+     un aviso corto y "Reintentar". El mensaje completo queda para lectores de pantalla.
+     Uso: th:replace="~{fragments/estados :: tileError('Donaciones realizadas', ${error}, '/donante', 'kpi')}" -->
+<section th:fragment="tileError(titulo, error, reintentar, clase)" class="tile-error" th:classappend="${clase}"
+         th:attr="aria-label=${titulo}" role="alert">
+  <span class="tile-error__aviso">Sin conexión</span>
+  <span class="sr-only" th:text="${titulo + ': ' + error.mensaje}">No pudimos conectarnos.</span>
+  <span class="hueso hueso--corto" aria-hidden="true"></span>
+  <span class="hueso hueso--alto" aria-hidden="true"></span>
+  <span class="hueso" aria-hidden="true"></span>
+  <a class="tile-error__reintentar" th:href="@{${reintentar}}">
+    <span th:replace="~{fragments/iconos :: icono('reintentar', 16)}"></span>Reintentar
+  </a>
+</section>
+
 <!-- Cargando: para contenido que se pide con JS (las páginas se renderizan completas en el servidor) -->
 <div th:fragment="cargando(texto)" class="estado-cargando" aria-busy="true" role="status">
   <span class="sr-only" th:text="${texto}">Cargando…</span>
