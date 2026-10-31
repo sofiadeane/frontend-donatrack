@@ -27,4 +27,11 @@ public class DonanteInicioController {
     sessionPort.actual(request).ifPresent(s -> model.addAttribute("panel", servicio.panel(s)));
     return "donante/inicio";
   }
+
+  /** El mismo tablero con tono más cercano, para comparar con el original. */
+  @GetMapping("/donante/cercano")
+  public String inicioCercano(HttpServletRequest request, Model model) {
+    sessionPort.actual(request).ifPresent(s -> model.addAttribute("panel", servicio.panel(s)));
+    return "donante/inicio-cercano";
+  }
 }

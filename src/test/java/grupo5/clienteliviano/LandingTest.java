@@ -91,6 +91,23 @@ class LandingTest {
     }
 
     @Test
+    @DisplayName("Variante cercana: copy desde quien dona sobre la misma landing")
+    void paginaCercana() throws Exception {
+      mvc.perform(get("/v1-cercana"))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("data-tono=\"cercano\"")))
+          .andExpect(
+              content()
+                  .string(
+                      containsString(
+                          "<h1 id=\"titulo-hero\">Lo que donás, de punta a punta.</h1>")))
+          .andExpect(content().string(containsString("Soy una organización")))
+          .andExpect(content().string(containsString("Quien la recibe confirma que llegó")))
+          .andExpect(content().string(containsString("Pupitres y sillas reacondicionadas")))
+          .andExpect(content().string(containsString("/registro?tipo=entidad")));
+    }
+
+    @Test
     @DisplayName("Persona humana: nombre e inicial del apellido; persona jurídica: razón social")
     void nombrePublico() {
       assertThat(LandingService.nombrePublico(persona("HUMANA", "Nicolás", "Pérez", null)))

@@ -213,7 +213,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: url("../img/topografico.svg") center top / 100% 100% no-repeat;
+  background: var(--textura-oscura) center top / 100% 100% no-repeat;
 }
 
 .hero__grilla {
@@ -712,7 +712,7 @@
   z-index: -1;
   width: 1281px;
   height: 700px;
-  background: url("../img/topografico.svg") no-repeat;
+  background: var(--textura-oscura) no-repeat;
 }
 
 .rol--marca {
@@ -1029,7 +1029,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: url("../img/topografico.svg") center top / 100% 100% no-repeat;
+  background: var(--textura-oscura) center top / 100% 100% no-repeat;
 }
 
 .banda-hero h1 {
@@ -1701,4 +1701,12 @@
   margin: 0;
   text-align: center;
   color: var(--text-muted);
+}
+
+/* ===== Variante "Cercana" (/v1-cercana) =====
+   Las cifras dejan el degradé verde saturado por el verde suave: el saturado queda para acciones
+   y detalles. La banda de destacadas cambia por token (--surface-band en tokens.css). */
+:root:has([data-tono="cercano"]) .cifra {
+  background: var(--surface-brand-soft);
+  border: 1px solid var(--border);
 }

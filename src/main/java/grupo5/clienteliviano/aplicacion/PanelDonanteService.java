@@ -58,8 +58,10 @@ public class PanelDonanteService {
 
   // ===== Modelo de la vista =====
 
+  /** {@code mensajeCercano}: el mismo aviso, nombrando la donación (variante /donante/cercano). */
   public record Panel(
       String mensaje,
+      String mensajeCercano,
       Bloque<Recorrido> recorrido,
       Bloque<Entregas> entregas,
       Bloque<Impacto> impacto,
@@ -87,6 +89,11 @@ public class PanelDonanteService {
 
   /** "+3 respecto al mes pasado": la cifra va destacada; nula si es igual. */
   public record Comparacion(String cifra, String texto) {
+    /** Este mes donó menos que el anterior (la variante cercana no lo muestra). */
+    public boolean negativa() {
+      return cifra != null && cifra.startsWith("−");
+    }
+
     @Override
     public String toString() {
       return cifra == null ? texto : cifra + " " + texto;
@@ -154,6 +161,7 @@ public class PanelDonanteService {
     Bloque<Entregas> entregas = derivar(propias, PanelDonanteService::entregas);
     return new Panel(
         mensaje(propias),
+        mensajeCercano(propias),
         recorrido,
         entregas,
         impacto(sesion.donanteId()),
@@ -218,6 +226,37 @@ public class PanelDonanteService {
       case "VENCIDA" -> "Tu última donación venció antes de poder entregarse.";
       default -> "Seguí el recorrido de tus donaciones hasta que llegan a quienes las necesitan.";
     };
+  }
+
+  /** Como {@link #mensaje}, pero nombra la donación y dice qué viene después. */
+  private static String mensajeCercano(Bloque<List<DonacionIndependienteResponseDTO>> propias) {
+    if (!propias.ok() || propias.datos().isEmpty()) {
+      return mensaje(propias);
+    }
+    DonacionIndependienteResponseDTO d = propias.datos().getFirst();
+    String que = "Tu donación de " + minusculaInicial(d.descripcion());
+    return switch (d.estadoActual()) {
+      case "EN_DEPOSITO" ->
+          que + " ya llegó al depósito. Te avisamos apenas sepamos a quién va a ayudar.";
+      case "ASIGNACION_REALIZADA" -> que + " ya tiene destino: una organización la está esperando.";
+      case "LISTA_PARA_ENTREGAR" -> que + " está lista para salir. Pronto va a estar en camino.";
+      case "EN_TRASLADO" -> que + " está en camino. Te avisamos cuando la reciban.";
+      case "ENTREGADA" -> que + " llegó y ya la recibieron. Gracias por estar.";
+      case "ENTREGA_FALLIDA" ->
+          "No pudimos entregar tu donación de "
+              + minusculaInicial(d.descripcion())
+              + ". Volvió al depósito; en el detalle te contamos qué pasó.";
+      case "VENCIDA" ->
+          que + " venció antes de poder entregarse. En el detalle te contamos qué pasó.";
+      default -> mensaje(propias);
+    };
+  }
+
+  private static String minusculaInicial(String texto) {
+    if (texto == null || texto.isEmpty()) {
+      return "";
+    }
+    return texto.substring(0, 1).toLowerCase(ES) + texto.substring(1);
   }
 
   // ----- Entregas (tile B) -----

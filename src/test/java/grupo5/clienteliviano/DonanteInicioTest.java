@@ -89,6 +89,22 @@ class DonanteInicioTest {
           .andExpect(content().string(containsString("hace 3 h")))
           .andExpect(content().string(containsString("Datos de demostración")));
     }
+
+    @Test
+    @DisplayName("Variante cercana: nombra la donación, no muestra la comparación negativa")
+    void tableroCercano() throws Exception {
+      mvc.perform(get("/donante/cercano").session(ingresar(mvc)))
+          .andExpect(status().isOk())
+          .andExpect(content().string(containsString("data-tono=\"cercano\"")))
+          .andExpect(
+              content()
+                  .string(
+                      containsString(
+                          "Tu donación de lentejas secas en bolsas de 1 kg ya llegó al depósito.")))
+          .andExpect(content().string(not(containsString("respecto al mes pasado"))))
+          .andExpect(content().string(containsString("va a Hogar Esperanza")))
+          .andExpect(content().string(containsString("Donante constante")));
+    }
   }
 
   @Nested

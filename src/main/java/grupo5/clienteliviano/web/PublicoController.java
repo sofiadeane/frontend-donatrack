@@ -23,6 +23,14 @@ public class PublicoController {
     return "publico/inicio";
   }
 
+  /** La landing original con tono más cercano: copy desde quien dona y neutros cálidos. */
+  @GetMapping("/v1-cercana")
+  public String inicioCercana(Model model) {
+    model.addAttribute("destacadas", landing.destacadasDelUltimoMes());
+    model.addAttribute("metricas", landing.metricas());
+    return "publico/inicio-cercana";
+  }
+
   /** Mapa interactivo (R2): sin coordenadas en el backend (brecha G4), queda como TBD visible. */
   @GetMapping("/mapa-de-impacto")
   public String mapa(Model model) {

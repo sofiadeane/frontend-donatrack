@@ -25,7 +25,7 @@ import urllib.request
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 IDENTIDADES = {"donante": "donante-nicolas", "entidad": "entidad-girasoles", "admin": "admin-deposito"}
-INICIOS_PUBLICOS = ["/", "/ingresar", "/registro", "/privacidad", "/mapa-de-impacto", "/donaciones-entregadas"]
+INICIOS_PUBLICOS = ["/", "/v1-cercana", "/ingresar", "/registro", "/privacidad", "/mapa-de-impacto", "/donaciones-entregadas"]
 
 
 class Enlaces(html.parser.HTMLParser):

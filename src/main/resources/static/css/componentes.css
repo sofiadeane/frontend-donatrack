@@ -89,7 +89,7 @@ output.tarjeta__bajada {
   z-index: -1;
   width: 1281px;
   height: 1295px;
-  background: url("../img/topografico.svg") no-repeat;
+  background: var(--textura-oscura) no-repeat;
 }
 
 .cabecera h1 {
@@ -508,7 +508,7 @@ a.opcion:hover {
   z-index: -1;
   width: 1281px;
   height: 700px;
-  background: url("../img/topografico.svg") no-repeat;
+  background: var(--textura-oscura) no-repeat;
   opacity: 0.9;
 }
 

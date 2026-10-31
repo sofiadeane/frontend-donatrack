@@ -23,7 +23,7 @@
   z-index: -1;
   width: 1281px;
   height: 1295px;
-  background: url("../img/topografico.svg") no-repeat;
+  background: var(--textura-oscura) no-repeat;
 }
 
 .panel-hero h1 {
@@ -93,6 +93,11 @@
   gap: 18px;
 }
 
+/* Variante cercana: sin el tile de categoría (pasa a un chip del hero), quedan dos */
+.kpis--dos {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .kpi {
   container-type: inline-size;
   position: relative;
@@ -135,7 +140,7 @@
   z-index: -1;
   width: 1281px;
   height: 700px;
-  background: url("../img/topografico.svg") no-repeat;
+  background: var(--textura-oscura) no-repeat;
 }
 
 .kpi--ruta .kpi__etiqueta {
@@ -520,7 +525,7 @@
   z-index: -1;
   width: 1281px;
   height: 600px;
-  background: url("../img/topografico.svg") no-repeat;
+  background: var(--textura-oscura) no-repeat;
 }
 
 /* Título arriba a la derecha: aprovecha el espacio libre y despega el sello */
@@ -597,6 +602,31 @@
 
 .mision .boton {
   justify-self: start;
+}
+
+/* Variante cercana: la misión va en tarjeta clara para que el tablero no sea un muro oscuro */
+.mision--clara {
+  background: var(--surface);
+  color: var(--text);
+}
+
+.mision--clara::before {
+  display: none;
+}
+
+.mision--clara > h2 {
+  color: var(--text-strong);
+}
+
+.mision--clara .tarjeta__bajada,
+.mision--clara .mision__vacia,
+.mision--clara .mision__sello-fila span,
+.mision--clara .mision__pie {
+  color: var(--text-muted);
+}
+
+.mision--clara .mision__barra {
+  background: var(--surface-muted);
 }
 
 /* ===== Notificaciones ===== */

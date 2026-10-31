@@ -201,4 +201,26 @@
   --dur-base: 200ms;
   --dur-slow: 300ms;
   --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  /* Textura de las superficies oscuras (trazos blancos con opacidad baja, sin color propio) */
+  --textura-oscura: url("../img/topografico.svg");
+}
+
+/*
+ * ===== Variante "Cercana" (sobre la original, exploración 2026-10-31) =====
+ * Misma identidad teal y verde. Cambia: neutros de gris azulado a hueso cálido, la textura oscura
+ * pasa de curvas topográficas a un damero de ciudad con un recorrido de reparto, y el verde
+ * saturado se reserva para acciones y detalles (las superficies grandes usan el verde suave).
+ * Se activa en las páginas que tienen un elemento con data-tono="cercano" (/v1-cercana,
+ * /donante/cercano). Contraste AA verificado: --ink-muted 4,9:1 sobre --gray-50 y 4,6:1 sobre
+ * --gray-100.
+ */
+:root:has([data-tono="cercano"]) {
+  --gray-50: #f7f5f0;
+  --gray-75: #fbfaf7;
+  --gray-100: #f3f0ea;
+  --white-a78: rgb(247 245 240 / 0.78);
+  --textura-oscura: url("../img/textura-ciudad.svg");
+  --surface-band: var(--green-50);
+  --grad-fade-band: linear-gradient(90deg, transparent 0%, var(--green-50) 100%);
 }
