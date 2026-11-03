@@ -1,0 +1,55 @@
+{
+ "concepto": "Tratado de la máquina: DonaTrack como una máquina de precisión grabada en tinta. La landing es un tratado de láminas numeradas; el dashboard es un plano de planta donde los estados son estaciones unidas por tuberías y las alertas son válvulas naranja.",
+ "principios": [
+  "Se ve cómo está hecho: cada paso es un mecanismo dibujado y cada cambio de estado deja fecha y responsable.",
+  "Un solo acento: la tinta es la norma, el naranja solo marca atención (válvulas, urgentes, desvíos, acción principal).",
+  "Láminas: todo bloque es una lámina con doble marco, esquinas de registro, rótulo superior (Lám. N) y nota al margen.",
+  "Los datos son objetos: odómetros, calibres rayados, rieles de camión, válvulas numeradas; nunca KPI sueltos.",
+  "Legibilidad operativa primero: el grabado decora el marco, nunca el texto; los estados siempre llevan palabra."
+ ],
+ "tokens": {
+  "color": {"papel": "#EFE5CA", "papel2": "#E6DAB9", "tinta": "#2A2822", "tinta2": "#5A5546", "naranja": "#C4501B", "naranja2 (sobre tinta)": "#F29A62"},
+  "tipografia": {"titulos": "Barlow Condensed 600/700, mayúsculas, interlínea .98", "texto": "Barlow 400/500, 16-17 px", "rotulos y cifras": "IBM Plex Mono 400/500, 11-13 px, mayúsculas con tracking en rótulos", "fallbacks": "Arial Narrow / Segoe UI / ui-monospace"},
+  "espaciado": "Base 6 px (trama de puntos del papel); láminas con 6-8 px de marco exterior y 12-14 px de relleno interior; separación de lámina 22-26 px.",
+  "radios": "0 en láminas, botones y etiquetas; círculo solo en estaciones, válvulas y medallones.",
+  "bordes/sombras": "Bordes de 1,5 px tinta y filete interior de 1 px; esquinas de registro naranja de 2 px; sombras duras 2-3 px sin desenfoque en botones; rayado a 45 grados y trama de puntos como textura."
+ },
+ "componentes": [
+  {"nombre": "Lámina (.plate)", "uso": "Contenedor de todo bloque: doble marco, esquinas de registro, rótulo Lám. N; variante .dk sobre tinta para esquemas principales."},
+  {"nombre": "Estación (.sel)", "uso": "Botón de estado con conteo; seleccionada se invierte a papel. Nunca lleva la válvula dentro del mismo selector."},
+  {"nombre": "Válvula (.valve)", "uso": "Círculo naranja con número en el borde superior de una estación: pendiente que frena el circuito. Es un botón con aria-label."},
+  {"nombre": "Riel de camión (.stops)", "uso": "Lista ordenada de paradas con marcas cumplidas y camión entre la última cumplida y la siguiente; vertical en móvil."},
+  {"nombre": "Calibre (.gauge)", "uso": "Cobertura de una necesidad con rayado; naranja si es urgente."},
+  {"nombre": "Odómetro (.odo)", "uso": "Cifras públicas con dígitos mecánicos que cuentan al entrar en pantalla."},
+  {"nombre": "Registro de alarmas", "uso": "Códigos A (urgente), B (hoy), C (semana) con un botón de acción por alarma."},
+  {"nombre": "Tag de estado (.tag)", "uso": "Texto del estado; naranja lleno = más de 5 días o urgente, rayado punteado = pendiente de evento (Actualizando…), tinta llena = Vencida o Asignada tras aprobar."},
+  {"nombre": "Paleta de comandos", "uso": "Ctrl K: ir a pantallas, ver estaciones y ejecutar acciones."},
+  {"nombre": "Nota al margen (.marg / .nm)", "uso": "Aclaración en mono con filete naranja; en la landing va en columna lateral, en el dashboard bajo la lámina."}
+ ],
+ "patrones": [
+  "Landing: índice lateral fijo con numeración romana y resaltado por scroll; barra horizontal en móvil.",
+  "Dashboard: 7 pantallas conmutables en el mismo archivo (hash o ?vista=), plano de planta en Inicio.",
+  "Toda acción asíncrona: el botón pasa a Actualizando…, y recién después cambia el estado o queda como pendiente; nunca éxito inmediato.",
+  "En móvil las tablas pasan a fichas apiladas y los diagramas se verticalizan."
+ ],
+ "tono": "Sobrio, preciso, con un guiño de manual antiguo. Frases cortas, rótulos técnicos, voseo rioplatense.",
+ "copyEjemplos": {
+  "headline": "Una máquina de precisión para que ninguna donación se pierda.",
+  "cta": "Ver la máquina en marcha",
+  "seccion": "Cuatro mecanismos, ningún eslabón suelto.",
+  "dashboard": "Todo el depósito en un solo circuito.",
+  "leyenda": "válvula = pendiente que frena el circuito",
+  "accion": "DT-0398: Asignar. Actualizando…"
+ },
+ "estados": {
+  "EN_DEPOSITO": "Estación E2 del plano; tag con contorno de tinta, naranja lleno si lleva más de 5 días.",
+  "ASIGNACION_REALIZADA": "Estación E3; tag con contorno; tras aprobar una propuesta pasa a tinta llena.",
+  "LISTA_PARA_ENTREGAR": "Estación E4; tag con contorno.",
+  "EN_TRASLADO": "Estación E5; el camión aparece entre paradas en el riel.",
+  "ENTREGADA": "Estación E6; solo suma cuando la entidad confirma la recepción.",
+  "ENTREGA_FALLIDA": "Desvío punteado naranja que vuelve al depósito; en la tabla de estados con rayado.",
+  "VENCIDA": "Desvío punteado con cruz; tag en tinta llena."
+ },
+ "accesibilidad": "Foco visible de 3 px naranja (naranja claro sobre tinta); estados siempre con texto; válvulas y estaciones son botones con aria-label; paleta de comandos con role dialog y listbox; contraste de texto sobre papel y sobre tinta por encima de 4,5:1; se anulan animaciones con prefers-reduced-motion; sin scroll horizontal de página.",
+ "paraExtender": "Falta llevarlo al lado del donante (historial de estados como riel de una sola donación, misiones como calibres, insignias como medallones grabados), al de la entidad (necesidades como calibres y botón Confirmar recepción con Actualizando…), a los formularios de registro y de ingreso (láminas con campos de borde doble y mensajes de error con código tipo A1) y a estados vacíos y de error. Falta además un modo de alto contraste, la tabla de donantes y entidades completas con paginación, y definir cómo escala el plano si se agregan estados o camiones."
+}

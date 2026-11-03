@@ -1,0 +1,68 @@
+{
+  "pipeline": [
+    { "estado": "EN_DEPOSITO", "cantidad": 18, "nota": "4 llevan más de 5 días" },
+    { "estado": "ASIGNACION_REALIZADA", "cantidad": 11, "nota": "2 sin camión todavía" },
+    { "estado": "LISTA_PARA_ENTREGAR", "cantidad": 7, "nota": "Salen hoy y mañana" },
+    { "estado": "EN_TRASLADO", "cantidad": 9, "nota": "3 camiones en ruta" }
+  ],
+  "entregadasMes": 23,
+  "entregadasDelta": 15,
+  "recibidasMes": 31,
+  "recibidasDelta": 8,
+  "semanas": [
+    { "etiqueta": "S34", "recibidas": 9, "entregadas": 6, "kgRecibidos": 210, "kgEntregados": 150 },
+    { "etiqueta": "S35", "recibidas": 12, "entregadas": 8, "kgRecibidos": 340, "kgEntregados": 220 },
+    { "etiqueta": "S36", "recibidas": 7, "entregadas": 9, "kgRecibidos": 180, "kgEntregados": 260 },
+    { "etiqueta": "S37", "recibidas": 14, "entregadas": 10, "kgRecibidos": 410, "kgEntregados": 300 },
+    { "etiqueta": "S38", "recibidas": 11, "entregadas": 12, "kgRecibidos": 290, "kgEntregados": 350 },
+    { "etiqueta": "S39", "recibidas": 16, "entregadas": 11, "kgRecibidos": 480, "kgEntregados": 310 },
+    { "etiqueta": "S40", "recibidas": 10, "entregadas": 13, "kgRecibidos": 260, "kgEntregados": 390 },
+    { "etiqueta": "S41", "recibidas": 8, "entregadas": 5, "kgRecibidos": 190, "kgEntregados": 120 }
+  ],
+  "pendientes": [
+    { "nivel": "ALTA", "titulo": "4 donaciones llevan más de 5 días sin asignar", "detalle": "Frazadas, conservas y 2 más en depósito", "accion": "Asignar", "href": "/admin/asignaciones" },
+    { "nivel": "ALTA", "titulo": "2 donaciones vencen en 48 horas", "detalle": "Lácteos y panificados · DT-0401, DT-0403", "accion": "Priorizar", "href": "/admin/donaciones" },
+    { "nivel": "MEDIA", "titulo": "Camión 3 sin chofer confirmado para mañana", "detalle": "Ruta Sur · 4 paradas · sale 08:00", "accion": "Confirmar", "href": "/admin/camiones" },
+    { "nivel": "MEDIA", "titulo": "Entrega pendiente de confirmar en Hogar Esperanza", "detalle": "Llegó ayer 17:40 · la entidad todavía no confirmó", "accion": "Recordar", "href": "/admin/donaciones" },
+    { "nivel": "BAJA", "titulo": "3 entidades nuevas esperan aprobación", "detalle": "Registradas esta semana", "accion": "Revisar", "href": "/admin/entidades" }
+  ],
+  "camiones": [
+    { "nombre": "Camión 1", "estado": "EN_RUTA", "ruta": "Depósito → Escuela 12 → Hogar Esperanza", "paradasHechas": 1, "paradasTotal": 3, "eta": "14:20", "carga": 78 },
+    { "nombre": "Camión 2", "estado": "EN_RUTA", "ruta": "Depósito → Los Girasoles → Merendero Norte", "paradasHechas": 2, "paradasTotal": 3, "eta": "15:05", "carga": 54 },
+    { "nombre": "Camión 3", "estado": "CARGANDO", "ruta": "Depósito → Ruta Sur (4 paradas)", "paradasHechas": 0, "paradasTotal": 4, "eta": "Mañana 08:00", "carga": 31 }
+  ],
+  "atencion": [
+    { "codigo": "DT-0398", "bien": "Frazadas · 30 u", "donante": "Cooperativa La Huerta", "destino": "Sin asignar", "estado": "EN_DEPOSITO", "antiguedad": "8 días", "urgente": true },
+    { "codigo": "DT-0401", "bien": "Yogur · 40 kg", "donante": "Lácteos del Sur", "destino": "Sin asignar", "estado": "EN_DEPOSITO", "antiguedad": "3 días", "urgente": true },
+    { "codigo": "DT-0403", "bien": "Pan lactal · 60 u", "donante": "Panadería El Molino", "destino": "Comedor Los Girasoles", "estado": "ASIGNACION_REALIZADA", "antiguedad": "2 días", "urgente": true },
+    { "codigo": "DT-0407", "bien": "Conservas · 24 kg", "donante": "Nicolás Pérez", "destino": "Escuela 12", "estado": "ASIGNACION_REALIZADA", "antiguedad": "5 días", "urgente": false },
+    { "codigo": "DT-0411", "bien": "Camperas · 18 u", "donante": "Nicolás Pérez", "destino": "Hogar Esperanza", "estado": "LISTA_PARA_ENTREGAR", "antiguedad": "1 día", "urgente": false },
+    { "codigo": "DT-0412", "bien": "Arroz · 50 kg", "donante": "Cooperativa La Huerta", "destino": "Comedor Los Girasoles", "estado": "EN_TRASLADO", "antiguedad": "hoy", "urgente": false },
+    { "codigo": "DT-0414", "bien": "Útiles · 120 u", "donante": "Librería Central", "destino": "Escuela 12", "estado": "EN_TRASLADO", "antiguedad": "hoy", "urgente": false },
+    { "codigo": "DT-0396", "bien": "Fideos · 35 kg", "donante": "Cooperativa La Huerta", "destino": "Merendero Norte", "estado": "EN_DEPOSITO", "antiguedad": "6 días", "urgente": true }
+  ],
+  "actividad": [
+    { "cuando": "hace 12 min", "estado": "ENTREGADA", "texto": "Los Girasoles confirmó la recepción de DT-0409 (frazadas ×30)" },
+    { "cuando": "hace 40 min", "estado": "EN_TRASLADO", "texto": "El camión 2 salió con 6 donaciones hacia Los Girasoles" },
+    { "cuando": "hace 1 h", "estado": "ASIGNACION_REALIZADA", "texto": "El sistema asignó DT-0415 (útiles) a la necesidad de Escuela 12" },
+    { "cuando": "hace 2 h", "estado": "EN_DEPOSITO", "texto": "Recibida DT-0416: conservas, 24 kg, de Nicolás Pérez" },
+    { "cuando": "hace 3 h", "estado": "LISTA_PARA_ENTREGAR", "texto": "DT-0411 quedó lista y se sumó al camión 3" },
+    { "cuando": "ayer", "estado": "ENTREGA_FALLIDA", "texto": "Nadie recibió DT-0390 en Merendero Norte; vuelve al depósito" }
+  ],
+  "impacto": {
+    "kg": 2450,
+    "entidades": 34,
+    "categorias": [
+      { "nombre": "Alimentos", "porcentaje": 62 },
+      { "nombre": "Vestimenta", "porcentaje": 18 },
+      { "nombre": "Útiles escolares", "porcentaje": 12 },
+      { "nombre": "Higiene", "porcentaje": 8 }
+    ]
+  },
+  "necesidades": [
+    { "entidad": "Comedor Los Girasoles", "bien": "Frazadas", "cubiertas": 18, "total": 30, "urgente": true },
+    { "entidad": "Escuela 12", "bien": "Útiles escolares", "cubiertas": 90, "total": 120, "urgente": false },
+    { "entidad": "Merendero Norte", "bien": "Leche en polvo", "cubiertas": 6, "total": 40, "urgente": true },
+    { "entidad": "Hogar Esperanza", "bien": "Camperas", "cubiertas": 18, "total": 18, "urgente": false }
+  ]
+}

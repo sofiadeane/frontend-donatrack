@@ -74,15 +74,15 @@ class DonanteInicioTest {
                   .string(
                       containsString(
                           "Donaciones por mes: mayo 0, junio 0, julio 1, agosto 1, septiembre 4, octubre 1")))
-          .andExpect(
-              content().string(containsString("<b>−3</b><span>respecto al mes pasado</span>")))
+          .andExpect(content().string(containsString("7 donaciones en estos meses")))
+          .andExpect(content().string(not(containsString("respecto al mes pasado"))))
           .andExpect(content().string(containsString("2 entregadas")))
           .andExpect(content().string(containsString("3 en proceso")))
           .andExpect(content().string(containsString("1 sin entregar")))
           .andExpect(content().string(containsString("Colaborador")))
           .andExpect(content().string(containsString("Sostenedor")))
           .andExpect(content().string(containsString("Lentejas secas en bolsas de 1 kg")))
-          .andExpect(content().string(containsString("recorrido__paso--actual")))
+          .andExpect(content().string(containsString("dh-paso--actual")))
           .andExpect(content().string(containsString("Donante constante")))
           .andExpect(content().string(containsString("aria-valuenow=\"66\"")))
           .andExpect(content().string(containsString("El camión salió a entregar")))
@@ -135,7 +135,7 @@ class DonanteInicioTest {
                       containsString("No pudimos conectarnos con el servicio de notificaciones")))
           .andExpect(content().string(containsString("Lentejas secas en bolsas de 1 kg")))
           .andExpect(content().string(containsString("2 entregadas")))
-          .andExpect(content().string(not(containsString("kpi--categoria"))));
+          .andExpect(content().string(not(containsString("dh-cat__nombre"))));
     }
 
     @Test

@@ -1,0 +1,787 @@
+{
+ "generado": "2026-10-31 16:26",
+ "fuentes": "Enunciado DDS-TP-Anual-2026.pdf (prólogo, decálogo, marco institucional, contexto, 'Nuestro sistema' y requisitos mínimos de UI/UX); CRITERIOS.md y ESQUEMA.md; plantilla inicio.html y tokens.css de la propuesta original; en final/d1…d6: notas.md, sistema.json y una captura de dashboard por propuesta.",
+ "enunciado": {
+  "resumen": "DonaTrack nace como caso de estudio de UTN Solidaria, una iniciativa estudiantil que asiste a personas en situación de vulnerabilidad. El problema es el desorden y la poca claridad sobre el destino de las donaciones. El sistema busca organizarlas, registrarlas y seguirlas desde el depósito hasta la entidad beneficiaria. Su objetivo declarado es mejorar la distribución y fortalecer la confianza de donantes y entidades. Los valores citados son responsabilidad social, empatía y trabajo colaborativo.",
+  "criteriosClave": [
+   "Confianza y transparencia hacia donantes y entidades",
+   "Trazabilidad de cada donación, de punta a punta",
+   "Landing pública con propósito, ejemplos del mes, mapa y fotos de entregas",
+   "Tres actores: donantes, entidades beneficiarias y administración",
+   "Impacto social y tono responsable",
+   "Visión sistémica y profesional"
+  ]
+ },
+ "columnas": [
+  {
+   "id": "orig",
+   "nombre": "Propuesta original"
+  },
+  {
+   "id": "d1",
+   "nombre": "1 · La Gaceta"
+  },
+  {
+   "id": "d2",
+   "nombre": "2 · Encastre"
+  },
+  {
+   "id": "d3",
+   "nombre": "3 · Tratado de la máquina"
+  },
+  {
+   "id": "d4",
+   "nombre": "4 · Huerto"
+  },
+  {
+   "id": "d5",
+   "nombre": "5 · Lima translúcida"
+  },
+  {
+   "id": "d6",
+   "nombre": "6 · Atlas de Rumbos"
+  }
+ ],
+ "resumenEjecutivo": [
+  "Se evaluó qué comunica cada propuesta y qué tan bien calza con DonaTrack, no cuál es más linda.",
+  "El enunciado pide confianza, trazabilidad y cercanía con personas en situación vulnerable. Ese es el filtro.",
+  "La original es la más segura y escalable, pero también la menos distintiva.",
+  "Huerto es la que mejor equilibra sobriedad, cercanía y claridad de estados.",
+  "Gaceta, Tratado y Atlas se destacan por identidad, pero son costosas de sostener o poco cercanas para donantes y entidades.",
+  "Recomendación: híbrida. Huerto para la landing, estructura de la original para el panel, y cola de tareas de Encastre.",
+  "Los puntajes son juicios interpretativos, sin pruebas con usuarias reales."
+ ],
+ "recomendacion": {
+  "direccion": "Híbrida: Huerto como identidad pública y paleta de alertas, con el panel construido sobre la base y los tokens de la original.",
+  "landing": "Huerto: aire, tipografía serif, estados con su nombre real y coral solo para lo urgente.",
+  "dashboard": "Estructura y tokens de la original, con la cola de tareas de Encastre y el coral de alerta de Huerto.",
+  "combinar": [
+   "Huerto: paleta oliva/salvia y estados con nombre real",
+   "Encastre: cola de tareas con foco",
+   "Gaceta: libro de registro para auditar estados",
+   "Atlas: recorrido como ruta para la vista de camiones",
+   "Original: tokens y fuente única de color"
+  ],
+  "porQue": "El enunciado habla de confianza, trazabilidad y de personas en situación de vulnerabilidad. Eso pide sobriedad, cercanía y estados claros antes que estética distintiva. Huerto cubre la parte pública y la original ya está integrada y probada para la operación diaria. Las otras ideas aportan piezas sueltas."
+ },
+ "puntajes": {
+  "criterios": [
+   {
+    "id": "coherencia",
+    "nombre": "Coherencia con la identidad del proyecto",
+    "peso": 25
+   },
+   {
+    "id": "publico",
+    "nombre": "Adecuación al público objetivo",
+    "peso": 20
+   },
+   {
+    "id": "credibilidad",
+    "nombre": "Credibilidad institucional",
+    "peso": 20
+   },
+   {
+    "id": "claridad",
+    "nombre": "Claridad y usabilidad",
+    "peso": 20
+   },
+   {
+    "id": "escalabilidad",
+    "nombre": "Escalabilidad a largo plazo",
+    "peso": 10
+   },
+   {
+    "id": "diferenciacion",
+    "nombre": "Diferenciación visual",
+    "peso": 5
+   }
+  ],
+  "valores": {
+   "orig": {
+    "coherencia": {
+     "p": 4,
+     "j": "Teal y verde con tono institucional: refuerza confianza y orden. Dice poco de personas e impacto."
+    },
+    "publico": {
+     "p": 4,
+     "j": "Sirve a donantes, entidades y administración sin exigir un código visual especial."
+    },
+    "credibilidad": {
+     "p": 4,
+     "j": "Se parece a una plataforma seria (salud, finanzas). Se lee como organización consolidada."
+    },
+    "claridad": {
+     "p": 4,
+     "j": "Jerarquía convencional y componentes conocidos. Es observable, no se probó con usuarios."
+    },
+    "escalabilidad": {
+     "p": 5,
+     "j": "Tokens semánticos con una sola fuente de color; ya está integrada al código real."
+    },
+    "diferenciacion": {
+     "p": 2,
+     "j": "Se confunde con muchas plataformas de gestión. No hay un rasgo propio memorable."
+    }
+   },
+   "d1": {
+    "coherencia": {
+     "p": 3,
+     "j": "Idea fuerte: lo que se dona se anota y se publica. Pero el tono de diario de barrio le quita seriedad operativa."
+    },
+    "publico": {
+     "p": 3,
+     "j": "Cómoda para quien lee y le gusta lo editorial. Puede ser ruidosa para quien administra todo el día."
+    },
+    "credibilidad": {
+     "p": 3,
+     "j": "El libro de registro transmite transparencia. Bordes gruesos y colores fuertes juegan a favor de lo informal."
+    },
+    "claridad": {
+     "p": 4,
+     "j": "Titulares numerados con una acción cada uno; el texto es grande y legible."
+    },
+    "escalabilidad": {
+     "p": 3,
+     "j": "Estilo con mucho carácter: cuesta sostenerlo en pantallas densas (tablas, formularios largos)."
+    },
+    "diferenciacion": {
+     "p": 5,
+     "j": "Es la más reconocible del grupo: nada la confunde con otra plataforma."
+    }
+   },
+   "d2": {
+    "coherencia": {
+     "p": 4,
+     "j": "Un bloque por dato y una tarea por vez: refuerza organización y cercanía. Los pasteles aportan poca solemnidad."
+    },
+    "publico": {
+     "p": 4,
+     "j": "Voseo, píldoras y bloques: invita a donantes y a entidades chicas. En el dashboard, el foco de a una tarea pide probarse con volumen alto."
+    },
+    "credibilidad": {
+     "p": 3,
+     "j": "Amable y clara, pero se parece a una app de consumo; puede leerse como menos institucional."
+    },
+    "claridad": {
+     "p": 4,
+     "j": "Estado con color, punto y texto. Cola de tareas simple de seguir."
+    },
+    "escalabilidad": {
+     "p": 4,
+     "j": "Un solo CSS compartido y piezas repetibles; la grilla de escritorio ya prevé crecer."
+    },
+    "diferenciacion": {
+     "p": 3,
+     "j": "Reconocible, pero el estilo de bloques pastel está muy visto."
+    }
+   },
+   "d3": {
+    "coherencia": {
+     "p": 3,
+     "j": "Muestra cómo funciona el sistema (estaciones, válvulas): refuerza trazabilidad. Casi no habla de personas ni de impacto social."
+    },
+    "publico": {
+     "p": 2,
+     "j": "Atrae a perfiles técnicos. Una persona donante o una entidad pequeña puede sentirlo ajeno."
+    },
+    "credibilidad": {
+     "p": 3,
+     "j": "Rigor y precisión transmiten seriedad, pero con un aire de curiosidad antigua más que de ONG."
+    },
+    "claridad": {
+     "p": 3,
+     "j": "El plano de planta es claro para quien lo entiende. Texto técnico chico en mono y metáfora a decodificar."
+    },
+    "escalabilidad": {
+     "p": 2,
+     "j": "Láminas con doble marco y esquinas de registro: costoso de mantener y de extender a pantallas nuevas."
+    },
+    "diferenciacion": {
+     "p": 5,
+     "j": "Identidad visual muy propia; difícil de confundir."
+    }
+   },
+   "d4": {
+    "coherencia": {
+     "p": 4,
+     "j": "Calma, aire y nombres reales de estados: refuerza confianza y cuidado. Es la que mejor equilibra personas y proceso."
+    },
+    "publico": {
+     "p": 4,
+     "j": "Cómoda para donantes y entidades. Para operar con mucho volumen, el aire resta densidad."
+    },
+    "credibilidad": {
+     "p": 4,
+     "j": "Sobria y legible, sin ruido. Tipografía serif fina sugiere cuidado y seriedad."
+    },
+    "claridad": {
+     "p": 4,
+     "j": "Una acción principal por vez y lo demás visible. Líneas finas y gris verdoso: revisar contraste."
+    },
+    "escalabilidad": {
+     "p": 3,
+     "j": "El estilo depende del aire y de pocas cajas; con tablas muy densas puede perder jerarquía."
+    },
+    "diferenciacion": {
+     "p": 4,
+     "j": "Distinta de lo habitual en gestión, sin caer en lo estridente."
+    }
+   },
+   "d5": {
+    "coherencia": {
+     "p": 3,
+     "j": "Lo estructural (carriles de estado) es coherente. El vidrio y las auroras hablan de tecnología más que de donaciones."
+    },
+    "publico": {
+     "p": 3,
+     "j": "Resulta cómoda para público acostumbrado a apps recientes. Puede sentirse impersonal para otros."
+    },
+    "credibilidad": {
+     "p": 3,
+     "j": "Pulida y moderna, pero ligada a una tendencia; transmite innovación más que consolidación."
+    },
+    "claridad": {
+     "p": 3,
+     "j": "Cifras enormes ayudan. Texto sobre vidrio depende del contraste; existe modo sin transparencia."
+    },
+    "escalabilidad": {
+     "p": 2,
+     "j": "Transparencias y fondos degradados: caros de renderizar y de mantener accesibles. Envejece con la moda."
+    },
+    "diferenciacion": {
+     "p": 4,
+     "j": "Llamativa y reconocible, aunque el estilo de vidrio lo usan muchos productos."
+    }
+   },
+   "d6": {
+    "coherencia": {
+     "p": 3,
+     "j": "El recorrido como derrota de puerto a puerto calza con mapas y entregas. Pero Naufragio o Rumbo perdido para donaciones vencidas chocan con un contexto solidario."
+    },
+    "publico": {
+     "p": 2,
+     "j": "Estilo de nicho (pergamino, lacre, náutica). Muchas personas lo verían teatral para una gestión cotidiana."
+    },
+    "credibilidad": {
+     "p": 3,
+     "j": "Tradición y sello generan peso. También pueden leerse como disfraz y distraer de lo real."
+    },
+    "claridad": {
+     "p": 3,
+     "j": "Siempre muestra el nombre real del estado. La metáfora suma una capa de lectura."
+    },
+    "escalabilidad": {
+     "p": 2,
+     "j": "Collage, bordes rasgados y marrón oscuro: mucha decoración para sostener en cada pantalla nueva."
+    },
+    "diferenciacion": {
+     "p": 5,
+     "j": "Muy distintiva; cuenta una historia propia."
+    }
+   }
+  }
+ },
+ "matriz": [
+  {
+   "dimension": "Personalidad",
+   "valores": {
+    "orig": "Sobria, institucional, tecnológica",
+    "d1": "Editorial, directa, de diario",
+    "d2": "Amable, lúdica, ordenada",
+    "d3": "Técnica, de ingenio, de grabado",
+    "d4": "Serena, cuidada, orgánica",
+    "d5": "Fresca, liviana, tecnológica",
+    "d6": "Teatral, exploradora, de archivo"
+   }
+  },
+  {
+   "dimension": "Keywords",
+   "valores": {
+    "orig": [
+     "institucional",
+     "limpia",
+     "teal",
+     "convencional",
+     "confiable"
+    ],
+    "d1": [
+     "diario",
+     "registro",
+     "contraste",
+     "papel",
+     "tinta"
+    ],
+    "d2": [
+     "bloques",
+     "pasteles",
+     "amable",
+     "tarea",
+     "bolsillo"
+    ],
+    "d3": [
+     "grabado",
+     "máquina",
+     "plano",
+     "tinta",
+     "precisión"
+    ],
+    "d4": [
+     "aire",
+     "planta",
+     "calma",
+     "hairline",
+     "serif"
+    ],
+    "d5": [
+     "vidrio",
+     "lima",
+     "aurora",
+     "liviano",
+     "tipografía"
+    ],
+    "d6": [
+     "mapa",
+     "brújula",
+     "pergamino",
+     "lacre",
+     "derrota"
+    ]
+   }
+  },
+  {
+   "dimension": "Percepción emocional",
+   "valores": {
+    "orig": "Orden y tranquilidad",
+    "d1": "Franqueza y energía",
+    "d2": "Cercanía y alivio",
+    "d3": "Curiosidad y rigor",
+    "d4": "Calma y cuidado",
+    "d5": "Novedad y ligereza",
+    "d6": "Aventura y solemnidad"
+   }
+  },
+  {
+   "dimension": "Edad percibida",
+   "valores": {
+    "orig": "Adulta, transversal",
+    "d1": "Adulta joven",
+    "d2": "Joven a adulta",
+    "d3": "Adulta madura",
+    "d4": "Adulta",
+    "d5": "Joven a adulta",
+    "d6": "Adulta madura"
+   }
+  },
+  {
+   "dimension": "Público objetivo",
+   "valores": {
+    "orig": "Donantes, entidades y personal",
+    "d1": "Lectores comprometidos, sensibles a lo editorial",
+    "d2": "Donantes y entidades chicas",
+    "d3": "Perfiles técnicos y curiosos",
+    "d4": "Donantes y entidades",
+    "d5": "Usuarios de apps actuales",
+    "d6": "Público de nicho: narrativa e historia"
+   }
+  },
+  {
+   "dimension": "Orientación",
+   "valores": {
+    "orig": "Híbrido (ONG + institucional)",
+    "d1": "ONG / comunitaria",
+    "d2": "B2C + ONG",
+    "d3": "B2B / técnica",
+    "d4": "ONG / B2C",
+    "d5": "B2C / tecnológica",
+    "d6": "Cultural / ONG de nicho"
+   }
+  },
+  {
+   "dimension": "Formalidad",
+   "valores": {
+    "orig": "Media-alta",
+    "d1": "Media-baja",
+    "d2": "Media-baja",
+    "d3": "Alta",
+    "d4": "Media",
+    "d5": "Media",
+    "d6": "Alta, ornamental"
+   }
+  },
+  {
+   "dimension": "Mensaje institucional",
+   "valores": {
+    "orig": "Organización seria y ordenada",
+    "d1": "Transparencia como acto público",
+    "d2": "Gestión simple y cercana",
+    "d3": "Sistema preciso y verificable",
+    "d4": "Cuidado paciente de cada donación",
+    "d5": "Plataforma actual y ágil",
+    "d6": "Cada donación tiene su recorrido"
+   }
+  },
+  {
+   "dimension": "Comunicación cromática",
+   "valores": {
+    "orig": "Teal y verde: confianza y salud; error en rojo terroso",
+    "d1": "Mostaza, celeste, rosa y tomate: energía; tomate choca con alertas",
+    "d2": "Tierras cálidas: cercanía y abrigo",
+    "d3": "Tinta y un solo naranja: atención reservada",
+    "d4": "Oliva y salvia: calma; coral solo para urgencias",
+    "d5": "Gris-lima y pasteles: ligereza; poco contraste de marca",
+    "d6": "Pergamino y marrón: solemnidad; poco semáforo"
+   }
+  },
+  {
+   "dimension": "Profesionalismo",
+   "valores": {
+    "orig": "Alto",
+    "d1": "Medio",
+    "d2": "Medio",
+    "d3": "Medio-alto",
+    "d4": "Alto",
+    "d5": "Medio",
+    "d6": "Medio"
+   }
+  },
+  {
+   "dimension": "Confianza",
+   "valores": {
+    "orig": "Alta",
+    "d1": "Media",
+    "d2": "Media",
+    "d3": "Media",
+    "d4": "Alta",
+    "d5": "Media",
+    "d6": "Media"
+   }
+  },
+  {
+   "dimension": "Innovación",
+   "valores": {
+    "orig": "Baja",
+    "d1": "Alta",
+    "d2": "Media",
+    "d3": "Media",
+    "d4": "Media",
+    "d5": "Alta",
+    "d6": "Media"
+   }
+  },
+  {
+   "dimension": "Accesibilidad",
+   "valores": {
+    "orig": "Buena (contraste verificado)",
+    "d1": "Buena; revisar rosa y celeste",
+    "d2": "Buena; estado con texto",
+    "d3": "Media; texto mono chico",
+    "d4": "Media; revisar contraste fino",
+    "d5": "Media; depende del vidrio",
+    "d6": "Media; serif chica y fondo oscuro"
+   }
+  },
+  {
+   "dimension": "Diferenciación",
+   "valores": {
+    "orig": "Baja",
+    "d1": "Muy alta",
+    "d2": "Media",
+    "d3": "Muy alta",
+    "d4": "Alta",
+    "d5": "Alta",
+    "d6": "Muy alta"
+   }
+  },
+  {
+   "dimension": "Escalabilidad",
+   "valores": {
+    "orig": "Alta (ya en código)",
+    "d1": "Media",
+    "d2": "Alta",
+    "d3": "Baja",
+    "d4": "Media",
+    "d5": "Baja",
+    "d6": "Baja"
+   }
+  },
+  {
+   "dimension": "Coherencia con Donatrack",
+   "valores": {
+    "orig": "Alta",
+    "d1": "Media",
+    "d2": "Alta",
+    "d3": "Media-baja",
+    "d4": "Alta",
+    "d5": "Media",
+    "d6": "Media-baja"
+   }
+  },
+  {
+   "dimension": "Ventajas",
+   "valores": {
+    "orig": "Probada en código; sobria y legible",
+    "d1": "Memorable; refuerza transparencia",
+    "d2": "Cercana; una tarea a la vez",
+    "d3": "Se ve cómo funciona el sistema",
+    "d4": "Calma; estados con su nombre real",
+    "d5": "Cifras grandes; estados como carriles",
+    "d6": "Recorrido claro; mapa natural"
+   }
+  },
+  {
+   "dimension": "Desventajas",
+   "valores": {
+    "orig": "Poco memorable",
+    "d1": "Choca con alertas; ruido en pantallas densas",
+    "d2": "Poco solemne; foco único limita volumen",
+    "d3": "Poco humana; mantenimiento caro",
+    "d4": "Menos densa; contraste fino",
+    "d5": "Ligada a una moda; exige cuidar contraste",
+    "d6": "Metáforas incómodas; decoración pesada"
+   }
+  },
+  {
+   "dimension": "Riesgos",
+   "valores": {
+    "orig": "Que parezca genérica",
+    "d1": "Que se lea como informal ante instituciones",
+    "d2": "Que se perciba como app de consumo",
+    "d3": "Que aleje a donantes y entidades",
+    "d4": "Que no rinda con mucho volumen",
+    "d5": "Que envejezca rápido",
+    "d6": "Que la narrativa tape la función"
+   }
+  }
+ ],
+ "analisis": {
+  "orig": {
+   "personalidad": "Sobria y tecnológica. Se parece a plataformas de gestión: ordenada, previsible, calmada. Observable: hero con CTA doble (donar o ser entidad) y pasos numerados.",
+   "publico": "Adultos y transversal. Cómoda para quien dona, para entidades y para quien administra. Interpretación: no intimida, pero tampoco emociona.",
+   "coherencia": "Alta. Refuerza confianza, orden y trazabilidad. Deja en segundo plano a las personas y el impacto social. No contradice lo que ofrece el producto.",
+   "institucional": "Se lee como organización consolidada y confiable. Poca señal de cercanía o de historia propia.",
+   "paleta": "Teal oscuro y verde. Interpretación (no universal): en muchos contextos se asocia a salud y cuidado. Contraste verificado en AA. Error en rojo terroso que no choca con la paleta. Flexible para estados.",
+   "ventajas": [
+    "Ya está en el código, con tokens semánticos y una sola fuente de color.",
+    "Contraste revisado, con estados claros.",
+    "Componentes convencionales: bajo costo de aprender."
+   ],
+   "desventajas": [
+    "Se parece a muchas plataformas: poca identidad propia.",
+    "Verde también es éxito: puede confundirse con estados positivos."
+   ],
+   "riesgos": [
+    "Parecer genérica ante una organización que quiere destacar su cercanía."
+   ],
+   "oportunidades": [
+    "Sumar rasgos propios (tipografía, ilustración) sin romper la base."
+   ],
+   "conservar": [
+    "Tokens y fuente única de color.",
+    "Contraste AA.",
+    "Estructura de la landing."
+   ]
+  },
+  "d1": {
+   "personalidad": "Editorial y directa: DonaTrack como diario de barrio. Observable: titulares enormes, libro de registro, bordes gruesos y sombra dura.",
+   "publico": "Adultos jóvenes y lectores comprometidos. Cómoda para quien ama lo editorial; puede cansar a quien usa el panel todo el día.",
+   "coherencia": "Media. Refuerza transparencia (todo se anota, se verifica y se publica) y conciencia de lo público. Debilita la formalidad y la sensación de sistema serio.",
+   "institucional": "Franqueza y transparencia. A la vez, una iniciativa con voz propia, algo informal para una institución.",
+   "paleta": "Mostaza, celeste, rosa y tomate sobre papel cálido. Interpretación: energía y calidez. El tomate se usa para En traslado y para titulares: choca con la idea de alerta.",
+   "ventajas": [
+    "Identidad muy reconocible.",
+    "Titulares con una acción por vez: orden claro.",
+    "Libro de registro: encaja con trazabilidad y auditoría."
+   ],
+   "desventajas": [
+    "Colores fuertes compiten con las alertas reales.",
+    "Estilo costoso de sostener en formularios densos.",
+    "Tono informal frente a instituciones."
+   ],
+   "riesgos": [
+    "Que se lea como una propuesta experimental y no como un sistema consolidado."
+   ],
+   "oportunidades": [
+    "Usar el lenguaje de libro y titulares como voz de la landing pública."
+   ],
+   "conservar": [
+    "Libro de registro y cinta de circulación.",
+    "Paleta de comandos."
+   ]
+  },
+  "d2": {
+   "personalidad": "Amable y ordenada. Observable: bloques pastel por dato, cápsula de cinco paradas, cola de tareas con foco único y dock inferior.",
+   "publico": "Jóvenes y adultos. Cercana para donantes y entidades chicas. Para el personal con mucho volumen, el foco único hay que probarlo.",
+   "coherencia": "Alta. Refuerza cercanía, claridad y organización. Debilita la solemnidad institucional.",
+   "institucional": "Una organización cercana y práctica, que simplifica. Puede leerse como iniciativa joven más que consolidada.",
+   "paleta": "Crema y tierras cálidas (bone, oro, siena) con la tundora (gris carbón cálido) como tinta. Interpretación: cercanía y abrigo, más sobria que los pasteles anteriores. No tiene verde: 'Entregada' va en dorado y se parece a 'En depósito' en tono; se separan por intensidad y por el texto. El siena con texto oscuro queda cerca del contraste mínimo. Estado = color + punto + texto.",
+   "ventajas": [
+    "Una tarea a la vez baja la carga mental.",
+    "Estado con color, punto y texto: accesible.",
+    "CSS compartido por landing y dashboard: coherencia."
+   ],
+   "desventajas": [
+    "Se parece a una app de consumo.",
+    "El foco único puede frenar cuando hay muchas tareas."
+   ],
+   "riesgos": [
+    "Perder credibilidad frente a instituciones y empresas donantes."
+   ],
+   "oportunidades": [
+    "Sirve para un portal de donantes y entidades, más que para la administración pesada."
+   ],
+   "conservar": [
+    "Cola de tareas con foco.",
+    "Estado con texto y punto.",
+    "Voseo."
+   ]
+  },
+  "d3": {
+   "personalidad": "Técnica y de ingenio: máquina grabada en tinta. Observable: láminas con doble marco, plano de planta con estaciones, válvulas naranjas, tipografía condensada y mono.",
+   "publico": "Adultos maduros y perfiles técnicos. Quien dona o la entidad pequeña puede sentirlo ajeno o intimidante.",
+   "coherencia": "Media-baja. Refuerza trazabilidad y rigor (se ve cómo está hecho). Deja de lado a las personas, la cercanía y el impacto social.",
+   "institucional": "Precisión y sistema verificable. A la vez, distancia y un aire de curiosidad antigua.",
+   "paleta": "Papel crema, tinta y un solo naranja. Interpretación: sobriedad, con el naranja como atención. Un único acento es una regla clara, pero deja poco margen para estados diversos.",
+   "ventajas": [
+    "Un solo color de atención: regla simple.",
+    "Los estados son estaciones: modelo mental claro.",
+    "Muy reconocible."
+   ],
+   "desventajas": [
+    "Poco humana: casi no hay personas ni impacto.",
+    "Texto mono de 11–13 px: lectura difícil.",
+    "Marcos y láminas: costo alto de mantener."
+   ],
+   "riesgos": [
+    "Que quienes donan o reciben se sientan lejos de la plataforma."
+   ],
+   "oportunidades": [
+    "El plano de planta puede servir como vista técnica del depósito."
+   ],
+   "conservar": [
+    "Plano de estaciones.",
+    "Un solo acento de atención."
+   ]
+  },
+  "d4": {
+   "personalidad": "Serena y orgánica: la donación es una planta que crece. Observable: serif fina, líneas finas en lugar de cajas, mucho aire, metáfora de poda y helada solo en cursiva.",
+   "publico": "Adultos. Cómoda para donantes y entidades. En administración muy cargada, el aire resta densidad.",
+   "coherencia": "Alta. Refuerza confianza, cuidado y claridad. Equilibra proceso y personas. El nombre real de cada estado siempre se muestra.",
+   "institucional": "Una organización cuidadosa y sobria. Cercana sin ser informal.",
+   "paleta": "Oliva, salvia y miel; coral solo para urgencias. Interpretación: calma y cuidado (asociación cultural, no universal). El coral queda reservado para alerta y se destaca. Revisar contraste de grises verdosos y líneas finas.",
+   "ventajas": [
+    "Coral reservado para lo urgente: semántica clara.",
+    "Nombres reales de estado siempre visibles.",
+    "Una cosa por vez, con lo demás visible."
+   ],
+   "desventajas": [
+    "Líneas finas y grises verdosos: riesgo de contraste.",
+    "Menos densa para tablas grandes.",
+    "Metáfora de planta puede quedar corta en entregas fallidas."
+   ],
+   "riesgos": [
+    "Que en operación con mucho volumen cueste escanear."
+   ],
+   "oportunidades": [
+    "Muy buena base para la landing y el portal de donantes."
+   ],
+   "conservar": [
+    "Paleta oliva/salvia con coral de alerta.",
+    "Estado con nombre real.",
+    "Para después visible."
+   ]
+  },
+  "d5": {
+   "personalidad": "Fresca y liviana: vidrio esmerilado sobre auroras. Observable: tipografía enorme y delgada, lima como acento, carriles de estado y modo sin transparencia.",
+   "publico": "Jóvenes y adultos habituados a apps actuales. Puede sentirse impersonal o inestable para otros públicos.",
+   "coherencia": "Media. Los carriles de estado son coherentes con trazabilidad. El vidrio comunica tecnología más que donaciones.",
+   "institucional": "Plataforma actual e innovadora. Menos señal de institución consolidada.",
+   "paleta": "Gris-lima con pasteles. Interpretación: ligereza y novedad. La lima marca lo activo, no la jerarquía de significado. Contraste del texto depende de la superficie.",
+   "ventajas": [
+    "Cifras grandes legibles.",
+    "Modo sin transparencia disponible.",
+    "Carriles de estado como estructura."
+   ],
+   "desventajas": [
+    "Transparencias y degradados: costo de mantener accesible.",
+    "Ligada a una tendencia."
+   ],
+   "riesgos": [
+    "Envejecer rápido y requerir rediseño pronto."
+   ],
+   "oportunidades": [
+    "Los carriles de estado sirven en cualquier estética."
+   ],
+   "conservar": [
+    "Carriles de estado.",
+    "Modo sin transparencia."
+   ]
+  },
+  "d6": {
+   "personalidad": "Teatral y exploradora: cartografía antigua. Observable: pergamino y marrón, collage con bordes rasgados, rosa de los vientos como filtro, lacres y nombres náuticos.",
+   "publico": "Adultos maduros y público de nicho. Para el uso cotidiano de entidades y donantes resulta ornamental.",
+   "coherencia": "Media-baja. El recorrido de puerto a puerto refuerza trazabilidad y mapa. Naufragio y Rumbo perdido para donaciones vencidas o fallidas chocan con un contexto solidario.",
+   "institucional": "Solemnidad y tradición. A la vez, algo disfrazado y lejano de una iniciativa universitaria solidaria.",
+   "paleta": "Pergamino y marrón tabaco. Interpretación: antigüedad y peso. Hay pocos colores semánticos; la alerta depende del texto y los sellos.",
+   "ventajas": [
+    "El recorrido de puerto a puerto es una metáfora que calza con el mapa de entregas.",
+    "Siempre muestra el nombre real del estado."
+   ],
+   "desventajas": [
+    "Naufragio y Rumbo perdido: metáforas inapropiadas para donaciones.",
+    "Collage y bordes rasgados: costoso de mantener.",
+    "Texto serif chico sobre fondo oscuro."
+   ],
+   "riesgos": [
+    "Que la decoración tape la función y aleje a quienes necesitan simplicidad."
+   ],
+   "oportunidades": [
+    "El mapa de rutas puede inspirar la vista de camiones."
+   ],
+   "conservar": [
+    "Recorrido como ruta.",
+    "Constancia de recepción."
+   ]
+  }
+ },
+ "conclusiones": [
+  {
+   "pregunta": "¿Qué variante comunica mejor el propósito y los valores?",
+   "respuesta": "La original y Huerto. Ambas dicen orden, confianza y cuidado. Gaceta transmite transparencia pero con tono informal."
+  },
+  {
+   "pregunta": "¿Cuál proyecta mayor confianza y credibilidad institucional?",
+   "respuesta": "La original y Huerto. Sobriedad, legibilidad y pocas decoraciones. Tratado y Atlas inspiran respeto, pero por tradición, no por claridad."
+  },
+  {
+   "pregunta": "¿Cuál es más apropiada para los usuarios reales?",
+   "respuesta": "Encastre y Huerto: simples y cercanas para donantes y entidades. En el panel, conviene una versión más densa y consistente (original o Huerto)."
+  },
+  {
+   "pregunta": "¿Cuál tiene más potencial de identidad reconocible?",
+   "respuesta": "La Gaceta, Tratado y Atlas: son muy distintivas. Pero la identidad también debe resistir el tiempo y el uso cotidiano; ahí pesa menos."
+  },
+  {
+   "pregunta": "¿Cuál tiene el mejor equilibrio entre personalidad, profesionalismo y usabilidad?",
+   "respuesta": "Huerto: personalidad propia, tono sobrio y estados claros. La original es más segura pero menos propia."
+  },
+  {
+   "pregunta": "¿Qué elementos podrían combinarse?",
+   "respuesta": "De Huerto, la paleta con coral solo para alertas y los estados con nombre real. De Encastre, la cola de tareas. De Gaceta, el libro de registro. De Atlas, el recorrido como ruta. De la original, la base de tokens."
+  },
+  {
+   "pregunta": "¿Qué dirección recomendás y por qué?",
+   "respuesta": "Híbrida: Huerto como identidad pública y base de color. Dashboard sobre la estructura de la original, con la cola de tareas de Encastre. Prioriza confianza, claridad y contexto institucional sobre novedad."
+  }
+ ],
+ "incertidumbres": [
+  "Se usó el texto del PDF extraído con PDFKit (la herramienta de lectura de PDF no estaba disponible). No se vieron las figuras ni diagramas del enunciado.",
+  "No hay pruebas con usuarias reales (donantes, entidades, administración). Todo juicio sobre público es interpretativo.",
+  "Las asociaciones de color y de estilo (calma, confianza, tradición) dependen de cada cultura y contexto; no son verdades universales.",
+  "No se midió contraste ni accesibilidad de cada propuesta; solo se tomó lo declarado en las notas y lo visto en capturas.",
+  "No se revisaron todas las pantallas de cada propuesta con detalle (se miró una captura de dashboard por propuesta y notas); la landing de cada una se evaluó por sus notas y sistema.json.",
+  "El enunciado no define identidad visual ni público en detalle: se infirió del marco institucional (UTN Solidaria) y de los requisitos de UI.",
+  "Pesos sugeridos y puntajes no son métricas objetivas.",
+  "La paleta de Encastre cambió a 'A · Tierra' después de esta evaluación. Los puntajes de accesibilidad y diferenciación de esa columna no se rehicieron con la paleta nueva."
+ ]
+}

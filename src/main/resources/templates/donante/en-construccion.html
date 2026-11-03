@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/panel-h :: layout(~{::title}, ~{::contenido})}">
+<head><title th:text="${seccion.etiqueta} + ' · DonaTrack'">Sección · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <header class="pc-cab">
+    <div>
+      <p class="c-kicker" th:text="${sesion.rol.etiqueta}">Persona donante</p>
+      <h1 class="c-display" th:text="${seccion.etiqueta}">Entidades</h1>
+    </div>
+  </header>
+  <section class="dh-caja dh-obra" aria-labelledby="t-obra">
+    <svg class="dh-obra__ilus" viewBox="0 0 320 90" aria-hidden="true">
+      <path class="dh-obra__camino" d="M0 78 H320"/>
+      <path class="esc-deja__monticulo" d="M232 78 C246 56 260 48 276 48 C292 48 306 58 320 78Z"/>
+      <use class="dh-obra__hormiga" href="#h-hormiga-grano" x="0" y="38" width="48" height="40"/>
+    </svg>
+    <h2 id="t-obra">Estamos armando esta sección</h2>
+    <p>Todavía no está disponible en el prototipo. Se habilita cuando se implemente su recorrido en el backlog.</p>
+    <a class="c-btn c-btn--sm" th:href="@{/donante}">Volver al inicio<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+  </section>
+</th:block>
+</body>
+</html>

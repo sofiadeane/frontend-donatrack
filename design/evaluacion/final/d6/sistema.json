@@ -1,0 +1,114 @@
+{
+ "concepto": "Atlas de Rumbos (ex Arcanos de la Donación): el mismo diseño editorial de collage, grabado y láminas, ahora con temática de cartografía antigua y navegación. Cada donación traza una derrota sobre la carta; el depósito es el puerto de origen y la entidad el puerto de llegada.",
+ "principios": [
+  "Cada donación tiene su derrota: el recorrido de 5 puertos es la columna vertebral de toda la interfaz",
+  "Siete láminas numeradas en romanos, una por estado real; los dos desvíos (Entrega fallida = Rumbo perdido, Vencida = Naufragio) se dibujan como ramales discontinuos y siempre llevan el nombre real del estado",
+  "Pergamino y marrón tabaco alternan: el pergamino para leer y operar, el marrón oscuro para cifras, derrota y momentos de énfasis",
+  "Nada se da por hecho: las acciones asíncronas muestran «Actualizando…» y luego «Solicitud enviada» con un lacre plata, no un éxito",
+  "Collage editorial con bordes rasgados, grabado, latón y lacre; la decoración nunca reemplaza el texto ni el estado",
+  "La rosa de los vientos es el control de filtro principal (sectores = estados)"
+ ],
+ "tokens": {
+  "color": {
+   "--parch": "#eee1c0 pergamino base",
+   "--parch2": "#e2d0a4 pergamino oscuro",
+   "--card": "#f6edd3 lámina clara",
+   "--kraft": "#c8a46c papel kraft (etiquetas, stickers)",
+   "--ink": "#2a1c12 tinta",
+   "--tob": "#2a1b12 marrón tabaco (secciones oscuras)",
+   "--copper": "#9b4f27 cobre antiguo",
+   "--brass": "#b8893a / --brassL #e6c373 latón",
+   "--silver": "#8d9194 / #c9ccce plata deslucida",
+   "--sea": "#5d8790 / --seaD #2f6068 mar",
+   "--red": "#a32d1b capitular y urgencias",
+   "--wax": "#8c2a1d lacre",
+   "--chart": "#4a5350 carbón de la carta"
+  },
+  "tipografia": {
+   "capitales": "Cinzel (capitales romanas tipo Trajan, con espaciado) para etiquetas, botones, numeración romana y logo; fallback Trajan Pro, Optima, Georgia",
+   "titulos": "Cormorant Garamond 600 con énfasis en cursiva cobre",
+   "texto": "EB Garamond 18px / 1.55, fallback Georgia"
+  },
+  "espaciado": "Contenedor 1240 px (1320 útil en dashboard), gutters clamp(16px,4vw,48px), secciones con 44–92 px de aire vertical, rejilla de 4/8 px",
+  "radios": "Casi nulos (0–2 px): esquinas rectas de papel; solo círculos para lacres, stickers y puertos",
+  "bordes/sombras": "Filetes de 1.5 px en tinta, doble filete en constancias, sombra dura 2px 2px 0 en botones, bordes rasgados con filtro SVG feDisplacementMap, textura de ruido SVG, bordes de sección dentados (--tear)"
+ },
+ "componentes": [
+  {
+   "nombre": "Rosa de los vientos (rosa)",
+   "uso": "Símbolo de marca, fondo de cartas, base del filtro de estados"
+  },
+  {
+   "nombre": "Rosa de estados (dial)",
+   "uso": "Dashboard: 45 donaciones en 4 sectores; filtra la hilera de láminas; teclado Enter/Espacio"
+  },
+  {
+   "nombre": "Derrota",
+   "uso": "Landing: carta con 5 puertos y 2 desvíos, nave que se mueve al puerto elegido; versión vertical en celular"
+  },
+  {
+   "nombre": "Lámina",
+   "uso": "Tarjeta numerada en romanos por estado (landing) o por donación que pide atención (dashboard); la oscura marca urgencia/vencimiento"
+  },
+  {
+   "nombre": "Tag de estado",
+   "uso": "Texto + forma (círculo, rombo, cuadrado, flecha, tilde, X, hexágono) para los 7 estados"
+  },
+  {
+   "nombre": "Sello de lacre",
+   "uso": "Confirmaciones: rojo = recepción, cobre = aprobación, plata = solicitud enviada, oro/plata/cobre = podio del ranking"
+  },
+  {
+   "nombre": "Constancia de recepción",
+   "uso": "Certificado con doble filete, firmas y lacre; se sella cuando la entidad confirma"
+  },
+  {
+   "nombre": "Etiqueta kraft y sticker redondo",
+   "uso": "Galería de entregas y filtro por categoría"
+  },
+  {
+   "nombre": "Paleta de comandos (Ctrl K)",
+   "uso": "Navegación entre secciones/pantallas y acciones"
+  },
+  {
+   "nombre": "Ruta con nave",
+   "uso": "Camiones: paradas como puertos y nave en el avance"
+  },
+  {
+   "nombre": "Tabla/inventario",
+   "uso": "Filtros por estado, búsqueda, y en celular se convierte en fichas con rótulos"
+  },
+  {
+   "nombre": "Grabado y collage",
+   "uso": "Ilustraciones SVG propias: latón, mar con veleros, panel xilográfico, capitular roja"
+  }
+ ],
+ "patrones": [
+  "Numeración romana en secciones, pendientes y láminas",
+  "Navegación por índice de atlas (pestañas I–VII) más paleta de comandos",
+  "Filtro por rosa que reordena una mano de láminas",
+  "Alternancia pergamino/marrón con bordes rasgados",
+  "Acciones asíncronas: botón «Actualizando…» → lacre plata + «Solicitud enviada»",
+  "Esquemas ilustrativos siempre rotulados; mapa de impacto como «Próximamente»"
+ ],
+ "tono": "Editorial, sereno y náutico, en voseo rioplatense. Metáforas de carta, rumbo y puerto sin perder claridad operativa: el nombre real del estado siempre acompaña a la metáfora.",
+ "copyEjemplos": {
+  "headline": "Cada donación tiene su rumbo.",
+  "subheadline": "DonaTrack traza cada donación sobre la carta: desde que entra al depósito hasta que la entidad confirma que la recibió.",
+  "dashboardH1": "45 donaciones en la rosa, 2 piden rumbo ya.",
+  "cta": "Seguir una donación →",
+  "asincrono": "Actualizando… / Solicitud enviada. El estado cambia cuando el sistema lo confirme.",
+  "proximamente": "El atlas todavía está en blanco · PRÓXIMAMENTE"
+ },
+ "estados": {
+  "EN_DEPOSITO": "Lámina I · Puerto de origen · tag círculo ocre · sector ocre de la rosa",
+  "ASIGNACION_REALIZADA": "Lámina II · Rumbo fijado · tag rombo verde mar · sector celeste",
+  "LISTA_PARA_ENTREGAR": "Lámina III · Carga a bordo · tag cuadrado oliva · sector pergamino",
+  "EN_TRASLADO": "Lámina IV · En travesía · tag flecha cobre · sector cobre; nave en la derrota",
+  "ENTREGADA": "Lámina V · Llegada a puerto · tag tilde verde · lacre rojo en la constancia",
+  "ENTREGA_FALLIDA": "Lámina VI · Rumbo perdido · tag X con borde discontinuo rojo · ramal rojo discontinuo desde En traslado; vuelve al depósito",
+  "VENCIDA": "Lámina VII · Naufragio · tag hexágono con borde punteado gris pardo · ramal punteado desde En depósito; sale de circulación"
+ },
+ "accesibilidad": "Contraste tinta sobre pergamino superior a 10:1; rojo y cobre sobre pergamino superior a 4.5:1; foco visible de 3 px; tags con texto y forma; rosa, puertos y láminas operables por teclado; paleta con role=dialog; aria-live en filtros y mensajes; prefers-reduced-motion desactiva transiciones y animaciones; fuentes con fallback real; tablas se reordenan en fichas a 390 px.",
+ "paraExtender": "Falta llevarlo a: panel de donante (historial como derrota propia, misiones e insignias como sellos), panel de entidad (necesidades como provisiones con cobertura, «Confirmar recepción» con lacre), formularios de registro/ingreso (humana, jurídica, entidad) con el estilo de constancia, vista de galería pública completa, página de privacidad, estados vacíos y de error, notificaciones, y un sistema de ilustraciones reutilizable (más viñetas de grabado por categoría). También definir plantillas para Donantes/Entidades/Rankings con más datos reales."
+}

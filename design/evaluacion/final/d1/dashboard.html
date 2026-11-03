@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DonaTrack · El Libro del día</title>
+<meta name="description" content="Administración del depósito de DonaTrack, escrita como un diario: titulares del día, libro de registro, asignaciones y camiones.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@500;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F4ECD8;--paper2:#EADFC3;--paper3:#FBE6B5;--ink:#15130F;--tomato:#E8452C;--tomato-d:#B02A14;--mostaza:#F2B705;--celeste:#7FB2F0;--rosa:#F59BB8;--verde:#3FA566;--b:3px;--sh:6px 6px 0 var(--ink);--sh-s:4px 4px 0 var(--ink);--f-head:"Archivo Black","Arial Black",Impact,sans-serif;--f-body:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,sans-serif;--f-serif:"Instrument Serif",Georgia,"Times New Roman",serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:500 16px/1.45 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--f-head);font-weight:400;line-height:1;letter-spacing:-.02em}
+em,.it{font-family:var(--f-serif);font-style:italic;font-weight:400;letter-spacing:0}
+a{color:inherit}button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 7px var(--mostaza)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--paper);padding:10px 14px;z-index:50;font-weight:800}.skip:focus{left:8px;top:8px}
+.btn{font:800 14px/1 var(--f-body);border:var(--b) solid var(--ink);background:var(--mostaza);padding:.8em 1.05em;box-shadow:var(--sh-s);cursor:pointer;text-decoration:none;display:inline-block;color:var(--ink);transition:transform .1s,box-shadow .1s;white-space:nowrap}
+.btn:hover:not(:disabled){transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active:not(:disabled){transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+.btn.sm{font-size:12.5px;padding:.6em .8em;box-shadow:3px 3px 0 var(--ink)}
+.btn.w{background:#fff}.btn.ink{background:var(--ink);color:var(--paper);box-shadow:4px 4px 0 var(--tomato)}.btn.rd{background:var(--rosa)}
+.btn:disabled{cursor:progress;background:repeating-linear-gradient(135deg,var(--paper2) 0 6px,#fff 6px 12px);box-shadow:none;transform:translate(2px,2px)}
+.tag{display:inline-block;font:800 11px/1 var(--f-body);letter-spacing:.05em;text-transform:uppercase;padding:5px 7px;border:2px solid var(--ink);white-space:nowrap;background:#fff}
+.s-dep{background:var(--mostaza)}.s-asig{background:var(--celeste)}.s-lista{background:var(--rosa)}.s-trasl{background:var(--tomato)}.s-ent{background:var(--verde)}
+.s-fall{background:repeating-linear-gradient(135deg,var(--paper) 0 5px,#f0b9ae 5px 9px)}.s-venc{background:var(--ink);color:var(--paper)}
+.demo{display:inline-block;font:800 11px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:6px 9px}
+.chip{font:700 13px/1 var(--f-body);border:2px solid var(--ink);background:#fff;padding:9px 12px;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.chip b{font-family:var(--f-head);font-weight:400;margin-left:4px}
+.pend{display:inline-block;font:800 11px var(--f-body);text-transform:uppercase;letter-spacing:.06em;border:2px dashed var(--ink);padding:3px 6px;background:#fff}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+.paper{max-width:1280px;margin:0 auto;padding:14px 3vw 70px}
+.meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center}
+.brand{font:400 30px var(--f-head);text-decoration:none;letter-spacing:-.04em}.brand i{font-family:var(--f-serif);color:var(--tomato);letter-spacing:0}
+.meta .r{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.kbd{display:inline-flex;gap:10px;align-items:center;border:var(--b) solid var(--ink);background:#fff;box-shadow:var(--sh-s);padding:10px 14px;font-weight:800;cursor:pointer;min-width:270px;justify-content:space-between}
+.kbd kbd{font:800 11px var(--f-body);background:var(--ink);color:var(--paper);padding:4px 6px}
+.idxn{display:flex;border-block:var(--b) solid var(--ink);margin-top:12px;border-bottom:8px double var(--ink);overflow:hidden}
+.idxn button{flex:1;background:var(--paper);border:0;border-right:var(--b) solid var(--ink);padding:9px 6px;font:800 13px var(--f-body);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;position:relative}
+.idxn button small{font:700 10px var(--f-body);letter-spacing:.1em;opacity:.7}
+.idxn button:last-child{border-right:0}
+.idxn button[aria-selected=true]{background:var(--ink);color:var(--paper)}
+.idxn button:hover:not([aria-selected=true]){background:var(--mostaza)}
+.idxn .bd{position:absolute;top:4px;right:5px;background:var(--tomato);color:var(--ink);font:800 10px var(--f-body);padding:2px 5px;border:2px solid var(--ink)}
+.view[hidden]{display:none}
+.kick{display:flex;gap:10px;align-items:center;font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase}
+.kick::after{content:"";flex:1;height:3px;background:var(--ink)}
+h1.big{font-size:clamp(40px,7vw,104px);line-height:.88;margin:18px 0 10px;letter-spacing:-.045em}
+h1.big em{color:var(--tomato)}
+.sub{font-size:19px;font-weight:600;max-width:62ch}
+h2.s{font-size:clamp(28px,3.6vw,50px);margin:46px 0 8px;letter-spacing:-.035em}
+h2.s em{color:var(--tomato)}
+h2.s+.kk,.kk{font-weight:600;max-width:62ch;margin-bottom:12px}
+.circ{margin-top:24px;border:var(--b) solid var(--ink);box-shadow:var(--sh);background:#fff;padding:14px 16px}
+.circ .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline;margin-bottom:10px}
+.circ .top b{font:400 40px/1 var(--f-head)}
+.seg{display:flex;height:60px;border:var(--b) solid var(--ink)}
+.seg button{border:0;border-right:var(--b) solid var(--ink);cursor:pointer;font:400 24px var(--f-head);display:grid;place-items:center;min-width:34px}
+.seg button:last-child{border:0}.seg button:hover{filter:brightness(1.07);box-shadow:inset 0 -8px 0 var(--ink)}
+.segl{display:flex;margin-top:6px;font:800 11px var(--f-body);text-transform:uppercase;letter-spacing:.04em}.segl span{padding-right:6px;overflow:hidden}
+.alerts{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;font-weight:700;font-size:14px}
+.heads{margin-top:10px;border-top:var(--b) solid var(--ink)}
+.hl{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:18px;align-items:center;padding:16px 0;border-bottom:var(--b) solid var(--ink)}
+.hl .n{font:400 48px var(--f-head);line-height:1}
+.hl.u .n{color:var(--tomato-d)}
+.hl p{font-family:var(--f-serif);font-style:italic;font-size:clamp(22px,2.6vw,36px);line-height:1.08}
+.hl p small{display:block;font:800 11px var(--f-body);font-style:normal;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.hl .res{display:block;font:700 14px/1.3 var(--f-body);font-style:normal;margin-top:8px}
+.hl.seen{background:repeating-linear-gradient(135deg,transparent 0 10px,rgba(21,19,15,.05) 10px 20px)}
+.two{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(0,1fr);gap:32px;align-items:start}
+.eq{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:start}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.ledger{border:var(--b) solid var(--ink);background:#fff;box-shadow:var(--sh)}
+.lr{display:grid;grid-template-columns:86px minmax(0,1fr) minmax(0,1.3fr) 178px;gap:12px;align-items:center;padding:12px 14px;border:0;border-bottom:2px solid var(--ink);font-size:14px;width:100%;text-align:left;background:none;cursor:pointer}
+.lr.h{background:var(--ink);color:var(--paper);font:800 11px var(--f-body);text-transform:uppercase;letter-spacing:.06em;cursor:default}
+.lr b{font:400 15px var(--f-head)}
+.ledger>.rw:last-child .lr,.ledger>.rw:last-child .det{border-bottom:0}
+.lr:hover{background:var(--paper3)}.lr[aria-expanded=true]{background:var(--paper3)}
+.lr .car{font-weight:800;margin-left:4px;display:inline-block;transition:transform .15s}
+.lr[aria-expanded=true] .car{transform:rotate(90deg)}
+.det{display:none;padding:14px 16px;border-bottom:2px solid var(--ink);background:var(--paper3);gap:18px;grid-template-columns:minmax(0,1fr) auto;align-items:end;box-shadow:inset 8px 0 0 var(--tomato)}
+.det.on{display:grid}
+.det h4{font:800 11px var(--f-body);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.det ol{list-style:none;display:grid;gap:4px;font-size:13.5px;font-weight:700}.det ol li::before{content:"› "}
+.act{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.col{display:grid;gap:24px}
+.box{border:var(--b) solid var(--ink);background:#fff;box-shadow:var(--sh);padding:16px}
+.box h3{font-size:21px;margin-bottom:10px}
+.box.y{background:var(--mostaza)}.box.p{background:var(--paper2)}.box.c{background:var(--celeste)}.box.r{background:var(--rosa)}
+.rt{font-weight:600;font-size:14.5px;display:grid;gap:10px}
+.rt p{padding-bottom:10px;border-bottom:2px dashed var(--ink)}.rt p:last-child{border:0;padding:0}
+.bar{height:16px;border:2px solid var(--ink);background:#fff;margin-top:5px}.bar div{height:100%;background:var(--verde);border-right:2px solid var(--ink)}.bar.u div{background:var(--tomato)}
+.need{font-weight:700;font-size:14px;margin-bottom:14px}.need:last-child{margin:0}
+.ac{list-style:none;display:grid;gap:10px;font-size:14.5px;font-weight:600}.ac li{display:grid;grid-template-columns:58px 1fr;gap:10px}.ac time{font:800 11px var(--f-body);background:var(--ink);color:var(--paper);height:fit-content;padding:5px 4px;text-align:center}
+.kp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:var(--b) solid var(--ink);background:#fff;box-shadow:var(--sh)}
+.kp div{padding:18px;border-right:var(--b) solid var(--ink)}.kp div:last-child{border:0}
+.kp div:nth-child(1){background:var(--mostaza)}.kp div:nth-child(2){background:var(--verde)}
+.kp b{font:400 clamp(40px,5vw,72px)/1 var(--f-head);display:block;letter-spacing:-.04em}.kp span{font-weight:700;font-size:14px;display:block;margin-top:6px}
+.dots{display:flex;gap:8px;align-items:flex-end;height:200px;margin:10px 0 6px;border-bottom:var(--b) solid var(--ink)}
+.dots div{flex:1;display:flex;flex-direction:column-reverse;gap:3px;align-items:center;height:100%}
+.dots i{width:100%;max-width:30px;height:10px;border:2px solid var(--ink);flex:none}
+.wl{display:flex;gap:8px;font:800 11px var(--f-body)}.wl span{flex:1;text-align:center}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.rk{list-style:none;counter-reset:r;display:grid;gap:8px}.rk li{counter-increment:r;font-weight:800;display:flex;gap:10px;align-items:center}.rk li::before{content:counter(r);font:400 28px/1 var(--f-serif);font-style:italic;width:22px}
+.cat{display:grid;gap:8px;font-weight:700;font-size:14px}.cat div{display:grid;grid-template-columns:110px 1fr 44px;gap:8px;align-items:center}.cat .bar{margin:0;height:14px}.cat b{text-align:right}
+.sts{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+/* tablas */
+.tbl{border:var(--b) solid var(--ink);background:#fff;box-shadow:var(--sh);margin-top:12px}
+.tr{display:grid;gap:12px;align-items:center;padding:12px 14px;border-bottom:2px solid var(--ink);font-size:14px}
+.tr:last-child{border:0}.tr.h{background:var(--ink);color:var(--paper);font:800 11px var(--f-body);text-transform:uppercase;letter-spacing:.06em}
+.tr b{font:400 15px var(--f-head)}.tr.new{background:var(--paper3)}
+.inv .tr{grid-template-columns:84px minmax(0,1fr) minmax(0,1fr) 110px 150px 150px}
+.prop .tr{grid-template-columns:84px minmax(0,1fr) minmax(0,1.3fr) 150px 200px}
+.nrm .tr{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 120px 150px}
+.ent .tr{grid-template-columns:minmax(0,1.2fr) minmax(0,1.4fr) 220px}
+.trk{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:14px;align-items:start}
+.truck{border:var(--b) solid var(--ink);background:#fff;box-shadow:var(--sh)}
+.truck header{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:var(--b) solid var(--ink)}
+.truck h3{font-size:30px}.truck .bdy{padding:14px;display:grid;gap:14px}
+.eta{font:400 38px/1 var(--f-head);letter-spacing:-.03em}.eta small{display:block;font:800 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.route{list-style:none;display:grid;gap:0;margin-left:6px}
+.route li{display:grid;grid-template-columns:22px 1fr;gap:12px;font-weight:700;font-size:15px;padding-bottom:14px;position:relative}
+.route li::before{content:"";width:20px;height:20px;border:3px solid var(--ink);background:#fff;z-index:1}
+.route li.d::before{background:var(--ink)}.route li.c::before{background:var(--mostaza)}
+.route li:not(:last-child)::after{content:"";position:absolute;left:8px;top:20px;bottom:0;width:4px;background:var(--ink)}
+.route li.d:not(:last-child)::after{background:var(--ink)}.route li:not(.d):not(:last-child)::after{background:repeating-linear-gradient(var(--ink) 0 5px,transparent 5px 9px)}
+.route li span small{display:block;font-weight:600;font-size:12px}
+.cargo{font-size:13.5px;font-weight:600}.cargo b{font-family:var(--f-head);font-weight:400}
+.pod{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;align-items:end;margin-top:16px}
+.pod div{border:var(--b) solid var(--ink);padding:14px;text-align:center;font-weight:800}
+.pod div b{display:block;font:400 56px/1 var(--f-serif);font-style:italic}
+.pod .a{background:var(--mostaza);height:210px}.pod .b2{background:var(--celeste);height:170px}.pod .c3{background:var(--rosa);height:140px}
+form.reg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:12px;border:var(--b) solid var(--ink);background:#fff;box-shadow:var(--sh);padding:18px}
+form.reg label{font:800 12px var(--f-body);text-transform:uppercase;letter-spacing:.06em;display:grid;gap:6px}
+form.reg input,form.reg select{font:600 15px var(--f-body);border:var(--b) solid var(--ink);padding:10px;background:var(--paper);color:var(--ink);min-width:0;width:100%}
+form.reg .fw{grid-column:1/-1;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.pal{position:fixed;inset:0;background:rgba(21,19,15,.6);display:none;align-items:flex-start;justify-content:center;padding:10vh 14px 0;z-index:20}
+.pal.on{display:flex}
+.pal .in{width:min(660px,100%);background:var(--paper);border:var(--b) solid var(--ink);box-shadow:10px 10px 0 var(--ink)}
+.pal input{width:100%;font:800 20px var(--f-body);padding:16px;border:0;border-bottom:var(--b) solid var(--ink);background:#fff;color:var(--ink)}
+.pal ul{list-style:none;max-height:50vh;overflow:auto}
+.pal li button{width:100%;text-align:left;background:none;border:0;border-bottom:2px solid var(--ink);padding:12px 16px;font-weight:700;display:flex;justify-content:space-between;gap:10px;cursor:pointer}
+.pal li button:hover,.pal li button.sel{background:var(--mostaza)}
+.pal small{display:block;padding:9px 16px;font-weight:700;background:var(--ink);color:var(--paper)}
+.toast{position:fixed;right:16px;bottom:16px;max-width:min(440px,calc(100vw - 32px));background:var(--ink);color:var(--paper);padding:12px 16px;font-weight:800;border:var(--b) solid var(--paper);display:none;z-index:30}.toast.on{display:block}
+.sr{position:absolute;left:-9999px}
+@media(max-width:1000px){.two,.eq,.trk{grid-template-columns:1fr}.inv .tr,.prop .tr,.nrm .tr,.ent .tr{grid-template-columns:1fr 1fr}.tr.h{display:none}.tr>*:nth-child(2){grid-column:1/-1}.idxn{display:grid;grid-template-columns:repeat(4,1fr)}.idxn button{border-bottom:var(--b) solid var(--ink)}form.reg{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.hl{grid-template-columns:44px minmax(0,1fr);gap:10px}.hl .n{font-size:34px}.hl .act{grid-column:2;justify-content:flex-start}.kp{grid-template-columns:1fr}.kp div{border-right:0;border-bottom:var(--b) solid var(--ink)}.kp div:last-child{border:0}.kbd{min-width:0;width:100%}.paper{padding:12px 14px 60px}
+.lr{grid-template-columns:1fr auto}.lr.h{display:none}.lr>span:nth-child(3){grid-column:1/-1}.det{grid-template-columns:1fr}.act{justify-content:flex-start}
+.idxn{grid-template-columns:repeat(2,1fr)}form.reg{grid-template-columns:1fr}.cat div{grid-template-columns:90px 1fr 40px}.segl{display:none}.pod div b{font-size:38px}.pod .a{height:170px}.pod .b2{height:140px}.pod .c3{height:115px}.pod div{padding:8px 4px;font-size:13px}}
+</style></head><body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<div class="paper">
+<div class="meta"><a class="brand" href="#" data-v="inicio">Dona<i>Track</i> <span style="font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;margin-left:6px">El libro del día</span></a>
+ <div class="r"><span class="demo">Datos de demostración</span><button class="kbd" id="open" type="button" aria-haspopup="dialog"><span>Ir a, filtrar o actuar…</span><kbd>Ctrl K</kbd></button></div></div>
+<nav class="idxn" id="idxn" role="tablist" aria-label="Pantallas de administración"></nav>
+<main id="main">
+
+<!-- INICIO -->
+<section class="view" id="v-inicio" role="tabpanel" aria-labelledby="tab-inicio">
+ <h1 class="big">Sábado 31: <em>cinco asuntos</em> y un libro por abrir.</h1>
+ <p class="sub">Depósito central. <span id="circtxt"></span></p>
+ <div class="circ"><div class="top"><span><b id="circn">45</b> <strong>donaciones en circulación</strong></span><span style="font-weight:700;font-size:14px">Tocá un tramo para filtrar el libro</span></div>
+  <div class="seg" id="seg"></div><div class="segl" id="segl"></div>
+  <div class="alerts"><span class="pend">4 llevan más de 5 días en depósito</span><span class="pend">2 asignadas sin camión</span><span class="pend">3 camiones en ruta o cargando</span></div></div>
+
+ <h2 class="s">Titulares <em>del día</em></h2>
+ <p class="kk">Ordenados por urgencia. Cada titular tiene su acción; lo que depende de otro actor queda como pendiente hasta que responda.</p>
+ <div class="heads" id="heads"></div>
+
+ <h2 class="s">Libro de <em>registro</em></h2>
+ <div class="two"><div style="min-width:0">
+  <p class="kk" style="margin:0">Las donaciones que piden atención. Tocá una fila para abrir su historial.</p>
+  <div class="filters" id="filters" role="group" aria-label="Filtrar por estado"></div>
+  <div class="ledger" id="ledger"></div></div>
+ <div class="col">
+  <div class="box y"><h3>Parte de ruta</h3><div class="rt" id="rt"></div><p style="margin-top:12px"><button class="btn sm w" data-v="camiones">Ver camiones y paradas</button></p></div>
+  <div class="box"><h3>Necesidades abiertas</h3><div id="needs"></div></div></div></div>
+
+ <h2 class="s">Crónica <em>de las últimas horas</em></h2>
+ <div class="two"><div class="box p"><ul class="ac">
+  <li><time>12 min</time>Los Girasoles confirmó la recepción de DT-0409 (frazadas ×30).</li>
+  <li><time>40 min</time>El camión 2 salió con 6 donaciones hacia Los Girasoles.</li>
+  <li><time>1 h</time>El sistema asignó DT-0415 (útiles) a la necesidad de Escuela 12.</li>
+  <li><time>2 h</time>Recibida DT-0416 (conservas 24 kg, Nicolás Pérez).</li>
+  <li><time>3 h</time>DT-0411 quedó lista y se sumó al camión 3.</li>
+  <li><time>ayer</time>Nadie recibió DT-0390 en Merendero Norte: vuelve al depósito (Entrega fallida).</li></ul></div>
+  <div class="box"><h3>Ranking del mes</h3><ol class="rk"><li>Cooperativa La Huerta</li><li>Nicolás Pérez</li><li>Panadería El Molino</li></ol><p style="margin-top:14px"><button class="btn sm w" data-v="rankings">Ver rankings</button> <button class="btn sm w" data-v="donantes">Importar CSV de donantes</button></p></div></div>
+
+ <h2 class="s">Balance <em>del mes</em></h2>
+ <div class="kp"><div><b>31</b><span>recibidas este mes (+8 %)</span></div><div><b>23</b><span>entregadas este mes (+15 %)</span></div><div><b>2.450 kg</b><span>distribuidos a 34 entidades</span></div></div>
+ <div class="eq" style="margin-top:26px">
+  <div class="box"><h3>Ocho semanas, S34–S41</h3><div class="dots" id="dots" role="img"></div><div class="wl" id="wl"></div><div class="legend"><span class="tag s-dep">cuadro amarillo: recibida</span><span class="tag s-ent">cuadro verde: entregada</span></div></div>
+  <div class="box"><h3>Impacto por categoría</h3><div class="cat" id="cat"></div><p style="font-weight:600;font-size:13px;margin-top:14px">Acumulado: 2.450 kg distribuidos a 34 entidades.</p></div></div>
+</section>
+
+<!-- DONANTES -->
+<section class="view" id="v-donantes" role="tabpanel" aria-labelledby="tab-donantes" hidden>
+ <h1 class="big">Donantes: <em>86 firman</em> el libro.</h1><p class="sub">Vista resumida. Personas humanas y jurídicas que llevan donaciones al depósito.</p>
+ <div class="eq" style="margin-top:26px">
+  <div class="box y"><h3>Categorías de donante</h3><div class="seg" style="height:46px" role="img" aria-label="52 Colaboradores, 26 Sostenedores, 8 Transformadores"><span style="flex:52;background:var(--mostaza);display:grid;place-items:center;border-right:3px solid var(--ink);font:400 20px var(--f-head)">52</span><span style="flex:26;background:var(--celeste);display:grid;place-items:center;border-right:3px solid var(--ink);font:400 20px var(--f-head)">26</span><span style="flex:8;background:var(--rosa);display:grid;place-items:center;font:400 16px var(--f-head)">8</span></div>
+  <div class="cat" style="margin-top:12px"><div style="grid-template-columns:1fr auto"><span>Colaboradores</span><b>52</b></div><div style="grid-template-columns:1fr auto"><span>Sostenedores</span><b>26</b></div><div style="grid-template-columns:1fr auto"><span>Transformadores</span><b>8</b></div></div></div>
+  <div class="box"><h3>Importar CSV de donantes</h3><p class="kk">Elegí un archivo .csv. Se lee en tu navegador para contar filas; la carga real queda pendiente de revisión.</p>
+   <input type="file" id="csv" accept=".csv,text/csv" aria-label="Archivo CSV de donantes" style="font:600 14px var(--f-body);max-width:100%"><p id="csvres" role="status" style="margin-top:12px;font-weight:700"></p></div></div>
+</section>
+
+<!-- ENTIDADES -->
+<section class="view" id="v-entidades" role="tabpanel" aria-labelledby="tab-entidades" hidden>
+ <h1 class="big">Entidades: <em>34 ayudadas,</em> 3 esperando.</h1><p class="sub">Vista resumida. Las entidades nuevas se aprueban antes de poder recibir asignaciones.</p>
+ <h2 class="s">Esperan <em>aprobación</em></h2>
+ <div class="tbl ent" id="ents"></div>
+ <h2 class="s">Necesidades <em>abiertas</em></h2><div class="box" style="max-width:640px" id="needs2"></div>
+</section>
+
+<!-- DONACIONES -->
+<section class="view" id="v-donaciones" role="tabpanel" aria-labelledby="tab-donaciones" hidden>
+ <h1 class="big">Donaciones: <em>lo que entra</em> y cómo se anota.</h1><p class="sub">Registrar, revisar la normalización de los datos y manejar el inventario en depósito.</p>
+ <div class="filters" id="subs" role="group" aria-label="Sección de donaciones" style="margin-top:22px"><button class="chip" data-sub="inventario" aria-pressed="true">Inventario en depósito</button><button class="chip" data-sub="registrar" aria-pressed="false">Registrar donación</button><button class="chip" data-sub="normalizacion" aria-pressed="false">Revisión de normalización <b id="nn">3</b></button></div>
+ <div id="s-inventario"><p class="kk">Lo que hoy está en el depósito. Muestra 6 de 18 en depósito. “Marcar vencida” responde con Actualizando… antes de cambiar el estado.</p><div class="tbl inv" id="inv"></div></div>
+ <div id="s-registrar" hidden><p class="kk">Anotá la donación tal como llegó: qué es, cantidad, vencimiento y categoría.</p>
+  <form class="reg" id="reg"><label>Donante<select id="f-don"><option>Cooperativa La Huerta</option><option>Nicolás Pérez</option><option>Panadería El Molino</option><option>Librería Central</option><option>Lácteos del Sur</option></select></label>
+   <label>Qué es<input id="f-que" required placeholder="Ej.: leche en polvo"></label>
+   <label>Cantidad<input id="f-cant" type="number" min="1" required placeholder="Ej.: 20"></label>
+   <label>Unidad<select id="f-uni"><option>u</option><option>kg</option><option>l</option></select></label>
+   <label>Categoría<select id="f-cat"><option>Alimentos</option><option>Bebidas</option><option>Vestimenta</option><option>Mobiliario</option><option>Útiles escolares</option><option>Higiene</option></select></label>
+   <label>Vencimiento<input id="f-ven" type="date"></label>
+   <div class="fw"><button class="btn" type="submit" id="f-ok">Registrar donación</button><span id="f-res" role="status" style="font-weight:700"></span></div></form></div>
+ <div id="s-normalizacion" hidden><p class="kk">El sistema propone cómo escribir cada dato. Aprobá la sugerencia o dejala para revisar a mano.</p><div class="tbl nrm" id="nrm"></div></div>
+</section>
+
+<!-- ASIGNACIONES -->
+<section class="view" id="v-asignaciones" role="tabpanel" aria-labelledby="tab-asignaciones" hidden>
+ <h1 class="big">Asignaciones: <em>el sistema propone,</em> vos firmás.</h1><p class="sub">Revisá cada propuesta: aprobar la deja Asignada, descartar la devuelve al depósito sin asignar.</p>
+ <div style="margin-top:20px" class="act" ><button class="btn" id="runAsig" data-act="asignar" style="margin-right:auto">Ejecutar asignación</button></div>
+ <h2 class="s">Propuestas <em>para revisar</em> <span class="tag" id="pcount" style="vertical-align:middle;font-family:var(--f-body)"></span></h2>
+ <div class="tbl prop" id="props"></div>
+ <h2 class="s">Asignadas <em>sin camión</em></h2><p class="kk">Ya tienen entidad, pero todavía no están cargadas en ningún camión.</p>
+ <div class="tbl prop" id="nocam"></div>
+</section>
+
+<!-- CAMIONES -->
+<section class="view" id="v-camiones" role="tabpanel" aria-labelledby="tab-camiones" hidden>
+ <h1 class="big">Camiones: <em>tres rutas,</em> una hoja de ruta.</h1><p class="sub">Flota, estado y paradas. Sin seguimiento en vivo: el avance se registra por parada.</p>
+ <div class="trk" id="trk"></div>
+</section>
+
+<!-- RANKINGS -->
+<section class="view" id="v-rankings" role="tabpanel" aria-labelledby="tab-rankings" hidden>
+ <h1 class="big">Rankings: <em>quiénes</em> firmaron más.</h1><p class="sub">Vista resumida. Ranking de donantes del mes, de ejemplo.</p>
+ <div class="pod" style="max-width:720px"><div class="b2"><b>2</b>Nicolás Pérez</div><div class="a"><b>1</b>Cooperativa La Huerta</div><div class="c3"><b>3</b>Panadería El Molino</div></div>
+ <p style="margin-top:18px"><span class="demo">Ranking de ejemplo</span></p>
+</section>
+</main>
+</div>
+<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Paleta de comandos"><div class="in"><input id="q" type="text" placeholder="Escribí: asignar, vencida, camión, entidades…" aria-label="Buscar comando" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="res"><ul id="res" role="listbox"></ul><small>Enter para ejecutar · Esc para cerrar</small></div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const N={dep:"En depósito",asig:"Asignada",lista:"Lista para entregar",trasl:"En traslado",ent:"Entregada",fall:"Entrega fallida",venc:"Vencida"};
+const CL={dep:'var(--mostaza)',asig:'var(--celeste)',lista:'var(--rosa)',trasl:'var(--tomato)'};
+const tag=k=>`<span class="tag s-${k}">${N[k]}</span>`;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+/* ---- estado ---- */
+const C={dep:18,asig:11,lista:7,trasl:9};
+let D=[
+{id:'DT-0398',w:'Frazadas · 30 u',from:'Cooperativa La Huerta',to:null,st:'dep',age:'En depósito 8 días',v:'—',h:['Recibida hace 8 días','Sin necesidad asignada']},
+{id:'DT-0401',w:'Yogur · 40 kg',from:'Lácteos del Sur',to:null,st:'dep',age:'En depósito 3 días · vence en 48 h',v:'48 h',h:['Recibida hace 3 días','Vence en 48 h','Sin necesidad asignada']},
+{id:'DT-0403',w:'Pan lactal · 60 u',from:'Panadería El Molino',to:'Comedor Los Girasoles',st:'asig',age:'Asignada 2 días · vence en 48 h',v:'48 h',h:['Registrada','Asignada a Comedor Los Girasoles','Vence en 48 h','Aún sin camión']},
+{id:'DT-0407',w:'Conservas · 24 kg',from:'Nicolás Pérez',to:'Escuela 12',st:'asig',age:'Asignada 5 días',v:'—',h:['Registrada','Asignada a Escuela 12','Aún sin camión']},
+{id:'DT-0411',w:'Camperas · 18 u',from:'Nicolás Pérez',to:'Hogar Esperanza',st:'lista',age:'Lista para entregar 1 día',v:'—',cam:'Camión 3',h:['Registrada','Asignada a Hogar Esperanza','Lista y sumada al camión 3']},
+{id:'DT-0412',w:'Arroz · 50 kg',from:'Cooperativa La Huerta',to:'Comedor Los Girasoles',st:'trasl',age:'En traslado hoy',v:'—',cam:'Camión 2',h:['Registrada','Asignada','Lista','Salió en el camión 2. Actualizando…']},
+{id:'DT-0414',w:'Útiles · 120 u',from:'Librería Central',to:'Escuela 12',st:'trasl',age:'En traslado hoy',v:'—',cam:'Camión 1',h:['Registrada','Asignada','Lista','En traslado en el camión 1']},
+{id:'DT-0396',w:'Fideos · 35 kg',from:'Cooperativa La Huerta',to:null,st:'dep',age:'En depósito 6 días',v:'—',h:['Recibida hace 6 días','Sin necesidad asignada']},
+{id:'DT-0416',w:'Conservas · 24 kg',from:'Nicolás Pérez',to:null,st:'dep',age:'En depósito 2 h',v:'—',x:1,h:['Recibida hace 2 h','Sin necesidad asignada']},
+{id:'DT-0418',w:'Jugos · 48 u',from:'Panadería El Molino',to:null,st:'dep',age:'En depósito 4 días · vence en 12 días',v:'12 días',x:1,h:['Recibida hace 4 días','Sin necesidad asignada']},
+{id:'DT-0419',w:'Kits de higiene · 40 u',from:'Librería Central',to:null,st:'dep',age:'En depósito 1 día',v:'—',x:1,h:['Recibida ayer','Sin necesidad asignada']}];
+let P=[{id:'DT-0398',to:'Comedor Los Girasoles',need:'Frazadas 18/30 (urgente)',qty:'12 de 30 u',why:'Cubre lo que falta de una necesidad urgente. El resto queda en depósito.',s:'p'},{id:'DT-0396',to:'Merendero Norte',need:'Necesidad abierta de alimentos',qty:'35 kg',why:'Lleva 6 días en depósito.',s:'p'}];
+let ranAsig=false;
+const get=id=>D.find(d=>d.id===id);
+function move(d,s){if(C[d.st]!==undefined)C[d.st]--;d.st=s;if(C[s]!==undefined)C[s]++}
+/* ---- ayudas ---- */
+const T=$('#toast');let tt;function toast(m){T.textContent=m;T.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>T.classList.remove('on'),3200)}
+function work(btn,done,ms){if(btn.disabled)return;const old=btn.textContent;btn.disabled=true;btn.setAttribute('aria-busy','true');btn.textContent='Actualizando…';toast('Actualizando…');setTimeout(()=>{btn.removeAttribute('aria-busy');btn.disabled=false;btn.textContent=old;done()},ms||1400)}
+/* ---- navegación ---- */
+const V=[['inicio','Inicio'],['donantes','Donantes'],['entidades','Entidades'],['donaciones','Donaciones'],['asignaciones','Asignaciones'],['camiones','Camiones'],['rankings','Rankings']];
+function idx(){$('#idxn').innerHTML=V.map((v,i)=>`<button role="tab" id="tab-${v[0]}" data-v="${v[0]}" aria-selected="false" aria-controls="v-${v[0]}"><small>Pág. ${i+1}</small>${v[1]}${v[0]==='asignaciones'&&P.some(p=>p.s==='p')?`<span class="bd" aria-label="${P.filter(p=>p.s==='p').length} propuestas">${P.filter(p=>p.s==='p').length}</span>`:''}</button>`).join('')}
+let cur='inicio';
+function go(v,sub){if(!V.some(x=>x[0]===v))v='inicio';cur=v;idx();$$('#idxn button').forEach(b=>{const on=b.dataset.v===v;b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1});$$('.view').forEach(s=>s.hidden=s.id!=='v-'+v);if(v==='donaciones')subv(sub||'inventario');try{history.replaceState(null,'','#'+v)}catch(e){}window.scrollTo({top:0})}
+function subv(s){['inventario','registrar','normalizacion'].forEach(k=>{$('#s-'+k).hidden=k!==s});$$('#subs .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.sub===s))}
+$('#subs').addEventListener('click',e=>{const c=e.target.closest('.chip');if(c)subv(c.dataset.sub)});
+$('#idxn').addEventListener('keydown',e=>{const t=$$('#idxn button'),i=t.findIndex(b=>b===document.activeElement);if(i<0)return;let n=null;if(e.key==='ArrowRight')n=(i+1)%t.length;if(e.key==='ArrowLeft')n=(i+t.length-1)%t.length;if(n!==null){e.preventDefault();go(t[n].dataset.v);$$('#idxn button')[n].focus()}});
+/* ---- inicio ---- */
+function circ(){const k=['dep','asig','lista','trasl'],tot=k.reduce((a,x)=>a+C[x],0);$('#circn').textContent=tot;$('#circtxt').textContent=`${tot} donaciones en circulación: ${C.dep} en depósito, ${C.asig} asignadas, ${C.lista} listas para entregar y ${C.trasl} en traslado.`;
+ $('#seg').innerHTML=k.map(x=>`<button style="flex:${Math.max(C[x],1)};background:${CL[x]}" data-f="${x}" aria-label="${N[x]}: ${C[x]}. Filtrar el libro">${C[x]}</button>`).join('');$('#segl').innerHTML=k.map(x=>`<span style="flex:${Math.max(C[x],1)}">${N[x]}</span>`).join('')}
+$('#seg').addEventListener('click',e=>{const b=e.target.closest('button');if(b){f=b.dataset.f;ledger();$('#ledger').scrollIntoView({block:'center'})}});
+const H=[{u:1,l:'Urgente',t:'4 donaciones llevan más de 5 días sin asignar.',b:'Ejecutar asignación',a:'asignar'},{u:1,l:'Urgente',t:'2 vencen en 48 h: lácteos y panificados, DT-0401 y DT-0403.',b:'Ver cuáles',a:'v48'},{l:'Hoy',t:'Camión 3 sin chofer confirmado para mañana: Ruta Sur, 4 paradas, sale 08:00.',b:'Confirmar chofer',a:'chofer',w:1},{l:'Hoy',t:'Entrega pendiente de confirmar en Hogar Esperanza: llegó ayer 17:40.',b:'Pedir confirmación',a:'conf',w:1},{l:'Esta semana',t:'3 entidades nuevas esperan aprobación.',b:'Revisar entidades',a:'ents'}];
+function heads(){$('#heads').innerHTML=H.map((h,i)=>`<div class="hl ${h.u?'u':''} ${h.r?'seen':''}"><span class="n">${i+1}</span><p><small>${h.l}</small>${h.t}${h.r?`<span class="res">${h.r}</span>`:''}</p><div class="act"><button class="btn sm ${h.w?'w':''}" data-act="${h.a}" data-h="${i}">${h.b}</button></div></div>`).join('')}
+let f=null;
+function acts(d){const a=[];if(d.st==='dep'&&!d.to)a.push(['asignar','Ejecutar asignación']);if(d.st==='dep'&&d.v==='48 h')a.push(['venc','Marcar vencida']);if(d.st==='asig'&&!d.cam)a.push(['sumar','Sumar a camión']);if(d.st==='lista'||d.st==='trasl')a.push(['ruta',d.st==='lista'?'Ver camión':'Ver ruta']);return a}
+function chips(){const base=D.filter(d=>!d.x),c=[['todos','Todos',base.length]];Object.keys(N).forEach(k=>{const n=base.filter(d=>d.st===k).length;if(n||f===k)c.push([k,N[k],n])});c.push(['v48','Vence en 48 h',base.filter(d=>d.v==='48 h'&&d.st!=='venc').length]);
+ $('#filters').innerHTML=c.map(x=>`<button class="chip" aria-pressed="${(x[0]==='todos'&&!f)||x[0]===f}" data-s="${x[0]}">${x[1]}<b>${x[2]}</b></button>`).join('')}
+function ledger(){chips();const rows=D.filter(d=>!d.x&&(!f||d.st===f||(f==='v48'&&d.v==='48 h'&&d.st!=='venc')));
+ $('#ledger').innerHTML=`<div class="lr h" aria-hidden="true"><span>Código</span><span>Qué</span><span>De → para</span><span>Estado</span></div>`+(rows.map(d=>`<div class="rw"><button class="lr" aria-expanded="false" aria-controls="d-${d.id}" data-id="${d.id}"><b>${d.id}</b><span>${d.w}</span><span>${d.from} → ${d.to||'<i>sin asignar</i>'}</span><span>${tag(d.st)}<span class="car" aria-hidden="true">›</span></span></button><div class="det" id="d-${d.id}"><div><h4>${d.age}</h4><ol>${d.h.map(x=>`<li>${x}</li>`).join('')}</ol></div><div class="act">${acts(d).map(a=>`<button class="btn sm" data-act="${a[0]}" data-id="${d.id}">${a[1]}</button>`).join('')||'<span class="pend">Sin acciones</span>'}</div></div></div>`).join('')||'<div class="lr"><span>Nada con ese estado entre las que piden atención.</span></div>')}
+$('#filters').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b){f=b.dataset.s==='todos'?null:b.dataset.s;ledger()}});
+$('#ledger').addEventListener('click',e=>{const r=e.target.closest('button.lr');if(!r)return;const d=document.getElementById('d-'+r.dataset.id),on=!d.classList.contains('on');d.classList.toggle('on',on);r.setAttribute('aria-expanded',on)});
+function rt(){$('#rt').innerHTML=`<p><b>Camión 1</b> en ruta. Depósito → Escuela 12 → Hogar Esperanza. 1/3 paradas, ETA 14:20, carga 78 %.</p><p><b>Camión 2</b> en ruta. Depósito → Los Girasoles → Merendero Norte. 2/3 paradas, ETA 15:05, carga 54 %.</p><p><b>Camión 3</b> cargando. Ruta Sur, 4 paradas, sale mañana 08:00, carga 31 %. ${chofer?'Chofer: confirmación pedida.':'Sin chofer confirmado.'}</p>`}
+const NE=[['Frazadas',18,30,'Comedor Los Girasoles',1],['Útiles escolares',90,120,'Escuela 12'],['Leche en polvo',6,40,'Merendero Norte',1],['Camperas',18,18,'Hogar Esperanza']];
+function needs(){const h=NE.map(n=>`<div class="need">${n[0]} ${n[1]}/${n[2]} · ${n[3]}${n[4]?' · urgente':''}${n[1]===n[2]?' · cubierta':''}<div class="bar ${n[4]?'u':''}"><div style="width:${Math.round(n[1]/n[2]*100)}%"></div></div></div>`).join('');$('#needs').innerHTML=h;$('#needs2').innerHTML=h}
+const R=[9,12,7,14,11,16,10,8],E=[6,8,9,10,12,11,13,5];
+$('#dots').innerHTML=R.map((r,i)=>`<div>${'<i style="background:var(--verde)"></i>'.repeat(E[i])}${'<i style="background:var(--mostaza)"></i>'.repeat(Math.max(0,r-E[i]))}${E[i]>r?'':''}</div>`).join('');
+$('#dots').setAttribute('aria-label','Recibidas por semana S34 a S41: '+R.join(', ')+'. Entregadas: '+E.join(', '));
+$('#wl').innerHTML=R.map((r,i)=>`<span>S${34+i}</span>`).join('');
+$('#cat').innerHTML=[['Alimentos',62],['Vestimenta',18],['Útiles escolares',12],['Higiene',8]].map(c=>`<div><span>${c[0]}</span><div class="bar"><div style="width:${c[1]}%"></div></div><b>${c[1]} %</b></div>`).join('');
+/* ---- inventario ---- */
+function inv(){const rows=D.filter(d=>(d.st==='dep'||d.st==='venc')&&!d.cam).slice(0,6);
+ $('#inv').innerHTML=`<div class="tr h"><span>Código</span><span>Qué</span><span>Donante</span><span>Vence</span><span>Estado</span><span>Acción</span></div>`+rows.map(d=>`<div class="tr"><b>${d.id}</b><span>${d.w}</span><span>${d.from}</span><span>${d.v==='48 h'?'<b style="font-size:13px">en 48 h</b>':d.v}</span><span>${tag(d.st)}</span><span>${d.st==='venc'?'<span class="pend">Cerrada</span>':d.v==='48 h'||d.v==='12 días'?`<button class="btn sm rd" data-act="venc" data-id="${d.id}">Marcar vencida</button>`:'<span class="pend">En espera</span>'}</span></div>`).join('')}
+/* ---- asignaciones ---- */
+function props(){const pend=P.filter(p=>p.s==='p').length;$('#pcount').textContent=pend+(pend===1?' pendiente':' pendientes');
+ $('#props').innerHTML=`<div class="tr h"><span>Código</span><span>Qué</span><span>Propuesta</span><span>Estado</span><span>Decisión</span></div>`+(P.map((p,i)=>{const d=get(p.id);return `<div class="tr ${p.n?'new':''}"><b>${p.id}</b><span>${d.w}<br><small style="font-weight:700">${d.from}</small></span><span><b style="font-size:13px">→ ${p.to}</b><br>${p.need} · ${p.qty}<br><small style="font-weight:600">${p.why}</small></span><span>${p.s==='p'?'<span class="pend">Para revisar</span>':p.s==='a'?tag('asig'):'<span class="tag">Descartada</span>'}</span><span class="act" style="justify-content:flex-start">${p.s==='p'?`<button class="btn sm" data-act="aprobar" data-i="${i}">Aprobar</button><button class="btn sm w" data-act="descartar" data-i="${i}">Descartar</button>`:''}</span></div>`}).join('')||'<div class="tr"><span>Sin propuestas.</span></div>');
+ const nc=D.filter(d=>d.st==='asig'&&!d.cam);$('#nocam').innerHTML=`<div class="tr h"><span>Código</span><span>Qué</span><span>Entidad</span><span>Estado</span><span>Acción</span></div>`+(nc.map(d=>`<div class="tr"><b>${d.id}</b><span>${d.w}</span><span>${d.to}</span><span>${tag(d.st)}</span><span class="act" style="justify-content:flex-start"><button class="btn sm" data-act="sumar" data-id="${d.id}">Sumar a camión</button></span></div>`).join('')||'<div class="tr"><span>Todas las asignadas tienen camión.</span></div>');idx();$$('#idxn button').forEach(b=>b.setAttribute('aria-selected',b.dataset.v===cur))}
+/* ---- camiones ---- */
+let chofer=false,sumadas=[];
+function trucks(){const cargo=n=>D.filter(d=>d.cam===n&&(d.st==='trasl'||d.st==='lista')).map(d=>d.id).concat(n==='Camión 3'?sumadas.map(s=>s+' (pendiente de carga)'):[]);
+ const T3=[['Depósito',''],['Parada 1',''],['Parada 2',''],['Parada 3',''],['Parada 4','']];
+ const rutaH=(a,c)=>`<ul class="route">${a.map((s,i)=>`<li class="${i<c?'d':i===c?'c':''}"><span>${s[0]}<small>${i<c?'Hecha':i===c?'Próxima':'Por hacer'}</small></span></li>`).join('')}</ul>`;
+ const cs=[['Camión 1','trasl','En ruta','14:20','Hoy',78,[['Depósito'],['Escuela 12'],['Hogar Esperanza']],1,'1/3 paradas'],['Camión 2','trasl','En ruta','15:05','Hoy',54,[['Depósito'],['Los Girasoles'],['Merendero Norte']],2,'2/3 paradas'],['Camión 3','lista','Cargando','08:00','Mañana',31,[['Depósito'],['Parada 1'],['Parada 2'],['Parada 3'],['Parada 4']],0,'Ruta Sur · 4 paradas']];
+ $('#trk').innerHTML=cs.map(c=>`<article class="truck"><header><h3>${c[0]}</h3>${c[1]==='trasl'?tag('trasl').replace('En traslado','En ruta'):tag('lista').replace('Lista para entregar','Cargando')}</header><div class="bdy"><div class="eta"><small>ETA · ${c[4]}</small>${c[3]}</div><div><b style="font-size:13px">${c[8]}</b>${rutaH(c[6],c[7])}</div><div><div class="cat"><div style="grid-template-columns:50px 1fr 44px"><span>Carga</span><div class="bar"><div style="width:${c[5]}%"></div></div><b>${c[5]} %</b></div></div></div><p class="cargo"><b>Lleva:</b> ${cargo(c[0]).join(', ')||'sin donaciones cargadas'}</p>${c[0]==='Camión 3'?`<div><span class="pend" id="chof">${chofer?'Chofer: confirmación pedida':'Sin chofer confirmado'}</span><br><br><button class="btn sm" data-act="chofer" ${chofer?'disabled style="cursor:default"':''}>${chofer?'Pedido enviado':'Confirmar chofer'}</button></div>`:''}</div></article>`).join('');if(chofer)$('#trk .btn[data-act=chofer]').disabled=true}
+/* ---- normalización y entidades ---- */
+let NR=[['yogurt firm. bco 1kg x40','Yogur firme blanco · 40 kg','Alimentos'],['pan lactal bimbo','Pan lactal · 60 u','Alimentos'],['campera niño t.8','Camperas infantiles · 18 u','Vestimenta']].map(x=>({o:x[0],s:x[1],c:x[2],ok:0}));
+function nrm(){$('#nrm').innerHTML=`<div class="tr h"><span>Como llegó</span><span>Sugerencia</span><span>Categoría</span><span>Acción</span></div>`+NR.map((n,i)=>`<div class="tr"><span><code style="font-size:13px">${esc(n.o)}</code></span><span><b style="font-size:14px">${n.s}</b></span><span>${n.c}</span><span>${n.ok?'<span class="tag s-ent">Normalizada</span>':`<button class="btn sm" data-act="norm" data-i="${i}">Aprobar sugerencia</button>`}</span></div>`).join('');$('#nn').textContent=NR.filter(n=>!n.ok).length}
+let EN=[['Centro Vecinal Las Lomas','Solicitó el alta esta semana'],['Comedor Santa Rita','Solicitó el alta esta semana'],['Biblioteca Popular Raíces','Solicitó el alta esta semana']].map(x=>({n:x[0],d:x[1],s:'p'}));
+function ents(){$('#ents').innerHTML=`<div class="tr h"><span>Entidad</span><span>Situación</span><span>Decisión</span></div>`+EN.map((e,i)=>`<div class="tr"><b style="font-size:14px">${e.n}</b><span>${e.d}</span><span class="act" style="justify-content:flex-start">${e.s==='p'?`<button class="btn sm" data-act="ealta" data-i="${i}">Aprobar</button><button class="btn sm w" data-act="ebaja" data-i="${i}">Rechazar</button>`:e.s==='a'?'<span class="tag s-ent">Aprobada</span>':'<span class="tag">Rechazada</span>'}</span></div>`).join('')}
+/* ---- acciones ---- */
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-v]');if(g&&!g.matches('[role=tab]')){e.preventDefault();go(g.dataset.v);return}
+ const t=e.target.closest('[role=tab]');if(t){go(t.dataset.v);return}
+ const l=e.target.closest('a[href="#"]');if(l)e.preventDefault();
+ const b=e.target.closest('button[data-act]');if(!b)return;
+ const a=b.dataset.act,id=b.dataset.id,i=+b.dataset.i;
+ if(a==='asignar')work(b,()=>{if(!ranAsig){ranAsig=true;P.push({id:'DT-0401',to:'Comedor Los Girasoles',need:'Necesidad abierta de alimentos frescos',qty:'40 kg',why:'Vence en 48 h.',s:'p',n:1});toast('Algoritmos ejecutados: 1 propuesta nueva para revisar en Asignaciones.')}else toast('Algoritmos ejecutados: sin propuestas nuevas.');if(b.dataset.h!==undefined){H[b.dataset.h].r='Hecho: hay propuestas para revisar en Asignaciones. Nada queda asignado hasta que las apruebes.'}heads();props();});
+ else if(a==='v48'){f='v48';ledger();toast('Mostrando DT-0401 y DT-0403 en el libro');$('#ledger').scrollIntoView({block:'center'})}
+ else if(a==='chofer')work(b,()=>{chofer=true;if(b.dataset.h!==undefined)H[b.dataset.h].r='Pedido enviado. Pendiente: falta la respuesta del chofer.';heads();rt();trucks();toast('Pedido enviado al chofer. Falta su confirmación.')});
+ else if(a==='conf')work(b,()=>{H[b.dataset.h].r='Recordatorio enviado. Pendiente: Hogar Esperanza todavía no confirmó.';heads();toast('Recordatorio enviado a Hogar Esperanza. Falta su confirmación.')});
+ else if(a==='ents')go('entidades');
+ else if(a==='ruta')go('camiones');
+ else if(a==='venc')work(b,()=>{const d=get(id);move(d,'venc');d.age='Vencida';d.h.push('Marcada como vencida por la administración');circ();ledger();inv();toast(id+' quedó como Vencida.')});
+ else if(a==='sumar')work(b,()=>{const d=get(id);sumadas.push(id);d.cam='Camión 3';d.h.push('Pedido de carga al camión 3');ledger();props();trucks();toast(id+': pedido de carga al Camión 3. Falta cargarla.')});
+ else if(a==='aprobar')work(b,()=>{const p=P[i],d=get(p.id);if(d.st==='venc'){p.s='d';props();toast(p.id+' ya está Vencida: propuesta descartada.');return}p.s='a';d.to=p.to;move(d,'asig');d.age='Asignada hoy';d.h=d.h.filter(x=>!/Sin necesidad/.test(x));d.h.push('Asignada a '+p.to);circ();ledger();props();inv();toast(p.id+' quedó Asignada a '+p.to+'.')});
+ else if(a==='descartar')work(b,()=>{P[i].s='d';props();toast(P[i].id+': propuesta descartada. Sigue sin asignar.')});
+ else if(a==='norm')work(b,()=>{NR[i].ok=1;nrm();toast('Sugerencia aprobada.')});
+ else if(a==='ealta')work(b,()=>{EN[i].s='a';ents();toast(EN[i].n+': alta aprobada.')});
+ else if(a==='ebaja')work(b,()=>{EN[i].s='r';ents();toast(EN[i].n+': alta rechazada.')});
+});
+$('#reg').addEventListener('submit',e=>{e.preventDefault();const b=$('#f-ok');work(b,()=>{$('#f-res').textContent='Recibida. Quedó En depósito y la sugerencia de normalización espera tu revisión.';NR.push({o:$('#f-que').value.toLowerCase()+' '+$('#f-cant').value+$('#f-uni').value,s:$('#f-que').value.charAt(0).toUpperCase()+$('#f-que').value.slice(1)+' · '+$('#f-cant').value+' '+$('#f-uni').value,c:$('#f-cat').value,ok:0});nrm();$('#reg').reset();toast('Donación registrada.')},1600)});
+$('#csv').addEventListener('change',e=>{const fl=e.target.files[0],o=$('#csvres');if(!fl)return;o.textContent='Actualizando…';const r=new FileReader();r.onload=()=>{const n=String(r.result).split(/\r?\n/).filter(x=>x.trim()).length;setTimeout(()=>{o.textContent=`Leídas ${Math.max(n-1,0)} filas de “${fl.name}”. Pendiente: revisar duplicados antes de cargar.`},1300)};r.onerror=()=>{o.textContent='No se pudo leer el archivo.'};r.readAsText(fl)});
+/* ---- paleta ---- */
+const Cm=[...V.map(v=>['Ir a '+v[1],'Pantalla',()=>go(v[0])]),['Ir a Donaciones · Registrar','Pantalla',()=>go('donaciones','registrar')],['Ir a Donaciones · Normalización','Pantalla',()=>go('donaciones','normalizacion')],
+['Ejecutar asignación','Acción',()=>{go('asignaciones');$('#runAsig').click()}],['Marcar vencida DT-0401','Acción',()=>{go('donaciones','inventario');const x=$('#inv [data-act=venc][data-id="DT-0401"]');x?x.click():toast('DT-0401 ya no está en el inventario.')}],['Confirmar chofer del Camión 3','Acción',()=>{go('camiones');const x=$('#trk [data-act=chofer]');if(x&&!x.disabled)x.click()}],['Importar CSV de donantes','Acción',()=>{go('donantes');$('#csv').focus()}],
+['Filtrar: En depósito','Filtro',()=>{go('inicio');f='dep';ledger()}],['Filtrar: En traslado','Filtro',()=>{go('inicio');f='trasl';ledger()}],['Filtrar: Vence en 48 h','Filtro',()=>{go('inicio');f='v48';ledger()}],['Filtrar: Todos los estados','Filtro',()=>{go('inicio');f=null;ledger()}]];
+const pal=$('#pal'),q=$('#q'),res=$('#res');let sel=0,cu=Cm;
+function rend(){const w=q.value.toLowerCase().split(/\s+/).filter(Boolean);cu=Cm.filter(c=>w.every(x=>(c[0]+' '+c[1]).toLowerCase().includes(x)));sel=0;res.innerHTML=cu.map((c,i)=>`<li role="option" aria-selected="${i===0}"><button class="${i===0?'sel':''}" data-i="${i}" tabindex="-1"><span>${c[0]}</span><span class="tag">${c[1]}</span></button></li>`).join('')||'<li><button disabled>Sin resultados</button></li>'}
+function open(){pal.classList.add('on');q.value='';rend();q.focus()}function close(){pal.classList.remove('on');$('#open').focus()}
+function run(i){if(cu[i]){close();cu[i][2]()}}
+$('#open').addEventListener('click',open);
+pal.addEventListener('click',e=>{if(e.target===pal)close();const b=e.target.closest('button[data-i]');if(b)run(+b.dataset.i)});
+q.addEventListener('input',rend);
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();pal.classList.contains('on')?close():open();return}
+ if(!pal.classList.contains('on'))return;if(e.key==='Escape')close();
+ if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();sel=(sel+(e.key==='ArrowDown'?1:cu.length-1))%Math.max(cu.length,1);$$('#res li').forEach((li,i)=>{li.setAttribute('aria-selected',i===sel);li.firstChild.classList.toggle('sel',i===sel)});$$('#res button')[sel]?.scrollIntoView({block:'nearest'})}
+ if(e.key==='Enter'){e.preventDefault();run(sel)}
+ if(e.key==='Tab'){e.preventDefault();q.focus()}});
+/* ---- arranque ---- */
+circ();heads();ledger();rt();needs();inv();props();trucks();nrm();ents();
+const U=new URLSearchParams(location.search);go(U.get('vista')||location.hash.slice(1)||'inicio',U.get('sub'));
+if(U.get('f')){f=U.get('f');ledger()}
+if(U.get('abrir')){const r=document.querySelector(`button.lr[data-id="${U.get('abrir')}"]`);r&&r.click()}
+if(U.get('paleta')){open();q.value=U.get('paleta')==='1'?'':U.get('paleta');rend()}
+</script></body></html>

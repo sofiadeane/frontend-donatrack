@@ -1,0 +1,128 @@
+{
+ "concepto": "Encastre: los bloques de colores de Bloques encajan en la app de bolsillo de Bolsillo. La landing es un mosaico (bento) que se recorre como una cápsula de cinco paradas; el dashboard es una cola de turno de a una tarea, con dock de cápsulas, que en escritorio gana contexto sin perder esa lógica.",
+ "principios": [
+  "Un dato, un bloque: cada cifra, estado o rol vive en su propio contenedor de color.",
+  "Una cosa a la vez: en el dashboard siempre hay una tarjeta de foco; el resto es contexto.",
+  "Estado = color + punto + texto, nunca solo color.",
+  "Lo asíncrono se nota: toda acción responde 'Actualizando…' y recién después muestra el estado.",
+  "Amable pero concreto: voseo, frases cortas, cifras reales de demostración.",
+  "Mismo objeto en todos lados: píldoras, cápsulas y círculos con ícono."
+ ],
+ "tokens": {
+  "color": {
+   "paleta de marca (elegida: A · Tierra)": {
+    "bone": "#DFD0BB",
+    "harvest gold": "#E5BD77",
+    "raw sienna": "#CC7952",
+    "mule fawn": "#943D2C",
+    "tundora": "#474344"
+   },
+   "base": {
+    "crema": "#F2EADB",
+    "crema2": "#E8DCC6",
+    "papel": "#FBF7EE",
+    "ink (= tundora)": "#474344",
+    "ink2": "#6A6465",
+    "linea": "#DCCDB4"
+   },
+   "tintes y bloques": {
+    "sol (oro suave, En depósito)": "#F2DFB4",
+    "durazno (siena, En traslado)": "#CC7952",
+    "naranja (oro, bloque)": "#E5BD77",
+    "rosa (óxido suave, Entrega fallida)": "#E3B4A4",
+    "lila (bone, Asignada y dock activo)": "#DFD0BB",
+    "azul (gris cálido, Lista para entregar)": "#D5D1D2",
+    "menta (oro, Entregada)": "#E5BD77",
+    "gris (Vencida)": "#CFC7C0"
+   },
+   "tonos de texto de estado": {
+    "sol-d": "#6B4A00",
+    "durazno-d": "#FFFFFF",
+    "rosa-d": "#6B2517",
+    "lila-d": "#5A4A33",
+    "azul-d": "#474344",
+    "menta-d": "#4A3600",
+    "gris-d": "#474344"
+   },
+   "uso": "Fondo crema; tundora como tinta y superficie de contraste (dock, bloques oscuros, CTA). El siena aparece en bloques grandes con texto oscuro #2A2526, cerca del contraste mínimo: revisar antes de usarlo en cuerpo de texto. El óxido #943D2C queda como acento; 'Entrega fallida' usa su tinte suave.",
+   "nota": "La paleta no tiene verde: 'Entregada' va en dorado. 'En depósito' (oro suave) y 'Entregada' (oro) son vecinos: se distinguen por intensidad y por el texto."
+  },
+  "tipografia": {
+   "titulos y cifras": "Baloo 2 800 (fallback Arial Rounded MT Bold, Nunito, system-ui)",
+   "texto": "Nunito 500-900",
+   "escala": "cifras 46-60 px, h1 hasta 76 px (landing) y 60 px (dashboard), cuerpo 16-19 px, apoyo 13 px"
+  },
+  "espaciado": "Base de 4 px; separación entre bloques 16 px (landing) y 20 px (dashboard); padding de bloque 24-42 px; gutter 24 px (16 px en móvil).",
+  "radios": "Bloque 28 px, bloque grande/hoja/foco 40 px, fila o tarjeta chica 22 px, píldoras y botones 999 px.",
+  "bordes/sombras": "Superficies planas sin bordes; ring de 2 px solo en botón secundario y chips. Sombra suave únicamente en elementos flotantes (nav, dock, hoja)."
+ },
+ "componentes": [
+  {
+   "nombre": "Bloque",
+   "uso": "Contenedor base de color con radio 28; unidad del mosaico de la landing y de las tarjetas del dashboard."
+  },
+  {
+   "nombre": "Cifra",
+   "uso": "Número grande en Baloo con etiqueta y variación en píldora."
+  },
+  {
+   "nombre": "Cápsula segmentada",
+   "uso": "Progreso y proporciones (donantes 52/26/8, circulación 18/11/7/9, impacto por categoría); en circulación además filtra el inventario."
+  },
+  {
+   "nombre": "Tag de estado",
+   "uso": "Píldora con punto y texto para los siete estados reales."
+  },
+  {
+   "nombre": "Botón / chip",
+   "uso": "Primario ink, secundario con ring, chip filtro con aria-pressed."
+  },
+  {
+   "nombre": "Parada de recorrido",
+   "uso": "Círculo con ícono; en landing son cinco paradas tocables, en dashboard la ruta de un camión con paradas y carga."
+  },
+  {
+   "nombre": "Tarjeta de foco",
+   "uso": "Una tarea urgente con acción (Resolver) y Después; la cola lateral muestra el resto."
+  },
+  {
+   "nombre": "Dock de cápsulas",
+   "uso": "Navegación inferior: en el dashboard cuatro vistas más Más; en la landing móvil las secciones."
+  },
+  {
+   "nombre": "Hoja",
+   "uso": "Bottom sheet en móvil y modal centrado en escritorio (Más, Registrar donación)."
+  },
+  {
+   "nombre": "Toast",
+   "uso": "Confirma 'Actualizando…' y luego el resultado (demo)."
+  }
+ ],
+ "patrones": [
+  "Landing: mosaico asimétrico de 12 columnas, secciones como bloques, nav flotante en píldora (escritorio) o dock (móvil).",
+  "Dashboard: vistas por pestaña de dock, cola de turno, circulación como cápsula filtrable.",
+  "Escritorio del dashboard: foco 7/12 + cola 5/12, tira oscura de circulación, grilla de 4 columnas de donaciones; inventario 8/12 con panel lateral; atajos R (resolver) y D (después).",
+  "Acción asíncrona: botón deshabilitado con 'Actualizando…' durante ~0,8 s y luego estado nuevo."
+ ],
+ "tono": "Cercano, en voseo, optimista y concreto. Acompaña sin dramatizar: los pendientes son tareas, no alarmas.",
+ "copyEjemplos": {
+  "landingHeadline": "Cada donación llega. Y se nota.",
+  "landingCta": "Seguir una donación",
+  "dashboardSaludo": "Hoy te toca atender 5 cosas.",
+  "dashboardVacio": "Todo al día. Buen turno.",
+  "accion": "Ejecutar asignación · Confirmar chofer · Avisar a la entidad · Marcar vencida",
+  "asincrono": "Actualizando… → Resuelto (demo)",
+  "proximamente": "Vas a poder ver dónde llega cada aporte"
+ },
+ "estados": {
+  "EN_DEPOSITO": "Tag oro suave con texto 'En depósito'",
+  "ASIGNACION_REALIZADA": "Tag bone con texto 'Asignada'",
+  "LISTA_PARA_ENTREGAR": "Tag gris cálido con texto 'Lista para entregar'",
+  "EN_TRASLADO": "Tag siena con texto 'En traslado'",
+  "ENTREGADA": "Tag oro con texto 'Entregada'",
+  "ENTREGA_FALLIDA": "Tag óxido suave con texto 'Entrega fallida'",
+  "VENCIDA": "Tag taupe con texto 'Vencida'"
+ },
+ "accesibilidad": "Foco visible de 3 px (blanco sobre fondos oscuros); estados siempre con texto y punto; texto de estado en tonos oscuros sobre pastel; aria-pressed/aria-current/aria-live en chips, pasos y mensajes; hojas con Esc, velo y retorno de foco; prefers-reduced-motion desactiva transiciones. Pendiente: contraste medido formalmente y foco atrapado dentro de las hojas.",
+ "paraExtender": "Falta llevar el sistema a donante (mis donaciones con historial de estados, misiones, insignias, notificaciones), entidad (necesidades con cobertura y Confirmar recepción), formularios completos de registro (humana, jurídica, entidad) y login demo por rol; reutilizan bloque, cápsula, tag, foco, dock y hoja. Las pantallas Donantes, Entidades y Rankings del dashboard están resumidas."
+}

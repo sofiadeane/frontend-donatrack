@@ -1,0 +1,42 @@
+<!-- Variante H · piezas gráficas compartidas por la landing y el panel: hormigas y filtros de grano.
+     Uso: <svg th:replace="~{fragments/ilustraciones-h :: defs}"></svg>, una vez por página. Después: <use href="#h-hormiga">. -->
+<svg th:fragment="defs" class="h-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Relleno granulado: motas claras y oscuras sobre el color de la forma -->
+    <filter id="h-arena" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" seed="3" stitchTiles="stitch" result="ruido"/>
+      <feColorMatrix in="ruido" values="0 0 0 0 1  0 0 0 0 0.93  0 0 0 0 0.86  2.6 0 0 0 -1.55" result="claras"/>
+      <feColorMatrix in="ruido" values="0 0 0 0 0.55  0 0 0 0 0.2  0 0 0 0 0.12  0 2.6 0 0 -1.6" result="oscuras"/>
+      <feComposite in="claras" in2="SourceAlpha" operator="in" result="claras-dentro"/>
+      <feComposite in="oscuras" in2="SourceAlpha" operator="in" result="oscuras-dentro"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="oscuras-dentro"/><feMergeNode in="claras-dentro"/></feMerge>
+    </filter>
+    <!-- Trama de puntos para sombras de polvo: la forma se ve solo donde hay grano -->
+    <pattern id="h-trama" width="160" height="160" patternUnits="userSpaceOnUse"><image th:href="@{/img/h-grano.svg}" width="160" height="160"/></pattern>
+    <mask id="h-polvo" style="mask-type: alpha"><rect x="-200" y="-200" width="1200" height="1000" fill="url(#h-trama)"/></mask>
+    <radialGradient id="h-sombra-suelo"><stop offset="0" class="h-st-gris" stop-opacity="0.9"/><stop offset="0.6" class="h-st-gris" stop-opacity="0.45"/><stop offset="1" class="h-st-gris" stop-opacity="0"/></radialGradient>
+    <linearGradient id="h-montana" x1="0.2" y1="0" x2="0.7" y2="1"><stop offset="0" class="h-st-0"/><stop offset="0.55" class="h-st-1"/><stop offset="1" class="h-st-2"/></linearGradient>
+
+    <!-- Hormiga de perfil, mirando a la derecha -->
+    <symbol id="h-hormiga" viewBox="0 -10 66 50">
+      <g class="h-ant__cuerpo">
+        <ellipse cx="15" cy="22" rx="11.5" ry="8" transform="rotate(-14 15 22)"/>
+        <ellipse cx="31" cy="20.5" rx="6.6" ry="4.2" transform="rotate(-8 31 20.5)"/>
+        <circle cx="44.5" cy="16.5" r="6.2"/>
+      </g>
+      <g class="h-ant__trazo">
+        <path class="h-ant__pata h-ant__pata--a" d="M27 23 L21 30 L16 38"/>
+        <path class="h-ant__pata h-ant__pata--b" d="M31 24 L32 31 L29 38"/>
+        <path class="h-ant__pata h-ant__pata--a" d="M35 22 L42 29 L46 37"/>
+        <path d="M47 11 Q50 2 57.5 1"/>
+        <path d="M44 10.5 Q45 1 51 -2"/>
+        <path d="M50 20 l5 2.5"/>
+      </g>
+    </symbol>
+    <!-- La misma hormiga llevando un granito sobre la cabeza -->
+    <symbol id="h-hormiga-grano" viewBox="0 -14 66 54">
+      <use href="#h-hormiga" x="0" y="-10" width="66" height="50"/>
+      <circle class="h-ant__grano" cx="52" cy="-4" r="7.5"/>
+    </symbol>
+  </defs>
+</svg>

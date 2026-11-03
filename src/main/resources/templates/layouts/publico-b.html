@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<!-- Layout público de la variante B. Uso: <html th:replace="~{layouts/publico-b :: layout(~{::title}, ~{::contenido})}"> -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
+<head th:replace="~{fragments/cabeza-b :: cabeza(${titulo}, 'b-landing')}"></head>
+<body class="b">
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="bl-barra">
+  <a class="b-marca" th:href="@{/}" aria-label="DonaTrack, ir al inicio">
+    <span class="b-marca__sello"><img th:src="@{/img/logo.svg}" alt=""></span>
+    <span>Dona<em>Track</em></span>
+  </a>
+  <div class="bl-menu">
+    <nav aria-label="Secciones">
+      <ul>
+        <li><a th:href="@{/}+'#como'">Cómo funciona</a></li>
+        <li><a th:href="@{/}+'#recorrido'">Recorrido</a></li>
+        <li><a th:href="@{/}+'#actores'">Actores</a></li>
+        <li><a th:href="@{/}+'#impacto'">Impacto</a></li>
+        <li><a th:href="@{/donaciones-entregadas}" th:attr="aria-current=${rutaActual == '/donaciones-entregadas'} ? 'page' : null">Entregadas</a></li>
+      </ul>
+    </nav>
+    <div class="bl-menu__sesion">
+      <th:block th:if="${sesion == null}">
+        <a class="bl-menu__ingresar" th:href="@{/ingresar}">Iniciar sesión</a>
+        <a class="b-btn b-btn--lime b-btn--sm" th:href="@{/registro}">Registrarse</a>
+      </th:block>
+      <a th:if="${sesion != null}" class="b-btn b-btn--lime b-btn--sm" th:href="@{${sesion.rol.inicio}}">Ir a mi panel</a>
+    </div>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1" th:insert="${contenido}"></main>
+
+<footer class="bl-pie b-dark">
+  <div class="bl-pie__fila">
+    <div class="bl-pie__texto">
+      <p class="bl-pie__lema">Una donación no termina cuando sale de tus manos.</p>
+      <p>Plataforma de gestión y trazabilidad de donaciones para organizaciones solidarias universitarias. Conecta donantes, entidades beneficiarias y administración.</p>
+    </div>
+    <nav class="bl-pie__nav" aria-label="Pie de página">
+      <ul>
+        <li><a th:href="@{/ingresar}">Iniciar sesión</a></li>
+        <li><a th:href="@{/registro}">Registrarse</a></li>
+        <li><a th:href="@{/donaciones-entregadas}">Donaciones entregadas</a></li>
+        <li><a th:href="@{/mapa-de-impacto}">Mapa de impacto</a></li>
+        <li><a th:href="@{/privacidad}">Privacidad</a></li>
+        <li><a href="mailto:contacto@donatrack.edu">contacto@donatrack.edu</a></li>
+      </ul>
+    </nav>
+  </div>
+  <p class="bl-pie__marca" aria-hidden="true">DonaTrack</p>
+  <p class="bl-pie__legal">© 2026 DonaTrack · Proyecto académico UTN-FRBA · Diseño de Sistemas · Maqueta, variante visual B</p>
+</footer>
+</body>
+</html>

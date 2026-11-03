@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import grupo5.clienteliviano.integracion.donaciones.DonacionesFixtureAdapter;
 import grupo5.clienteliviano.integracion.donaciones.DonacionesPort.FiltroDonaciones;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionOutputDTO;
+import grupo5.clienteliviano.integracion.entidades.EntidadesPort.Asignacion;
+import grupo5.clienteliviano.integracion.entidades.EntidadesPort.Entidad;
 import grupo5.clienteliviano.integracion.fixtures.LectorFixtures;
 import grupo5.clienteliviano.integracion.metricas.MetricasPublicasPort.Metrica;
 import grupo5.clienteliviano.session.IdentidadDemo;
@@ -66,6 +68,25 @@ class FixturesContratoTest {
     assertThat(adapter.donacionesIndependientes(new FiltroDonaciones(null, null, null)))
         .flatExtracting(d -> d.items())
         .allSatisfy(i -> assertThat(subcategorias).contains(i.bien().subcategoria().id()));
+  }
+
+  @Test
+  @DisplayName("Las asignaciones de demostración apuntan a entidades y donaciones que existen")
+  void entidades() {
+    List<Entidad> entidades = lector.lista("entidades/entidades.json", Entidad.class);
+    List<UUID> donaciones =
+        new DonacionesFixtureAdapter(lector)
+            .donacionesIndependientes(new FiltroDonaciones(null, null, null)).stream()
+                .map(d -> d.id())
+                .toList();
+    assertThat(entidades).isNotEmpty().allSatisfy(e -> assertThat(e.categorias()).isNotEmpty());
+    assertThat(lector.lista("entidades/asignaciones.json", Asignacion.class))
+        .isNotEmpty()
+        .allSatisfy(
+            a -> {
+              assertThat(entidades).extracting(Entidad::id).contains(a.entidadId());
+              assertThat(donaciones).contains(a.donacionId());
+            });
   }
 
   @Test

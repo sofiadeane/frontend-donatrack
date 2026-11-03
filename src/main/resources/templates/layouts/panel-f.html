@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<!-- Layout del panel de la variante F: riel flotante blanco, barra con buscador en píldora y navegación inferior oscura en celular. -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
+<head th:replace="~{fragments/cabeza-f :: cabeza(${titulo}, 'c-panel')}"></head>
+<body class="c f c-app">
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<div class="pc-app">
+  <nav class="pc-riel" aria-label="Secciones">
+    <a class="pc-riel__marca" th:href="@{${sesion.rol.inicio}}" aria-label="DonaTrack, ir al inicio"><span class="c-marca__sello"><img th:src="@{/img/logo.svg}" alt=""></span></a>
+    <ul>
+      <li th:each="item : ${nav}">
+        <a th:href="@{${item.href}}" th:title="${item.etiquetaMovil}" th:attr="aria-current=${item.activo} ? 'page' : null">
+          <span th:replace="~{fragments/iconos :: icono(${item.icono}, 22)}"></span>
+          <span class="sr-only" th:text="${item.etiquetaMovil}">Sección</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="pc-col">
+    <header class="pc-barra">
+      <a class="c-marca pc-barra__marca" th:href="@{${sesion.rol.inicio}}" aria-label="DonaTrack, ir al inicio">
+        <span class="c-marca__sello"><img th:src="@{/img/logo.svg}" alt=""></span>
+      </a>
+      <form class="pc-buscar" role="search" th:action="@{${sesion.rol.inicio} + '/buscar'}" method="get">
+        <label class="sr-only" for="pc-q">Buscar</label>
+        <span th:replace="~{fragments/iconos :: icono('buscar', 20)}"></span>
+        <input id="pc-q" name="q" type="search" placeholder="Buscar código, bien o entidad…" autocomplete="off">
+      </form>
+      <div class="pc-barra__fin">
+        <a class="c-ico pc-ico" th:href="@{${sesion.rol.inicio} + '/notificaciones'}" aria-label="Notificaciones">
+          <span th:replace="~{fragments/iconos :: icono('notificaciones', 20)}"></span>
+        </a>
+        <details class="pc-cuenta">
+          <summary th:aria-label="'Cuenta de ' + ${sesion.nombre}" th:text="${sesion.iniciales}">AD</summary>
+          <div class="pc-cuenta__menu">
+            <p><b th:text="${sesion.nombre}">Nombre</b><span th:text="${sesion.rol.etiqueta} + ' · sesión de demostración'">Rol</span></p>
+            <form th:unless="${exportEstatico}" th:action="@{/salir}" method="post">
+              <button class="c-btn c-btn--sm c-btn--plain" type="submit">Salir</button>
+            </form>
+            <a th:if="${exportEstatico}" class="c-btn c-btn--sm c-btn--plain" th:href="@{/ingresar}">Cambiar de perfil</a>
+          </div>
+        </details>
+      </div>
+    </header>
+    <main id="contenido" class="pc-main" tabindex="-1" th:insert="${contenido}"></main>
+  </div>
+</div>
+
+<nav class="pc-inferior" aria-label="Navegación principal">
+  <a th:each="item : ${navMovil}" th:href="@{${item.href}}" th:attr="aria-current=${item.activo} ? 'page' : null">
+    <span th:replace="~{fragments/iconos :: icono(${item.icono}, 22)}"></span>
+    <span class="sr-only" th:text="${item.etiquetaMovil}">Sección</span>
+  </a>
+</nav>
+</body>
+</html>

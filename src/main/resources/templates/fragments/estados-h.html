@@ -1,0 +1,6 @@
+<!-- Variante H · estados compartidos del panel. Uso (th:replace se evalúa antes que th:if, por eso el bloque): <th:block th:if="${b.conError()}"><div th:replace="~{fragments/estados-h :: error(${b.error}, '/donante')}"></div></th:block> -->
+<div th:fragment="error(error, reintentar)" class="dh-error" role="alert">
+  <p class="dh-error__texto" th:text="${error.mensaje}">No pudimos cargar esta información.</p>
+  <p class="dh-error__ref" th:if="${error.referencia != null}">Referencia para soporte: <code th:text="${error.referencia}">abc123</code></p>
+  <a class="c-link" th:if="${reintentar != null}" th:href="@{${reintentar}}">Reintentar</a>
+</div>

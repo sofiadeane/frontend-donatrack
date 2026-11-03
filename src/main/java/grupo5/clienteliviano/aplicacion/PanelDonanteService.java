@@ -165,21 +165,30 @@ public class PanelDonanteService {
         recorrido,
         entregas,
         impacto(sesion.donanteId()),
-        cargador.cargar(
-            notificaciones.esDemo(),
-            () ->
-                notificaciones.dePersona(sesion.personaId()).stream()
-                    .sorted(
-                        Comparator.comparing(
-                                NotificacionDTO::fechaCreacion,
-                                Comparator.nullsFirst(Comparator.<LocalDateTime>naturalOrder()))
-                            .reversed())
-                    .limit(NOTIFICACIONES)
-                    .map(
-                        n ->
-                            new NotificacionVista(
-                                n.mensaje(), hace(n.fechaCreacion()), n.fechaCreacion()))
-                    .toList()));
+        notificaciones(sesion, NOTIFICACIONES));
+  }
+
+  /** Todas las notificaciones de la persona, de la más reciente a la más vieja. */
+  public Seccion<NotificacionVista> notificaciones(SesionDemo sesion) {
+    return notificaciones(sesion, Long.MAX_VALUE);
+  }
+
+  private Seccion<NotificacionVista> notificaciones(SesionDemo sesion, long limite) {
+    return cargador.cargar(
+        notificaciones.esDemo(),
+        () ->
+            notificaciones.dePersona(sesion.personaId()).stream()
+                .sorted(
+                    Comparator.comparing(
+                            NotificacionDTO::fechaCreacion,
+                            Comparator.nullsFirst(Comparator.<LocalDateTime>naturalOrder()))
+                        .reversed())
+                .limit(limite)
+                .map(
+                    n ->
+                        new NotificacionVista(
+                            n.mensaje(), hace(n.fechaCreacion()), n.fechaCreacion()))
+                .toList());
   }
 
   private Bloque<List<DonacionIndependienteResponseDTO>> propias(UUID donanteId) {

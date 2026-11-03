@@ -1,0 +1,57 @@
+/*
+ * DonaTrack · variante de paleta CÁLIDA (exploración, no aplicada)
+ *
+ * Misma estructura que tokens.css: solo se redefinen los primitivos y las transparencias derivadas.
+ * Los nombres (--teal-*, --green-*, --turquoise-*) se conservan a propósito para no tocar ningún
+ * componente: ahora "teal" = espresso, "green" = ámbar, "turquoise" = coral.
+ *
+ * Cómo probarla:
+ *   a) linkear este archivo DESPUÉS de tokens.css en una plantilla, o
+ *   b) pegar el bloque :root dentro de tokens.css (reemplaza los primitivos de la sección 1).
+ * No dejarla bajo static/: FuenteUnicaDeColorTest exige que solo tokens.css declare colores.
+ */
+:root {
+  /* Primitivos */
+  --teal-900: #3b2420;       /* espresso: superficies oscuras, texto fuerte */
+  --teal-800: #4d2f29;
+  --teal-750: #4c2e28;
+  --teal-100: #f6e3d4;       /* durazno claro: texto suave sobre oscuro */
+  --green-500: #f0a35e;      /* ámbar: marca, bandas */
+  --green-400: #f6b070;      /* ámbar claro: acción primaria */
+  --green-50: #fdf3ea;
+  --turquoise-500: #e8785a;  /* coral: acento alterno */
+  --slate-green: #5a4038;
+  --ink: #2e2622;
+  --ink-muted: #75675f;
+  --gray-100: #f5f0ea;
+  --gray-75: #faf7f3;
+  --gray-50: #faf5ef;        /* fondo de página crema */
+  --white: #ffffff;
+
+  /* Error: se mantiene, ya era terroso */
+  --red-600: #b9443b;
+  --red-50: #fdf1ef;
+
+  /* Transparencias derivadas (mismos canales que arriba) */
+  --white-a78: rgb(250 245 239 / 0.78);
+  --ink-a40: rgb(46 38 34 / 0.4);
+  --ink-a62: rgb(46 38 34 / 0.62);
+  --ink-a78: rgb(46 38 34 / 0.78);
+  --slate-a39: rgb(90 64 56 / 0.39);
+  --green-500-a20: rgb(240 163 94 / 0.2);
+  --green-500-a16: rgb(240 163 94 / 0.16);
+  --teal-a06: rgb(59 36 32 / 0.06);
+  --teal-a08: rgb(59 36 32 / 0.08);
+  --teal-a14: rgb(59 36 32 / 0.14);
+  --teal-a15: rgb(59 36 32 / 0.15);
+  --teal-a35: rgb(59 36 32 / 0.35);
+  --teal-a45: rgb(59 36 32 / 0.45);
+  --green-a28: rgb(246 176 112 / 0.28);
+  --green-a30: rgb(246 176 112 / 0.3);
+  --green-a35: rgb(246 176 112 / 0.35);
+  --green-a40: rgb(246 176 112 / 0.4);
+  --green-a55: rgb(246 176 112 / 0.55);
+  --green-a70: rgb(246 176 112 / 0.7);
+  --green-a80: rgb(246 176 112 / 0.8);
+  --turquoise-a35: rgb(232 120 90 / 0.35);
+}

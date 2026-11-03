@@ -22,16 +22,23 @@
         <a class="boton boton--fantasma" th:href="@{/donante/donaciones}">Mis donaciones</a>
       </div>
     </div>
-    <div class="panel-hero__red" aria-hidden="true">
-      <svg viewBox="0 0 360 200" preserveAspectRatio="none">
-        <path d="M18 168 C 80 150, 110 110, 160 102 S 270 60, 340 14" />
+    <!-- Cuatro manzanas iguales y tres rutas por sus calles (centro, borde izquierdo y abajo, borde
+         derecho). Cada ruta empieza y termina fuera del hero: los envíos entran, pasan entre las
+         cuadras y se van. El hero muestra lo que no aparece abajo: a cuántas organizaciones ayudó
+         y su categoría; los totales de donaciones quedan solo en sus tiles. -->
+    <div class="panel-hero__ciudad">
+      <svg class="panel-hero__calles" viewBox="0 0 360 200" aria-hidden="true">
+        <path class="panel-hero__ruta" d="M180 340 L180 112 Q180 100 192 100 L470 100" />
+        <path class="panel-hero__ruta" d="M-14 -160 L-14 202 Q-14 214 -2 214 L470 214" />
+        <path class="panel-hero__ruta" d="M376 340 L376 -160" />
       </svg>
-      <span class="panel-hero__nodo" style="left:13px;top:163px"></span>
-      <span class="panel-hero__nodo" style="left:155px;top:97px"></span>
-      <!-- El hero muestra lo que no aparece abajo: a cuántas organizaciones ayudó y su categoría.
-           Los totales de donaciones quedan solo en sus tiles. -->
-      <div class="panel-hero__chip" style="left:186px;top:118px" th:if="${i.ok() and i.datos.entidadesAyudadas != null}"><b th:text="${i.datos.entidadesAyudadas}">2</b><span th:text="${i.datos.entidadesAyudadas == 1} ? 'organización ayudada' : 'organizaciones ayudadas'">organizaciones ayudadas</span></div>
-      <div class="panel-hero__chip" style="right:-6px;top:-8px" th:if="${i.ok()}"><b th:text="${i.datos.categoria}">Colaborador</b><span>tu categoría</span></div>
+      <span class="panel-hero__cuadra panel-hero__cuadra--baldia panel-hero__cuadra--no" aria-hidden="true"></span>
+      <span class="panel-hero__cuadra panel-hero__cuadra--baldia panel-hero__cuadra--so" aria-hidden="true"></span>
+      <div class="panel-hero__cuadra panel-hero__cuadra--ne" th:if="${i.ok()}"><b th:text="${i.datos.categoria}">Colaborador</b><span>tu categoría</span></div>
+      <div class="panel-hero__cuadra panel-hero__cuadra--se" th:if="${i.ok() and i.datos.entidadesAyudadas != null}"><b th:text="${i.datos.entidadesAyudadas}">2</b><span th:text="${i.datos.entidadesAyudadas == 1} ? 'organización ayudada' : 'organizaciones ayudadas'">organizaciones ayudadas</span></div>
+      <span class="panel-hero__envio panel-hero__envio--centro" aria-hidden="true"></span>
+      <span class="panel-hero__envio panel-hero__envio--borde" aria-hidden="true"></span>
+      <span class="panel-hero__envio panel-hero__envio--derecha" aria-hidden="true"></span>
     </div>
   </section>
 
@@ -83,7 +90,7 @@
 
   <div class="panel-grilla">
     <!-- Recorrido de la última donación (la ruta como firma visual) -->
-    <section class="tarjeta" aria-labelledby="titulo-recorrido">
+    <section class="tarjeta tarjeta--recorrido" aria-labelledby="titulo-recorrido">
       <div class="recorrido__cabecera">
         <div>
           <h2 id="titulo-recorrido">Recorrido de tu última donación</h2>

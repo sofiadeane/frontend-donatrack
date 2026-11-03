@@ -1,0 +1,161 @@
+/*
+ * Variante D · "Trazo". Se carga después de c-base y c-landing/c-panel: remapea sus tokens a la paleta D,
+ * agrega contorno de tinta a cada bloque y las ilustraciones de línea (mascota, camión, casa).
+ */
+body.d {
+  --c-cream: var(--d-paper);
+  --c-cream-deep: var(--d-paper-2);
+  --c-white: var(--d-white);
+  --c-ink: var(--d-ink);
+  --c-ink-2: var(--d-ink-2);
+  --c-ink-3: var(--d-ink-3);
+  --c-text-3: var(--d-ink-3);
+  --c-forest: var(--d-ink);
+  --c-forest-2: var(--d-ink-soft);
+  --c-lime: var(--d-orange);
+  --c-lime-100: var(--d-orange-100);
+  --c-lavender: var(--d-coral);
+  --c-lavender-100: var(--d-coral-100);
+  --c-orange: var(--d-yellow);
+  --c-orange-100: var(--d-yellow-100);
+  --c-pink: var(--d-peach);
+  --c-pink-100: var(--d-orange-100);
+  --c-sky: var(--d-mint);
+  --c-sky-100: var(--d-mint-100);
+  --c-peach: var(--d-red);
+  --c-peach-100: var(--d-orange-100);
+  --c-peach-deep: var(--d-red-deep);
+  --c-blue: var(--d-ink);
+  --c-green: var(--d-green);
+  --c-focus: var(--d-ink);
+  --c-serif: var(--c-font);
+  --cs-deposito: var(--d-yellow);
+  --cs-asignada: var(--d-coral);
+  --cs-lista: var(--d-mint);
+  --cs-traslado: var(--d-ink);
+  --cs-entregada: var(--d-olive);
+  --cs-fallida: var(--d-red);
+  --c-lift: none;
+}
+
+/* ===== Tipografía: negrita compacta y acento en itálica naranja ===== */
+.d .c-display { font-weight: 700; letter-spacing: -0.045em; line-height: 1; }
+.d .c-display em, .d .c-serif { font-family: var(--c-font); font-style: italic; font-weight: 600; font-synthesis: style; letter-spacing: -0.04em; color: var(--c-lime); }
+.d .cp em, .d .ck__lado em, .d .actor em, .d .pc-hero em, .d .pc-mes em, .d .cifra em { color: inherit; }
+.d .actor--admin em { color: var(--c-lime); }
+.d .c-kicker::before { background: var(--c-lime); }
+.d .c-marca em { font-family: var(--c-font); font-synthesis: style; }
+.d .c-marca__sello { background: var(--c-white); box-shadow: inset 0 0 0 2px var(--c-ink); }
+
+/* ===== Contorno de tinta en cada bloque ===== */
+.d :is(.cl-barra, .ch, .ficha, .ruta__est, .cp, .cp__tabla, .paso, .cr__marco, .actor, .actor__mini li, .actor__need, .cifra,
+  .ci__entregas, .func, .ck__lado, .cl-pie, .pend, .pend__item, .vol, .seg, .pc-hero, .pc-mes, .aten, .act, .imp, .nec, .log,
+  .camiones li, .pc-riel, .pc-buscar, .c-ico, .chip, .mapa__n, .mapa__rama, .cinta__grupo > span, .pc-cuenta__menu, .cp__notas li, .ci__msg) {
+  box-shadow: inset 0 0 0 2px var(--c-ink);
+}
+.d .cl-pie, .d .log, .d .actor--admin, .d .paso--5 { box-shadow: none; }
+.d .c-btn--white, .d .c-btn--lime, .d .c-btn--ghost { box-shadow: inset 0 0 0 2px var(--c-ink); }
+.d .c-tag { box-shadow: inset 0 0 0 1.5px var(--c-ink); }
+.d .c-tag[data-estado="EN_TRASLADO"] { box-shadow: none; }
+.d .c-barra, .d .ficha__barra i, .d .camion__avance i { box-shadow: inset 0 0 0 1.5px var(--c-ink); background: var(--c-white); }
+.d .c-barra i { background: var(--c-lime); box-shadow: inset 0 0 0 1.5px var(--c-ink); }
+.d .nec .c-barra i, .d .imp__barra i { box-shadow: inset 0 0 0 1.5px var(--c-ink); }
+.d .ficha__barra i.is-on { background: var(--c-lime); }
+.d .camion__avance i { box-shadow: none; background: var(--c-white-a16); }
+.d .camion__avance i.is-on { background: var(--c-lime); }
+.d .bar { box-shadow: inset 0 0 0 1.5px var(--c-ink); }
+.d .seg:hover, .d .ruta__est:hover { transform: translateY(-3px); }
+.d .cl-barra { box-shadow: inset 0 0 0 2px var(--c-ink); }
+.d .cl-nav a:hover, .d .cl-nav a[aria-current="page"] { background: var(--c-yellow, var(--c-orange)); }
+.d .pc-riel li a[aria-current="page"] { background: var(--c-ink); color: var(--c-lime); }
+.d .pc-riel li a:hover { background: var(--c-orange); }
+
+/* ===== Hero claro con ilustración ===== */
+.d .ch { background: var(--c-white); color: var(--c-ink); }
+.d .ch__forma { display: none; }
+.d .ch__chips li { box-shadow: inset 0 0 0 1.5px var(--c-ink); background: var(--c-orange); }
+.d .ch__lead, .d .ch__mapa { color: var(--c-ink-2); }
+.d .ch__arriba { grid-template-columns: minmax(0, 1fr) minmax(320px, 0.95fr); align-items: start; }
+.ch__ilus { display: grid; gap: 14px; }
+.ch__escena { width: 100%; height: auto; }
+.d .ficha { background: var(--c-white); grid-template-columns: 1fr 1fr; gap: 10px 16px; padding: 18px; }
+.d .ficha__cab { grid-column: 1; }
+.d .ficha__estado { grid-column: 2; justify-self: end; align-self: center; }
+.d .ficha__datos, .d .ficha__barra { grid-column: 1 / -1; }
+.d .ficha__datos { grid-template-columns: 1fr 1fr; gap: 16px; }
+.d .ficha__datos div { flex-direction: column; justify-content: flex-start; gap: 0; padding: 8px 0 0; }
+.d .ficha__datos dd { text-align: left; }
+.d .ficha__ico { background: var(--c-orange); }
+.d .ruta__est:nth-child(1) { --bg: var(--c-orange); }
+.d .ruta__est:nth-child(2) { --bg: var(--c-lavender); }
+.d .ruta__est:nth-child(3) { --bg: var(--c-sky); }
+.d .ruta__est:nth-child(4) { --bg: var(--c-lime); }
+.d .ruta__est.is-act { outline-color: var(--c-ink); }
+.d .ruta__est.is-act .ruta__num { background: var(--c-ink); }
+.d .ruta__num { background: var(--c-white); }
+
+/* ===== Ilustraciones de línea ===== */
+.il { display: block; overflow: visible; }
+.il-l * { stroke: var(--c-ink); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.il-l .il-f-w { fill: var(--c-white); }
+.il-l .il-f-a { fill: var(--il-a, var(--c-lime)); }
+.il-l .il-f-b { fill: var(--il-b, var(--c-orange)); }
+.il-l .il-f-m { fill: var(--c-sky); }
+.il-l .il-dot { fill: var(--c-ink); stroke: none; }
+.il-suelo { stroke: var(--c-ink); stroke-width: 3; stroke-linecap: round; fill: none; }
+.il-ruta { stroke: var(--c-ink); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 2 11; fill: none; }
+.il-viajero { fill: var(--c-lime); stroke: var(--c-ink); stroke-width: 3; offset-path: path("M118 132 C 200 20, 380 20, 500 132"); offset-rotate: 0deg; animation: viajero 5s ease-in-out infinite alternate; }
+@keyframes viajero { from { offset-distance: 0%; } to { offset-distance: 100%; } }
+.il--a { --il-a: var(--c-lime); }
+
+.cp__ilus { display: flex; align-items: flex-end; gap: 18px; margin-top: 28px; }
+.cp__ilus .il { width: 104px; flex: none; }
+.cp__globo { position: relative; margin-bottom: 70px; padding: 12px 18px; background: var(--c-white); border-radius: 22px 22px 22px 4px; font-weight: 700; box-shadow: inset 0 0 0 2px var(--c-ink); }
+.cp__tabla { background: var(--c-white); }
+.cp__notas li { box-shadow: inset 0 0 0 2px var(--c-ink); }
+.actor__il { margin-top: auto; align-self: flex-end; width: clamp(150px, 16vw, 230px); }
+.actor--donante { padding-bottom: 0; overflow: hidden; }
+.ck__il { position: absolute; right: clamp(16px, 3vw, 40px); bottom: 0; width: clamp(110px, 15vw, 210px); }
+.ck__lado { overflow: hidden; }
+.ck__gran { max-width: 72%; }
+.d .ck__flecha { top: clamp(20px, 3vw, 40px); }
+.d .pc-hero__ilus { width: clamp(220px, 24vw, 340px); }
+.d .pc-hero__ilus .il-suelo { stroke-width: 3; }
+
+/* ===== Bloques que en C eran claros sobre fondo oscuro ===== */
+.d .cl-pie__marca { color: var(--c-forest-2); }
+.d .cl-pie__legal, .d .cl-pie__texto > p:last-child { color: var(--c-white-a70); }
+.d .log .pc-tit p, .d .camion__ruta { color: var(--c-white-a70); }
+.d .mr--1 { stroke: var(--c-lime); }
+.d .mr--2 { stroke: var(--d-yellow); }
+.d .mr-parada--1 circle:first-child, .d .mr-parada--2 circle:first-child, .d .mr-parada--2 circle:nth-child(2) { fill: var(--c-lime); stroke: var(--c-lime); }
+.d .mr-camion { stroke: var(--d-yellow); }
+.d .seg[data-estado="EN_TRASLADO"] { --bar: var(--c-lime); }
+.d .seg__etq { background: var(--c-white); box-shadow: inset 0 0 0 1.5px var(--c-ink); }
+.d .seg[data-estado="EN_TRASLADO"] .seg__etq { color: var(--c-ink); }
+
+@media (max-width: 1024px) {
+  .d .ch__arriba { grid-template-columns: 1fr; }
+  .ch__ilus { max-width: 560px; }
+}
+@media (max-width: 640px) {
+  .cp__globo { margin-bottom: 40px; }
+  .ck__gran { max-width: 100%; }
+  .ck__il { opacity: 0.0; }
+}
+
+
+/* ===== Conocé a Dona (sección propia de la v3) ===== */
+.sd { width: min(calc(100% - 2 * var(--c-gutter)), var(--c-max)); margin: clamp(72px, 10vw, 140px) auto 0; }
+.sd__cab h2 { font-size: clamp(2rem, 1.1rem + 3vw, 3.8rem); margin: 12px 0 28px; }
+.sd__escena { display: grid; grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr); gap: clamp(20px, 4vw, 56px); align-items: end; }
+.sd__dona { background: var(--c-orange); border-radius: var(--c-r-xl); padding: 28px 24px 8px; box-shadow: inset 0 0 0 2px var(--c-ink); }
+.sd__dona .il { width: 100%; height: auto; }
+.sd__tips { display: grid; gap: 16px; }
+.sd__tip { position: relative; display: flex; gap: 16px; align-items: flex-start; padding: 20px 24px; background: var(--c-white); border-radius: var(--c-r-l); box-shadow: inset 0 0 0 2px var(--c-ink); }
+.sd__tip:nth-child(even) { margin-left: clamp(0px, 4vw, 56px); }
+.sd__tip::before { content: ""; position: absolute; left: -12px; top: 28px; width: 20px; height: 20px; background: var(--c-white); box-shadow: -2px 2px 0 var(--c-ink) inset; transform: rotate(45deg); }
+.sd__n { flex: none; width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: var(--c-lime); box-shadow: inset 0 0 0 2px var(--c-ink); font-weight: 700; }
+.sd__tip h3 { font-size: 1.25rem; letter-spacing: -0.03em; }
+.sd__tip p { color: var(--c-ink-2); margin-top: 2px; }
+@media (max-width: 800px) { .sd__escena { grid-template-columns: minmax(0, 1fr); } .sd__dona { max-width: 320px; } .sd__tip::before { display: none; } .sd__tip:nth-child(even) { margin-left: 0; } }

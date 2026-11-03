@@ -8,15 +8,20 @@ import grupo5.clienteliviano.integracion.donaciones.dto.BienNormalizadoDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.CambioEstadoDIResponseDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.CategoriaOutputDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionIndependienteResponseDTO;
+import grupo5.clienteliviano.integracion.entidades.EntidadesPort;
+import grupo5.clienteliviano.integracion.entidades.EntidadesPort.Entidad;
 import grupo5.clienteliviano.integracion.error.BackendException;
 import grupo5.clienteliviano.session.SesionDemo;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 /** "Mis donaciones" del donante (H2.1) y el detalle con su historial de estados (H2.2). */
@@ -42,12 +47,14 @@ public class MisDonacionesService {
    * Página de la lista.
    *
    * @param categorias vacía si no se pudieron cargar (la lista funciona igual, sin ese filtro)
+   * @param destinos entidad a la que fue asignada cada donación (solo las asignadas; brecha G3)
    */
   public record MisDonaciones(
       Seccion<DonacionResumen> donaciones,
       List<OpcionEstado> estados,
       List<OpcionCategoria> categorias,
-      Filtros filtros) {}
+      Filtros filtros,
+      Map<UUID, Entidad> destinos) {}
 
   public record ItemVista(
       String descripcion,
@@ -79,16 +86,19 @@ public class MisDonacionesService {
   private final CargadorSecciones cargador;
   private final TraductorErrores traductor;
   private final VistaDonaciones vista;
+  private final EntidadesPort entidades;
 
   public MisDonacionesService(
       DonacionesPort donaciones,
       CargadorSecciones cargador,
       TraductorErrores traductor,
-      VistaDonaciones vista) {
+      VistaDonaciones vista,
+      EntidadesPort entidades) {
     this.donaciones = donaciones;
     this.cargador = cargador;
     this.traductor = traductor;
     this.vista = vista;
+    this.entidades = entidades;
   }
 
   public MisDonaciones listar(SesionDemo sesion, Filtros pedidos) {
@@ -111,7 +121,17 @@ public class MisDonacionesService {
         VistaDonaciones.ESTADOS.stream()
             .map(e -> new OpcionEstado(e, vista.estado(e).etiqueta()))
             .toList();
-    return new MisDonaciones(lista, estados, categorias, filtros);
+    return new MisDonaciones(lista, estados, categorias, filtros, destinos());
+  }
+
+  /** Entidad de destino por donación, según las asignaciones (brecha G3: hoy solo demostración). */
+  private Map<UUID, Entidad> destinos() {
+    Map<UUID, Entidad> porId =
+        entidades.entidades().stream().collect(Collectors.toMap(Entidad::id, Function.identity()));
+    return entidades.asignaciones().stream()
+        .filter(a -> porId.containsKey(a.entidadId()))
+        .collect(
+            Collectors.toMap(EntidadesPort.Asignacion::donacionId, a -> porId.get(a.entidadId())));
   }
 
   /**

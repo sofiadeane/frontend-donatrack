@@ -12,3 +12,5 @@ Datos **ficticios** para trabajar sin backend (adapters en modo `fixture`). La i
 | `donaciones/donaciones-independientes.json` | `GET /donaciones-independientes` (cada registro agrega `donanteId`, que la respuesta real no incluye, para poder filtrar) |
 | `donaciones/donaciones.json` | `GET /api/donaciones/{id}` (copia parcial del DTO: id y donante) |
 | `metricas/publicas.json` | Sin endpoint en el backend (brecha G7): métricas de la landing, cifras del Figma |
+| `entidades/entidades.json` | Sin endpoint de listado para el donante (brecha G3): entidades beneficiarias y lo que necesitan |
+| `entidades/asignaciones.json` | Sin endpoint (brecha G3): a qué entidad fue asignada cada donación independiente |

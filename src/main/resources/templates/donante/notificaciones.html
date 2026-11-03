@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/panel-h :: layout(~{::title}, ~{::contenido})}">
+<head><title>Notificaciones · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <header class="pc-cab">
+    <div>
+      <p class="c-kicker">Notificaciones</p>
+      <h1 class="c-display">Lo que pasó</h1>
+    </div>
+    <span class="c-demo" th:if="${notificaciones.demo}">Datos de demostración</span>
+  </header>
+
+  <section class="dh-notas" aria-labelledby="t-notas">
+    <div class="pc-tit">
+      <h2 id="t-notas">Todas</h2>
+      <p th:if="${notificaciones.ok()}" th:text="${notificaciones.datos.size() == 1} ? '1 aviso' : ${notificaciones.datos.size() + ' avisos'}">5 avisos</p>
+    </div>
+    <ul th:if="${notificaciones.ok()}">
+      <li th:each="n : ${notificaciones.datos}">
+        <span class="dh-notas__grano" aria-hidden="true"></span>
+        <p th:text="${n.mensaje}">Tu donación salió del depósito.</p>
+        <time th:datetime="${#temporals.formatISO(n.fecha)}" th:text="${n.cuando}">hace 2 h</time>
+      </li>
+    </ul>
+    <p class="dh-vacio" th:if="${notificaciones.vacia()}">No tenés notificaciones. Te avisamos acá cada vez que tu donación avance.</p>
+    <th:block th:if="${notificaciones.conError()}"><div th:replace="~{fragments/estados-h :: error(${notificaciones.error}, '/donante/notificaciones')}"></div></th:block>
+  </section>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/panel-h :: layout(~{::title}, ~{::contenido})}">
+<head><title>Entidades · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido" th:with="p=${pagina}, h=${pagina.hormiguero}, sel=${pagina.seleccionada}">
+  <header class="pc-cab">
+    <div>
+      <p class="c-kicker">Entidades</p>
+      <h1 class="c-display">Tu hormiguero</h1>
+    </div>
+    <span class="c-demo" th:if="${p.demo}">Datos de demostración</span>
+  </header>
+
+  <!-- A · El hormiguero: una cámara por entidad, de la primera a la que llegaste (arriba) a la más reciente.
+       Elegir una cámara es un enlace con ?entidad=: el servidor arma la ficha, sin JavaScript. -->
+  <section class="hg" aria-labelledby="t-hg">
+    <div class="pc-tit">
+      <h2 id="t-hg">Entidades a las que llegaron tus donaciones</h2>
+      <p th:if="${h.ok()}" th:text="${#lists.size(h.datos) == 1} ? '1 cámara · cada grano es una donación' : ${#lists.size(h.datos) + ' cámaras · cada grano es una donación'}">3 cámaras</p>
+    </div>
+
+    <th:block th:if="${h.conError()}"><div th:replace="~{fragments/estados-h :: error(${h.error}, '/donante/entidades')}"></div></th:block>
+
+    <div class="hg__cuerpo">
+      <div class="hg__tierra">
+        <div class="hg__superficie" aria-hidden="true">
+          <svg class="hg__entrada" viewBox="0 0 200 60" preserveAspectRatio="none"><path d="M0 60 C50 58 70 8 100 8 C130 8 150 58 200 60Z"/></svg>
+          <svg class="hg__h hg__h--1"><use href="#h-hormiga-grano"/></svg>
+          <svg class="hg__h hg__h--2"><use href="#h-hormiga"/></svg>
+        </div>
+        <svg class="hg__tunel" viewBox="0 0 100 1000" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M50 0 C24 110 76 200 50 320 S22 540 50 660 S78 880 50 1000"/>
+        </svg>
+        <svg class="hg__baja" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
+
+        <ol class="hg__camaras">
+          <li th:each="c : ${h.datos}" class="hg__lugar">
+            <a class="hg__camara" th:href="@{/donante/entidades(entidad=${c.entidad.id})} + '#ficha'"
+               th:attr="aria-current=${sel != null and sel.entidad.id == c.entidad.id} ? 'true' : null">
+              <span class="hg__monticulo" aria-hidden="true"><i th:each="n : ${#numbers.sequence(1, c.cantidad > 15 ? 15 : c.cantidad)}"></i></span>
+              <b th:text="${c.entidad.nombre}">Comedor Los Girasoles</b>
+              <small th:text="${c.cantidad == 1} ? '1 donación' : ${c.cantidad + ' donaciones'}">2 donaciones</small>
+            </a>
+          </li>
+          <!-- La próxima cámara: se cava cuando una donación tuya llega a una entidad nueva -->
+          <li class="hg__lugar hg__lugar--nueva">
+            <a class="hg__camara" href="#otras">
+              <span class="hg__monticulo" aria-hidden="true"></span>
+              <b>Tu próxima cámara</b>
+              <small>Se suma cuando una donación llega a una entidad nueva</small>
+            </a>
+          </li>
+        </ol>
+      </div>
+
+      <!-- Ficha de la cámara abierta -->
+      <aside class="hg__ficha dh-caja" id="ficha" aria-labelledby="t-ficha" th:if="${sel != null}">
+        <p class="c-kicker">Cámara abierta</p>
+        <h3 id="t-ficha" th:text="${sel.entidad.nombre}">Comedor Los Girasoles</h3>
+        <p class="hg__meta" th:text="${sel.entidad.tipo + ' · ' + sel.entidad.localidad}">Comedor · Villa Lugano</p>
+        <ul class="hg__cifras">
+          <li><b class="c-num" th:text="${sel.cantidad}">2</b><span th:text="${sel.cantidad == 1} ? 'donación tuya' : 'donaciones tuyas'">donaciones tuyas</span></li>
+          <li><b class="c-num" th:text="${sel.entregadas}">1</b><span th:text="${sel.entregadas == 1} ? 'ya llegó' : 'ya llegaron'">ya llegaron</span></li>
+        </ul>
+        <h4>Lo que le llevaste</h4>
+        <ul class="hg__donaciones">
+          <li th:each="d : ${sel.donaciones}">
+            <a th:href="@{/donante/donaciones/{id}(id=${d.id})}"><b th:text="${d.descripcion}">Arroz</b><span th:text="${d.detalle}">Arroz · 50 kg</span></a>
+            <span class="c-tag" th:attr="data-estado=${d.estado.codigo}" th:text="${d.estado.etiqueta}">En traslado</span>
+          </li>
+        </ul>
+        <h4>Lo que necesita hoy</h4>
+        <p class="hg__necesita">
+          <span class="hg__chip" th:each="cat : ${sel.entidad.categorias}" th:text="${cat}">Alimentos</span>
+        </p>
+        <p class="hg__abiertas" th:text="${sel.entidad.necesidadesAbiertas == 1} ? '1 necesidad abierta' : ${sel.entidad.necesidadesAbiertas + ' necesidades abiertas'}">3 necesidades abiertas</p>
+      </aside>
+      <div class="hg__ficha dh-vacio" th:if="${sel == null and h.vacia()}">
+        <b>Todavía no se cavó ninguna cámara.</b> Cuando una de tus donaciones se asigne a una entidad, va a aparecer acá su cámara.
+      </div>
+    </div>
+  </section>
+
+  <!-- B · El resto de las entidades: tabla con filtros (GET, sin JavaScript) -->
+  <section class="dh-caja" id="otras" aria-labelledby="t-otras">
+    <div class="pc-tit">
+      <h2 id="t-otras">Otras entidades</h2>
+      <output th:text="${#lists.size(p.otras) == 1} ? '1 entidad' : ${#lists.size(p.otras) + ' entidades'}">7 entidades</output>
+    </div>
+    <p class="hg__nota">Las donaciones se asignan desde el depósito según lo que cada entidad necesita. Acá podés conocer a dónde puede llegar tu próximo granito.</p>
+
+    <form class="dh-filtros dh-filtros--claro" th:action="@{/donante/entidades} + '#otras'" method="get" aria-label="Filtrar entidades">
+      <input type="hidden" name="entidad" th:if="${sel != null}" th:value="${sel.entidad.id}">
+      <label class="dh-campo dh-campo--ancho">
+        <span>Buscar</span>
+        <input type="search" name="q" th:value="${p.filtros.q}" placeholder="Nombre de la entidad" autocomplete="off">
+      </label>
+      <label class="dh-campo">
+        <span>Tipo</span>
+        <select name="tipo"><option value="">Todos</option>
+          <option th:each="t : ${p.tipos}" th:value="${t}" th:text="${t}" th:selected="${p.filtros.tipo == t}">Comedor</option></select>
+      </label>
+      <label class="dh-campo">
+        <span>Necesita</span>
+        <select name="categoria"><option value="">Cualquier cosa</option>
+          <option th:each="c : ${p.categorias}" th:value="${c}" th:text="${c}" th:selected="${p.filtros.categoria == c}">Alimentos</option></select>
+      </label>
+      <label class="dh-campo">
+        <span>Localidad</span>
+        <select name="localidad"><option value="">Todas</option>
+          <option th:each="l : ${p.localidades}" th:value="${l}" th:text="${l}" th:selected="${p.filtros.localidad == l}">Boedo</option></select>
+      </label>
+      <div class="dh-filtros__acc">
+        <button class="c-btn c-btn--sm c-btn--plain" type="submit">Filtrar</button>
+        <a class="c-link" th:if="${p.filtros.activos()}" th:href="@{/donante/entidades(entidad=${sel != null ? sel.entidad.id : null})} + '#otras'">Limpiar</a>
+      </div>
+    </form>
+
+    <table class="dh-tabla dh-tabla--ent" th:if="${!p.otras.isEmpty()}">
+      <caption class="sr-only">Entidades que todavía no recibieron tus donaciones</caption>
+      <thead><tr><th scope="col">Entidad</th><th scope="col">Localidad</th><th scope="col">Necesita</th><th scope="col">Necesidades abiertas</th></tr></thead>
+      <tbody>
+        <tr th:each="e : ${p.otras}">
+          <th scope="row"><b th:text="${e.nombre}">Biblioteca Popular Raíces</b><small th:text="${e.tipo}">Biblioteca popular</small></th>
+          <td th:text="${e.localidad}">Boedo</td>
+          <td><span class="hg__chips"><span class="hg__chip" th:each="c : ${e.categorias}" th:text="${c}">Útiles</span></span></td>
+          <td class="dh-tabla__n"><b class="c-mono" th:text="${e.necesidadesAbiertas}">2</b><span class="hg__urgente" th:if="${e.necesidadUrgente}">Urgente</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="dh-vacio" th:if="${p.otras.isEmpty() and p.filtros.activos()}"><b>Ninguna entidad coincide con esos filtros.</b> Probá con otra búsqueda.</div>
+  </section>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DonaTrack · Plano de planta (administración)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--papel:#EFE5CA;--papel2:#E6DAB9;--tinta:#2A2822;--tinta2:#5A5546;--naranja:#C4501B;--naranja2:#F29A62;--linea:#2A2822;
+--cond:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;--texto:"Barlow","Segoe UI",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+body{background:var(--papel);color:var(--tinta);font-family:var(--texto);font-size:16px;line-height:1.45;overflow-x:hidden;background-image:radial-gradient(rgba(42,40,34,.07) 1px,transparent 1px);background-size:6px 6px}
+a{color:inherit}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--naranja);outline-offset:2px}
+.dk :focus-visible{outline-color:var(--naranja2)}
+/* barra y regla */
+.bar{display:flex;align-items:center;gap:12px 14px;flex-wrap:wrap;padding:10px clamp(12px,3vw,36px);background:var(--tinta);color:var(--papel)}
+.brand{font-family:var(--cond);font-weight:700;font-size:24px;letter-spacing:.05em;text-transform:uppercase;text-decoration:none;display:flex;align-items:center;gap:8px}
+.crumb{font-family:var(--mono);font-size:12px;color:#CFC4A6;flex:1;min-width:200px}
+.demo{font-family:var(--mono);font-size:12px;border:1.5px dashed var(--naranja2);color:var(--naranja2);padding:1px 8px}
+.k{font-family:var(--mono);font-size:13px;border:1.5px solid var(--papel);background:transparent;padding:6px 12px;cursor:pointer;color:var(--papel)}
+.k:hover{background:var(--papel);color:var(--tinta)}
+.k kbd{font-family:var(--mono);border:1px solid currentColor;padding:0 5px;margin-left:8px;font-size:11px}
+.ruler{height:14px;background:repeating-linear-gradient(90deg,var(--tinta) 0 1px,transparent 1px 10px),repeating-linear-gradient(90deg,var(--tinta) 0 1.5px,transparent 1.5px 50px);background-size:100% 6px,100% 14px;background-repeat:repeat-x;background-position:0 0;border-bottom:1.5px solid var(--linea)}
+.short{display:flex;gap:0;flex-wrap:wrap;padding:0 clamp(12px,3vw,36px);border-bottom:1.5px solid var(--linea);background:var(--papel2)}
+.short button{font-family:var(--cond);font-weight:500;font-size:19px;text-transform:uppercase;letter-spacing:.04em;background:none;border:0;border-bottom:4px solid transparent;padding:8px 14px 5px;cursor:pointer;color:var(--tinta2)}
+.short button i{font-family:var(--mono);font-style:normal;font-size:10.5px;margin-right:5px;vertical-align:2px}
+.short button:hover{color:var(--tinta)}
+.short button[aria-current=page]{color:var(--tinta);border-bottom-color:var(--naranja);background:rgba(196,80,27,.09)}
+main{padding:24px clamp(12px,3vw,36px) 50px;max-width:1400px;margin:0 auto}
+h1,h2,h3{font-family:var(--cond);font-weight:600;text-transform:uppercase;line-height:1}
+h1{font-size:clamp(38px,5vw,64px)}
+h2{font-size:28px;margin-bottom:10px}
+h3{font-size:21px;margin-bottom:4px}
+.rot{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--naranja);margin-bottom:8px}
+.sub{color:var(--tinta2);max-width:48em;margin:8px 0 20px}
+/* lámina */
+.plate{border:1.5px solid var(--linea);padding:6px;background:rgba(255,255,255,.22);position:relative}
+.plate>.in{border:1px solid var(--linea);padding:14px;position:relative;height:100%}
+.plate>.in:before,.plate>.in:after{content:"";position:absolute;width:14px;height:14px;border:2px solid var(--naranja);pointer-events:none}
+.plate>.in:before{left:-6px;top:-6px;border-right:0;border-bottom:0}
+.plate>.in:after{right:-6px;bottom:-6px;border-left:0;border-top:0}
+.lam{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--tinta2);border-bottom:1px solid var(--linea);padding-bottom:6px;margin-bottom:12px}
+.dk{background:var(--tinta);color:var(--papel);background-image:repeating-linear-gradient(135deg,rgba(239,229,202,.045) 0 1px,transparent 1px 7px)}
+.dk.plate{border-color:var(--tinta)}
+.dk>.in{border-color:var(--papel)}
+.dk .lam{border-color:rgba(239,229,202,.5);color:#CFC4A6}
+.nm{font-family:var(--mono);font-size:11.5px;color:var(--tinta2);margin-top:10px;padding-left:10px;border-left:2px solid var(--naranja)}
+.dk .nm{color:#CFC4A6;border-color:var(--naranja2)}
+.view[hidden]{display:none}
+/* flujo */
+.flow{display:grid;grid-template-columns:repeat(6,1fr);gap:0;padding-top:12px}
+.nd{position:relative;margin:0 30px 0 0}
+.nd:last-child{margin:0}
+.sel{width:100%;height:100%;text-align:left;color:var(--papel);border:2px solid var(--papel);background:var(--tinta);padding:12px 12px 10px;cursor:pointer;position:relative;display:block}
+.sel:before{content:"";position:absolute;inset:3px;border:1px solid rgba(239,229,202,.45);pointer-events:none}
+.sel:hover{background:#3A372F}
+.sel[aria-pressed=true]{background:var(--papel);color:var(--tinta)}
+.sel[aria-pressed=true]:before{border-color:var(--tinta)}
+.sel .e{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;opacity:.8;display:block;margin-bottom:6px}
+.sel strong{font-family:var(--mono);font-size:36px;font-weight:500;line-height:1;display:block}
+.sel small{font-family:var(--cond);font-size:19px;text-transform:uppercase;font-weight:500;letter-spacing:.02em;line-height:1.05;display:block;margin-top:2px}
+.sel em{font-style:normal;font-family:var(--mono);font-size:11px;display:block;margin-top:5px;opacity:.9}
+.nd:not(:last-child):after{content:"";position:absolute;right:-30px;top:52%;width:30px;height:10px;border-top:2px solid var(--papel);border-bottom:2px solid var(--papel);background:repeating-linear-gradient(90deg,transparent 0 5px,rgba(239,229,202,.5) 5px 6px)}
+.valve{position:absolute;z-index:3;right:-13px;top:-15px;width:36px;height:36px;padding:0;margin:0;border-radius:50%;background:var(--naranja);color:#fff;border:2px solid var(--papel);font-family:var(--mono);font-weight:500;font-size:15px;line-height:1;display:grid;place-items:center;cursor:pointer;box-shadow:0 0 0 3px var(--tinta)}
+.valve:hover{background:#E0612A}
+.branches{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:30px}
+.br{border:2px dashed var(--naranja2);padding:10px 14px;font-size:14.5px;position:relative}
+.br b{font-family:var(--cond);font-size:20px;text-transform:uppercase;font-weight:600;display:block;color:var(--naranja2)}
+.br:before{content:"";position:absolute;top:-30px;left:34px;height:30px;border-left:2px dashed var(--naranja2)}
+.leg{font-family:var(--mono);font-size:12px;margin-top:12px;color:#CFC4A6}
+.leg i{display:inline-block;width:12px;height:12px;border-radius:50%;background:var(--naranja);border:1.5px solid var(--papel);vertical-align:-2px;margin-right:5px}
+.cols{display:grid;grid-template-columns:1.5fr 1fr;gap:22px;margin-top:26px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+.stack{margin-top:26px}
+.cols>*,.two>*,.plate,.plate>.in{min-width:0}
+.alarm li div{min-width:0}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+th{font-family:var(--mono);font-weight:500;font-size:11.5px;text-transform:uppercase;text-align:left;border-bottom:2px solid var(--linea);padding:4px 8px;white-space:nowrap}
+td{padding:8px;border-bottom:1px solid rgba(42,40,34,.35);vertical-align:top}
+td:first-child{font-family:var(--mono);font-size:13px;white-space:nowrap}
+.tw{overflow-x:auto}
+.tag{font-family:var(--mono);font-size:11.5px;border:1.5px solid var(--linea);padding:0 6px;white-space:nowrap;display:inline-block}
+.tag.o{background:var(--naranja);color:#fff}
+.tag.i{background:var(--tinta);color:var(--papel)}
+.tag.p{border-style:dashed}
+.btn{font-family:var(--mono);font-size:12px;border:1.5px solid var(--linea);background:var(--papel);padding:4px 10px;cursor:pointer;color:var(--tinta);box-shadow:2px 2px 0 var(--linea)}
+.btn:hover{background:var(--naranja);color:#fff}
+.btn:active{box-shadow:none;transform:translate(2px,2px)}
+.btn[disabled]{opacity:.6;cursor:progress;box-shadow:none}
+.btn.pri{background:var(--naranja);color:#fff}
+.btn.g{box-shadow:none;border-style:dashed}
+.alarm{list-style:none;padding:0}
+.alarm li{display:grid;grid-template-columns:42px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid rgba(42,40,34,.35);font-size:15px}
+.alarm li b{font-family:var(--mono);font-weight:500;font-size:12px;border:1.5px solid var(--linea);height:fit-content;text-align:center;padding:2px 0}
+.alarm li.u b{background:var(--naranja);color:#fff}
+.alarm li div{display:grid;gap:6px;justify-items:start}
+/* rieles */
+.rails{display:grid;gap:26px}
+.rail{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:start}
+.rail b{font-family:var(--cond);text-transform:uppercase;font-size:22px;font-weight:600;line-height:1}
+.rail small{font-family:var(--mono);font-size:11px;display:block;color:var(--tinta2);margin-top:4px}
+.stops{list-style:none;padding:0;display:flex;justify-content:space-between;position:relative;margin-top:6px}
+.stops:before{content:"";position:absolute;left:8px;right:8px;top:9px;height:8px;border-top:2px solid var(--linea);border-bottom:2px solid var(--linea)}
+.stops li{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;text-align:center;max-width:110px}
+.stops i{width:22px;height:22px;border:2px solid var(--linea);border-radius:50%;background:var(--papel);display:block;position:relative}
+.stops li.ok i{background:var(--tinta)}
+.stops li.ok i:after{content:"";position:absolute;left:5px;top:2px;width:5px;height:9px;border:solid var(--papel);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.stops li.t svg{width:44px;height:28px;background:var(--papel);padding:0 2px;margin-top:-3px}
+.stops li.t span{color:var(--naranja);font-weight:500}
+.route{margin-top:10px;font-family:var(--mono);font-size:12px;border:1px dashed var(--linea);padding:8px 10px}
+.route[hidden]{display:none}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.need{display:grid;gap:14px}
+.need>div{font-size:14.5px;font-weight:500}
+.need small{display:block;font-family:var(--mono);font-size:11px;font-weight:400;color:var(--tinta2)}
+.gauge{height:16px;border:2px solid var(--linea);background:var(--papel);margin-top:4px;position:relative}
+.gauge span{display:block;height:100%;background:repeating-linear-gradient(135deg,var(--tinta) 0 2px,transparent 2px 6px)}
+.gauge.o span{background:repeating-linear-gradient(135deg,var(--naranja) 0 3px,transparent 3px 6px)}
+.log{list-style:none;padding:0;font-family:var(--mono);font-size:12.5px}
+.log li{padding:7px 0;border-bottom:1px dotted var(--tinta2);display:grid;grid-template-columns:86px 1fr;gap:8px}
+.log li.f{color:var(--naranja)}
+.log li.f span:first-child:before{content:"! "}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 14px}
+.chip{font-family:var(--mono);font-size:12px;border:1.5px solid var(--linea);background:var(--papel);padding:3px 10px;cursor:pointer;color:var(--tinta)}
+.chip[aria-pressed=true]{background:var(--tinta);color:var(--papel)}
+.chip b{font-weight:500;opacity:.7;margin-left:5px}
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--linea);margin-bottom:14px;flex-wrap:wrap}
+.tabs button{font-family:var(--cond);font-size:19px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;background:none;border:2px solid transparent;border-bottom:0;padding:5px 14px;cursor:pointer;color:var(--tinta2)}
+.tabs button[aria-selected=true]{border-color:var(--linea);background:var(--papel);color:var(--tinta);margin-bottom:-2px}
+form.f{display:grid;grid-template-columns:repeat(2,1fr);gap:12px 16px;max-width:640px}
+form.f label{font-family:var(--mono);font-size:12px;display:grid;gap:4px}
+form.f input,form.f select{font:inherit;font-size:15px;padding:8px;border:1.5px solid var(--linea);background:var(--papel);color:var(--tinta)}
+.rk{list-style:none;padding:0;counter-reset:r}
+.rk li{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid rgba(42,40,34,.35);font-size:17px;font-weight:500}
+.rk li:before{counter-increment:r;content:counter(r);font-family:var(--cond);font-size:40px;font-weight:700;line-height:1;text-align:center;border:2px solid var(--linea);border-radius:50%;width:46px;height:46px;display:grid;place-items:center;font-size:26px}
+.rk li:first-child:before{background:var(--naranja);color:#fff}
+.odos{display:flex;gap:14px;flex-wrap:wrap}
+footer{margin-top:28px;font-family:var(--mono);font-size:12px;color:var(--tinta2)}
+/* paleta */
+.pal{position:fixed;inset:0;background:rgba(42,40,34,.62);display:grid;place-items:start center;padding-top:12vh;z-index:20}
+.pal[hidden]{display:none}
+.pal>div{width:min(560px,94vw);background:var(--papel);border:2px solid var(--linea);box-shadow:6px 6px 0 var(--naranja)}
+.pal input{width:100%;font-family:var(--mono);font-size:16px;padding:14px;border:0;border-bottom:2px solid var(--linea);background:var(--papel);color:var(--tinta)}
+.pal ul{list-style:none;padding:0;max-height:50vh;overflow:auto}
+.pal li{padding:9px 14px;font-family:var(--mono);font-size:13.5px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+.pal li small{color:var(--tinta2)}
+.pal li[aria-selected=true]{background:var(--tinta);color:var(--papel)}
+.pal li[aria-selected=true] small{color:var(--papel)}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--tinta);color:var(--papel);border:2px solid var(--naranja);font-family:var(--mono);font-size:13px;padding:9px 16px;z-index:30;max-width:92vw}
+.toast[hidden]{display:none}
+@media(max-width:1000px){
+ .cols,.two,.branches{grid-template-columns:1fr}
+ .flow{grid-template-columns:1fr 1fr;gap:20px 18px}
+ .nd,.nd:last-child{margin:0}.nd:not(:last-child):after{display:none}
+ .branches{gap:34px}
+ .rail{grid-template-columns:1fr}
+}
+@media(max-width:640px){
+ .stops{flex-direction:column;gap:14px;margin-left:4px}
+ .stops:before{left:10px;right:auto;top:8px;bottom:12px;width:8px;height:auto;border:0;border-left:2px solid var(--linea);border-right:2px solid var(--linea)}
+ .stops li{flex-direction:row;max-width:none;text-align:left;gap:10px}
+ .stops li.t{padding-left:0}
+ .stops li.t svg{width:40px}
+ .short button{font-size:17px;padding:8px 9px 5px}.short button i{display:none}
+ form.f{grid-template-columns:1fr}
+ table,tbody,tr,td{display:block}thead{display:none}
+ tr{border:1.5px solid var(--linea);padding:8px 10px;margin-bottom:10px;background:rgba(255,255,255,.3)}
+ td{border:0;padding:2px 0}td:first-child{font-weight:500}td:last-child{padding-top:6px}
+ .log li{grid-template-columns:1fr;gap:0}
+ .rk li{grid-template-columns:48px 1fr}.rk .tag{display:none}
+ .crumb{display:none}
+ .sel strong{font-size:30px}.sel small{font-size:17px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="bar">
+ <a class="brand" href="#inicio" data-go="inicio"><svg width="30" height="30" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="12" fill="none" stroke="#EFE5CA" stroke-width="7" stroke-dasharray="4 3.2"/><circle cx="17" cy="17" r="8" fill="#2A2822" stroke="#EFE5CA" stroke-width="1.5"/><circle cx="17" cy="17" r="3" fill="#C4501B"/></svg>DonaTrack</a>
+ <span class="crumb" id="crumb">Administración / Depósito central / Plano de planta · sábado 31 de octubre</span>
+ <span class="demo">Datos de demostración</span>
+ <button class="k" id="openPal" type="button">Ir a o hacer…<kbd>Ctrl K</kbd></button>
+</header>
+<div class="ruler" aria-hidden="true"></div>
+<nav class="short" id="nav" aria-label="Pantallas de administración"></nav>
+
+<main>
+<!-- INICIO -->
+<section class="view" id="v-inicio">
+ <div class="rot">Lámina 1 · Plano de planta</div>
+ <h1>Todo el depósito en un solo circuito.</h1>
+ <p class="sub">45 donaciones en circulación. Las válvulas naranja marcan dónde se está trabando algo: tocalas o elegí una estación para ver el detalle.</p>
+
+ <div class="plate dk"><div class="in">
+  <div class="lam"><span>Fig. 1 · Esquema operativo</span><span>Depósito central · escala S/E</span></div>
+  <div class="flow" id="flow"></div>
+  <div class="branches">
+   <div class="br"><b>Entrega fallida</b>Nadie recibió DT-0390 en Merendero Norte: vuelve al depósito (ayer).</div>
+   <div class="br"><b>Vencimientos</b>2 vencen en 48 h: lácteos y panificados (DT-0401 y DT-0403). Una donación vencida se marca como Vencida.</div>
+  </div>
+  <div class="leg"><i></i>válvula = pendiente que frena el circuito</div>
+ </div></div>
+
+ <div class="cols">
+  <div class="plate"><div class="in">
+   <div class="lam"><span>Lám. 2 · Ficha técnica</span><span>Estación elegida</span></div>
+   <h2 id="fichaT">Ficha técnica</h2>
+   <div class="tw"><table><thead><tr><th>Código</th><th>Qué es</th><th>Destino</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="rows"></tbody></table></div>
+   <p class="nm" id="nota"></p>
+  </div></div>
+  <div class="plate"><div class="in">
+   <div class="lam"><span>Lám. 3 · Alarmas</span><span>A urgente · B hoy · C semana</span></div>
+   <h2>Registro de alarmas</h2>
+   <ul class="alarm" id="alarm"></ul>
+  </div></div>
+ </div>
+
+ <div class="plate stack"><div class="in">
+  <div class="lam"><span>Lám. 4 · Rieles</span><span>Posiciones por paradas cumplidas</span></div>
+  <h2>Rieles de camiones</h2>
+  <div class="rails" id="rails1"></div>
+  <p class="nm">Posiciones por paradas cumplidas, no en vivo.</p>
+ </div></div>
+
+ <div class="two">
+  <div class="plate"><div class="in"><div class="lam"><span>Lám. 5 · Calibres</span><span>Cobertura</span></div><h2>Necesidades abiertas</h2><div class="need" id="need"></div></div></div>
+  <div class="plate"><div class="in"><div class="lam"><span>Lám. 6 · Serie</span><span>S34 – S41</span></div><h2>Semanas S34 a S41</h2>
+   <svg id="spark" viewBox="0 0 400 150" width="100%" role="img" aria-label="Recibidas: 9, 12, 7, 14, 11, 16, 10, 8. Entregadas: 6, 8, 9, 10, 12, 11, 13, 5."></svg>
+   <p class="nm">Trazo lleno: recibidas · trazo punteado naranja: entregadas.</p>
+   <p style="margin-top:10px"><b>23</b> entregadas este mes (+15 %) · <b>31</b> recibidas este mes (+8 %)</p>
+   <p style="margin-top:6px">Huella acumulada: <b>2.450 kg</b> a <b>34 entidades</b>. Alimentos 62 %, vestimenta 18 %, útiles escolares 12 %, higiene 8 %.</p></div></div>
+ </div>
+ <div class="plate stack"><div class="in"><div class="lam"><span>Lám. 7 · Bitácora</span><span>Cada cambio, con fecha y responsable</span></div><h2>Bitácora</h2>
+  <ul class="log">
+   <li><span>hace 12 min</span><span>Los Girasoles confirmó la recepción de DT-0409 (frazadas ×30).</span></li>
+   <li><span>hace 40 min</span><span>El camión 2 salió con 6 donaciones hacia Los Girasoles.</span></li>
+   <li><span>hace 1 h</span><span>El sistema asignó DT-0415 (útiles) a la necesidad de Escuela 12.</span></li>
+   <li><span>hace 2 h</span><span>Recibida DT-0416 (conservas 24 kg, Nicolás Pérez).</span></li>
+   <li><span>hace 3 h</span><span>DT-0411 quedó lista y se sumó al camión 3.</span></li>
+   <li class="f"><span>ayer</span><span>Nadie recibió DT-0390 en Merendero Norte: vuelve al depósito (Entrega fallida).</span></li>
+  </ul></div></div>
+</section>
+
+<!-- DONACIONES -->
+<section class="view" id="v-donaciones" hidden>
+ <div class="rot">Lámina 8 · Donaciones</div>
+ <h1>Inventario del depósito.</h1>
+ <p class="sub">Donaciones que piden atención y todo lo que está en circulación. Filtrá por estado; las acciones responden "Actualizando…" hasta que llega el evento.</p>
+ <div class="tabs" role="tablist" id="dtabs">
+  <button role="tab" aria-selected="true" data-t="inv">Inventario</button><button role="tab" aria-selected="false" data-t="reg">Registrar donación</button><button role="tab" aria-selected="false" data-t="norm">Revisión de normalización</button>
+ </div>
+ <div id="t-inv" class="plate"><div class="in">
+  <div class="lam"><span>Tabla de inventario</span><span id="invCount"></span></div>
+  <div class="chips" id="chips" role="group" aria-label="Filtrar por estado"></div>
+  <div class="tw"><table><thead><tr><th>Código</th><th>Qué es</th><th>Origen → destino</th><th>Estado</th><th>Acción</th></tr></thead><tbody id="inv"></tbody></table></div>
+  <p class="nm">Muestra de demostración: 8 donaciones que piden atención más la entrega fallida.</p>
+ </div></div>
+ <div id="t-reg" class="plate" hidden><div class="in">
+  <div class="lam"><span>Formulario de registro</span><span>Qué es · cantidad · vencimiento · categoría</span></div>
+  <form class="f" id="regf">
+   <label>Qué es<input required name="q" placeholder="Ej.: Frazadas" value="Frazadas"></label>
+   <label>Cantidad<input required name="c" placeholder="Ej.: 30 u" value="30 u"></label>
+   <label>Vencimiento<input name="v" type="text" placeholder="Sin vencimiento"></label>
+   <label>Categoría<select name="k"><option>alimentos</option><option>bebidas</option><option selected>vestimenta</option><option>mobiliario</option><option>útiles escolares</option><option>higiene</option></select></label>
+   <div style="grid-column:1/-1" class="row"><button class="btn pri" type="submit" id="regb">Registrar donación</button></div>
+  </form>
+  <p class="nm" id="regn">Al registrar, la donación queda En depósito, con fecha y responsable.</p>
+ </div></div>
+ <div id="t-norm" class="plate" hidden><div class="in">
+  <div class="lam"><span>Revisión de normalización de datos</span><span>Ejemplo ilustrativo</span></div>
+  <div class="tw"><table><thead><tr><th>Dato original</th><th>Propuesta</th><th>Acción</th></tr></thead><tbody id="normr"></tbody></table></div>
+  <p class="nm">Ejemplos ilustrativos para mostrar el flujo de revisión.</p>
+ </div></div>
+</section>
+
+<!-- ASIGNACIONES -->
+<section class="view" id="v-asignaciones" hidden>
+ <div class="rot">Lámina 9 · Asignaciones</div>
+ <h1>Propuestas para revisar.</h1>
+ <p class="sub">Los algoritmos proponen un destino; la administración aprueba o descarta. Hoy hay 4 donaciones con más de 5 días sin asignar y 2 asignadas sin camión.</p>
+ <div class="row" style="margin:0 0 16px"><button class="btn pri" id="runAlg" type="button">Ejecutar algoritmos de asignación</button></div>
+ <div class="two" style="margin-top:0">
+  <div class="plate"><div class="in"><div class="lam"><span>Cola de revisión</span><span id="propN">0 propuestas</span></div>
+   <ul class="alarm" id="props"><li><b>—</b><div><span>Sin propuestas por revisar. Ejecutá los algoritmos para generarlas.</span></div></li></ul></div></div>
+  <div class="plate"><div class="in"><div class="lam"><span>Contexto</span><span>Necesidades abiertas</span></div><div class="need" id="need2"></div>
+   <p class="nm">Asignada con 2 sin camión: DT-0403 y DT-0407 (demostración).</p></div></div>
+ </div>
+</section>
+
+<!-- CAMIONES -->
+<section class="view" id="v-camiones" hidden>
+ <div class="rot">Lámina 10 · Camiones</div>
+ <h1>Flota y rutas.</h1>
+ <p class="sub">3 camiones: 2 en ruta, 1 cargando. Cada ruta es un riel con sus paradas.</p>
+ <div class="plate"><div class="in"><div class="lam"><span>Rieles de la flota</span><span>No en vivo</span></div><div class="rails" id="rails2"></div>
+  <p class="nm">Posiciones por paradas cumplidas, no en vivo.</p></div></div>
+</section>
+
+<!-- DONANTES -->
+<section class="view" id="v-donantes" hidden>
+ <div class="rot">Lámina 11 · Donantes</div>
+ <h1>Quiénes alimentan la máquina.</h1>
+ <p class="sub">86 donantes activos: 52 Colaboradores, 26 Sostenedores y 8 Transformadores (demostración).</p>
+ <div class="two" style="margin-top:0">
+  <div class="plate"><div class="in"><div class="lam"><span>Importación</span><span>CSV de donantes</span></div><h2>Importar CSV</h2>
+   <p>Subí un archivo CSV de donantes. Va a pasar por la revisión de normalización antes de sumarse.</p>
+   <div class="row"><label class="btn" style="cursor:pointer">Elegir archivo<input id="csv" type="file" accept=".csv,text/csv" hidden></label><button class="btn pri" id="csvb" type="button">Importar CSV de donantes</button></div>
+   <p class="nm" id="csvn">Ningún archivo elegido.</p></div></div>
+  <div class="plate"><div class="in"><div class="lam"><span>Mes en curso</span><span>Ejemplo</span></div><h2>Ranking del mes</h2><ol class="rk"><li>Cooperativa La Huerta<span class="tag">1.º</span></li><li>Nicolás Pérez<span class="tag">2.º</span></li><li>Panadería El Molino<span class="tag">3.º</span></li></ol></div></div>
+ </div>
+</section>
+
+<!-- ENTIDADES -->
+<section class="view" id="v-entidades" hidden>
+ <div class="rot">Lámina 12 · Entidades</div>
+ <h1>Quiénes reciben.</h1>
+ <p class="sub">34 entidades ayudadas. 3 entidades nuevas esperan aprobación esta semana.</p>
+ <div class="two" style="margin-top:0">
+  <div class="plate"><div class="in"><div class="lam"><span>C1 · Esta semana</span><span>Solicitudes</span></div><h2>Esperando aprobación</h2>
+   <ul class="alarm" id="sol"></ul></div></div>
+  <div class="plate"><div class="in"><div class="lam"><span>Calibres</span><span>Necesidades abiertas</span></div><h2>Necesidades</h2><div class="need" id="need3"></div></div></div>
+ </div>
+</section>
+
+<!-- RANKINGS -->
+<section class="view" id="v-rankings" hidden>
+ <div class="rot">Lámina 13 · Rankings</div>
+ <h1>Donantes del mes.</h1>
+ <p class="sub">Ranking de ejemplo, octubre. Las categorías de donante son Colaboradores, Sostenedores y Transformadores.</p>
+ <div class="plate"><div class="in"><div class="lam"><span>Ranking del mes</span><span>Ejemplo</span></div><ol class="rk"><li>Cooperativa La Huerta<span class="tag">1.º</span></li><li>Nicolás Pérez<span class="tag">2.º</span></li><li>Panadería El Molino<span class="tag">3.º</span></li></ol></div></div>
+</section>
+<footer>DonaTrack · administración del depósito · Datos de demostración</footer>
+</main>
+
+<div class="pal" id="pal" hidden><div role="dialog" aria-modal="true" aria-label="Paleta de comandos"><input id="q" type="text" placeholder="Escribí una pantalla o una acción…" aria-label="Buscar pantalla o acción" autocomplete="off"><ul id="res" role="listbox"></ul></div></div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(function(){
+ var $=function(i){return document.getElementById(i)};
+ var tt,toast=$('toast');
+ function say(m){toast.textContent=m;toast.hidden=false;clearTimeout(tt);tt=setTimeout(function(){toast.hidden=true},3200)}
+ /* acción asíncrona: Actualizando… y recién después el resultado */
+ function act(btn,msg,done){var t=btn.textContent;btn.disabled=true;btn.textContent='Actualizando…';say(msg+' Actualizando…');setTimeout(function(){btn.disabled=false;btn.textContent=t;if(done)done();},1400)}
+ var TRUCK='<svg viewBox="0 0 36 22" aria-hidden="true"><path d="M1 3h20v14H1zM21 7h9l5 5v5H21z" fill="#EFE5CA" stroke="#2A2822" stroke-width="2"/><path d="M4 8h14M4 12h14" stroke="#C4501B" stroke-width="1.5"/><circle cx="9" cy="19" r="3" fill="#2A2822"/><circle cx="28" cy="19" r="3" fill="#2A2822"/></svg>';
+ /* navegación */
+ var V=[['inicio','Inicio'],['donantes','Donantes'],['entidades','Entidades'],['donaciones','Donaciones'],['asignaciones','Asignaciones'],['camiones','Camiones'],['rankings','Rankings']];
+ var nav=$('nav');
+ V.forEach(function(v,i){var b=document.createElement('button');b.type='button';b.dataset.v=v[0];b.innerHTML='<i>0'+(i+1)+'</i>'+v[1];b.onclick=function(){go(v[0])};nav.appendChild(b)});
+ function go(v,noHash){if(!document.getElementById('v-'+v))v='inicio';
+  V.forEach(function(x){$('v-'+x[0]).hidden=x[0]!==v});
+  [].forEach.call(nav.children,function(b){if(b.dataset.v===v)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')});
+  $('crumb').textContent='Administración / Depósito central / '+(v==='inicio'?'Plano de planta':V.filter(function(x){return x[0]===v})[0][1])+' · sábado 31 de octubre';
+  if(!noHash)history.replaceState(null,'','#'+v);window.scrollTo(0,0)}
+ document.querySelector('.brand').onclick=function(e){e.preventDefault();go('inicio')};
+ /* datos */
+ var D=[['DT-0398','Frazadas · 30 u','Cooperativa La Huerta → sin asignar','En depósito','8 días','Asignar'],['DT-0401','Yogur · 40 kg · vence en 48 h','Lácteos del Sur → sin asignar','En depósito','3 días','Asignar'],['DT-0396','Fideos · 35 kg','Cooperativa La Huerta → Merendero Norte','En depósito','6 días','Marcar vencida'],['DT-0403','Pan lactal · 60 u · vence en 48 h','Panadería El Molino → Comedor Los Girasoles','Asignada','2 días','Marcar vencida'],['DT-0407','Conservas · 24 kg','Nicolás Pérez → Escuela 12','Asignada','5 días','Cargar en camión 3'],['DT-0411','Camperas · 18 u','Nicolás Pérez → Hogar Esperanza','Lista para entregar','1 día','Cargar en camión 3'],['DT-0412','Arroz · 50 kg','Cooperativa La Huerta → Comedor Los Girasoles','En traslado','hoy','Ver ruta'],['DT-0414','Útiles · 120 u','Librería Central → Escuela 12','En traslado','hoy','Ver ruta'],['DT-0390','Donación no recibida','→ Merendero Norte','Entrega fallida','ayer','Asignar']];
+ var ST=['En depósito','Asignada','Lista para entregar','En traslado','Entrega fallida','Vencida'];
+ /* plano */
+ var N=[['Recibidas','31','este mes (+8 %)',null],['En depósito','18','4 llevan más de 5 días','En depósito'],['Asignada','11','2 sin camión','Asignada'],['Lista para entregar','7','','Lista para entregar'],['En traslado','9','3 camiones en ruta','En traslado'],['Entregada','23','este mes (+15 %)',null]];
+ var VV={1:['4','4 donaciones llevan más de 5 días sin asignar'],2:['2','2 donaciones asignadas sin camión'],4:['1','1 entrega pendiente de confirmar en Hogar Esperanza']};
+ var flow=$('flow'),rows=$('rows'),nota=$('nota'),btns=[];
+ N.forEach(function(n,i){var d=document.createElement('div');d.className='nd';var b=document.createElement('button');b.type='button';b.className='sel';b.setAttribute('aria-pressed','false');b.innerHTML='<span class="e">E'+(i+1)+'</span><strong>'+n[1]+'</strong><small>'+n[0]+'</small><em>'+(n[2]||'&nbsp;')+'</em>';b.onclick=function(){pick(i)};btns.push(b);d.appendChild(b);
+  var vv=VV[i];if(vv){var v=document.createElement('button');v.type='button';v.className='valve';v.textContent=vv[0];v.setAttribute('aria-label','Válvula: '+vv[1]);v.title=vv[1];v.onclick=function(){say(vv[1]);pick(i)};d.appendChild(v)}
+  flow.appendChild(d)});
+ function tagFor(d){return '<span class="tag'+(d[3]==='En depósito'&&parseInt(d[4])>5?' o':'')+'">'+d[3]+'</span> '+d[4]}
+ function pick(i){btns.forEach(function(b,k){b.setAttribute('aria-pressed',k===i)});var s=N[i][3];rows.innerHTML='';
+  $('fichaT').textContent='Ficha técnica · '+N[i][0];
+  if(!s){nota.textContent=i===0?'Las recibidas del mes se registran al llegar al depósito: 31 este mes.':'Las entregadas pasan a este contador cuando la entidad confirma la recepción: 23 este mes.';return}
+  var c=0;D.forEach(function(d){if(d[3]!==s)return;c++;var tr=document.createElement('tr');tr.innerHTML='<td>'+d[0]+'</td><td>'+d[1]+'</td><td>'+d[2].split('→')[1]+'</td><td class="st">'+tagFor(d)+'</td><td></td>';var b=document.createElement('button');b.className='btn';b.type='button';b.textContent=d[5];b.onclick=function(){rowAct(b,d,tr)};tr.lastChild.appendChild(b);rows.appendChild(tr)});
+  nota.textContent='Mostrando '+c+' de '+N[i][1]+' (muestra de demostración).'}
+ pick(1);
+ /* acción por fila */
+ function rowAct(b,d,tr){var cell=tr.querySelector('.st');
+  if(d[5]==='Ver ruta'){go('camiones');return}
+  cell.innerHTML='<span class="tag p">Actualizando…</span>';
+  act(b,d[0]+': '+d[5]+'.',function(){
+   if(d[5]==='Marcar vencida'){d[3]='Vencida';d[5]='Ver historial';say(d[0]+' quedó como Vencida.');renderInv();pick(btnIdx())}
+   else if(d[5]==='Asignar'){cell.innerHTML=tagFor(d)+' <span class="tag p">Propuesta pendiente</span>';say(d[0]+': la propuesta espera revisión en Asignaciones.')}
+   else if(d[5]==='Cargar en camión 3'){cell.innerHTML=tagFor(d)+' <span class="tag p">Camión 3: por confirmar</span>';say(d[0]+': carga solicitada, falta confirmación.')}
+   else cell.innerHTML=tagFor(d)})}
+ function btnIdx(){var r=0;btns.forEach(function(b,k){if(b.getAttribute('aria-pressed')==='true')r=k});return r}
+ /* alarmas */
+ var A=[['u','A1','4 donaciones llevan más de 5 días sin asignar','Ejecutar asignación','asignaciones'],['u','A2','2 vencen en 48 h: lácteos y panificados (DT-0401 y DT-0403)','Ver vencimientos','donaciones'],['','B1','Camión 3 sin chofer confirmado para mañana: Ruta Sur, 4 paradas, sale 08:00','Confirmar chofer',''],['','B2','Entrega pendiente de confirmar en Hogar Esperanza (llegó ayer 17:40)','Recordar a la entidad',''],['','C1','3 entidades nuevas esperan aprobación (esta semana)','Revisar solicitudes','entidades']];
+ A.forEach(function(a){var li=document.createElement('li');li.className=a[0];li.innerHTML='<b>'+a[1]+'</b><div><span>'+a[2]+'</span></div>';var b=document.createElement('button');b.className='btn';b.type='button';b.textContent=a[3];b.onclick=function(){if(a[4]){go(a[4]);return}act(b,a[3]+': '+a[1]+'.',function(){say(a[1]+': solicitud enviada, queda pendiente hasta recibir respuesta.')})};li.lastChild.appendChild(b);$('alarm').appendChild(li)});
+ /* necesidades */
+ var needH=[['Frazadas',18,30,'Comedor Los Girasoles · urgente',1],['Útiles escolares',90,120,'Escuela 12',0],['Leche en polvo',6,40,'Merendero Norte · urgente',1],['Camperas',18,18,'Hogar Esperanza · cubierta',0]].map(function(x){return '<div>'+x[0]+' '+x[1]+'/'+x[2]+'<small>'+x[3]+'</small><div class="gauge'+(x[4]?' o':'')+'" role="img" aria-label="'+x[1]+' de '+x[2]+'"><span style="width:'+Math.round(x[1]/x[2]*100)+'%"></span></div></div>'}).join('');
+ ['need','need2','need3'].forEach(function(i){$(i).innerHTML=needH});
+ /* rieles */
+ var T=[['Camión 1','En ruta · ETA 14:20 · carga 78 %','Depósito → Escuela 12 → Hogar Esperanza · 1/3 paradas',['Depósito','Escuela 12','Hogar Esperanza'],1],['Camión 2','En ruta · ETA 15:05 · carga 54 %','Depósito → Los Girasoles → Merendero Norte · 2/3 paradas',['Depósito','Los Girasoles','Merendero Norte'],2],['Camión 3','Cargando · sale mañana 08:00 · carga 31 %','Ruta Sur · 4 paradas',['Depósito','Parada 1','Parada 2','Parada 3','Parada 4'],0]];
+ function rails(id,full){var h='';T.forEach(function(t,k){var s='';t[3].forEach(function(n,i){s+='<li class="'+(i<t[4]?'ok':'')+'"><i></i>'+n+'</li>';if(i===Math.max(0,t[4]-1))s+='<li class="t" aria-label="'+t[0]+' aquí">'+TRUCK+'<span>'+t[0].replace('Camión ','C')+'</span></li>'});
+  h+='<div class="rail"><div><b>'+t[0]+'</b><small>'+t[1]+'</small></div><div><ol class="stops">'+s+'</ol>'+(full?'<div class="row"><button class="btn" data-r="'+k+'" type="button">Ver ruta</button>'+(k===2?'<button class="btn pri" data-c="1" type="button">Confirmar chofer</button>':'')+'</div><div class="route" id="rt'+k+'" hidden>'+t[2]+'</div>':'')+'</div></div>'});
+  $(id).innerHTML=h}
+ rails('rails1',0);rails('rails2',1);
+ $('rails2').addEventListener('click',function(e){var b=e.target;if(b.dataset.r){var r=$('rt'+b.dataset.r);r.hidden=!r.hidden;b.textContent=r.hidden?'Ver ruta':'Ocultar ruta'}else if(b.dataset.c){act(b,'Camión 3: confirmar chofer.',function(){say('Pedido enviado: el chofer del camión 3 sigue sin confirmar hasta que responda.')})}});
+ /* serie */
+ var R=[9,12,7,14,11,16,10,8],E=[6,8,9,10,12,11,13,5],sp=$('spark'),h='';
+ function pl(a,dash,col){return '<polyline fill="none" stroke="'+col+'" stroke-width="2.5" '+(dash?'stroke-dasharray="6 5" ':'')+'points="'+a.map(function(v,i){return (20+i*52)+','+(120-v*6.4)}).join(' ')+'"/>'}
+ h+='<path d="M20 120H380" stroke="#2A2822" stroke-width="1.5"/>'+[0,1,2,3,4,5,6,7].map(function(i){return '<path d="M'+(20+i*52)+' 120v5" stroke="#2A2822"/>'}).join('')+pl(R,0,'#2A2822')+pl(E,1,'#C4501B');
+ R.forEach(function(v,i){h+='<text x="'+(20+i*52)+'" y="142" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10">S'+(34+i)+'</text>'});
+ sp.innerHTML=h;
+ /* inventario con filtros */
+ var fil='Todas',chips=$('chips');
+ function renderInv(){chips.innerHTML='';['Todas'].concat(ST).forEach(function(s){var n=s==='Todas'?D.length:D.filter(function(d){return d[3]===s}).length;var b=document.createElement('button');b.type='button';b.className='chip';b.setAttribute('aria-pressed',fil===s);b.innerHTML=s+'<b>'+n+'</b>';b.onclick=function(){fil=s;renderInv()};chips.appendChild(b)});
+  var t=$('inv');t.innerHTML='';var c=0;D.forEach(function(d){if(fil!=='Todas'&&d[3]!==fil)return;c++;var tr=document.createElement('tr');var tg=d[3]==='Vencida'?'<span class="tag i">Vencida</span> '+d[4]:tagFor(d);tr.innerHTML='<td>'+d[0]+'</td><td>'+d[1]+'</td><td>'+d[2]+'</td><td class="st">'+tg+'</td><td></td>';var b=document.createElement('button');b.className='btn';b.type='button';b.textContent=d[5];b.onclick=function(){if(d[5]==='Ver historial'){say(d[0]+': En depósito → Vencida, con fecha y responsable.');return}rowAct(b,d,tr)};tr.lastChild.appendChild(b);t.appendChild(tr)});
+  if(!c)t.innerHTML='<tr><td colspan="5">Sin donaciones en este estado dentro de la muestra.</td></tr>';
+  $('invCount').textContent=c+' de '+D.length+' en la muestra'}
+ renderInv();
+ /* pestañas de donaciones */
+ var tb=[].slice.call($('dtabs').children);
+ tb.forEach(function(b){b.onclick=function(){tb.forEach(function(x){x.setAttribute('aria-selected',x===b);$('t-'+x.dataset.t).hidden=x!==b})}});
+ $('regf').onsubmit=function(e){e.preventDefault();var b=$('regb');act(b,'Registrar donación.',function(){$('regn').textContent='Registro recibido. Aparece en el inventario como En depósito cuando el sistema lo confirme.'})};
+ $('normr').innerHTML=[['yogurt 40 kgs','Yogur · 40 kg'],['pan lactal x60','Pan lactal · 60 u'],['conservas 24k','Conservas · 24 kg']].map(function(x){return '<tr><td>'+x[0]+'</td><td>'+x[1]+'</td><td><button class="btn" type="button">Aceptar</button> <button class="btn g" type="button">Corregir</button></td></tr>'}).join('');
+ $('normr').addEventListener('click',function(e){var b=e.target;if(b.tagName==='BUTTON'&&b.textContent==='Aceptar')act(b,'Aceptar normalización.',function(){b.closest('tr').children[1].insertAdjacentHTML('beforeend',' <span class="tag p">Pendiente de confirmación</span>')})});
+ /* asignaciones */
+ var P=[['DT-0398','Frazadas · 30 u','Comedor Los Girasoles','necesidad: Frazadas 18/30'],['DT-0396','Fideos · 35 kg','Merendero Norte','lleva 6 días en depósito'],['DT-0401','Yogur · 40 kg','Merendero Norte','vence en 48 h']];
+ $('runAlg').onclick=function(){var b=$('runAlg');act(b,'Ejecutar algoritmos de asignación.',function(){var u=$('props');u.innerHTML='';P.forEach(function(p){var li=document.createElement('li');li.className='u';li.innerHTML='<b>'+p[0].slice(3)+'</b><div><span><b style="all:unset;font-weight:600">'+p[1]+'</b> → '+p[2]+' <small style="font-family:var(--mono);color:var(--tinta2)">('+p[3]+')</small></span><span class="st"><span class="tag p">Propuesta · por revisar</span></span><span class="row" style="margin:0"></span></div>';var r=li.querySelector('.row');var a=document.createElement('button');a.className='btn pri';a.type='button';a.textContent='Aprobar';var x=document.createElement('button');x.className='btn';x.type='button';x.textContent='Descartar';
+   function fin(l,res,cls){var st=li.querySelector('.st');st.innerHTML='<span class="tag p">Actualizando…</span>';a.disabled=x.disabled=true;say(p[0]+': '+l+'. Actualizando…');setTimeout(function(){st.innerHTML='<span class="tag '+cls+'">'+res+'</span>';r.remove();$('propN').textContent=u.querySelectorAll('.row').length+' por revisar';say(p[0]+': '+res+'.')},1400)}
+   a.onclick=function(){fin('aprobar','Asignada','i')};x.onclick=function(){fin('descartar','Descartada','')};r.appendChild(a);r.appendChild(x);u.appendChild(li)});$('propN').textContent='3 por revisar';say('Propuestas de demostración listas para revisar.')})};
+ /* entidades */
+ [1,2,3].forEach(function(n){var li=document.createElement('li');li.className=n===1?'u':'';li.innerHTML='<b>N'+n+'</b><div><span>Solicitud de entidad nueva '+n+' de 3 · registro como entidad</span><span class="st"><span class="tag p">Por aprobar</span></span></div>';var b=document.createElement('button');b.className='btn';b.type='button';b.textContent='Revisar solicitud';b.onclick=function(){act(b,'Revisar solicitud '+n+'.',function(){li.querySelector('.st').innerHTML='<span class="tag p">En revisión</span>'})};li.lastChild.appendChild(b);$('sol').appendChild(li)});
+ /* csv */
+ $('csv').onchange=function(){$('csvn').textContent=this.files[0]?'Archivo elegido: '+this.files[0].name:'Ningún archivo elegido.'};
+ $('csvb').onclick=function(){var b=$('csvb');act(b,'Importar CSV de donantes.',function(){$('csvn').textContent=($('csv').files[0]?$('csv').files[0].name+': ':'')+'recibido; queda en revisión de normalización hasta que el sistema termine.'})};
+ /* paleta */
+ var items=[['Ir a Inicio','pantalla','inicio'],['Ir a Donantes','pantalla','donantes'],['Ir a Entidades','pantalla','entidades'],['Ir a Donaciones','pantalla','donaciones'],['Ir a Asignaciones','pantalla','asignaciones'],['Ir a Camiones','pantalla','camiones'],['Ir a Rankings','pantalla','rankings'],['Registrar donación','acción','reg'],['Revisión de normalización de datos','acción','norm'],['Ejecutar algoritmos de asignación','acción','alg'],['Importar CSV de donantes','acción','csv'],['Marcar donación como vencida','acción','venc'],['Ver estación: En depósito','plano',1],['Ver estación: Asignada','plano',2],['Ver estación: Lista para entregar','plano',3],['Ver estación: En traslado','plano',4]];
+ var pal=$('pal'),q=$('q'),res=$('res'),sel=0,list=[];
+ function render(){var t=q.value.toLowerCase();list=items.filter(function(x){return x[0].toLowerCase().indexOf(t)>-1});if(sel>=list.length)sel=0;res.innerHTML='';list.forEach(function(x,i){var li=document.createElement('li');li.setAttribute('role','option');li.setAttribute('aria-selected',i===sel);li.innerHTML='<span>'+x[0]+'</span><small>'+x[1]+'</small>';li.onclick=function(){run(x)};res.appendChild(li)});if(!list.length)res.innerHTML='<li>Sin resultados</li>'}
+ function open(){pal.hidden=false;q.value='';sel=0;render();q.focus()}
+ function close(){pal.hidden=true;$('openPal').focus()}
+ function tab(t){go('donaciones');tb.forEach(function(x){if(x.dataset.t===t)x.click()})}
+ function run(x){pal.hidden=true;var k=x[1];
+  if(k==='plano'){go('inicio');pick(x[2])}else if(k==='pantalla')go(x[2]);
+  else if(x[2]==='reg'||x[2]==='norm')tab(x[2]);
+  else if(x[2]==='alg'){go('asignaciones');$('runAlg').click()}
+  else if(x[2]==='csv')go('donantes');
+  else{go('donaciones');fil='Todas';renderInv();say('Elegí la donación y tocá "Marcar vencida".')}}
+ $('openPal').onclick=open;
+ q.oninput=function(){sel=0;render()};
+ document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();pal.hidden?open():close();return}
+  if(pal.hidden)return;
+  if(e.key==='Escape'){close()}else if(e.key==='ArrowDown'){e.preventDefault();sel=Math.min(list.length-1,sel+1);render()}else if(e.key==='ArrowUp'){e.preventDefault();sel=Math.max(0,sel-1);render()}else if(e.key==='Enter'&&list[sel]){run(list[sel])}});
+ pal.addEventListener('click',function(e){if(e.target===pal)close()});
+ /* arranque: ?vista=… o #… ; ?estacion=n ; ?tab=… */
+ var qs=new URLSearchParams(location.search),v0=qs.get('vista')||location.hash.slice(1)||'inicio';
+ go(v0,true);
+ if(qs.get('tab'))tab(qs.get('tab'));
+ if(qs.get('filtro')){fil=qs.get('filtro');renderInv()}
+ if(qs.get('alg'))$('runAlg').click();
+ if(qs.get('ruta')){[].forEach.call(document.querySelectorAll('#rails2 [data-r]'),function(b){b.click()})}
+})();
+</script>
+</body>
+</html>

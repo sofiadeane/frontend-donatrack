@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DonaTrack · Tratado de la máquina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--papel:#EFE5CA;--papel2:#E6DAB9;--tinta:#2A2822;--tinta2:#5A5546;--naranja:#C4501B;--naranja2:#F29A62;--linea:#2A2822;
+--cond:"Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;--texto:"Barlow","Segoe UI",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{background:var(--papel);color:var(--tinta);font-family:var(--texto);font-size:17px;line-height:1.55;overflow-x:hidden;background-image:radial-gradient(rgba(42,40,34,.07) 1px,transparent 1px);background-size:6px 6px}
+a{color:inherit}
+button{font:inherit}
+:focus-visible{outline:3px solid var(--naranja);outline-offset:3px}
+.dk :focus-visible{outline-color:var(--naranja2)}
+.shell{display:grid;grid-template-columns:250px minmax(0,1fr);min-height:100vh}
+aside{position:sticky;top:0;height:100vh;border-right:1.5px solid var(--linea);padding:22px 18px;display:flex;flex-direction:column;gap:16px;background:var(--papel2);overflow-y:auto}
+.brand{font-family:var(--cond);font-weight:700;font-size:26px;letter-spacing:.04em;text-transform:uppercase;display:flex;gap:10px;align-items:center;text-decoration:none}
+.brand small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;font-weight:400;color:var(--tinta2)}
+aside ol{list-style:none;padding:0;display:grid;gap:1px}
+aside ol a{display:grid;grid-template-columns:36px 1fr;font-family:var(--cond);font-weight:500;font-size:18px;text-transform:uppercase;letter-spacing:.03em;text-decoration:none;padding:3px 8px;border-left:3px solid transparent;color:var(--tinta2)}
+aside ol a span{font-family:var(--mono);font-size:11px;padding-top:5px}
+aside ol a:hover{color:var(--tinta)}
+aside ol a.on{border-left-color:var(--naranja);color:var(--tinta);background:rgba(196,80,27,.12)}
+.pub{margin-top:auto;display:grid;gap:6px;font-family:var(--mono);font-size:12px}
+.pub a{border:1.5px solid var(--linea);padding:5px 10px;text-decoration:none;text-align:center}
+.pub a:hover{background:var(--tinta);color:var(--papel)}
+.pub a.pri{background:var(--naranja);color:#fff;border-color:var(--naranja)}
+main{padding:0 clamp(16px,3.4vw,52px) 40px;max-width:1240px;min-width:0}
+section{padding:60px 0 34px;border-bottom:1.5px solid var(--linea);position:relative}
+section:after{content:"";position:absolute;left:0;right:0;bottom:-6px;border-bottom:1px solid var(--linea)}
+.rot{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--naranja);margin-bottom:8px;display:flex;gap:12px;align-items:center}
+.rot:after{content:"";flex:1;height:1px;background:repeating-linear-gradient(90deg,var(--tinta) 0 6px,transparent 6px 10px);opacity:.5}
+h1,h2,h3{font-family:var(--cond);font-weight:600;text-transform:uppercase;line-height:.98;letter-spacing:.01em}
+h1{font-size:clamp(48px,7.6vw,104px);margin-bottom:18px}
+h1 em{font-style:normal;color:var(--naranja);background:linear-gradient(transparent 82%,rgba(196,80,27,.22) 0)}
+h2{font-size:clamp(36px,4.6vw,58px);margin-bottom:14px}
+h3{font-size:25px;margin-bottom:4px}
+.lead{font-size:clamp(17px,1.5vw,20px);max-width:38em;color:var(--tinta2)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.btn{font-family:var(--mono);font-size:14px;text-decoration:none;border:1.5px solid var(--linea);padding:10px 18px;background:var(--papel);cursor:pointer;color:var(--tinta);box-shadow:3px 3px 0 var(--linea);display:inline-block}
+.btn.pri{background:var(--naranja);color:#fff}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--linea)}
+.dk .btn{box-shadow:3px 3px 0 var(--naranja2);border-color:var(--papel)}
+/* secciones con nota al margen */
+.sec{display:grid;grid-template-columns:minmax(0,1fr) 190px;gap:0 30px}
+.marg{font-family:var(--mono);font-size:11.5px;color:var(--tinta2);border-left:1px dotted var(--tinta);padding-left:12px;align-self:start;margin-top:26px;line-height:1.5}
+.marg b{display:block;color:var(--naranja);font-weight:500;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+.marg+.marg{margin-top:18px}
+.plate{border:1.5px solid var(--linea);padding:8px;margin-top:26px;background:rgba(255,255,255,.2);position:relative}
+.plate>.in{border:1px solid var(--linea);padding:12px;position:relative}
+.plate>.in:before,.plate>.in:after{content:"";position:absolute;width:16px;height:16px;border:2px solid var(--naranja);pointer-events:none}
+.plate>.in:before{left:-7px;top:-7px;border-right:0;border-bottom:0}
+.plate>.in:after{right:-7px;bottom:-7px;border-left:0;border-top:0}
+.dk{background:var(--tinta);color:var(--papel);background-image:repeating-linear-gradient(135deg,rgba(239,229,202,.05) 0 1px,transparent 1px 7px)}
+.dk.plate,.dk.plate>.in{border-color:var(--tinta)}
+.dk.plate>.in{border-color:var(--papel)}
+.plate svg{display:block;width:100%;height:auto}
+.cap{font-family:var(--mono);font-size:12px;color:var(--tinta2);display:flex;justify-content:space-between;gap:10px;padding:8px 2px 0;flex-wrap:wrap}
+.dk .cap{color:#CFC4A6}
+/* piezas */
+.parts{display:grid;grid-template-columns:repeat(2,1fr);margin-top:24px;border:1.5px solid var(--linea);background:rgba(255,255,255,.18)}
+.part{padding:20px;display:grid;grid-template-columns:92px 1fr;gap:16px;border-bottom:1.5px solid var(--linea);position:relative}
+.part:nth-child(odd){border-right:1.5px solid var(--linea)}
+.part:nth-last-child(-n+2){border-bottom:0}
+.part svg{width:92px;height:92px}
+.part p{font-size:15.5px}
+.part code{font-family:var(--mono);font-size:11.5px;color:var(--naranja);display:block;margin-top:6px}
+.part .n{position:absolute;right:12px;top:8px;font-family:var(--mono);font-size:11px;color:var(--tinta2)}
+/* problema */
+.prob{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:22px;border:1.5px solid var(--linea)}
+.prob>div{padding:20px}
+.prob>div:first-child{border-right:1.5px solid var(--linea);background:repeating-linear-gradient(135deg,rgba(42,40,34,.07) 0 1px,transparent 1px 8px)}
+.prob h3{margin-bottom:8px}
+.prob ul{list-style:none;padding:0;font-size:16px}
+.prob li{padding:6px 0 6px 28px;position:relative;border-bottom:1px dotted var(--tinta2)}
+.prob li:before{position:absolute;left:0;top:6px;font-family:var(--mono);color:var(--naranja);content:"×"}
+.prob>div+div li:before{content:"✓";color:var(--tinta)}
+/* circuito */
+.circ svg text{font-family:var(--mono);font-size:12px;fill:var(--papel)}
+.node{cursor:pointer}
+.node circle{fill:var(--tinta);stroke:var(--papel);stroke-width:2.5}
+.node.on circle{fill:var(--naranja)}
+.node:focus-visible circle{stroke:var(--naranja2);stroke-width:5}
+.info{border:1.5px solid var(--papel);padding:14px 16px;margin-top:14px;min-height:100px;background:rgba(239,229,202,.08);font-size:16px}
+.info b{font-family:var(--cond);font-size:26px;text-transform:uppercase;display:block;font-weight:600;color:var(--naranja2)}
+.tbl{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-top:22px;border:1.5px solid var(--linea)}
+.tbl div{padding:10px 8px;border-right:1px solid var(--linea);font-size:14px;line-height:1.3}
+.tbl div:last-child{border-right:0}
+.tbl b{display:block;font-family:var(--cond);font-size:19px;text-transform:uppercase;font-weight:600}
+.tbl code{font-family:var(--mono);font-size:10.5px;color:var(--tinta2);word-break:break-all;display:block;margin-top:3px}
+.tbl div.d{background:repeating-linear-gradient(135deg,rgba(196,80,27,.18) 0 2px,transparent 2px 7px)}
+/* operarios */
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:22px}
+.role{border:1.5px solid var(--linea);padding:18px;text-align:center;font-size:15.5px;background:rgba(255,255,255,.2);display:flex;flex-direction:column;align-items:center}
+.role svg{width:150px;height:150px;margin-bottom:6px}
+.role small{font-family:var(--mono);font-size:11px;color:var(--naranja);letter-spacing:.08em;text-transform:uppercase}
+/* contadores */
+.counters{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}
+.cnt{border:1.5px solid var(--linea);padding:14px 10px;text-align:center;background:rgba(255,255,255,.25);min-width:0}
+.odo{display:flex;gap:3px;justify-content:center;margin-bottom:8px}
+.odo i{font-family:var(--mono);font-style:normal;font-weight:500;font-size:clamp(22px,2.6vw,34px);background:var(--tinta);color:var(--papel);width:1.05em;text-align:center;border-radius:2px;line-height:1.4;box-shadow:inset 0 -6px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12)}
+.odo i.dot{background:none;color:var(--tinta);width:.35em;box-shadow:none}
+.cnt small{font-family:var(--cond);font-weight:500;font-size:19px;text-transform:uppercase;line-height:1.1;display:block}
+.cats{font-family:var(--mono);font-size:13px;margin-top:16px;display:flex;gap:10px 16px;flex-wrap:wrap}
+.cats span{border:1.5px solid var(--linea);padding:1px 10px}
+.demo{font-family:var(--mono);font-size:12px;border:1.5px dashed var(--tinta);padding:1px 8px;display:inline-block;margin-top:14px}
+.dk .demo{border-color:var(--naranja2);color:var(--naranja2)}
+/* galería */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 6px}
+.chip{font-family:var(--mono);font-size:13px;border:1.5px solid var(--linea);background:var(--papel);padding:4px 12px;cursor:pointer;color:var(--tinta)}
+.chip[aria-pressed=true]{background:var(--tinta);color:var(--papel)}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:14px}
+.gi{border:1.5px solid var(--linea);padding:6px;background:rgba(255,255,255,.22)}
+.gi>div{border:1px solid var(--linea);padding:12px;height:100%;display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center}
+.gi[hidden]{display:none}
+.gi svg{width:56px;height:56px}
+.gi h3{font-size:22px;margin:0}
+.gi p{font-family:var(--mono);font-size:11.5px;color:var(--tinta2)}
+.gi .tag{font-family:var(--mono);font-size:11px;border:1.5px solid var(--linea);padding:0 6px;display:inline-block;margin-top:4px}
+/* atlas */
+.atlas{position:relative}
+.stamp{position:absolute;right:18px;top:18px;font-family:var(--cond);font-weight:700;font-size:28px;text-transform:uppercase;color:var(--naranja);border:3px solid var(--naranja);padding:0 12px;transform:rotate(6deg);background:var(--papel);z-index:2}
+.priv{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.priv div{border:1.5px solid var(--linea);padding:16px;font-size:16px}
+.priv h3{font-size:22px}
+footer{padding:30px 0 0;font-family:var(--mono);font-size:12px;color:var(--tinta2);display:flex;gap:18px;flex-wrap:wrap}
+@media(max-width:1180px){.sec{grid-template-columns:minmax(0,1fr)}.marg{margin-top:16px;border-left:2px solid var(--naranja)}}
+@media(max-width:900px){
+ .shell{grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr;align-content:start}
+ aside{position:sticky;height:auto;z-index:5;flex-direction:row;align-items:center;padding:8px 12px;border-right:0;border-bottom:1.5px solid var(--linea);overflow-x:auto;overflow-y:hidden;gap:12px}
+ .brand small,.pub{display:none}.brand span{display:none}
+ aside ol{display:flex;gap:4px}
+ aside ol a{grid-template-columns:auto;white-space:nowrap;font-size:16px;border-left:0;border-bottom:3px solid transparent;padding:2px 8px}
+ aside ol a span{display:none}
+ aside ol a.on{border-bottom-color:var(--naranja)}
+ .parts,.roles,.prob,.priv{grid-template-columns:1fr}
+ .counters{grid-template-columns:repeat(2,1fr)}
+ .gal{grid-template-columns:1fr 1fr}
+ .part:nth-child(odd){border-right:0}.part:nth-last-child(-n+2){border-bottom:1.5px solid var(--linea)}.part:last-child{border-bottom:0}
+ .prob>div:first-child{border-right:0;border-bottom:1.5px solid var(--linea)}
+ .tbl{grid-template-columns:1fr 1fr}.tbl div{border-bottom:1px solid var(--linea)}
+ section{padding-top:36px}
+ .stamp{font-size:22px;right:8px;top:8px}
+}
+@media(max-width:700px){.circ svg text{font-size:21px}.circ .node text{font-size:21px}}
+@media(max-width:560px){.gal{grid-template-columns:1fr}.part{grid-template-columns:70px 1fr}.part svg{width:70px;height:70px}.btn{padding:10px 14px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important;animation:none!important}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.g1{transform-origin:178px 150px;animation:spin 24s linear infinite}.g2{transform-origin:236px 118px;animation:spin 24s linear infinite reverse}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside aria-label="Índice del tratado">
+ <a class="brand" href="#s1"><svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="12" fill="none" stroke="#2A2822" stroke-width="7" stroke-dasharray="4 3.2"/><circle cx="17" cy="17" r="8" fill="#EFE5CA" stroke="#2A2822" stroke-width="1.5"/><circle cx="17" cy="17" r="3" fill="#C4501B"/></svg><span>DonaTrack<small>TRATADO DE TRAZABILIDAD</small></span></a>
+ <ol id="idx">
+  <li><a href="#s1"><span>I</span>Principio</a></li>
+  <li><a href="#s2"><span>II</span>El problema</a></li>
+  <li><a href="#s3"><span>III</span>Las piezas</a></li>
+  <li><a href="#s4"><span>IV</span>El circuito</a></li>
+  <li><a href="#s5"><span>V</span>Los operarios</a></li>
+  <li><a href="#s6"><span>VI</span>Registro público</a></li>
+  <li><a href="#s7"><span>VII</span>Entregas</a></li>
+  <li><a href="#s8"><span>VIII</span>Atlas</a></li>
+  <li><a href="#s9"><span>IX</span>Privacidad</a></li>
+  <li><a href="#s10"><span>X</span>Entrada</a></li>
+ </ol>
+ <div class="pub"><a href="#s7">Galería de entregas</a><a href="#s9">Privacidad</a><a href="#s10">Ingresar</a><a class="pri" href="#s10">Registrarme</a></div>
+</aside>
+
+<main>
+<section id="s1" style="padding-top:44px">
+ <div class="rot">Lámina I · Principio de funcionamiento</div>
+ <h1>Una máquina de precisión para que <em>ninguna donación se pierda.</em></h1>
+ <p class="lead">DonaTrack registra, asigna, traslada y confirma cada donación, y deja constancia de cada paso con fecha y responsable.</p>
+ <div class="btns"><a class="btn pri" href="#s4">Ver la máquina en marcha</a><a class="btn" href="#s10">Ingresar</a></div>
+ <div class="sec"><div>
+ <div class="plate dk"><div class="in">
+  <svg viewBox="0 0 820 340" role="img" aria-label="Grabado de una máquina: tolva de entrada, engranajes, tuberías y un camión de salida">
+   <defs><pattern id="ha" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0v6" stroke="#EFE5CA" stroke-width="1" opacity=".55"/></pattern></defs>
+   <g fill="none" stroke="#EFE5CA" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M40 40h120l-24 70H64z" fill="url(#ha)"/><path d="M52 60h96M58 80h84" stroke-width="1" stroke="#2A2822"/>
+    <path d="M100 110v34h78"/><path d="M110 110v24h58" stroke-width="1"/>
+    <rect x="260" y="90" width="150" height="120" rx="4"/><rect x="270" y="100" width="130" height="100" rx="2" stroke-width="1"/>
+    <path d="M275 125h120M275 140h120M275 155h90M275 170h60" stroke-width=".8"/>
+    <circle cx="178" cy="150" r="34" stroke-width="9" stroke-dasharray="7 7.3" class="g1"/><circle cx="178" cy="150" r="26"/><circle cx="178" cy="150" r="9" fill="#2A2822"/><circle cx="178" cy="150" r="3" fill="#C4501B" stroke="none"/>
+    <circle cx="236" cy="118" r="22" stroke-width="7" stroke-dasharray="5 5.2" class="g2"/><circle cx="236" cy="118" r="16"/><circle cx="236" cy="118" r="5" fill="#2A2822"/>
+    <path d="M410 150h70q16 0 16 16v90h110"/><path d="M410 164h60q4 0 4 8v96h130" stroke-width="1"/>
+    <circle cx="496" cy="166" r="9" fill="#2A2822"/><circle cx="496" cy="256" r="9" fill="#2A2822"/>
+    <path d="M60 300h720" stroke-width="1.5"/><path d="M40 312h760M80 322h700" stroke-width=".8"/>
+    <path d="M610 190h110l30 36v44H610z" fill="url(#ha)"/><path d="M720 190v36h30"/><rect x="630" y="204" width="68" height="34" stroke-width="1" fill="#2A2822"/>
+    <circle cx="650" cy="276" r="18" fill="#2A2822"/><circle cx="650" cy="276" r="7"/><circle cx="730" cy="276" r="18" fill="#2A2822"/><circle cx="730" cy="276" r="7"/>
+    <rect x="590" y="214" width="30" height="30" stroke-width="1.5" fill="#2A2822"/><path d="M590 214l30 30M620 214l-30 30" stroke-width=".8"/>
+   </g>
+   <path d="M100 126v8M140 150h-6M262 258l60 0" stroke="#F29A62" stroke-width="3" stroke-linecap="round"/>
+   <path d="M640 238h48v14h-48z" fill="#C4501B"/>
+   <g font-family="IBM Plex Mono,monospace" font-size="11" fill="#EFE5CA"><text x="52" y="28">A · entrada</text><text x="150" y="206">B · asignación</text><text x="300" y="82">C · registro de estados</text><text x="560" y="180">D · salida</text><text x="760" y="248">E</text></g>
+   <rect x="262" y="212" width="146" height="18" fill="#C4501B"/><text x="270" y="225" font-family="IBM Plex Mono,monospace" font-size="11" fill="#fff">fecha + responsable</text>
+  </svg>
+  <div class="cap"><span>Fig. 1 · Esquema ilustrativo, sin escala</span><span>Entra una donación, sale una entrega confirmada</span></div>
+ </div></div></div>
+ <div><div class="marg"><b>Nota al margen</b>Cada donación que entra queda registrada con qué es, cuánta hay, cuándo vence y a qué categoría pertenece.</div><div class="marg"><b>Leyenda</b>A entrada · B asignación · C registro · D salida · E confirmación.</div></div></div>
+</section>
+
+<section id="s2">
+ <div class="rot">Lámina II · El problema</div>
+ <h2>Donar es fácil. Saber adónde fue, no.</h2>
+ <p class="lead">Sin un mecanismo, una donación puede quedarse días en el depósito, vencerse o llegar a quien no la necesita, y nadie puede decir en qué paso está.</p>
+ <div class="prob">
+  <div><h3>Sin mecanismo</h3><ul><li>No se sabe en qué estado está cada donación.</li><li>Lo que vence se descubre tarde.</li><li>Las necesidades de las entidades y lo que se dona no se encuentran.</li><li>Nadie deja constancia de quién hizo qué.</li></ul></div>
+  <div><h3>Con DonaTrack</h3><ul><li>Siete estados definidos, de En depósito a Entregada.</li><li>Alertas de vencimiento y de donaciones sin asignar.</li><li>Asignación propuesta por algoritmos y revisada por la administración.</li><li>Cada cambio queda con fecha y responsable.</li></ul></div>
+ </div>
+</section>
+
+<section id="s3">
+ <div class="rot">Lámina III · Las piezas</div>
+ <h2>Cuatro mecanismos, ningún eslabón suelto.</h2>
+ <p class="lead">Cada pieza hace una sola cosa y deja registro de lo que hizo.</p>
+ <div class="parts">
+  <div class="part"><span class="n">pieza 1</span><svg viewBox="0 0 84 84" fill="none" stroke="#2A2822" stroke-width="2" aria-hidden="true"><rect x="16" y="12" width="52" height="62" rx="3"/><rect x="30" y="6" width="24" height="12" fill="#EFE5CA"/><path d="M26 34h32M26 44h32M26 54h20" stroke-width="1.5"/><circle cx="56" cy="58" r="8" stroke="#C4501B"/></svg><div><h3>Registro</h3><p>La administración anota qué es, cuánta hay, cuándo vence y a qué categoría pertenece.</p><code>EN_DEPOSITO</code></div></div>
+  <div class="part"><span class="n">pieza 2</span><svg viewBox="0 0 84 84" fill="none" stroke="#2A2822" stroke-width="2" aria-hidden="true"><circle cx="30" cy="42" r="18" stroke-width="7" stroke-dasharray="4 3.8"/><circle cx="30" cy="42" r="12"/><circle cx="58" cy="30" r="12" stroke-width="5" stroke-dasharray="3 3.6"/><circle cx="58" cy="30" r="8"/><circle cx="30" cy="42" r="3" stroke="#C4501B"/></svg><div><h3>Asignación</h3><p>Los algoritmos proponen un destino para cada donación. La administración revisa, aprueba o descarta.</p><code>ASIGNACION_REALIZADA</code></div></div>
+  <div class="part"><span class="n">pieza 3</span><svg viewBox="0 0 84 84" fill="none" stroke="#2A2822" stroke-width="2" aria-hidden="true"><path d="M6 24h42v34H6zM48 34h18l10 12v12H48z"/><circle cx="20" cy="62" r="7" fill="#EFE5CA"/><circle cx="62" cy="62" r="7" fill="#EFE5CA"/><path d="M14 34h28" stroke="#C4501B"/></svg><div><h3>Traslado</h3><p>Se carga el camión y sale por una ruta con paradas.</p><code>LISTA_PARA_ENTREGAR · EN_TRASLADO</code></div></div>
+  <div class="part"><span class="n">pieza 4</span><svg viewBox="0 0 84 84" fill="none" stroke="#2A2822" stroke-width="2" aria-hidden="true"><circle cx="42" cy="42" r="28"/><circle cx="42" cy="42" r="22" stroke-width="1"/><path d="M30 42l9 9 16-18" stroke="#C4501B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><div><h3>Confirmación</h3><p>La entidad confirma la recepción. Recién ahí la donación pasa a Entregada y suma al impacto.</p><code>ENTREGADA</code></div></div>
+ </div>
+</section>
+
+<section id="s4">
+ <div class="rot">Lámina IV · El circuito</div>
+ <h2>El camino de una donación, de punta a punta.</h2>
+ <p class="lead">Tocá cada estación o poné la máquina en marcha. Las líneas punteadas son los dos desvíos: Entrega fallida y Vencida.</p>
+ <div class="plate dk circ"><div class="in">
+  <svg id="map" viewBox="0 0 800 270" role="group" aria-label="Circuito de estados de una donación"></svg>
+  <div class="cap"><span>Fig. 2 · Circuito de estados</span><span>Cada cambio queda con fecha y responsable</span></div>
+ </div></div>
+ <div class="info" id="info" aria-live="polite" style="background:var(--tinta);color:var(--papel)"></div>
+ <div class="btns" style="margin-top:14px"><button class="btn pri" id="run" type="button">Poner en marcha</button></div>
+ <div class="tbl" aria-label="Los siete estados">
+  <div><b>En depósito</b><code>EN_DEPOSITO</code></div><div><b>Asignada</b><code>ASIGNACION_REALIZADA</code></div><div><b>Lista para entregar</b><code>LISTA_PARA_ENTREGAR</code></div><div><b>En traslado</b><code>EN_TRASLADO</code></div><div><b>Entregada</b><code>ENTREGADA</code></div><div class="d"><b>Entrega fallida</b><code>ENTREGA_FALLIDA</code></div><div class="d"><b>Vencida</b><code>VENCIDA</code></div>
+ </div>
+ <div class="cap" style="padding-top:8px"><span>Tabla 1 · Los siete estados reales. Rayados: desvíos.</span></div>
+</section>
+
+<section id="s5">
+ <div class="rot">Lámina V · Los operarios</div>
+ <h2>Tres manos en la misma máquina.</h2>
+ <div class="roles">
+  <div class="role"><svg viewBox="0 0 150 150" fill="none" stroke="#2A2822" stroke-width="2" role="img" aria-label="Retrato grabado del donante"><circle cx="75" cy="75" r="70"/><circle cx="75" cy="75" r="64" stroke-width="1"/><circle cx="75" cy="62" r="20"/><path d="M36 128c4-28 20-38 39-38s35 10 39 38M60 70c6 6 24 6 30 0M62 52h26"/><path d="M48 118l8-10M58 122l8-12M92 122l-8-12M102 118l-8-10" stroke-width="1"/></svg><small>Operario A</small><h3>Donante</h3><p>Persona humana o jurídica. Mira el historial de estados de cada donación y sus incentivos: categoría, misiones e insignias.</p></div>
+  <div class="role"><svg viewBox="0 0 150 150" fill="none" stroke="#2A2822" stroke-width="2" role="img" aria-label="Retrato grabado de la entidad"><circle cx="75" cy="75" r="70"/><circle cx="75" cy="75" r="64" stroke-width="1"/><path d="M40 112V70l35-26 35 26v42zM62 112V88h26v24"/><path d="M75 44v-14l12 4-12 4" stroke="#C4501B"/></svg><small>Operario B</small><h3>Entidad</h3><p>Publica sus necesidades con cobertura (por ejemplo, 18 de 30 frazadas) y confirma lo que recibe.</p></div>
+  <div class="role"><svg viewBox="0 0 150 150" fill="none" stroke="#2A2822" stroke-width="2" role="img" aria-label="Retrato grabado de la administración"><circle cx="75" cy="75" r="70"/><circle cx="75" cy="75" r="64" stroke-width="1"/><circle cx="75" cy="75" r="22" stroke-width="9" stroke-dasharray="5 4.4"/><circle cx="75" cy="75" r="14"/><circle cx="75" cy="75" r="4" stroke="#C4501B"/></svg><small>Operario C</small><h3>Administración del depósito</h3><p>Registra, revisa propuestas, arma rutas y cuida los vencimientos.</p></div>
+ </div>
+</section>
+
+<section id="s6">
+ <div class="rot">Lámina VI · Registro público</div>
+ <h2>Los contadores de la máquina, a la vista.</h2>
+ <div class="counters" id="counters">
+  <div class="cnt"><div class="odo" data-v="128" data-d="4"></div><small>donaciones entregadas</small></div>
+  <div class="cnt"><div class="odo" data-v="34" data-d="4"></div><small>entidades ayudadas</small></div>
+  <div class="cnt"><div class="odo" data-v="2448" data-d="4" data-sep="1"></div><small>kg de alimentos distribuidos</small></div>
+  <div class="cnt"><div class="odo" data-v="86" data-d="4"></div><small>donantes activos</small></div>
+ </div>
+ <div class="cats"><span>52 Colaboradores</span><span>26 Sostenedores</span><span>8 Transformadores</span></div>
+ <span class="demo">Datos de demostración</span>
+</section>
+
+<section id="s7">
+ <div class="rot">Lámina VII · Entregas</div>
+ <h2>Lo que la máquina ya entregó.</h2>
+ <p class="lead">Galería pública de donaciones entregadas. Filtrá por categoría.</p>
+ <div class="chips" id="chips" role="group" aria-label="Filtrar por categoría"></div>
+ <div class="gal" id="gal"></div>
+ <span class="demo">Ejemplos de demostración</span>
+</section>
+
+<section id="s8">
+ <div class="rot">Lámina VIII · Atlas</div>
+ <h2>Mapa de impacto.</h2>
+ <div class="plate dk atlas"><span class="stamp">Próximamente</span><div class="in">
+  <svg viewBox="0 0 800 200" role="img" aria-label="Esquema ilustrativo de un territorio con curvas de nivel y estaciones unidas por una línea">
+   <g fill="none" stroke="#EFE5CA" stroke-width="1.2" opacity=".85"><path d="M20 150c60-80 140-100 220-40s160 60 240-20 200-60 300 20"/><path d="M20 170c70-70 150-86 220-30s160 56 240-14 200-52 300 18" stroke-width=".8"/><path d="M20 130c60-84 140-108 220-48s160 66 240-26 200-68 300 22" stroke-width=".8"/><path d="M20 110c60-84 140-108 220-48s160 66 240-26 200-68 300 22" stroke-width=".6"/></g>
+   <path d="M120 104L290 86 470 120 640 70" fill="none" stroke="#F29A62" stroke-width="2.5" stroke-dasharray="2 8" stroke-linecap="round"/>
+   <g fill="#2A2822" stroke="#EFE5CA" stroke-width="2"><circle cx="120" cy="104" r="8"/><circle cx="290" cy="86" r="8"/><circle cx="470" cy="120" r="8"/><circle cx="640" cy="70" r="8"/></g>
+  </svg>
+  <div class="cap"><span>Fig. 3 · Esquema ilustrativo</span><span>El mapa real todavía no está disponible</span></div></div></div>
+</section>
+
+<section id="s9">
+ <div class="rot">Lámina IX · Privacidad</div>
+ <h2>Qué se ve y qué no.</h2>
+ <div class="priv">
+  <div><h3>Sin sesión</h3><p>Cualquiera puede ver las cifras de transparencia y la galería de donaciones entregadas.</p></div>
+  <div><h3>Con sesión</h3><p>Cada rol ve lo suyo: la persona donante sus donaciones, la entidad sus necesidades y asignaciones, la administración el depósito.</p></div>
+ </div>
+ <div class="btns"><a class="btn" href="#">Leer la política de privacidad</a></div>
+</section>
+
+<section id="s10" style="border-bottom:0">
+ <div class="rot">Lámina X · Entrada</div>
+ <h2>Entrá a la sala de máquinas.</h2>
+ <p class="lead">Registrate como donante (persona humana o jurídica) o como entidad. Para recorrer antes, ingresá con una sesión de demostración por rol.</p>
+ <div class="btns"><a class="btn pri" href="#">Registrarme</a><a class="btn" href="#">Ingresar</a></div>
+ <footer><span>DonaTrack · proyecto académico UTN-FRBA</span><a href="#s9">Privacidad</a></footer>
+</section>
+</main>
+</div>
+
+<script>
+(function(){
+ var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+ var links=[].slice.call(document.querySelectorAll('#idx a'));
+ var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+e.target.id)})}})},{rootMargin:'-30% 0px -60% 0px'});
+ document.querySelectorAll('main section').forEach(function(s){io.observe(s)});
+ /* circuito */
+ var S=[['En depósito','Llega al depósito y se registra: qué es, cantidad, vencimiento y categoría.'],['Asignada','El sistema la asigna a una necesidad concreta; la administración aprueba o descarta la propuesta.'],['Lista para entregar','Queda lista y se suma a un camión con ruta y paradas.'],['En traslado','El camión está en ruta. La pantalla muestra "Actualizando…" hasta recibir el evento.'],['Entregada','La entidad confirmó la recepción: suma al impacto con fecha y responsable.']];
+ var NS='http://www.w3.org/2000/svg',map=document.getElementById('map'),info=document.getElementById('info');
+ function el(n,a,p){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);(p||map).appendChild(e);return e}
+ var d='M60 120C120 120 130 60 210 60S310 120 400 120 500 60 590 60 690 120 740 120';
+ el('path',{d:d,fill:'none',stroke:'#EFE5CA','stroke-width':2.5,id:'main'});
+ el('path',{d:d,fill:'none',stroke:'#EFE5CA','stroke-width':1,transform:'translate(0 7)'});
+ var main=document.getElementById('main'),L=main.getTotalLength(),pts=[],nodes=[];
+ [0,.25,.5,.75,1].forEach(function(f){pts.push(main.getPointAtLength(f*L))});
+ var p1=pts[0],p3=pts[3];
+ el('path',{d:'M'+p3.x+' '+(p3.y+16)+'C'+(p3.x-40)+' 225 '+(p1.x+150)+' 215 '+(p1.x+15)+' '+(p1.y+8),fill:'none',stroke:'#F29A62','stroke-width':2,'stroke-dasharray':'3 7','stroke-linecap':'round'});
+ var tf=el('text',{x:420,y:252,'text-anchor':'middle'});tf.textContent='Entrega fallida: vuelve al depósito';
+ el('path',{d:'M'+p1.x+' '+(p1.y+8)+'L'+(p1.x+10)+' '+(p1.y+60),fill:'none',stroke:'#F29A62','stroke-width':2,'stroke-dasharray':'3 7','stroke-linecap':'round',opacity:0});
+ el('path',{d:'M'+(p1.x-6)+' '+(p1.y-16)+'L'+(p1.x-20)+' '+(p1.y-56),fill:'none',stroke:'#F29A62','stroke-width':2,'stroke-dasharray':'3 7','stroke-linecap':'round'});
+ el('path',{d:'M'+(p1.x-28)+' '+(p1.y-74)+'l16 16M'+(p1.x-12)+' '+(p1.y-74)+'l-16 16',stroke:'#F29A62','stroke-width':2.5});
+ var tv=el('text',{x:p1.x+2,y:p1.y-62});tv.textContent='Vencida';
+ var dot=el('circle',{r:8,fill:'#C4501B',stroke:'#EFE5CA','stroke-width':2,cx:pts[0].x,cy:pts[0].y});
+ S.forEach(function(s,i){
+  var g=el('g',{class:'node',tabindex:0,role:'button','aria-label':'Estación '+(i+1)+': '+s[0]});
+  el('circle',{cx:pts[i].x,cy:pts[i].y,r:16},g);
+  var t=el('text',{x:pts[i].x,y:pts[i].y+4,'text-anchor':'middle','font-weight':'500'},g);t.textContent=i+1;
+  var lt=el('text',{x:pts[i].x,y:pts[i].y+(i%2===0?44:-28),'text-anchor':i===0?'start':(i===4?'end':'middle')},g);lt.textContent=s[0];
+  if(i===0)lt.setAttribute('x',pts[i].x-52);if(i===4)lt.setAttribute('x',pts[i].x+16);
+  g.onclick=function(){stop();show(i)};g.onkeydown=function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();stop();show(i)}};
+  nodes.push(g)});
+ map.appendChild(dot);
+ function show(i){nodes.forEach(function(n,k){n.classList.toggle('on',k===i)});dot.setAttribute('cx',pts[i].x);dot.setAttribute('cy',pts[i].y);info.innerHTML='<b>'+(i+1)+' · '+S[i][0]+'</b>'+S[i][1]}
+ var raf=0,run=document.getElementById('run');
+ function stop(){cancelAnimationFrame(raf);run.textContent='Poner en marcha'}
+ run.onclick=function(){
+  if(reduce){var k=0;var iv=setInterval(function(){show(k);k++;if(k>4)clearInterval(iv)},1200);return}
+  stop();run.textContent='Reiniciar';var t0=null,dur=9000;
+  function step(ts){if(!t0)t0=ts;var f=Math.min(1,(ts-t0)/dur),p=main.getPointAtLength(f*L);dot.setAttribute('cx',p.x);dot.setAttribute('cy',p.y);var i=Math.min(4,Math.round(f*4));nodes.forEach(function(n,k){n.classList.toggle('on',k===i)});info.innerHTML='<b>'+(i+1)+' · '+S[i][0]+'</b>'+S[i][1];if(f<1)raf=requestAnimationFrame(step);else run.textContent='Poner en marcha'}
+  raf=requestAnimationFrame(step)};
+ show(0);
+ /* odómetros */
+ document.querySelectorAll('.odo').forEach(function(o){
+  var v=+o.dataset.v,sep=o.dataset.sep;
+  function draw(x){var s=String(x);while(s.length<4)s='0'+s;var h='';s.split('').forEach(function(c,i){if(sep&&i===1)h+='<i class="dot">.</i>';h+='<i>'+c+'</i>'});o.innerHTML=h;o.setAttribute('role','img');o.setAttribute('aria-label',v.toLocaleString('es-AR'))}
+  draw(reduce||location.search.indexOf('static')>-1?v:0);
+  if(!reduce&&location.search.indexOf('static')<0){var seen=false;new IntersectionObserver(function(es){if(es[0].isIntersecting&&!seen){seen=true;var t0=null;(function f(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/1400);draw(Math.round(v*(1-Math.pow(1-k,3))));if(k<1)requestAnimationFrame(f)})(performance.now())}}).observe(o)}
+  if(location.search.indexOf('static')>-1)draw(v)});
+ /* galería */
+ var IC={'alimentos':'<path d="M14 40h28l-3 10H17zM18 40c0-14 20-14 20 0M28 20v-6"/>','bebidas':'<path d="M20 12h16l-2 8v28H22V20zM22 30h12"/>','vestimenta':'<path d="M18 12l-10 8 6 8 6-4v24h20V24l6 4 6-8-10-8c-2 6-12 6-14 0z" transform="translate(2 0) scale(.85)"/>','mobiliario':'<path d="M14 26h28v8H14zM16 34v14M40 34v14M14 26v-10h28v10"/>','útiles escolares':'<path d="M12 14h22v36H12zM34 18l10-4v36l-10 4M18 22h10M18 30h10"/>','higiene':'<path d="M22 20h12v28H22zM25 12h6v8h-6zM22 30h12"/>'};
+ var G=[['Frazadas × 30','vestimenta','Comedor Los Girasoles'],['Conservas · 24 kg','alimentos','Escuela 12'],['Jugos · 60 u','bebidas','Hogar Esperanza'],['Sillas · 12 u','mobiliario','Merendero Norte'],['Útiles · 120 u','útiles escolares','Escuela 12'],['Kits de higiene · 40 u','higiene','Hogar Esperanza']];
+ var cats=['Todas'].concat(G.map(function(g){return g[1]})),fc='Todas',chips=document.getElementById('chips'),gal=document.getElementById('gal');
+ G.forEach(function(g){var d=document.createElement('div');d.className='gi';d.dataset.c=g[1];d.innerHTML='<div><svg viewBox="0 0 56 56" fill="none" stroke="#2A2822" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><circle cx="28" cy="28" r="26" stroke-width="1" stroke-dasharray="2 3"/>'+IC[g[1]]+'</svg><div><h3>'+g[0]+'</h3><p>→ '+g[2]+'</p><span class="tag">Entregada</span> <span class="tag">'+g[1]+'</span></div></div>';gal.appendChild(d)});
+ cats.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='chip';b.textContent=c;b.setAttribute('aria-pressed',c===fc);b.onclick=function(){fc=c;[].forEach.call(chips.children,function(x){x.setAttribute('aria-pressed',x===b)});[].forEach.call(gal.children,function(x){x.hidden=c!=='Todas'&&x.dataset.c!==c})};chips.appendChild(b)});
+var m=location.search.match(/sec=(\d+)/);if(m){document.documentElement.style.scrollBehavior='auto';var t=document.getElementById('s'+m[1]);if(t)window.scrollTo(0,t.getBoundingClientRect().top+scrollY)}
+})();
+</script>
+</body>
+</html>

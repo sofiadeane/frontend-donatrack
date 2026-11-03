@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico-b :: layout(~{::title}, ~{::contenido})}">
+<head><title>DonaTrack — Cada donación, de punta a punta</title></head>
+<body>
+<th:block th:fragment="contenido">
+
+  <!-- ===== HERO: donación → trazabilidad → logística → impacto ===== -->
+  <section class="bh" aria-labelledby="titulo-hero" data-ruta-viva>
+    <div class="bh__arriba">
+      <div class="bh__texto">
+        <p class="b-kicker">Trazabilidad de donaciones · UTN-FRBA</p>
+        <h1 id="titulo-hero" class="b-display bh__titulo">Lo que donás, <em>de punta a punta.</em></h1>
+        <p class="b-lead">DonaTrack registra cada donación desde que entra al depósito hasta que una entidad la recibe, con estado, fecha y responsable en cada paso.</p>
+        <div class="bh__acciones">
+          <a class="b-btn b-btn--primary" th:href="@{/registro(tipo='humana')}">
+            <span th:replace="~{fragments/iconos :: icono('corazon', 18)}"></span>Quiero donar
+          </a>
+          <a class="b-btn" th:href="@{/registro(tipo='entidad')}">
+            <span th:replace="~{fragments/iconos :: icono('casa', 18)}"></span>Soy una entidad
+          </a>
+          <a class="b-link" th:href="@{/mapa-de-impacto}">Ver mapa de impacto →</a>
+        </div>
+      </div>
+
+      <!-- Ficha de seguimiento: cambia de estado al ritmo de la ruta -->
+      <aside class="ficha" aria-label="Ejemplo de ficha de seguimiento">
+        <div class="ficha__cab">
+          <span class="b-mono ficha__etq">Ficha de seguimiento</span>
+          <span class="b-demo">Ejemplo</span>
+        </div>
+        <p class="ficha__codigo b-display b-mono" data-ficha-codigo>DT-0412</p>
+        <p class="ficha__bien">Arroz largo fino · 50 kg</p>
+        <p class="ficha__estado"><span class="b-tag" data-estado="EN_DEPOSITO" data-ficha-estado>En depósito</span></p>
+        <dl class="ficha__datos">
+          <div><dt>Donó</dt><dd>Cooperativa La Huerta</dd></div>
+          <div><dt>Destino</dt><dd data-ficha-destino>Sin asignar todavía</dd></div>
+        </dl>
+        <div class="ficha__barra" aria-hidden="true">
+          <i data-paso="0" class="is-on"></i><i data-paso="1"></i><i data-paso="2"></i><i data-paso="3"></i>
+        </div>
+      </aside>
+    </div>
+
+    <ol class="ruta" aria-label="Recorrido de una donación en cuatro estaciones">
+      <li class="ruta__est" data-estacion="0" data-estado="EN_DEPOSITO" data-destino="Sin asignar todavía">
+        <span class="ruta__num b-mono">01</span>
+        <svg class="ruta__dibujo" viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+          <path d="M20 34 60 14l40 20-40 20z"/><path d="M20 34v34l40 20V54M100 34v34L60 88"/><path d="M40 24l40 20"/>
+        </svg>
+        <h2 class="b-display">Donación</h2>
+        <p class="ruta__dato b-mono">Entra al depósito</p>
+        <p class="ruta__texto">Se registra con su categoría, cantidad y vencimiento.</p>
+      </li>
+      <li class="ruta__est" data-estacion="1" data-estado="ASIGNACION_REALIZADA" data-destino="Comedor Los Girasoles">
+        <span class="ruta__num b-mono">02</span>
+        <svg class="ruta__dibujo" viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 14h50l42 42-30 30-42-42z"/><circle cx="34" cy="34" r="6"/><path d="M60 46l16 16M70 36l16 16"/>
+        </svg>
+        <h2 class="b-display">Trazabilidad</h2>
+        <p class="ruta__dato b-mono">Se asigna a una necesidad</p>
+        <p class="ruta__texto">El sistema la vincula con lo que una entidad pidió.</p>
+      </li>
+      <li class="ruta__est" data-estacion="2" data-estado="EN_TRASLADO" data-destino="Comedor Los Girasoles · camión 2">
+        <span class="ruta__num b-mono">03</span>
+        <svg class="ruta__dibujo" viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+          <path d="M8 22h62v44H8z"/><path d="M70 36h24l18 18v12H70z"/><circle cx="30" cy="70" r="9"/><circle cx="90" cy="70" r="9"/>
+        </svg>
+        <h2 class="b-display">Logística</h2>
+        <p class="ruta__dato b-mono">Sale en camión</p>
+        <p class="ruta__texto">Rutas, paradas y horarios a la vista de quien espera.</p>
+      </li>
+      <li class="ruta__est" data-estacion="3" data-estado="ENTREGADA" data-destino="Comedor Los Girasoles · recibida">
+        <span class="ruta__num b-mono">04</span>
+        <svg class="ruta__dibujo" viewBox="0 0 120 90" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" aria-hidden="true">
+          <path d="M14 46 60 10l46 36"/><path d="M26 40v44h68V40"/><path d="M44 62l12 12 22-24"/>
+        </svg>
+        <h2 class="b-display">Impacto</h2>
+        <p class="ruta__dato b-mono">Se entrega y se confirma</p>
+        <p class="ruta__texto">La entidad confirma la recepción y el donante lo ve.</p>
+      </li>
+    </ol>
+
+    <div class="cinta" aria-hidden="true">
+      <div class="cinta__pista">
+        <span class="cinta__grupo">
+          <span><i data-estado="EN_TRASLADO"></i>DT-0412 · Arroz 50 kg · En traslado</span>
+          <span><i data-estado="ENTREGADA"></i>DT-0409 · Frazadas ×30 · Entregada</span>
+          <span><i data-estado="ASIGNACION_REALIZADA"></i>DT-0415 · Útiles escolares · Asignada</span>
+          <span><i data-estado="EN_DEPOSITO"></i>DT-0416 · Conservas 24 kg · En depósito</span>
+          <span><i data-estado="LISTA_PARA_ENTREGAR"></i>DT-0411 · Camperas ×18 · Lista para entregar</span>
+        </span>
+        <span class="cinta__grupo">
+          <span><i data-estado="EN_TRASLADO"></i>DT-0412 · Arroz 50 kg · En traslado</span>
+          <span><i data-estado="ENTREGADA"></i>DT-0409 · Frazadas ×30 · Entregada</span>
+          <span><i data-estado="ASIGNACION_REALIZADA"></i>DT-0415 · Útiles escolares · Asignada</span>
+          <span><i data-estado="EN_DEPOSITO"></i>DT-0416 · Conservas 24 kg · En depósito</span>
+          <span><i data-estado="LISTA_PARA_ENTREGAR"></i>DT-0411 · Camperas ×18 · Lista para entregar</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROBLEMA ===== -->
+  <section class="bp b-dark" aria-labelledby="titulo-problema">
+    <div class="bp__cab">
+      <p class="b-kicker rev">01 · El problema</p>
+      <h2 id="titulo-problema" class="b-display rev" style="--i:1">Donar es fácil. <em>Saber qué pasó después,</em> no tanto.</h2>
+    </div>
+    <div class="bp__cuerpo">
+      <ul class="bp__tachado rev" aria-label="Cómo suele resolverse hoy">
+        <li><s>planilla_final_v3.xlsx</s></li>
+        <li><s>“¿llegó lo del jueves?”</s></li>
+        <li><s>te paso por WhatsApp</s></li>
+        <li><s>lo anoté en una libreta</s></li>
+      </ul>
+      <div class="bp__tabla rev" style="--i:1">
+        <table>
+          <caption class="sr-only">Antes y con DonaTrack</caption>
+          <thead><tr><th scope="col">Qué pasa</th><th scope="col">Antes</th><th scope="col">Con DonaTrack</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Registro</th><td>Planillas y mensajes sueltos</td><td>Una ficha por donación</td></tr>
+            <tr><th scope="row">Destino</th><td>Se decide de palabra</td><td>Vinculada a una necesidad concreta</td></tr>
+            <tr><th scope="row">Estado</th><td>“Creo que salió”</td><td>Siete estados, cada uno con fecha</td></tr>
+            <tr><th scope="row">Entrega</th><td>Sin constancia</td><td>Confirmada por la entidad</td></tr>
+            <tr><th scope="row">Quién ve</th><td>Solo quien lo hizo</td><td>Donante, entidad y administración</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CÓMO FUNCIONA ===== -->
+  <section class="bc" id="como" aria-labelledby="titulo-como">
+    <div class="bc__cab">
+      <p class="b-kicker rev">02 · Cómo funciona</p>
+      <h2 id="titulo-como" class="b-display rev" style="--i:1">Cinco pasos, <em>un solo expediente.</em></h2>
+      <p class="b-lead rev" style="--i:2">Cada paso lo hace una persona concreta y deja un registro que los demás pueden ver.</p>
+    </div>
+    <ol class="bc__lista">
+      <li class="paso rev" style="--c:var(--st-deposito)">
+        <span class="paso__num b-num">01</span>
+        <div class="paso__cuerpo"><h3>Registro</h3><p>Personas donantes y entidades beneficiarias crean su perfil. Las entidades cargan lo que necesitan.</p></div>
+        <span class="paso__actor b-tag">Donante · Entidad</span>
+      </li>
+      <li class="paso rev" style="--c:var(--st-deposito)">
+        <span class="paso__num b-num">02</span>
+        <div class="paso__cuerpo"><h3>Recepción</h3><p>Una persona administradora registra en el depósito lo que llegó: qué es, cuánto y cuándo vence.</p></div>
+        <span class="paso__actor b-tag" data-estado="EN_DEPOSITO">En depósito</span>
+      </li>
+      <li class="paso rev" style="--c:var(--st-asignada)">
+        <span class="paso__num b-num">03</span>
+        <div class="paso__cuerpo"><h3>Asignación</h3><p>El sistema vincula donaciones con necesidades materiales concretas y avisa a ambas partes.</p></div>
+        <span class="paso__actor b-tag" data-estado="ASIGNACION_REALIZADA">Asignada</span>
+      </li>
+      <li class="paso rev" style="--c:var(--st-lista)">
+        <span class="paso__num b-num">04</span>
+        <div class="paso__cuerpo"><h3>Traslado</h3><p>La donación queda lista, se carga en un camión y sale hacia la entidad por una ruta con paradas.</p></div>
+        <span class="paso__actor b-tag" data-estado="EN_TRASLADO">En traslado</span>
+      </li>
+      <li class="paso rev" style="--c:var(--st-entregada)">
+        <span class="paso__num b-num">05</span>
+        <div class="paso__cuerpo"><h3>Entrega</h3><p>La entidad confirma la recepción. El donante ve que llegó y el sistema suma al impacto.</p></div>
+        <span class="paso__actor b-tag" data-estado="ENTREGADA">Entregada</span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ===== RECORRIDO: máquina de estados + libro de movimientos ===== -->
+  <section class="br" id="recorrido" aria-labelledby="titulo-recorrido">
+    <div class="br__cab">
+      <p class="b-kicker rev">03 · Recorrido de una donación</p>
+      <h2 id="titulo-recorrido" class="b-display rev" style="--i:1">Un día en la vida de <em>DT‑0412.</em></h2>
+      <button type="button" class="b-btn b-btn--sm br__play" data-reproducir hidden>▶ Reproducir recorrido</button>
+    </div>
+
+    <div class="br__panel rev" data-recorrido>
+      <div class="mapa" role="group" aria-label="Estados de una donación. Elegí uno para ver su registro">
+        <button type="button" class="mapa__n" data-paso="1" data-estado="EN_DEPOSITO"><span class="b-mono">1</span>En depósito</button>
+        <button type="button" class="mapa__n" data-paso="2" data-estado="ASIGNACION_REALIZADA"><span class="b-mono">2</span>Asignada</button>
+        <button type="button" class="mapa__n" data-paso="3" data-estado="LISTA_PARA_ENTREGAR"><span class="b-mono">3</span>Lista para entregar</button>
+        <button type="button" class="mapa__n" data-paso="4" data-estado="EN_TRASLADO"><span class="b-mono">4</span>En traslado</button>
+        <button type="button" class="mapa__n" data-paso="5" data-estado="ENTREGADA"><span class="b-mono">5</span>Entregada</button>
+        <p class="mapa__rama mapa__rama--a" data-estado="VENCIDA"><span class="b-tag" data-estado="VENCIDA">Vencida</span><small>si vence antes de salir</small></p>
+        <p class="mapa__rama mapa__rama--b" data-estado="ENTREGA_FALLIDA"><span class="b-tag" data-estado="ENTREGA_FALLIDA">Entrega fallida</span><small>si nadie recibe</small></p>
+      </div>
+
+      <div class="libro">
+        <table>
+          <caption class="sr-only">Libro de movimientos de la donación DT-0412</caption>
+          <thead><tr><th scope="col">Hora</th><th scope="col">Estado</th><th scope="col">Quién</th><th scope="col">Qué pasó</th></tr></thead>
+          <tbody>
+            <tr data-paso="1"><td class="b-mono">08:12</td><td><span class="b-tag" data-estado="EN_DEPOSITO">En depósito</span></td><td class="b-mono">admin</td><td>Recibida: arroz, 50 kg. Se crea la ficha DT-0412.</td></tr>
+            <tr data-paso="2"><td class="b-mono">09:40</td><td><span class="b-tag" data-estado="ASIGNACION_REALIZADA">Asignada</span></td><td class="b-mono">SISTEMA</td><td>Vinculada a la necesidad de Comedor Los Girasoles.</td></tr>
+            <tr data-paso="3"><td class="b-mono">11:05</td><td><span class="b-tag" data-estado="LISTA_PARA_ENTREGAR">Lista para entregar</span></td><td class="b-mono">logística</td><td>Embalada y asignada al camión 2.</td></tr>
+            <tr data-paso="4"><td class="b-mono">13:30</td><td><span class="b-tag" data-estado="EN_TRASLADO">En traslado</span></td><td class="b-mono">logística</td><td>Salió del depósito. Parada 2 de 3.</td></tr>
+            <tr data-paso="5"><td class="b-mono">14:22</td><td><span class="b-tag" data-estado="ENTREGADA">Entregada</span></td><td class="b-mono">entidad</td><td>Los Girasoles confirmó la recepción.</td></tr>
+          </tbody>
+        </table>
+        <p class="libro__nota">Cada fila es un evento que ven el donante, la entidad y la administración. Los siete estados son los del backend; las transiciones a “Vencida” y “Entrega fallida” se muestran a modo ilustrativo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACTORES ===== -->
+  <section class="ba" id="actores" aria-labelledby="titulo-actores">
+    <div class="ba__cab">
+      <p class="b-kicker rev">04 · Quién participa</p>
+      <h2 id="titulo-actores" class="b-display rev" style="--i:1">Tres roles, <em>una misma verdad.</em></h2>
+    </div>
+    <div class="ba__mosaico">
+      <article class="actor actor--donante rev" aria-labelledby="a-donante">
+        <p class="actor__etq b-mono">Persona o empresa donante</p>
+        <h3 id="a-donante" class="b-display">Quiero donar</h3>
+        <p>Llevá tu donación al depósito y seguila hasta que llega. Ganá insignias por constancia.</p>
+        <ul class="actor__mini" aria-label="Ejemplo de mis donaciones">
+          <li><span>Arroz · 50 kg</span><span class="b-tag" data-estado="EN_TRASLADO">En traslado</span></li>
+          <li><span>Frazadas · 12 u</span><span class="b-tag" data-estado="ENTREGADA">Entregada</span></li>
+          <li><span>Conservas · 24 kg</span><span class="b-tag" data-estado="EN_DEPOSITO">En depósito</span></li>
+        </ul>
+        <a class="b-btn b-btn--ink" th:href="@{/registro(tipo='humana')}">Registrarme como donante</a>
+      </article>
+
+      <article class="actor actor--entidad rev" style="--i:1" aria-labelledby="a-entidad">
+        <div class="actor__txt">
+          <p class="actor__etq b-mono">Entidad beneficiaria</p>
+          <h3 id="a-entidad" class="b-display">Necesitamos ayuda</h3>
+          <p>Registrá tu organización, cargá lo que necesitás y confirmá cada recepción.</p>
+          <a class="b-btn" th:href="@{/registro(tipo='entidad')}">Registrar mi entidad</a>
+        </div>
+        <div class="actor__need" aria-label="Ejemplo de una necesidad abierta">
+          <p class="b-mono">Necesidad · Frazadas</p>
+          <p class="actor__need-n"><b class="b-num">18</b><span>de 30 cubiertas</span></p>
+          <div class="barra" role="img" aria-label="18 de 30 cubiertas"><i style="--p:60"></i></div>
+        </div>
+      </article>
+
+      <article class="actor actor--admin rev" style="--i:2" aria-labelledby="a-admin">
+        <div class="actor__txt">
+          <p class="actor__etq b-mono">Administración del depósito</p>
+          <h3 id="a-admin" class="b-display">Ordenamos todo</h3>
+          <p>Recibe, asigna, despacha camiones y atiende las alertas desde un panel.</p>
+          <a class="b-link" th:href="@{/ingresar}">Ver el panel →</a>
+        </div>
+        <div class="actor__flujo" role="img" aria-label="Donaciones en circulación por estado: 18 en depósito, 11 asignadas, 7 listas, 9 en traslado">
+          <i style="flex:18" data-estado="EN_DEPOSITO"></i><i style="flex:11" data-estado="ASIGNACION_REALIZADA"></i><i style="flex:7" data-estado="LISTA_PARA_ENTREGAR"></i><i style="flex:9" data-estado="EN_TRASLADO"></i>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== IMPACTO / TRANSPARENCIA ===== -->
+  <section class="bi" id="impacto" aria-labelledby="titulo-numeros">
+    <div class="bi__cab">
+      <p class="b-kicker rev">05 · Impacto</p>
+      <h2 id="titulo-numeros" class="b-display rev" style="--i:1">Transparencia <em>en números.</em></h2>
+      <span class="b-demo" th:if="${metricas.demo}">Cifras de demostración</span>
+    </div>
+
+    <ul class="bi__cifras">
+      <li class="cifra rev" th:each="m, it : ${metricas.valores}" th:style="'--i:' + ${it.index}" th:classappend="'cifra--' + ${it.index}">
+        <span class="cifra__valor b-num" data-contar th:attr="data-valor=${m.valor}" th:text="${#numbers.formatInteger(m.valor, 1, 'POINT')}">128</span>
+        <span class="cifra__etq" th:text="${m.etiqueta}">Donaciones entregadas</span>
+        <span class="cifra__det"><b th:text="${m.detalleTitulo}">+23 este mes</b> <span th:text="${m.detalleTexto}">Detalle</span></span>
+      </li>
+    </ul>
+
+    <div class="bi__entregas rev">
+      <div class="bi__entregas-cab">
+        <h3>Entregadas en el último mes</h3>
+        <span class="b-demo" th:if="${destacadas.demo}">Datos de demostración</span>
+        <a class="b-link" th:href="@{/donaciones-entregadas}">Ver todas →</a>
+      </div>
+      <table class="entregas" th:if="${destacadas.ok()}">
+        <caption class="sr-only">Donaciones entregadas en los últimos 30 días</caption>
+        <thead><tr><th scope="col">Fecha</th><th scope="col">Donación</th><th scope="col">Categoría</th><th scope="col">Donó</th></tr></thead>
+        <tbody>
+          <tr th:each="d : ${destacadas.datos}">
+            <td class="b-mono"><time th:datetime="${#temporals.formatISO(d.entregadaEl)}" th:text="${#temporals.format(d.entregadaEl, 'dd/MM')}">12/09</time></td>
+            <th scope="row" th:text="${d.titulo}">Cajas de arroz</th>
+            <td><span class="entregas__cat"><span th:replace="~{fragments/iconos :: icono(${d.iconoCategoria}, 16)}"></span><span th:text="${d.categoria}">Alimentos</span></span></td>
+            <td th:text="${d.donante != null} ? ${d.donante} : '—'">Cooperativa La Huerta</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="bi__msg" th:if="${destacadas.vacia()}">Este mes todavía no hay entregas registradas. Volvé pronto para ver las próximas.</p>
+      <p class="bi__msg bi__msg--error" role="alert" th:if="${destacadas.conError()}" th:text="${destacadas.error.mensaje}">No pudimos cargar las donaciones.</p>
+    </div>
+  </section>
+
+  <!-- ===== FUNCIONALIDADES ===== -->
+  <section class="bf" aria-labelledby="titulo-func">
+    <div class="bf__cab">
+      <p class="b-kicker rev">06 · Qué incluye</p>
+      <h2 id="titulo-func" class="b-display rev" style="--i:1">Todo lo que <em>mueve</em> una donación.</h2>
+    </div>
+    <div class="bf__mosaico">
+      <article class="func func--seg rev">
+        <h3>Seguimiento paso a paso</h3>
+        <p>Cada donación tiene su línea de tiempo. Se actualiza sola cuando cambia el estado.</p>
+        <ol class="func__linea" aria-hidden="true"><li></li><li></li><li></li><li class="is-act"></li><li></li></ol>
+      </article>
+      <article class="func func--asig rev" style="--i:1">
+        <h3>Asignación por necesidad</h3>
+        <p>Lo que se dona se vincula con lo que alguien pidió.</p>
+      </article>
+      <article class="func func--log rev" style="--i:2">
+        <h3>Logística y camiones</h3>
+        <p>Rutas con paradas, carga y horarios.</p>
+        <div class="barra barra--ruta" role="img" aria-label="Camión 2: parada 2 de 3"><i style="--p:66"></i></div>
+      </article>
+      <article class="func func--inc rev">
+        <h3>Incentivos y misiones</h3>
+        <p>Categorías de donante y misiones por constancia.</p>
+        <p class="func__sello b-mono">2/3 · Donante constante</p>
+      </article>
+      <article class="func func--not rev" style="--i:1">
+        <h3>Avisos en cada cambio</h3>
+        <p>“Tu donación salió del depósito.” Sin preguntar.</p>
+      </article>
+      <article class="func func--map rev" style="--i:2">
+        <h3>Mapa de impacto</h3>
+        <p>Dónde llegó cada entrega.</p>
+        <span class="b-tag">Próximamente</span>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== CONSTANCIA: remito de entrega ===== -->
+  <section class="bx" aria-labelledby="titulo-remito">
+    <div class="bx__cab">
+      <p class="b-kicker rev">07 · Constancia</p>
+      <h2 id="titulo-remito" class="b-display rev" style="--i:1">Cada entrega termina con <em>un remito.</em></h2>
+      <p class="b-lead rev" style="--i:2">Cuando la entidad confirma, queda un comprobante con quién dio, quién recibió y a qué hora. Se imprime, se firma y se archiva.</p>
+    </div>
+    <article class="remito rev" aria-labelledby="remito-n">
+      <header class="remito__cab">
+        <p class="b-mono remito__marca">DONATRACK · REMITO DE ENTREGA</p>
+        <p class="b-mono remito__n" id="remito-n">N.º DT‑0412</p>
+        <span class="b-demo">Ejemplo</span>
+      </header>
+      <dl class="remito__datos">
+        <div><dt>Bien</dt><dd>Arroz largo fino · 50 kg</dd></div>
+        <div><dt>Donó</dt><dd>Cooperativa La Huerta</dd></div>
+        <div><dt>Recibió</dt><dd>Comedor Los Girasoles</dd></div>
+        <div><dt>Transporte</dt><dd>Camión 2 · parada 2 de 3</dd></div>
+        <div><dt>Hora</dt><dd class="b-mono">14:22</dd></div>
+        <div><dt>Estado</dt><dd><span class="b-tag" data-estado="ENTREGADA">Entregada</span></dd></div>
+      </dl>
+      <div class="remito__firma">
+        <p>Firma de quien recibe</p>
+      </div>
+      <p class="remito__sello" aria-hidden="true">RECIBIDO</p>
+    </article>
+  </section>
+
+  <!-- ===== LLAMADA A LA ACCIÓN ===== -->
+  <section class="bk" aria-labelledby="titulo-cta">
+    <h2 id="titulo-cta" class="sr-only">Sumate</h2>
+    <a class="bk__lado bk__lado--donar" th:href="@{/registro(tipo='humana')}">
+      <span class="b-mono">Si querés ayudar</span>
+      <span class="bk__gran b-display">Quiero<br><em>donar</em></span>
+      <span class="bk__flecha" aria-hidden="true">→</span>
+    </a>
+    <a class="bk__lado bk__lado--ayuda" th:href="@{/registro(tipo='entidad')}">
+      <span class="b-mono">Si necesitás ayuda</span>
+      <span class="bk__gran b-display">Registrar<br><em>mi entidad</em></span>
+      <span class="bk__flecha" aria-hidden="true">→</span>
+    </a>
+  </section>
+</th:block>
+</body>
+</html>

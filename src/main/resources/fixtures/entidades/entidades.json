@@ -1,0 +1,124 @@
+[
+  {
+    "id": "e7a10000-0000-4000-8000-000000000001",
+    "nombre": "Comedor Los Girasoles",
+    "tipo": "Comedor",
+    "localidad": "Villa Lugano",
+    "categorias": [
+      "Alimentos",
+      "Higiene"
+    ],
+    "necesidadesAbiertas": 3,
+    "necesidadUrgente": true
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000002",
+    "nombre": "Hogar Esperanza",
+    "tipo": "Hogar de personas mayores",
+    "localidad": "Flores",
+    "categorias": [
+      "Vestimenta",
+      "Higiene"
+    ],
+    "necesidadesAbiertas": 2,
+    "necesidadUrgente": false
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000003",
+    "nombre": "Merendero Norte",
+    "tipo": "Merendero",
+    "localidad": "Saavedra",
+    "categorias": [
+      "Alimentos"
+    ],
+    "necesidadesAbiertas": 1,
+    "necesidadUrgente": false
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000004",
+    "nombre": "Escuela 12 · Cooperadora",
+    "tipo": "Escuela",
+    "localidad": "Parque Patricios",
+    "categorias": [
+      "Útiles escolares",
+      "Mobiliario"
+    ],
+    "necesidadesAbiertas": 2,
+    "necesidadUrgente": false
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000005",
+    "nombre": "Biblioteca Popular Raíces",
+    "tipo": "Biblioteca popular",
+    "localidad": "Boedo",
+    "categorias": [
+      "Útiles escolares",
+      "Mobiliario"
+    ],
+    "necesidadesAbiertas": 1,
+    "necesidadUrgente": false
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000006",
+    "nombre": "Centro Comunitario Las Tunas",
+    "tipo": "Centro comunitario",
+    "localidad": "Pacheco",
+    "categorias": [
+      "Alimentos",
+      "Vestimenta",
+      "Higiene"
+    ],
+    "necesidadesAbiertas": 4,
+    "necesidadUrgente": true
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000007",
+    "nombre": "Merendero Manos Unidas",
+    "tipo": "Merendero",
+    "localidad": "Lanús",
+    "categorias": [
+      "Alimentos",
+      "Bebidas"
+    ],
+    "necesidadesAbiertas": 2,
+    "necesidadUrgente": false
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000008",
+    "nombre": "Jardín Comunitario Semillitas",
+    "tipo": "Jardín maternal",
+    "localidad": "Avellaneda",
+    "categorias": [
+      "Útiles escolares",
+      "Higiene",
+      "Vestimenta"
+    ],
+    "necesidadesAbiertas": 3,
+    "necesidadUrgente": true
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000009",
+    "nombre": "Refugio Nocturno San Telmo",
+    "tipo": "Refugio",
+    "localidad": "San Telmo",
+    "categorias": [
+      "Vestimenta",
+      "Higiene",
+      "Alimentos"
+    ],
+    "necesidadesAbiertas": 2,
+    "necesidadUrgente": false
+  },
+  {
+    "id": "e7a10000-0000-4000-8000-000000000010",
+    "nombre": "Club Barrial Defensores",
+    "tipo": "Club de barrio",
+    "localidad": "Mataderos",
+    "categorias": [
+      "Mobiliario",
+      "Vestimenta"
+    ],
+    "necesidadesAbiertas": 1,
+    "necesidadUrgente": false
+  }
+]

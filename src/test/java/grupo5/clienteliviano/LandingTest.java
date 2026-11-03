@@ -76,7 +76,7 @@ class LandingTest {
     @DisplayName(
         "La landing muestra hero, cómo funciona, destacadas, números y llamado a la acción")
     void pagina() throws Exception {
-      mvc.perform(get("/"))
+      mvc.perform(get("/v1"))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("<h1 id=\"titulo-hero\">DonaTrack</h1>")))
           .andExpect(content().string(containsString("Cómo funciona")))
@@ -177,7 +177,7 @@ class LandingTest {
     void error() throws Exception {
       when(donaciones.donacionesIndependientes(any()))
           .thenThrow(new BackendException(Servicio.DONACIONES, Tipo.NO_DISPONIBLE, 0, null, null));
-      mvc.perform(get("/"))
+      mvc.perform(get("/v1"))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("No pudimos conectarnos")))
           .andExpect(content().string(containsString("Transparencia en números")))

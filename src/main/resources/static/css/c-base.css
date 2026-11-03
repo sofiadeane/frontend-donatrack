@@ -1,0 +1,169 @@
+/*
+ * Variante C · base compartida. Plana y redondeada: color con tokens (--c-*, --cs-*),
+ * profundidad con tono, escala y una sombra mínima. Sin blur, sin gradientes, sin bordes gruesos.
+ */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body.c {
+  margin: 0;
+  font-family: var(--c-font);
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--c-text);
+  background: var(--c-bg);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+:where(.c) h1, :where(.c) h2, :where(.c) h3, :where(.c) h4,
+:where(.c) p, :where(.c) ul, :where(.c) ol, :where(.c) dl, :where(.c) dd, :where(.c) figure {
+  margin: 0;
+  padding: 0;
+}
+:where(.c) ul, :where(.c) ol { list-style: none; }
+:where(.c) a { color: inherit; }
+:where(.c) img, :where(.c) svg { max-width: 100%; display: block; }
+:where(.c) button, :where(.c) input, :where(.c) select { font: inherit; color: inherit; }
+:where(.c) table { border-collapse: collapse; width: 100%; }
+
+.c :focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 3px;
+  border-radius: var(--c-r-s);
+}
+.c-dark :focus-visible { outline-color: var(--c-lime); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: absolute; left: 16px; top: -100px; z-index: 100;
+  padding: 10px 18px; background: var(--c-forest); color: var(--c-white);
+  font-weight: 700; text-decoration: none; border-radius: 999px;
+}
+.skip-link:focus { top: 12px; }
+
+/* ===== Tipografía ===== */
+.c-display {
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+.c-display em, .c-serif {
+  font-family: var(--c-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+.c-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--c-text-2);
+}
+.c-kicker::before {
+  content: ""; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--c-green); flex: none;
+}
+.c-lead {
+  font-size: clamp(1.05rem, 0.95rem + 0.4vw, 1.25rem);
+  line-height: 1.5; color: var(--c-text-2); max-width: 36em;
+}
+.c-num { font-weight: 600; letter-spacing: -0.04em; line-height: 0.95; font-variant-numeric: tabular-nums; }
+.c-mono { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; }
+
+/* ===== Marca ===== */
+.c-marca {
+  display: inline-flex; align-items: center; gap: 10px; text-decoration: none;
+  font-weight: 700; font-size: 1.2rem; letter-spacing: -0.03em;
+}
+.c-marca__sello {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  background: var(--c-lime); border-radius: 14px; flex: none;
+}
+.c-marca__sello img { width: 15px; height: 20px; }
+.c-marca em { font-family: var(--c-serif); font-style: italic; font-weight: 400; }
+
+/* ===== Botones: píldora con círculo de flecha (como en las referencias) ===== */
+.c-btn {
+  --btn-bg: var(--c-forest); --btn-fg: var(--c-white);
+  --btn-dot: var(--c-lime); --btn-dot-fg: var(--c-forest);
+  display: inline-flex; align-items: center; gap: 14px;
+  min-height: 52px; padding: 6px 6px 6px 24px;
+  font-weight: 600; font-size: 1rem; text-decoration: none; cursor: pointer;
+  color: var(--btn-fg); background: var(--btn-bg);
+  border: 0; border-radius: 999px;
+  transition: transform 160ms ease-out, background-color 160ms ease-out;
+}
+.c-btn:hover { transform: translateY(-2px); }
+.c-btn:active { transform: translateY(0); }
+.c-btn__dot {
+  width: 40px; height: 40px; border-radius: 50%; flex: none;
+  display: grid; place-items: center;
+  background: var(--btn-dot); color: var(--btn-dot-fg);
+  transition: transform 200ms ease-out;
+}
+.c-btn:hover .c-btn__dot { transform: rotate(-35deg); }
+.c-btn--lime { --btn-bg: var(--c-lime); --btn-fg: var(--c-forest); --btn-dot: var(--c-forest); --btn-dot-fg: var(--c-lime); }
+.c-btn--white { --btn-bg: var(--c-white); --btn-fg: var(--c-ink); --btn-dot: var(--c-forest); --btn-dot-fg: var(--c-white); }
+.c-btn--plain { padding: 0 22px; }
+.c-btn--sm { min-height: 40px; padding: 4px 4px 4px 16px; font-size: 0.875rem; gap: 10px; }
+.c-btn--sm .c-btn__dot { width: 32px; height: 32px; }
+.c-btn--sm.c-btn--plain { padding: 0 16px; }
+.c-btn--ghost { --btn-bg: var(--c-white); --btn-fg: var(--c-ink); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
+
+.c-link {
+  display: inline-flex; align-items: center; gap: 8px; font-weight: 600;
+  text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 5px;
+}
+.c-link:hover { text-decoration-color: var(--c-green); }
+
+/* ===== Etiquetas de estado: píldora chica con punto; siempre llevan texto ===== */
+.c-tag {
+  --tag-bg: var(--c-cream-deep); --tag-fg: var(--c-ink);
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 4px 11px 4px 9px; font-size: 0.78rem; font-weight: 600; line-height: 1.4;
+  white-space: nowrap; color: var(--tag-fg); background: var(--tag-bg); border-radius: 999px;
+}
+.c-tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--tag-fg); flex: none; }
+.c-tag[data-estado="EN_DEPOSITO"] { --tag-bg: var(--cs-deposito); }
+.c-tag[data-estado="ASIGNACION_REALIZADA"] { --tag-bg: var(--cs-asignada); }
+.c-tag[data-estado="LISTA_PARA_ENTREGAR"] { --tag-bg: var(--cs-lista); }
+.c-tag[data-estado="EN_TRASLADO"] { --tag-bg: var(--cs-traslado); --tag-fg: var(--c-white); }
+.c-tag[data-estado="ENTREGADA"] { --tag-bg: var(--cs-entregada); }
+.c-tag[data-estado="ENTREGA_FALLIDA"], .c-tag[data-estado="VENCIDA"] { --tag-bg: var(--cs-fallida); }
+.c-tag--plano { --tag-bg: var(--c-white); box-shadow: inset 0 0 0 1.5px var(--c-line-strong); }
+
+.c-demo {
+  display: inline-block; font-size: 0.72rem; font-weight: 600; padding: 3px 10px;
+  border-radius: 999px; color: var(--c-text-2); box-shadow: inset 0 0 0 1.5px var(--c-line-strong);
+}
+
+/* Círculo para un ícono */
+.c-ico {
+  width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--c-white); color: var(--c-ink); flex: none;
+}
+
+/* Barra de progreso en cápsula */
+.c-barra { height: 10px; border-radius: 999px; background: var(--c-ink-a08); overflow: hidden; }
+.c-barra i { display: block; height: 100%; width: calc(var(--p) * 1%); border-radius: inherit; background: var(--c-forest); }
+
+/* ===== Entrada al hacer scroll ===== */
+.js .rev { opacity: 0; transform: translateY(20px); transition: opacity 520ms ease-out, transform 520ms ease-out; transition-delay: calc(var(--i, 0) * 70ms); }
+.js .rev.is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .js .rev { opacity: 1; transform: none; transition: none; }
+  *, *::before, *::after { animation: none !important; transition-duration: 0.01ms !important; }
+}

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/panel-c :: layout(~{::title}, ~{::contenido})}">
+<head><title>Inicio · Administración · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido" th:with="p=${panel}">
+
+  <p class="pc-aviso" role="status" th:if="${aviso == 'sin-permiso'}">Esa sección no corresponde a tu perfil, así que te trajimos a tu inicio.</p>
+
+  <!-- Cabecera: dónde estamos parados hoy -->
+  <header class="pc-cab">
+    <div>
+      <p class="c-kicker" th:text="'Depósito central · ' + ${fecha}">Depósito central · jueves</p>
+      <h1 class="c-display">El depósito, <em>hoy.</em></h1>
+    </div>
+    <div class="pc-cab__acc">
+      <a class="c-btn c-btn--ghost c-btn--sm c-btn--plain" th:href="@{/admin/asignaciones}">Asignar</a>
+      <a class="c-btn c-btn--sm" th:href="@{/admin/donaciones}">Registrar recepción<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+    </div>
+  </header>
+
+  <!-- A · Banner y entregas del mes -->
+  <div class="pc-fila pc-fila--hero">
+    <section class="pc-hero" aria-label="Resumen del día">
+      <div class="pc-hero__txt">
+        <p class="pc-hero__titulo c-display"><b class="c-mono" th:text="${p.totalActivas}">45</b> donaciones en circulación y <b class="c-mono" th:text="${p.urgentes}">2</b> <em>pendientes urgentes.</em></p>
+        <div class="pc-hero__pie">
+          <a class="c-btn c-btn--sm" href="#t-pend">Ver pendientes<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+          <span class="c-demo">Datos de demostración</span>
+        </div>
+      </div>
+      <svg class="pc-hero__ilus" viewBox="0 0 320 200" aria-hidden="true">
+          <circle class="il-sol" cx="248" cy="52" r="34"/>
+          <rect class="il-suelo" x="10" y="168" width="300" height="10" rx="5"/>
+          <rect class="il-caja1" x="30" y="108" width="62" height="60" rx="12"/>
+          <rect class="il-caja2" x="52" y="62" width="50" height="46" rx="10"/>
+          <rect class="il-cinta" x="55" y="130" width="34" height="8" rx="4"/>
+          <rect class="il-furgon" x="124" y="86" width="116" height="82" rx="16"/>
+          <path class="il-cabina" d="M240 112h30a14 14 0 0 1 11 5l16 22a14 14 0 0 1 3 9v20H240z"/>
+          <rect class="il-vent" x="252" y="120" width="22" height="20" rx="6"/>
+          <rect class="il-check" x="150" y="108" width="64" height="12" rx="6"/>
+          <rect class="il-check" x="150" y="130" width="40" height="12" rx="6"/>
+          <circle class="il-rueda" cx="164" cy="170" r="17"/><circle class="il-eje" cx="164" cy="170" r="6"/>
+          <circle class="il-rueda" cx="262" cy="170" r="17"/><circle class="il-eje" cx="262" cy="170" r="6"/>
+        </svg>
+    </section>
+    <aside class="pc-mes" aria-label="Entregas del mes">
+      <p class="pc-mes__etq">Entregadas este mes</p>
+      <p class="pc-mes__n c-num" th:text="${p.entregadasMes}">23</p>
+      <p class="pc-mes__delta"><span class="delta" th:text="'▲ ' + ${p.entregadasDelta} + ' %'">▲ 15 %</span> que el mes pasado</p>
+      <p class="pc-mes__pie"><b class="c-mono" th:text="${p.recibidasMes}">31</b> recibidas <span class="delta" th:text="'▲ ' + ${p.recibidasDelta} + ' %'">▲ 8 %</span></p>
+    </aside>
+  </div>
+
+  <!-- B · En circulación: las tarjetas filtran la tabla -->
+  <section class="flujo" aria-labelledby="t-flujo">
+    <div class="pc-tit">
+      <h2 id="t-flujo">En circulación</h2>
+      <p>Elegí un estado para filtrar la tabla</p>
+    </div>
+    <ul class="flujo__lista" data-filtros="tabla-atencion">
+      <li th:each="e : ${p.pipeline}">
+        <button type="button" class="seg" th:attr="data-filtro=${e.estado},data-estado=${e.estado},aria-pressed='false'">
+          <span class="seg__etq" th:text="#{'estado.donacion.' + ${e.estado}}">En depósito</span>
+          <span class="seg__n c-num" th:text="${e.cantidad}">18</span>
+          <span class="seg__nota" th:text="${e.nota}">4 llevan más de 5 días</span>
+          <span class="seg__barra" aria-hidden="true"><i th:style="'--p:' + ${e.cantidad * 100 / p.totalActivas}"></i></span>
+        </button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- C · Volumen y pendientes -->
+  <div class="pc-fila pc-fila--vol">
+    <section class="vol" aria-labelledby="t-vol" data-chart data-m="n">
+      <div class="vol__cab">
+        <div>
+          <h2 id="t-vol">Recibidas y entregadas</h2>
+          <p class="vol__sub">Últimas 8 semanas · <b class="c-mono" th:text="${#aggregates.sum(p.semanas.![recibidas])}">87</b> recibidas · <b class="c-mono" th:text="${#aggregates.sum(p.semanas.![entregadas])}">74</b> entregadas</p>
+        </div>
+        <div class="seg-ctl" role="group" aria-label="Qué medir">
+          <button type="button" data-metrica="n" aria-pressed="true">Donaciones</button>
+          <button type="button" data-metrica="kg" aria-pressed="false">Kilos</button>
+        </div>
+      </div>
+      <div class="chart" th:style="'--maxn:' + ${p.maxSemana} + ';--maxk:' + ${p.maxSemanaKg}">
+        <ol class="chart__cols">
+          <li th:each="s, it : ${p.semanas}" class="col" th:classappend="${it.last} ? 'is-actual'" tabindex="0"
+              th:attr="data-lectura=${s.etiqueta + (it.last ? ' (en curso)' : '')},data-n=${s.recibidas + ' recibidas · ' + s.entregadas + ' entregadas'},data-kg=${s.kgRecibidos + ' kg recibidos · ' + s.kgEntregados + ' kg entregados'},aria-label=${s.etiqueta + ': ' + s.recibidas + ' recibidas, ' + s.entregadas + ' entregadas'}">
+            <div class="col__par">
+              <i class="bar bar--r" th:style="'--n:' + ${s.recibidas} + ';--kg:' + ${s.kgRecibidos}"><b class="v v--n" th:text="${s.recibidas}">9</b><b class="v v--kg" th:text="${s.kgRecibidos}">210</b></i>
+              <i class="bar bar--e" th:style="'--n:' + ${s.entregadas} + ';--kg:' + ${s.kgEntregados}"><b class="v v--n" th:text="${s.entregadas}">6</b><b class="v v--kg" th:text="${s.kgEntregados}">150</b></i>
+            </div>
+            <span class="col__etq" th:text="${s.etiqueta}">S34</span>
+          </li>
+        </ol>
+      </div>
+      <div class="vol__pie">
+        <ul class="leyenda"><li class="leyenda--r">Recibidas en depósito</li><li class="leyenda--e">Entregadas</li></ul>
+        <p class="vol__lectura" data-lectura-out aria-live="polite">Pasá el cursor o enfocá una semana para ver el detalle.</p>
+      </div>
+    </section>
+
+    <section class="pend" aria-labelledby="t-pend">
+      <div class="pc-tit">
+        <h2 id="t-pend">Pendientes</h2>
+        <span class="pend__cuenta c-mono" th:text="${#lists.size(p.pendientes)}">5</span>
+      </div>
+      <ul class="pend__lista">
+        <li th:each="x : ${p.pendientes}" class="pend__item" th:attr="data-nivel=${x.nivel}">
+          <span class="pend__nivel" th:text="${x.nivel == 'ALTA'} ? 'Urgente' : (${x.nivel == 'MEDIA'} ? 'Hoy' : 'Esta semana')">Urgente</span>
+          <div class="pend__texto"><b th:text="${x.titulo}">Título</b><span th:text="${x.detalle}">Detalle</span></div>
+          <a class="pend__ir" th:href="@{${x.href}}" th:attr="aria-label=${x.accion + ': ' + x.titulo}" th:title="${x.accion}"><span th:replace="~{fragments/iconos :: icono('flecha', 18)}"></span></a>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- D · Logística y tabla de atención -->
+  <div class="pc-fila pc-fila--log">
+    <section class="log c-dark" aria-labelledby="t-log">
+      <div class="pc-tit">
+        <h2 id="t-log">Logística</h2>
+        <p><b th:text="${p.camionesEnRuta}">2</b> en ruta · <b th:text="${#lists.size(p.camiones)}">3</b> camiones</p>
+      </div>
+      <svg class="mapa-rutas" viewBox="0 0 520 190" role="img" aria-label="Esquema de rutas: el camión 1 va a Escuela 12 y Hogar Esperanza, el camión 2 a Los Girasoles y Merendero Norte, el camión 3 carga para la ruta Sur.">
+        <path class="mr mr--1" d="M64 95 C 120 95, 130 40, 200 40 S 300 40, 330 34 S 410 30, 460 30"/>
+        <path class="mr mr--2" d="M64 95 C 130 95, 150 95, 214 95 S 330 98, 388 98 S 440 100, 464 100"/>
+        <path class="mr mr--3" d="M64 95 C 120 95, 130 152, 200 152 S 300 154, 340 150 S 410 152, 460 152"/>
+        <rect class="mr-nodo" x="22" y="72" width="44" height="46" rx="14"/>
+        <text class="mr-t mr-t--dep" x="44" y="100" text-anchor="middle">DEP</text>
+        <g class="mr-parada mr-parada--1"><circle cx="200" cy="40" r="8"/><circle cx="330" cy="34" r="8"/><circle cx="460" cy="30" r="8"/></g>
+        <g class="mr-parada mr-parada--2"><circle cx="214" cy="95" r="8"/><circle cx="388" cy="98" r="8"/><circle cx="464" cy="100" r="8"/></g>
+        <g class="mr-parada mr-parada--3"><circle cx="200" cy="152" r="8"/><circle cx="340" cy="150" r="8"/><circle cx="460" cy="152" r="8"/></g>
+        <text class="mr-t" x="200" y="22" text-anchor="middle">Escuela 12</text>
+        <text class="mr-t" x="330" y="16" text-anchor="middle">Hogar Esperanza</text>
+        <text class="mr-t" x="214" y="78" text-anchor="middle">Los Girasoles</text>
+        <text class="mr-t" x="388" y="80" text-anchor="middle">Merendero Norte</text>
+        <text class="mr-t" x="340" y="178" text-anchor="middle">Ruta Sur · sale mañana</text>
+        <circle class="mr-camion mr-camion--1" r="10"/>
+        <circle class="mr-camion mr-camion--2" r="10"/>
+      </svg>
+      <ul class="camiones">
+        <li th:each="c : ${p.camiones}">
+          <div class="camion__id">
+            <b th:text="${c.nombre}">Camión 1</b>
+            <span class="c-tag" th:attr="data-estado=${c.estado == 'EN_RUTA'} ? 'EN_TRASLADO' : 'LISTA_PARA_ENTREGAR'" th:text="${c.estado == 'EN_RUTA'} ? 'En ruta' : 'Cargando'">En ruta</span>
+          </div>
+          <p class="camion__ruta" th:text="${c.ruta}">Depósito → …</p>
+          <div class="camion__avance" role="img" th:attr="aria-label=${'Parada ' + c.paradasHechas + ' de ' + c.paradasTotal}">
+            <i th:each="n : ${#numbers.sequence(1, c.paradasTotal)}" th:classappend="${n <= c.paradasHechas} ? 'is-on'"></i>
+          </div>
+          <p class="camion__eta"><span th:text="${c.paradasHechas + '/' + c.paradasTotal + ' paradas'}">1/3 paradas</span><span th:text="'ETA ' + ${c.eta}">ETA 14:20</span><span th:text="'carga ' + ${c.carga} + ' %'">carga 78 %</span></p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="aten" aria-labelledby="t-aten">
+      <div class="pc-tit">
+        <h2 id="t-aten">Donaciones que piden atención</h2>
+        <div class="chips" role="group" aria-label="Filtrar por estado" data-filtros="tabla-atencion">
+          <button type="button" class="chip" data-filtro="TODAS" aria-pressed="true">Todas <b class="c-mono" th:text="${#lists.size(p.atencion)}">8</b></button>
+          <button type="button" class="chip" data-filtro="URGENTE" aria-pressed="false">Urgentes <b class="c-mono" th:text="${p.atencionUrgente}">4</b></button>
+        </div>
+      </div>
+      <div class="aten__tabla">
+        <table id="tabla-atencion" data-tabla-filtrable>
+          <caption class="sr-only">Donaciones que requieren atención</caption>
+          <thead><tr><th scope="col">Código</th><th scope="col">Bien</th><th scope="col">Donante → destino</th><th scope="col">Estado</th><th scope="col">Tiempo</th></tr></thead>
+          <tbody>
+            <tr th:each="a : ${p.atencion}" th:attr="data-estado=${a.estado},data-urgente=${a.urgente}">
+              <td class="c-mono"><a th:href="@{/admin/donaciones}" th:text="${a.codigo}">DT-0398</a></td>
+              <th scope="row" th:text="${a.bien}">Frazadas · 30 u</th>
+              <td class="aten__ruta"><span th:text="${a.donante}">Donante</span><span class="aten__flecha" aria-hidden="true">→</span><span th:text="${a.destino}">Destino</span></td>
+              <td><span class="c-tag" th:attr="data-estado=${a.estado}" th:text="#{'estado.donacion.' + ${a.estado}}">En depósito</span></td>
+              <td class="c-mono aten__t" th:classappend="${a.urgente} ? 'is-urgente'"><span th:if="${a.urgente}" class="sr-only">Urgente: </span><span th:text="${a.antiguedad}">8 días</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="aten__vacio" hidden>No hay donaciones con ese filtro.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- E · Actividad, impacto, necesidades -->
+  <div class="pc-fila pc-fila--tres">
+    <section class="act" aria-labelledby="t-act">
+      <div class="pc-tit"><h2 id="t-act">Actividad reciente</h2></div>
+      <ol class="act__lista">
+        <li th:each="e : ${p.actividad}" th:attr="data-estado=${e.estado}">
+          <span class="act__nodo" aria-hidden="true"></span>
+          <p th:text="${e.texto}">Texto</p>
+          <span class="act__cuando" th:text="${e.cuando}">hace 12 min</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="imp" aria-labelledby="t-imp">
+      <p class="imp__etq" id="t-imp">Impacto acumulado</p>
+      <p class="imp__kg c-num"><span data-contar th:attr="data-valor=${p.impacto.kg}" th:text="${#numbers.formatInteger(p.impacto.kg, 1, 'POINT')}">2.450</span><small>kg</small></p>
+      <p class="imp__sub">distribuidos a <b th:text="${p.impacto.entidades}">34</b> entidades</p>
+      <div class="imp__barra" role="img" aria-label="Distribución por categoría">
+        <i th:each="c, it : ${p.impacto.categorias}" th:style="'flex:' + ${c.porcentaje}" th:classappend="'k' + ${it.index}"></i>
+      </div>
+      <ul class="imp__leyenda">
+        <li th:each="c, it : ${p.impacto.categorias}" th:classappend="'k' + ${it.index}"><span th:text="${c.nombre}">Alimentos</span><b class="c-mono" th:text="${c.porcentaje} + ' %'">62 %</b></li>
+      </ul>
+    </section>
+
+    <section class="nec" aria-labelledby="t-nec">
+      <div class="pc-tit"><h2 id="t-nec">Necesidades abiertas</h2></div>
+      <ul class="nec__lista">
+        <li th:each="n : ${p.necesidades}" th:classappend="${n.urgente} ? 'is-urgente'">
+          <div class="nec__fila"><b th:text="${n.bien}">Frazadas</b><span class="c-mono" th:text="${n.cubiertas} + '/' + ${n.total}">18/30</span></div>
+          <p><span th:text="${n.entidad}">Entidad</span><span class="c-tag nec__tag" th:if="${n.urgente}">Urgente</span></p>
+          <div class="c-barra" role="img" th:attr="aria-label=${n.porcentaje + ' % cubierto'}"><i th:style="'--p:' + ${n.porcentaje}"></i></div>
+        </li>
+      </ul>
+    </section>
+  </div>
+</th:block>
+</body>
+</html>

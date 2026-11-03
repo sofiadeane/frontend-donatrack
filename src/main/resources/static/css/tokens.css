@@ -207,20 +207,407 @@
 }
 
 /*
+ * ===== Variante B · "Ruta" (exploración visual 2026-10-30) =====
+ * Papel cálido + tinta + bloques de color. Los colores de estado de una donación forman una escala
+ * (amarillo → lila → celeste → cobalto → lima) que se repite en la landing y en el panel.
+ * Solo la usan b-base.css, b-landing.css y b-panel.css; el resto del producto sigue con la paleta anterior.
+ */
+:root {
+  /* Primitivos */
+  --b-paper: #f4efe4;
+  --b-paper-deep: #e9e2d0;
+  --b-card: #fffdf7;
+  --b-ink: #131826;
+  --b-ink-2: #3a4152;
+  --b-ink-3: #5a6173;
+  --b-cobalt: #2c52d9;
+  --b-cobalt-100: #dbe4fd;
+  --b-sky: #8fbaf7;
+  --b-sky-100: #dcebfd;
+  --b-lime: #c5ee4f;
+  --b-lime-100: #ecf8c4;
+  --b-green: #187a4f;
+  --b-green-100: #d5f0e0;
+  --b-sun: #ffd23c;
+  --b-sun-100: #fff0b8;
+  --b-coral: #ff6a55;
+  --b-coral-deep: #bd3320;
+  --b-coral-100: #ffddd6;
+  --b-lilac: #b9a7f5;
+  --b-lilac-100: #e8e1fc;
+  --b-lilac-deep: #5a3fc0;
+  --b-ink-a12: rgb(19 24 38 / 0.12);
+  --b-ink-a20: rgb(19 24 38 / 0.2);
+  --b-paper-a24: rgb(244 239 228 / 0.24);
+  --b-paper-a60: rgb(244 239 228 / 0.62);
+
+  /* Semánticos */
+  --b-bg: var(--b-paper);
+  --b-bg-muted: var(--b-paper-deep);
+  --b-surface: var(--b-card);
+  --b-surface-dark: var(--b-ink);
+  --b-text: var(--b-ink);
+  --b-text-2: var(--b-ink-2);
+  --b-text-3: var(--b-ink-3);
+  --b-text-on-dark: var(--b-paper);
+  --b-text-on-dark-2: var(--b-paper-a60);
+  --b-line: var(--b-ink);
+  --b-line-soft: var(--b-ink-a20);
+  --b-line-faint: var(--b-ink-a12);
+  --b-line-on-dark: var(--b-paper-a24);
+  --b-primary: var(--b-cobalt);
+  --b-on-primary: var(--b-card);
+  --b-secondary: var(--b-lime);
+  --b-on-secondary: var(--b-ink);
+  --b-success: var(--b-green);
+  --b-success-soft: var(--b-green-100);
+  --b-warning: var(--b-sun);
+  --b-warning-soft: var(--b-sun-100);
+  --b-error: var(--b-coral-deep);
+  --b-error-soft: var(--b-coral-100);
+  --b-info: var(--b-sky);
+  --b-info-soft: var(--b-sky-100);
+  --b-focus: var(--b-cobalt);
+
+  /* Estados de una donación (fase → color) */
+  --st-deposito: var(--b-sun);
+  --st-asignada: var(--b-lilac);
+  --st-lista: var(--b-sky);
+  --st-traslado: var(--b-cobalt);
+  --st-entregada: var(--b-lime);
+  --st-fallida: var(--b-coral);
+  --st-traslado-texto: var(--b-card);
+  /* Actores */
+  --actor-donante: var(--b-coral);
+  --actor-entidad: var(--b-lilac);
+  --actor-admin: var(--b-sun);
+
+  /* Tipografía */
+  --b-font: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --b-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --b-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --b-fs-mega: clamp(2.9rem, 1.2rem + 6.6vw, 7.4rem);
+  --b-fs-h2: clamp(2rem, 1.1rem + 3.2vw, 4.4rem);
+  --b-fs-h3: clamp(1.25rem, 1.05rem + 0.8vw, 1.7rem);
+  --b-fs-num: clamp(3rem, 1.5rem + 5vw, 6.5rem);
+
+  /* Formas: radios con intención (chico = datos, medio = paneles, grande = bloques editoriales) */
+  --b-r-1: 4px;
+  --b-r-2: 12px;
+  --b-r-3: 28px;
+  --b-bw: 2px;
+  --b-hard: 4px 4px 0 var(--b-ink);
+  --b-hard-sm: 2px 2px 0 var(--b-ink);
+  --b-gutter: clamp(16px, 4vw, 56px);
+  --b-max: 1320px;
+  --b-rail: 92px;
+}
+
+/*
+ * ===== Variante C · "Suave" (v2, exploración visual 2026-10-30) =====
+ * Plana, redondeada y pastel: fondo crema, superficies blancas, bloques de color suaves,
+ * verde bosque como tinta de marca y lima como acento. Sin bordes gruesos ni sombras duras.
+ * Solo la usan c-base.css, c-landing.css y c-panel.css.
+ */
+:root {
+  --c-cream: #f7f0e6;
+  --c-cream-deep: #efe6d8;
+  --c-white: #fffdfa;
+  --c-ink: #1b1a2e;
+  --c-ink-2: #43425a;
+  --c-ink-3: #66657c;
+  --c-forest: #15382f;
+  --c-forest-2: #20493d;
+  --c-lime: #cdf27e;
+  --c-lime-100: #eaf9c9;
+  --c-lavender: #c4bcf6;
+  --c-lavender-100: #e9e5fc;
+  --c-lavender-deep: #4b3bb5;
+  --c-orange: #f9b06b;
+  --c-orange-100: #fde4cb;
+  --c-orange-deep: #9c4a0b;
+  --c-pink: #f6a0dc;
+  --c-pink-100: #fcdcf1;
+  --c-sky: #a8c8f4;
+  --c-sky-100: #dfebfc;
+  --c-peach: #f4a592;
+  --c-peach-100: #fbdcd3;
+  --c-peach-deep: #a53a22;
+  --c-blue: #4651d6;
+  --c-green: #1c7a4d;
+  --c-green-100: #d8f1e2;
+  --c-ink-a08: rgb(27 26 46 / 0.08);
+  --c-ink-a14: rgb(27 26 46 / 0.14);
+  --c-ink-a60: rgb(27 26 46 / 0.6);
+  --c-white-a16: rgb(255 253 250 / 0.16);
+  --c-white-a44: rgb(255 253 250 / 0.44);
+  --c-white-a70: rgb(255 253 250 / 0.7);
+  --c-lift: 0 14px 34px -20px rgb(27 26 46 / 0.28);
+
+  /* Semánticos */
+  --c-bg: var(--c-cream);
+  --c-surface: var(--c-white);
+  --c-text: var(--c-ink);
+  --c-text-2: var(--c-ink-2);
+  --c-text-3: var(--c-ink-3);
+  --c-line: var(--c-ink-a08);
+  --c-line-strong: var(--c-ink-a14);
+  --c-primary: var(--c-forest);
+  --c-on-primary: var(--c-white);
+  --c-secondary: var(--c-lime);
+  --c-success: var(--c-green);
+  --c-warning: var(--c-orange);
+  --c-error: var(--c-peach-deep);
+  --c-info: var(--c-sky);
+  --c-focus: var(--c-blue);
+
+  /* Estados de una donación */
+  --cs-deposito: var(--c-orange);
+  --cs-asignada: var(--c-lavender);
+  --cs-lista: var(--c-sky);
+  --cs-traslado: var(--c-blue);
+  --cs-entregada: var(--c-lime);
+  --cs-fallida: var(--c-peach);
+
+  --c-font: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --c-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --c-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --c-r-s: 12px;
+  --c-r-m: 20px;
+  --c-r-l: 30px;
+  --c-r-xl: 44px;
+  --c-gutter: clamp(14px, 3vw, 40px);
+  --c-max: 1360px;
+}
+
+/*
+ * ===== Variante D · "Trazo" (v3, exploración visual 2026-10-30) =====
+ * Dibujo lineal en tinta con rellenos planos naranja y amarillo sobre papel crema, y una mascota propia.
+ * Reutiliza la estructura de la variante C: d-theme.css remapea sus tokens --c-* a esta paleta.
+ */
+:root {
+  --d-paper: #fbf5ea;
+  --d-paper-2: #f1e7d2;
+  --d-white: #fffdf8;
+  --d-ink: #1c2b2d;
+  --d-ink-2: #3f5052;
+  --d-ink-3: #5c6b6c;
+  --d-ink-soft: #2c4144;
+  --d-orange: #ee7440;
+  --d-orange-100: #fbdac7;
+  --d-coral: #f4906c;
+  --d-coral-100: #fbd5c4;
+  --d-yellow: #fbbd55;
+  --d-yellow-100: #fde8b8;
+  --d-peach: #f7b49a;
+  --d-mint: #a9d8c8;
+  --d-mint-100: #d9efe6;
+  --d-olive: #c9db84;
+  --d-red: #d8512a;
+  --d-red-deep: #a63a1a;
+  --d-green: #1f7a52;
+}
+
+/*
+ * ===== Variante E · "Calma" (v4, exploración visual 2026-10-30) =====
+ * Minimalista y aireada: crema, salvia y oliva, serif en los títulos, líneas finas y mucho espacio.
+ * Reutiliza la estructura de la variante C: e-theme.css remapea sus tokens --c-* a esta paleta.
+ */
+:root {
+  --e-paper: #faf8f1;
+  --e-paper-2: #f0ecdd;
+  --e-white: #fffefb;
+  --e-ink: #1f2a17;
+  --e-ink-2: #46533c;
+  --e-ink-3: #667060;
+  --e-forest: #243d10;
+  --e-forest-2: #35501f;
+  --e-sage: #dee2d0;
+  --e-sage-100: #eef0e4;
+  --e-sage-2: #cdd4b0;
+  --e-olive: #808a42;
+  --e-olive-deep: #55602a;
+  --e-matcha: #c7d28a;
+  --e-matcha-100: #eef1d9;
+  --e-honey: #f1e8c7;
+  --e-honey-2: #e9dba2;
+  --e-pond: #b4c7bd;
+  --e-pond-100: #e2ebe5;
+  --e-coral: #e47048;
+  --e-coral-100: #f8dccd;
+  --e-coral-deep: #b04a26;
+  --e-line: rgb(31 42 23 / 0.1);
+  --e-line-strong: rgb(31 42 23 / 0.16);
+}
+
+/*
+ * ===== Variante F · "Cristal" (v5, exploración visual 2026-10-30) =====
+ * Paneles de vidrio esmerilado sobre degradés pastel suaves, tipografía liviana y acento lima.
+ * Reutiliza la estructura de la variante C: f-theme.css remapea sus tokens --c-* a esta paleta.
+ */
+:root {
+  --f-base: #dfe5e1;
+  --f-white: #ffffff;
+  --f-mint: #bfe9d8;
+  --f-mint-100: #e1f4ec;
+  --f-mint-deep: #7fc7ad;
+  --f-lav: #cfc6f5;
+  --f-lav-100: #ebe7fb;
+  --f-lav-deep: #8a78e0;
+  --f-pink: #f7c7d2;
+  --f-pink-100: #fde5ea;
+  --f-sun: #f6d68a;
+  --f-sun-100: #fbefcf;
+  --f-coral: #f0a39a;
+  --f-coral-100: #fbe0dc;
+  --f-lime: #d9f25f;
+  --f-lime-100: #eef8b4;
+  --f-ink: #1f2a30;
+  --f-ink-2: #435158;
+  --f-ink-3: #5a686e;
+  --f-slate: #27353d;
+  --f-slate-2: #33444d;
+  --f-red-deep: #a53a28;
+  --f-green: #1f7a58;
+  --f-grad-a: #d6558a;
+  --f-grad-b: #6f5ad6;
+  --f-glass: rgb(255 255 255 / 0.52);
+  --f-glass-2: rgb(255 255 255 / 0.34);
+  --f-edge: rgb(255 255 255 / 0.8);
+  --f-shadow: rgb(40 60 70 / 0.3);
+  --f-line: rgb(31 42 48 / 0.12);
+  --f-dark-glass: rgb(39 53 61 / 0.82);
+}
+
+/*
+ * ===== Variante G · "Cartografía" (v6, exploración visual 2026-10-30) =====
+ * Pergamino, tinta sepia, latón y terracota; brújulas, numeración romana y cuaderno de bitácora.
+ * Reutiliza la estructura de la variante C: g-theme.css remapea sus tokens --c-* a esta paleta.
+ */
+:root {
+  --g-parch: #f0e4c8;
+  --g-parch-2: #e6d6b0;
+  --g-parch-3: #f8f0dc;
+  --g-ink: #33261a;
+  --g-ink-2: #55412b;
+  --g-ink-3: #6b563b;
+  --g-brass: #b58a3a;
+  --g-brass-100: #ecd9a6;
+  --g-gold: #e3c77d;
+  --g-terra: #cf6a47;
+  --g-terra-100: #f1cdb8;
+  --g-terra-deep: #9c4529;
+  --g-sea: #a9bfc1;
+  --g-sea-100: #d7e2dd;
+  --g-verd: #6b7d62;
+  --g-verd-soft: #9db28a;
+  --g-verd-100: #d8dfc7;
+  --g-char: #2d2a26;
+  --g-char-2: #3d3933;
+  --g-line: rgb(51 38 26 / 0.38);
+  --g-line-soft: rgb(51 38 26 / 0.2);
+  --g-wash: rgb(248 240 220 / 0.6);
+}
+
+/*
  * ===== Variante "Cercana" (sobre la original, exploración 2026-10-31) =====
- * Misma identidad teal y verde. Cambia: neutros de gris azulado a hueso cálido, la textura oscura
- * pasa de curvas topográficas a un damero de ciudad con un recorrido de reparto, y el verde
- * saturado se reserva para acciones y detalles (las superficies grandes usan el verde suave).
+ * Paleta "Teal tibio" (elegida en el visor de paleta el 2026-10-31): el teal se corre hacia un verde
+ * bosque, el verde de marca es menos eléctrico, el acento pasa de turquesa a salvia y los neutros
+ * van de gris azulado a arena. La textura oscura es un damero de ciudad con un recorrido de reparto
+ * y el verde saturado se reserva para acciones y detalles (las superficies grandes usan el suave).
+ * Sin vidrio: las superficies translúcidas pasan a sólidas (teal elevado sobre lo oscuro, arena en
+ * la barra superior); con fondo sólido el blur de los componentes deja de verse.
  * Se activa en las páginas que tienen un elemento con data-tono="cercano" (/v1-cercana,
- * /donante/cercano). Contraste AA verificado: --ink-muted 4,9:1 sobre --gray-50 y 4,6:1 sobre
- * --gray-100.
+ * /donante/cercano). Contraste AA verificado: texto 13,0:1 y --ink-muted 5,5:1 sobre --gray-50,
+ * --ink-muted 5,1:1 sobre --gray-100; blanco 12,4:1 sobre --teal-900; sobre --teal-700, blanco
+ * 7,2:1, --text-on-dark-muted 4,6:1 y --teal-100 5,8:1; botón primario 6,2:1; texto sobre el
+ * acento 6,6:1; --danger 4,7:1 sobre --gray-50.
  */
 :root:has([data-tono="cercano"]) {
-  --gray-50: #f7f5f0;
-  --gray-75: #fbfaf7;
-  --gray-100: #f3f0ea;
-  --white-a78: rgb(247 245 240 / 0.78);
+  /* Primitivos */
+  --teal-900: #1e3a2d;
+  --teal-800: #284c3a;
+  --teal-750: #284b39;
+  --teal-700: #2f6149;
+  --teal-100: #d8ecd9;
+  --green-500: #69c272;
+  --green-400: #73cb7d;
+  --green-50: #eef7ed;
+  --turquoise-500: #9cc99f;
+  --slate-green: #3d4f42;
+  --ink: #2c2824;
+  --ink-muted: #676056;
+  --gray-50: #f6f1e7;
+  --gray-75: #faf7f1;
+  --gray-100: #efe8dc;
+
+  /* Transparencias derivadas (mismos canales que los primitivos de arriba) */
+  --white-a78: rgb(246 241 231 / 0.78);
+  --ink-a40: rgb(44 40 36 / 0.4);
+  --ink-a62: rgb(44 40 36 / 0.62);
+  --ink-a78: rgb(44 40 36 / 0.78);
+  --slate-a39: rgb(61 79 66 / 0.39);
+  --green-500-a20: rgb(105 194 114 / 0.2);
+  --green-500-a16: rgb(105 194 114 / 0.16);
+  --teal-a06: rgb(30 58 45 / 0.06);
+  --teal-a08: rgb(30 58 45 / 0.08);
+  --teal-a14: rgb(30 58 45 / 0.14);
+  --teal-a15: rgb(30 58 45 / 0.15);
+  --teal-a35: rgb(30 58 45 / 0.35);
+  --teal-a45: rgb(30 58 45 / 0.45);
+  --green-a28: rgb(115 203 125 / 0.28);
+  --green-a30: rgb(115 203 125 / 0.3);
+  --green-a35: rgb(115 203 125 / 0.35);
+  --green-a40: rgb(115 203 125 / 0.4);
+  --green-a55: rgb(115 203 125 / 0.55);
+  --green-a70: rgb(115 203 125 / 0.7);
+  --green-a80: rgb(115 203 125 / 0.8);
+  --turquoise-a35: rgb(156 201 159 / 0.35);
+
+  /* Semánticos que cambian de rol */
   --textura-oscura: url("../img/textura-ciudad.svg");
   --surface-band: var(--green-50);
   --grad-fade-band: linear-gradient(90deg, transparent 0%, var(--green-50) 100%);
+  --surface-glass: var(--teal-700);
+  --action-ghost-bg: var(--teal-700);
+  --surface-topbar: var(--gray-75);
+}
+
+/*
+ * ===== Variante H · "Hormiguero" (v7, exploración visual 2026-11-01) =====
+ * Azafrán, concha, celadón, pizarra y grafito: DonaTrack como las hormigas que llevan tu granito de arena.
+ * Reutiliza la estructura de la variante C: h-theme.css remapea sus tokens --c-* a esta paleta.
+ */
+:root {
+  --h-saffron: #fa9500;
+  --h-saffron-2: #e87a1e;
+  --h-saffron-deep: #b35f00;
+  --h-saffron-100: #fde2bd;
+  --h-shell: #f3e6e2;
+  --h-shell-2: #ead7d1;
+  --h-shell-3: #fbf5f3;
+  --h-celadon: #a8d4ad;
+  --h-celadon-2: #8dc394;
+  --h-celadon-100: #dcefde;
+  --h-slate: #3a606e;
+  --h-slate-2: #2e4d58;
+  --h-slate-100: #d2e0e4;
+  --h-graphite: #484349;
+  --h-graphite-2: #353136;
+  --h-ink: #2f2b30;
+  --h-ink-2: #484349;
+  --h-ink-3: #625c63;
+  --h-line: rgb(72 67 73 / 0.22);
+  --h-line-soft: rgb(72 67 73 / 0.12);
+  --h-dots: rgb(72 67 73 / 0.35);
+  --h-dots-strong: rgb(72 67 73 / 0.45);
+  --h-veil: rgb(251 245 243 / 0.92);
+  --h-veil-soft: rgb(251 245 243 / 0.5);
+  --h-lift: 0 1px 0 rgb(72 67 73 / 0.12), 0 10px 30px -18px rgb(72 67 73 / 0.35);
+  --h-saffron-mid: #f08a12;
+  --h-coral: #e2683a;
+  --h-failed: #f2b8a6;
+  --h-soil: #f6c27d;
+  --h-soil-deep: #e9a24b;
 }

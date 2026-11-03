@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DonaTrack · Huerto del depósito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,200;0,9..144,300;0,9..144,400;1,9..144,200;1,9..144,300&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f5f3e6; --paper2:#faf8ee; --wash:#e7ecd0; --ink:#252819; --muted:#585c46;
+  --oliva:#525c2a; --salvia:#9aa88a; --salviad:#6b7a58; --matcha:#cfd9a9; --miel:#c08e22; --mielt:#7a5a10; --coral:#c0503a; --coralt:#a93f2a;
+  --hair:rgba(37,40,25,.26); --hair2:rgba(37,40,25,.11);
+  --serif:"Fraunces","Iowan Old Style","Palatino Linotype",Georgia,"Times New Roman",serif;
+  --sans:"DM Sans",system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;min-height:100vh}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--oliva);outline-offset:3px;border-radius:3px}
+button{font:inherit;color:inherit;cursor:pointer}
+button[disabled]{cursor:default}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 34px 6px;flex-wrap:wrap}
+.brand{font-family:var(--serif);font-weight:300;font-size:24px;text-decoration:none;display:flex;align-items:center;gap:9px}.brand b{font-weight:400;color:var(--oliva)}
+.brand svg{width:22px;height:22px;fill:none;stroke:var(--oliva);stroke-width:1.3;stroke-linecap:round}
+.mid{font-size:13px;color:var(--muted);text-align:center}
+.demo{color:var(--coralt);letter-spacing:.1em;text-transform:uppercase;font-size:11px;border:1px solid var(--coralt);border-radius:999px;padding:1px 10px;margin-left:8px;white-space:nowrap}
+.kbd{border:1px solid var(--hair);background:none;border-radius:999px;padding:6px 16px;font-size:14px;color:var(--muted);transition:.3s}
+.kbd:hover{border-color:var(--oliva);color:var(--ink)}.kbd kbd{font:inherit;font-size:11px;letter-spacing:.06em;margin-left:6px;color:var(--salviad)}
+.nav{display:flex;justify-content:center;gap:4px 26px;padding:6px 34px 14px;border-bottom:1px solid var(--hair2);overflow-x:auto;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav a{font-size:14.5px;text-decoration:none;color:var(--muted);padding:6px 0;border-bottom:1px solid transparent;white-space:nowrap;transition:.3s}
+.nav a:hover{color:var(--ink);border-color:var(--salvia)}
+.nav a[aria-current=page]{color:var(--ink);border-color:var(--oliva)}
+main{max-width:1020px;margin:0 auto;padding:3vh 28px 110px;position:relative}
+h1,h2,h3{font-weight:300}
+.eyebrow{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+.vt{font-family:var(--serif);font-weight:200;font-size:clamp(34px,4.6vw,56px);line-height:1.05;letter-spacing:-.015em;margin:8px 0 6px}.vt em{font-style:italic;color:var(--oliva)}
+.lede{color:var(--muted);max-width:60ch;margin-bottom:26px}
+h2.st{font-family:var(--serif);font-weight:300;font-size:28px;line-height:1.15;margin-bottom:4px}
+.cap{font-size:13px;color:var(--muted)}
+.sec{margin-top:7vh}
+/* parcelas */
+.plots{display:flex;justify-content:center;align-items:flex-start;gap:clamp(6px,2.4vw,30px);flex-wrap:wrap;position:relative;padding-bottom:8px}
+.plots:after{content:"";position:absolute;left:4%;right:4%;top:98px;height:1px;background:var(--hair)}
+.cw{height:92px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:8px}
+.plot{background:none;border:0;text-align:center;padding:6px 8px 8px;border-radius:12px;color:var(--muted);font-size:13px;position:relative;z-index:1;min-width:92px;transition:background .3s}
+.plot .c{display:flex;align-items:center;justify-content:center;border:1px solid var(--oliva);border-radius:50%;margin:0;font-family:var(--serif);font-weight:300;color:var(--ink);transition:.4s;background:var(--paper)}
+.plot b{display:block;font-weight:500;color:var(--ink);font-size:14.5px;line-height:1.25}
+.plot i{display:block;font-family:var(--serif);font-size:13.5px;color:var(--salviad);line-height:1.3}
+.plot small{display:block;font-size:11.5px;color:var(--coralt);line-height:1.3;min-height:1.3em}
+.plot:hover{background:var(--wash)}.plot:hover .c{background:var(--matcha)}
+.plot.m .c{border-color:var(--miel)}
+.offpath{margin:14px auto 0;max-width:640px;display:flex;gap:6px 28px;justify-content:center;flex-wrap:wrap;font-size:14px;border-top:1px solid var(--hair2);padding-top:12px;color:var(--muted)}
+.offpath button{background:none;border:0;padding:0;color:var(--ink);display:flex;gap:8px;align-items:center;border-bottom:1px solid transparent}.offpath button:hover{border-color:var(--coralt)}
+.offpath em{font-family:var(--serif);color:var(--salviad)}
+.offpath b{font-weight:500}
+/* foco */
+.focus{text-align:center;max-width:780px;margin:7vh auto 0;position:relative}
+.lv{display:inline-block;border:1px solid var(--hair);border-radius:999px;padding:1px 12px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.lv.u{color:var(--coralt);border-color:var(--coralt)}.lv.h{color:var(--mielt);border-color:var(--miel)}.lv.s{color:var(--oliva);border-color:var(--salvia)}
+.focus h1{font-family:var(--serif);font-weight:200;font-size:clamp(32px,5vw,62px);line-height:1.07;letter-spacing:-.015em;margin:14px 0 16px}
+.why{color:var(--muted);font-size:19px;max-width:48ch;margin:0 auto}
+.stem{width:1px;height:46px;background:var(--hair);margin:0 auto 14px;position:relative}.stem:after{content:"";position:absolute;left:-5px;bottom:-1px;width:11px;height:11px;border:1px solid var(--oliva);border-radius:50%;background:var(--paper)}
+.btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:32px}
+.btn{border:1px solid var(--oliva);background:var(--oliva);color:#fbf9ee;border-radius:999px;padding:12px 30px;font-size:16px;transition:.3s;line-height:1.3;text-decoration:none;display:inline-block}
+.btn:hover:not([disabled]){background:transparent;color:var(--oliva)}
+.btn.g{background:none;color:var(--oliva)}.btn.g:hover:not([disabled]){background:var(--matcha)}
+.btn[disabled]{opacity:.6}
+.btn.sm{padding:6px 18px;font-size:14px}
+.lk{background:none;border:0;border-bottom:1px solid var(--oliva);color:var(--oliva);font-size:14px;padding:0;white-space:nowrap}.lk:hover:not([disabled]){background:var(--matcha)}.lk[disabled]{opacity:.55;border-color:transparent;color:var(--muted)}
+.lk.w{color:var(--coralt);border-color:var(--coralt)}.lk.w:hover{background:rgba(192,80,58,.12)}
+.sub2{margin-top:20px;font-size:13px;color:var(--muted)}
+.count{margin-top:22px;display:flex;justify-content:center;gap:8px;align-items:center;font-size:13px;color:var(--muted)}
+.count i{width:26px;height:1px;background:var(--hair);display:inline-block}.count i.on{background:var(--oliva);height:2px}.count i.d{background:var(--salvia)}
+.calm{padding:6vh 0;font-family:var(--serif);font-weight:200;font-size:clamp(32px,4.4vw,56px);line-height:1.15}.calm em{color:var(--oliva)}
+.calm p{font-family:var(--sans);font-size:17px;color:var(--muted);margin-top:10px}
+.later{margin-top:8vh;max-width:780px;margin-left:auto;margin-right:auto}
+.later h2{margin-bottom:2px}
+.lrow{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--hair2)}
+.lrow:first-of-type{border-top:1px solid var(--hair);margin-top:10px}
+.lrow .t{font-family:var(--serif);font-size:18px;line-height:1.3}
+.more{margin-top:9vh;border-top:1px solid var(--hair);padding-top:14px;text-align:center}
+.more button{background:none;border:0;font-size:15px;color:var(--oliva);border-bottom:1px solid var(--oliva);padding:2px 0}.more button:hover{background:var(--matcha)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:64px}
+/* filas */
+.row{display:grid;grid-template-columns:1fr auto;gap:12px 18px;padding:14px 0;border-bottom:1px solid var(--hair2);align-items:start}
+.list>.row:first-child{border-top:1px solid var(--hair)}
+.row .t{font-family:var(--serif);font-size:19px;line-height:1.3}.row .t button{background:none;border:0;font:inherit;text-align:left;padding:0;border-bottom:1px solid transparent}.row .t button:hover{border-color:var(--oliva)}
+.row .m{font-size:13.5px;color:var(--muted)}
+.row .r{text-align:right;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.w{color:var(--coralt)}
+.tg{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--hair);border-radius:999px;padding:1px 11px 1px 8px;font-size:12.5px;white-space:nowrap;line-height:1.7}
+.tg .g{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+.s-dep{border-color:var(--salviad);color:#3f4a30}
+.s-asi{border-color:var(--oliva);color:var(--oliva)}
+.s-lis{border-color:var(--oliva);color:var(--oliva);background:var(--matcha)}
+.s-tra{border-color:var(--mielt);color:var(--mielt);background:rgba(192,142,34,.14)}
+.s-ent{border-color:var(--oliva);color:#fbf9ee;background:var(--oliva)}
+.s-fal{border-color:var(--coralt);color:var(--coralt)}
+.s-ven{border-color:var(--coralt);color:var(--coralt);border-style:dashed;background:rgba(192,80,58,.08)}
+.s-act{border-style:dotted;color:var(--muted);border-color:var(--salviad)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 6px}
+.chip{border:1px solid var(--hair);background:none;border-radius:999px;padding:4px 14px;font-size:14px;transition:.3s}.chip:hover{border-color:var(--oliva)}
+.chip[aria-pressed=true]{background:var(--oliva);border-color:var(--oliva);color:#fbf9ee}
+.chip small{opacity:.8;margin-left:4px;font-size:12px}
+.chip.w[aria-pressed=false]{border-color:var(--coralt);color:var(--coralt)}
+.tabs{display:flex;gap:22px;border-bottom:1px solid var(--hair2);margin-bottom:20px;flex-wrap:wrap}
+.tabs button{background:none;border:0;border-bottom:1px solid transparent;padding:8px 0;color:var(--muted);font-size:15px}.tabs button[aria-selected=true]{color:var(--ink);border-color:var(--oliva)}
+.srch{width:100%;max-width:340px;border:0;border-bottom:1px solid var(--hair);background:none;padding:6px 0;font:inherit;color:var(--ink);margin:6px 0 4px}.srch:focus{outline:none;border-color:var(--oliva)}
+/* camiones */
+.truck{padding:20px 0;border-bottom:1px solid var(--hair2)}.truck:first-of-type{border-top:1px solid var(--hair)}
+.truck h3{font-family:var(--serif);font-weight:400;font-size:24px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+.truck h3 span{font-family:var(--sans);font-size:13.5px;color:var(--muted);font-weight:400}
+.path{display:flex;align-items:flex-start;margin:16px 4px 6px;font-size:12.5px;color:var(--muted)}
+.path .n{display:flex;flex-direction:column;align-items:center;gap:7px;flex:none;text-align:center;width:84px}
+.path .n i{width:12px;height:12px;border:1px solid var(--oliva);border-radius:50%;background:var(--paper)}.path .n.ok i{background:var(--oliva)}.path .n.at i{box-shadow:0 0 0 4px var(--matcha);background:var(--oliva)}
+.path .l{flex:1;height:1px;background:var(--hair);margin-top:6px;min-width:14px}.path .l.ok{background:var(--oliva)}
+.ld{height:1px;background:var(--hair);position:relative;margin-top:12px}.ld:after{content:"";position:absolute;left:0;top:-1px;height:3px;width:var(--w);background:var(--salvia)}
+.trinfo{display:flex;gap:6px 24px;flex-wrap:wrap;font-size:13.5px;color:var(--muted);margin-top:10px;align-items:center}
+.nd{padding:12px 0;border-bottom:1px solid var(--hair2)}.nd:first-of-type{border-top:1px solid var(--hair)}.nd .l{display:flex;justify-content:space-between;gap:8px}.nd .u{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--coralt)}
+.nd i{display:block;height:1px;background:var(--hair);position:relative;margin-top:8px}.nd i:after{content:"";position:absolute;left:0;top:-1px;height:3px;width:var(--w);background:var(--oliva)}
+.jr{list-style:none}.jr li{padding:12px 0;border-bottom:1px solid var(--hair2);font-size:15px}.jr li:first-child{border-top:1px solid var(--hair)}.jr time{display:block;font-size:12px;color:var(--muted)}.jr .bad time{color:var(--coralt)}
+.kp{display:flex;gap:40px;margin:10px 0 16px;flex-wrap:wrap}.kp b{font-family:var(--serif);font-weight:200;font-size:54px;line-height:1;display:block}.kp span{font-size:13px;color:var(--muted)}
+.chart{width:100%;height:auto;display:block}.chart .a{fill:none;stroke:var(--oliva);stroke-width:1.5}.chart .b{fill:none;stroke:var(--miel);stroke-width:1.5;stroke-dasharray:4 4}.chart .x{stroke:var(--hair)}.chart .gr{stroke:var(--hair2)}.chart text{font-size:11px;fill:var(--muted);font-family:var(--sans)}
+.key{font-size:13px;color:var(--muted);display:flex;gap:18px;margin-top:6px}
+.bar{display:grid;grid-template-columns:120px 1fr 44px;gap:12px;align-items:center;font-size:14px;margin:12px 0}.bar i{display:block;height:1px;background:var(--hair);position:relative}.bar i:after{content:"";position:absolute;left:0;top:-1px;height:3px;width:var(--w);background:var(--oliva)}
+.rank{list-style:none;counter-reset:r}.rank li{counter-increment:r;display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--hair2);font-family:var(--serif);font-size:22px;align-items:baseline}.rank li:first-child{border-top:1px solid var(--hair)}.rank li:before{content:counter(r);color:var(--oliva);width:20px;font-weight:200;font-size:30px}
+/* propuestas / formularios */
+.prop{padding:18px 0;border-bottom:1px solid var(--hair2);display:grid;grid-template-columns:1fr auto;gap:10px 20px;align-items:center}.prop:first-of-type{border-top:1px solid var(--hair)}
+.prop .t{font-family:var(--serif);font-size:20px;line-height:1.3}
+.prop .arrow{color:var(--salviad)}
+.acts2{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.ok2{color:var(--oliva);font-size:14px}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:20px 36px;max-width:760px}
+.form label{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.form input,.form select{width:100%;border:0;border-bottom:1px solid var(--hair);background:none;font:inherit;font-size:17px;padding:6px 0;color:var(--ink);border-radius:0}.form input:focus,.form select:focus{outline:none;border-color:var(--oliva)}
+.form .full{grid-column:1/-1}.form .two{display:grid;grid-template-columns:1fr 110px;gap:14px}
+.err{color:var(--coralt);font-size:13px;min-height:1.2em}
+.empty{padding:34px 0;color:var(--muted);font-family:var(--serif);font-size:20px;font-weight:300;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair2)}
+.big{display:flex;gap:44px;flex-wrap:wrap;margin:14px 0 8px}.big b{font-family:var(--serif);font-weight:200;font-size:58px;line-height:1;display:block}.big span{font-size:13.5px;color:var(--muted)}
+.drop{border:1px dashed var(--salvia);border-radius:14px;padding:22px;max-width:560px}
+/* cajón */
+.drw{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--paper);border-left:1px solid var(--hair);box-shadow:-30px 0 70px -40px rgba(37,40,25,.5);padding:26px 28px;transform:translateX(105%);transition:transform .45s cubic-bezier(.3,.7,.2,1);z-index:35;overflow:auto;visibility:hidden}
+.drw.on{transform:none;visibility:visible}
+.drw h2{font-family:var(--serif);font-weight:300;font-size:30px;line-height:1.1;margin:10px 0 4px}
+.drw .x{position:absolute;top:14px;right:18px;background:none;border:1px solid var(--hair);border-radius:50%;width:34px;height:34px}
+.hist{list-style:none;margin-top:18px;border-left:1px solid var(--hair);margin-left:6px}
+.hist li{position:relative;padding:0 0 20px 22px}.hist li:before{content:"";position:absolute;left:-6px;top:6px;width:11px;height:11px;border:1px solid var(--oliva);border-radius:50%;background:var(--paper)}.hist li.now:before{background:var(--oliva)}
+.hist small{display:block;color:var(--muted);font-size:13px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);background:var(--ink);color:#fbf9ee;padding:11px 22px;border-radius:999px;font-size:14px;opacity:0;transition:.4s;pointer-events:none;z-index:50;max-width:92vw;text-align:center}.toast.on{opacity:1;transform:translate(-50%,0)}
+.pal{position:fixed;inset:0;background:rgba(37,40,25,.3);display:none;align-items:flex-start;justify-content:center;padding-top:14vh;z-index:40}.pal.on{display:flex}
+.pal .box{background:var(--paper);border:1px solid var(--hair);border-radius:14px;width:min(600px,92vw);box-shadow:0 30px 70px -30px rgba(37,40,25,.5);overflow:hidden}
+.pal input{width:100%;border:0;border-bottom:1px solid var(--hair);background:transparent;padding:18px 22px;font-family:var(--serif);font-size:22px;font-weight:300;color:var(--ink)}.pal input:focus{outline:none}
+.pal ul{list-style:none;max-height:46vh;overflow:auto}.pal li button{display:flex;justify-content:space-between;width:100%;background:none;border:0;padding:11px 22px;text-align:left;font-size:16px;gap:10px}
+.pal li button.sel,.pal li button:hover{background:var(--wash)}.pal li small{color:var(--muted);font-size:12px;white-space:nowrap}.pal .ft{padding:10px 22px;font-size:12px;color:var(--muted);border-top:1px solid var(--hair2)}
+.sprig{position:absolute;right:20px;top:20px;width:130px;opacity:.9;pointer-events:none}.sprig *{fill:none;stroke:var(--salvia);stroke-width:1.1;stroke-linecap:round}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media (max-width:860px){
+  .top{padding:12px 16px 4px}.mid{order:3;width:100%;text-align:left}.kbd kbd{display:none}
+  .nav{justify-content:flex-start;padding:4px 16px 10px;gap:4px 20px}
+  main{padding:2vh 18px 100px}.sprig{display:none}
+  .grid,.form{grid-template-columns:1fr;gap:48px}.form{gap:22px}
+  .plot{min-width:0;flex:0 0 31%;padding:2px}.plots:after{display:none}.cw{height:66px;margin-bottom:4px}.plot .c{transform:scale(.68);transform-origin:bottom center}.plot b{font-size:13px}.plots{row-gap:10px;gap:4px}.focus{margin-top:3vh}.stem{height:28px}
+  .btn{padding:12px 24px}
+  .lrow{grid-template-columns:1fr auto;}.lrow .lv{grid-column:1/-1;justify-self:start}
+  .bar{grid-template-columns:96px 1fr 40px}
+  .prop{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr}.row .r{align-items:flex-start;text-align:left;flex-direction:row;flex-wrap:wrap;gap:10px 14px;align-items:center}
+  .path .n{width:56px}.path .l{min-width:6px}
+  .big b{font-size:46px}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<symbol id="g-dep" viewBox="0 0 14 14"><ellipse cx="7" cy="8" rx="2.6" ry="3.6"/><path d="M1.5 12.5h11"/></symbol>
+<symbol id="g-asi" viewBox="0 0 14 14"><path d="M7 2v5M7 7c-1 2-2.5 3-4 4M7 7c1 2 2.5 3 4 4M7 7v6"/></symbol>
+<symbol id="g-lis" viewBox="0 0 14 14"><path d="M7 13V6M7 8C4 8 2.5 6.5 2 4c3 0 4.5 1.5 5 4ZM7 6c0-2.5 1.5-4 4.5-4.5C11.5 4 10 5.5 7 6Z"/></symbol>
+<symbol id="g-tra" viewBox="0 0 14 14"><circle cx="7" cy="7" r="1.6"/><path d="M7 5.4C6 3.5 6.5 2 7 1.5c.5.5 1 2 0 3.9ZM8.6 7c1.9-1 3.4-.5 3.9 0-.5.5-2 1-3.9 0ZM7 8.6c1 1.9.5 3.4 0 3.9-.5-.5-1-2 0-3.9ZM5.4 7c-1.9 1-3.4.5-3.9 0 .5-.5 2-1 3.9 0Z"/></symbol>
+<symbol id="g-ent" viewBox="0 0 14 14"><circle cx="7" cy="8" r="4"/><path d="M7 4V1.5M7 2.5c1.5-.3 2.5 0 3 .8"/></symbol>
+<symbol id="g-fal" viewBox="0 0 14 14"><path d="M3 11L11 3M3 3l3 3M11 11L8 8"/><circle cx="3" cy="11" r="1.4"/></symbol>
+<symbol id="g-ven" viewBox="0 0 14 14"><path d="M7 1.5v11M2.2 4.2l9.6 5.6M2.2 9.8l9.6-5.6"/></symbol>
+</defs></svg>
+
+<header class="top">
+  <a class="brand" href="#inicio" data-v="inicio"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V9"/><path d="M12 14C8 14 5 11.5 4.5 8 8.5 8 11.5 10 12 14Z"/><path d="M12 11c0-3.5 2.5-6 6.5-6.5C18.5 8 16 10.5 12 11Z"/></svg><span>Dona<b>Track</b></span></a>
+  <p class="mid">Depósito central · Sábado 31 de octubre <span class="demo">Datos de demostración</span></p>
+  <button class="kbd" type="button" id="open-pal" aria-haspopup="dialog">Ir a o hacer… <kbd>Ctrl K</kbd></button>
+</header>
+<nav class="nav" id="nav" aria-label="Pantallas de administración"></nav>
+<main id="view" tabindex="-1"></main>
+
+<aside class="drw" id="drw" role="dialog" aria-modal="false" aria-labelledby="drt"><button class="x" type="button" id="drx" aria-label="Cerrar el historial">&times;</button><div id="drc"></div></aside>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Ir a o hacer">
+  <div class="box"><input id="pi" type="text" placeholder="¿Qué querés hacer?" aria-label="Buscar acción o destino" autocomplete="off"><ul id="pl"></ul><div class="ft">Flechas para moverte, Enter para elegir, Esc para cerrar</div></div>
+</div>
+
+<script>
+(function(){
+  var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches,$=function(i){return document.getElementById(i)};
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var tt;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},3200)}
+  var MES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+  function dstr(n){var d=new Date(2026,9,31-n);return d.getDate()+' '+MES[d.getMonth()]}
+
+  /* ---- estados reales ---- */
+  var S={dep:['En depósito','Semilla','EN_DEPOSITO'],asi:['Asignada','Raíz','ASIGNACION_REALIZADA'],lis:['Lista para entregar','Brote','LISTA_PARA_ENTREGAR'],tra:['En traslado','Flor','EN_TRASLADO'],ent:['Entregada','Fruto','ENTREGADA'],fal:['Entrega fallida','Poda','ENTREGA_FALLIDA'],ven:['Vencida','Helada','VENCIDA']};
+  var ORD=['dep','asi','lis','tra','ent','fal','ven'];
+  function tag(k){return '<span class="tg s-'+k+'" title="'+S[k][2]+'"><svg class="g" aria-hidden="true"><use href="#g-'+k+'"/></svg>'+S[k][0]+'</span>'}
+  var C={dep:18,asi:11,lis:7,tra:9,ent:23,fal:1,ven:0};
+  var NOTE={dep:'4 llevan más de 5 días',asi:'2 sin camión',lis:'',tra:'3 camiones en ruta',ent:'este mes',fal:'',ven:''};
+
+  /* ---- donaciones de ejemplo: [id, item, donante, destino, estado, días, aviso] ---- */
+  var D=[['DT-0398','Frazadas · 30 u','Cooperativa La Huerta',null,'dep',8,''],['DT-0396','Fideos · 35 kg','Cooperativa La Huerta','Merendero Norte','dep',6,''],['DT-0401','Yogur · 40 kg','Lácteos del Sur',null,'dep',3,'vence en 48 h'],['DT-0416','Conservas · 24 kg','Nicolás Pérez',null,'dep',0,''],
+    ['DT-0403','Pan lactal · 60 u','Panadería El Molino','Comedor Los Girasoles','asi',2,'vence en 48 h'],['DT-0407','Conservas · 24 kg','Nicolás Pérez','Escuela 12','asi',5,''],['DT-0415','Útiles escolares','Sin dato en la demo','Escuela 12','asi',0,''],
+    ['DT-0411','Camperas · 18 u','Nicolás Pérez','Hogar Esperanza','lis',1,''],['DT-0412','Arroz · 50 kg','Cooperativa La Huerta','Comedor Los Girasoles','tra',0,''],['DT-0414','Útiles · 120 u','Librería Central','Escuela 12','tra',0,''],
+    ['DT-0390','Donación','Sin dato en la demo','Merendero Norte','fal',1,'nadie la recibió: vuelve al depósito'],['DT-0409','Frazadas · 30 u','Sin dato en la demo','Comedor Los Girasoles','ent',0,'confirmó la entidad hace 12 min']].map(function(r){return {id:r[0],item:r[1],fr:r[2],to:r[3],st:r[4],age:r[5],w:r[6],busy:false}});
+  function don(id){return D.filter(function(d){return d.id===id})[0]}
+  function ageTxt(d){return d.age===0?'hoy':(d.age===1?'1 día':d.age+' días')}
+
+  /* ---- pendientes ---- */
+  var Q=[{id:'q1',l:'u',t:'4 donaciones llevan más de 5 días sin asignar.',w:'Cuanto más esperan en el depósito, más cerca están de vencer. Ejecutá la asignación y revisá las propuestas con calma.',b:'Ejecutar asignación',ph:0,go:'asignaciones'},
+    {id:'q2',l:'u',t:'2 donaciones vencen en 48 h.',w:'Son lácteos y panificados: DT-0401 (yogur, 40 kg) y DT-0403 (pan lactal, 60 u). Revisalas primero.',b:'Ver las dos donaciones',go:'donaciones'},
+    {id:'q3',l:'h',t:'El Camión 3 no tiene chofer confirmado para mañana.',w:'Ruta Sur, 4 paradas, sale a las 08:00. Va cargado al 31 % por ahora.',b:'Confirmar chofer',ph:0},
+    {id:'q4',l:'h',t:'Hay una entrega pendiente de confirmar en Hogar Esperanza.',w:'Llegó ayer a las 17:40. La confirma la entidad; podés avisarle.',b:'Avisar a la entidad',ph:0},
+    {id:'q5',l:'s',t:'3 entidades nuevas esperan aprobación.',w:'No corre apuro, pero conviene no dejarlas esperando.',b:'Revisar entidades',go:'entidades'}];
+  var LV={u:'Urgente',h:'Hoy',s:'Esta semana'},idx='q1',done=[],armedKey=null,asig='idle',P=[],tab='inventario',fst=null,todo=false,sec='inicio';
+  var ENT=[['Solicitud 1',0],['Solicitud 2',0],['Solicitud 3',0]].map(function(e){return {n:e[0],s:'new'}});
+  var TR=[{n:'Camión 1',st:'En ruta',eta:'ETA 14:20',carga:78,stops:[['Depósito',1],['Escuela 12',0],['Hogar Esperanza',0]],prog:'1/3 paradas',don:'3 donaciones a bordo',ex:'DT-0414 · Útiles · 120 u → Escuela 12',chof:'Chofer confirmado'},
+    {n:'Camión 2',st:'En ruta',eta:'ETA 15:05',carga:54,stops:[['Depósito',1],['Los Girasoles',1],['Merendero Norte',0]],prog:'2/3 paradas',don:'6 donaciones a bordo',ex:'DT-0412 · Arroz · 50 kg → Comedor Los Girasoles',chof:'Chofer confirmado'},
+    {n:'Camión 3',st:'Cargando',eta:'Sale mañana 08:00',carga:31,stops:[['Depósito',1],['Parada 1',0],['Parada 2',0],['Parada 3',0],['Parada 4',0]],prog:'Ruta Sur · 4 paradas',don:'DT-0411 se sumó hace 3 h',ex:'DT-0411 · Camperas · 18 u → Hogar Esperanza',chof:'Sin chofer confirmado para mañana',ch:'none'}];
+  var NEC=[['Frazadas',' · Comedor Los Girasoles',18,30,1],['Útiles escolares',' · Escuela 12',90,120,0],['Leche en polvo',' · Merendero Norte',6,40,1],['Camperas',' · Hogar Esperanza',18,18,0]];
+  var ACT=[['Los Girasoles confirmó la recepción de DT-0409 (frazadas ×30).','hace 12 min'],['El camión 2 salió con 6 donaciones hacia Los Girasoles.','hace 40 min'],['El sistema asignó DT-0415 (útiles) a la necesidad de Escuela 12.','hace 1 h'],['Recibida DT-0416 (conservas 24 kg, Nicolás Pérez).','hace 2 h'],['DT-0411 quedó lista y se sumó al camión 3.','hace 3 h'],['Nadie recibió DT-0390 en Merendero Norte: vuelve al depósito (Entrega fallida).','ayer',1]];
+  var CSV=null;
+
+  function busy(b,fn,ms){b.disabled=true;b.textContent='Actualizando…';b.setAttribute('aria-busy','true');setTimeout(fn,reduce?0:(ms||1300))}
+  function open(){return Q.filter(function(q){return done.indexOf(q.id)<0})}
+  function finish(id){if(done.indexOf(id)<0)done.push(id)}
+
+  /* ---- vistas ---- */
+  var NAV=[['inicio','Inicio'],['donantes','Donantes'],['entidades','Entidades'],['donaciones','Donaciones'],['asignaciones','Asignaciones'],['camiones','Camiones'],['rankings','Rankings']];
+  $('nav').innerHTML=NAV.map(function(n){return '<a href="#'+n[0]+'" data-v="'+n[0]+'">'+n[1]+'</a>'}).join('');
+
+  function head(e,t,l){return '<p class="eyebrow">'+e+'</p><h1 class="vt">'+t+'</h1><p class="lede">'+l+'</p>'}
+  function plots(){
+    var cfg=[['dep',18],['asi',11],['lis',7],['tra',9],['ent',23]];
+    return '<div class="plots" role="group" aria-label="El huerto: donaciones por estado. Tocá una parcela para ver sus donaciones.">'+cfg.map(function(c){var k=c[0],n=C[k],d=Math.round(38+n*2.1);
+      return '<button type="button" class="plot'+(k==='ent'?' m':'')+'" data-a="plot" data-k="'+k+'"><span class="cw"><span class="c" style="width:'+d+'px;height:'+d+'px;font-size:'+Math.round(14+n*.75)+'px">'+n+'</span></span><b>'+S[k][0]+'</b><i>'+S[k][1]+'</i><small>'+NOTE[k]+'</small></button>'}).join('')+'</div>'
+     +'<div class="offpath" aria-label="Estados fuera del camino"><span>Si algo sale mal:</span><button type="button" data-a="plot" data-k="fal">'+tag('fal')+' <b>'+C.fal+'</b> <em>la poda</em></button><button type="button" data-a="plot" data-k="ven">'+tag('ven')+' <b>'+(C.ven?C.ven:'ninguna hoy')+'</b> <em>la helada</em></button></div>'}
+  function focusHTML(){
+    var o=open(),n={u:0,h:0,s:0};o.forEach(function(q){n[q.l]++});
+    if(!o.length)return '<div class="focus"><div class="calm">Hoy el huerto está <em>en calma.</em><p>Nada más pide tu atención. Descansá.</p></div></div>';
+    if(o.indexOf(Q.filter(function(q){return q.id===idx})[0])<0)idx=o[0].id;
+    var q=Q.filter(function(x){return x.id===idx})[0],pos=o.indexOf(q)+1,pend=q.ph===1&&q.id!=='q1';
+    return '<section class="focus" aria-labelledby="ft"><div class="stem" aria-hidden="true"></div><p class="eyebrow" id="ft">Lo primero ahora</p><h1><span class="lv '+q.l+'">'+LV[q.l]+'</span><br>'+esc(q.t)+'</h1><p class="why">'+esc(q.w)+'</p>'
+      +'<div class="btns"><button class="btn" type="button" data-a="do"'+(pend?' disabled':'')+'>'+(pend?'Esperando respuesta…':q.b)+'</button><button class="btn g" type="button" data-a="later"'+(o.length<2?' disabled':'')+'>Para después</button></div>'
+      +'<p class="sub2"><button type="button" class="lk" data-a="resolve">'+(armedKey==='r'+q.id?'¿Confirmás? Tocá de nuevo':'Dar por resuelto')+'</button></p>'
+      +'<div class="count"><span>'+pos+' de '+o.length+' · '+n.u+' urgentes, '+n.h+' para hoy, '+n.s+' esta semana</span></div></section>'
+      +(o.length>1?'<section class="later" aria-labelledby="lt"><h2 class="st" id="lt">Para después</h2><p class="cap">Nada se esconde: lo urgente sigue a la vista y vuelve al frente cuando quieras.</p><div>'+o.filter(function(x){return x!==q}).map(function(x){return '<div class="lrow"><span class="lv '+x.l+'">'+LV[x.l]+'</span><span class="t">'+esc(x.t)+'</span><button type="button" class="lk" data-a="front" data-id="'+x.id+'">Pasar al frente</button></div>'}).join('')+'</div></section>':'')}
+  function V_inicio(){
+    return '<h1 class="sr">Inicio: el huerto del depósito</h1>'+plots()+'<div id="foc" aria-live="polite">'+focusHTML()+'</div>'
+     +'<div class="more"><button type="button" id="tog" data-a="todo" aria-expanded="'+todo+'" aria-controls="all">'+(todo?'Volver a una sola cosa':'Ver todo el huerto')+'</button></div><div id="all"'+(todo?'':' hidden')+'>'+allHTML()+'</div>'}
+  function allHTML(){
+    var att=D.filter(function(d){return d.w&&d.st!=='ent'||d.age>=5}).slice(0,6);
+    var W=['S34','S35','S36','S37','S38','S39','S40','S41'],R=[9,12,7,14,11,16,10,8],E=[6,8,9,10,12,11,13,5];
+    function ln(a){return a.map(function(v,i){return (i?'L':'M')+(30+i*48)+' '+(140-v*7.5)}).join(' ')}
+    var ch='<svg class="chart" viewBox="0 0 400 172" role="img" aria-label="Recibidas y entregadas por semana, de S34 a S41. Recibidas: 9, 12, 7, 14, 11, 16, 10, 8. Entregadas: 6, 8, 9, 10, 12, 11, 13, 5."><line class="gr" x1="20" x2="390" y1="65" y2="65"/><line class="gr" x1="20" x2="390" y1="103" y2="103"/><line class="x" x1="20" x2="390" y1="140" y2="140"/>'+W.map(function(w,i){return '<text x="'+(30+i*48)+'" y="160" text-anchor="middle">'+w+'</text>'}).join('')+'<path class="a" d="'+ln(R)+'"/><path class="b" d="'+ln(E)+'"/>'+R.map(function(v,i){return '<circle cx="'+(30+i*48)+'" cy="'+(140-v*7.5)+'" r="2.6" fill="#525c2a"><title>'+W[i]+' recibidas '+v+'</title></circle>'}).join('')+E.map(function(v,i){return '<circle cx="'+(30+i*48)+'" cy="'+(140-v*7.5)+'" r="2.6" fill="#c08e22"><title>'+W[i]+' entregadas '+v+'</title></circle>'}).join('')+'<text x="378" y="'+(140-8*7.5-8)+'" text-anchor="end">8</text><text x="378" y="'+(140-5*7.5+16)+'" text-anchor="end">5</text></svg>';
+    return '<section class="sec"><h2 class="st">Donaciones que piden atención</h2><p class="cap">Un adelanto. La lista completa, con filtros, está en Donaciones.</p><div class="list">'+att.map(rowHTML).join('')+'</div><p class="sub2"><button class="lk" type="button" data-v="donaciones">Ir al inventario completo</button></p></section>'
+     +'<div class="grid sec"><section><h2 class="st">Camiones</h2><p class="cap">Tres en la flota: dos en ruta, uno cargando</p>'+TR.map(truckHTML).join('')+'</section><section><h2 class="st">Lo que se necesita</h2><p class="cap">Necesidades abiertas de las entidades</p>'+needsHTML()+'</section></div>'
+     +'<div class="grid sec"><section><h2 class="st">El mes y las semanas</h2><div class="kp"><div><b>31</b><span>recibidas este mes · +8 %</span></div><div><b>23</b><span>entregadas este mes · +15 %</span></div></div>'+ch+'<div class="key"><span>── Recibidas</span><span>- - Entregadas</span></div></section><section><h2 class="st">Lo que pasó</h2><ul class="jr">'+ACT.map(function(a){return '<li'+(a[2]?' class="bad"':'')+'>'+a[0]+'<time>'+a[1]+'</time></li>'}).join('')+'</ul></section></div>'
+     +'<div class="grid sec"><section><h2 class="st">Lo que ya se cosechó</h2><p class="cap">2.450 kg distribuidos a 34 entidades</p>'+bars()+'</section><section><h2 class="st">Ranking del mes</h2><p class="cap">Ejemplo</p>'+rankHTML()+'</section></div>'}
+  function bars(){return [['Alimentos',62],['Vestimenta',18],['Útiles escolares',12],['Higiene',8]].map(function(b){return '<div class="bar" style="--w:'+b[1]+'%"><span>'+b[0]+'</span><i></i><span>'+b[1]+' %</span></div>'}).join('')}
+  function rankHTML(){return '<ol class="rank"><li>Cooperativa La Huerta</li><li>Nicolás Pérez</li><li>Panadería El Molino</li></ol>'}
+  function needsHTML(){return NEC.map(function(n){return '<div class="nd"><div class="l"><span>'+n[0]+n[1]+'</span>'+(n[4]?'<span class="u">Urgente</span>':'')+'</div><div class="cap">'+n[2]+' de '+n[3]+(n[2]===n[3]?' · cubierta':'')+'</div><i style="--w:'+(n[2]/n[3]*100)+'%"></i></div>'}).join('')}
+  function truckHTML(t,i){
+    var p=t.stops.map(function(s,k){var last=t.stops[k-1];return (k?'<span class="l'+(s[1]?' ok':'')+'"></span>':'')+'<span class="n'+(s[1]?' ok':'')+'"><i></i>'+s[0]+'</span>'}).join('');
+    var chof=t.ch==='none'?'<span class="w">'+t.chof+'</span> <button class="lk" type="button" data-a="chofer"'+(chPend?' disabled':'')+'>'+(chPend?'Actualizando… esperando al chofer':'Confirmar chofer')+'</button>':t.chof;
+    return '<div class="truck"><h3>'+t.n+'<span>'+t.st+' · '+t.eta+' · carga '+t.carga+' %</span></h3><div class="path" role="img" aria-label="Ruta de '+t.n+': '+t.stops.map(function(s){return s[0]}).join(', ')+'. '+t.prog+'">'+p+'</div><div class="ld" style="--w:'+t.carga+'%"></div><div class="trinfo"><span>'+t.prog+'</span><span>'+t.don+'</span><span>'+chof+'</span></div><p class="cap" style="margin-top:6px">Entre otras: '+t.ex+'</p></div>'}
+  var chPend=false;
+  function rowHTML(d){
+    var act='',st=d.busy?'<span class="tg s-act">Actualizando…</span>':tag(d.st);
+    if(d.st==='dep'){var k='v'+d.id;act='<button class="lk w" type="button" data-a="venc" data-id="'+d.id+'"'+(d.busy?' disabled':'')+'>'+(armedKey===k?'¿Confirmás? Tocá de nuevo':'Marcar vencida')+'</button>'}
+    else if(d.st==='asi')act='<button class="lk" type="button" data-v="asignaciones">Ver asignación</button>';
+    else if(d.st==='lis'||d.st==='tra')act='<button class="lk" type="button" data-v="camiones">Ver ruta</button>';
+    return '<div class="row"><div><div class="t"><button type="button" data-a="hist" data-id="'+d.id+'">'+d.id+' · '+esc(d.item)+'</button></div><div class="m">'+esc(d.fr)+' → '+(d.to?esc(d.to):'<em>sin asignar</em>')+' · '+(d.st==='ent'?'entregada ':'')+(d.st==='dep'||d.st==='asi'||d.st==='lis'?ageTxt(d)+' en este estado':ageTxt(d))+(d.w?' <span class="w">· '+d.w+'</span>':'')+'</div></div><div class="r">'+st+act+'</div></div>'}
+
+  function V_donaciones(){
+    var tabs=[['inventario','Inventario'],['registrar','Registrar donación'],['normalizacion','Revisión de normalización']];
+    var h=head('Depósito central','Donaciones','Lo que hay en el depósito, con su estado real siempre a la vista.')
+     +'<div class="tabs" role="tablist">'+tabs.map(function(t){return '<button type="button" role="tab" aria-selected="'+(tab===t[0])+'" data-a="tab" data-t="'+t[0]+'">'+t[1]+'</button>'}).join('')+'</div>';
+    if(tab==='registrar')return h+regForm();
+    if(tab==='normalizacion')return h+normHTML();
+    var rows=D.filter(function(d){return (!fst||d.st===fst||(fst==='v48'&&d.w==='vence en 48 h'))&&(!q||(d.id+' '+d.item+' '+d.fr+' '+(d.to||'')).toLowerCase().indexOf(q.toLowerCase())>-1)});
+    return h+'<div class="chips" role="group" aria-label="Filtrar por estado"><button class="chip" type="button" data-a="fst" data-k="" aria-pressed="'+(!fst)+'">Todas</button>'+ORD.map(function(k){return '<button class="chip" type="button" data-a="fst" data-k="'+k+'" aria-pressed="'+(fst===k)+'">'+S[k][0]+'<small>'+C[k]+'</small></button>'}).join('')+'<button class="chip w" type="button" data-a="fst" data-k="v48" aria-pressed="'+(fst==='v48')+'">Vencen en 48 h</button></div>'
+     +'<label class="sr" for="q">Buscar por código, producto o entidad</label><input class="srch" id="q" type="search" placeholder="Buscar por código, producto o entidad" value="'+esc(q)+'" autocomplete="off">'
+     +'<p class="cap" style="margin:8px 0 12px">'+rows.length+(rows.length===1?' donación':' donaciones')+' de ejemplo. En el depósito hay 45 en circulación y 23 entregadas este mes.</p>'
+     +(rows.length?'<div class="list">'+rows.map(rowHTML).join('')+'</div>':'<p class="empty">No hay donaciones con ese filtro.</p>')}
+  var q='';
+  function regForm(){return '<form class="form" id="reg" novalidate><div class="full"><p class="cap">El sistema anota fecha y responsable del registro. Nada queda como “entregado” sin que la entidad lo confirme.</p></div>'
+    +'<div><label for="f-don">Donante</label><input id="f-don" required autocomplete="off" placeholder="Nombre o razón social"></div><div><label for="f-des">Qué es</label><input id="f-des" required autocomplete="off" placeholder="Ej.: Arroz"></div>'
+    +'<div><label for="f-cat">Categoría</label><select id="f-cat"><option>Alimentos</option><option>Bebidas</option><option>Vestimenta</option><option>Mobiliario</option><option>Útiles escolares</option><option>Higiene</option></select></div>'
+    +'<div class="two"><div><label for="f-qty">Cantidad</label><input id="f-qty" type="number" min="1" required placeholder="0"></div><div><label for="f-un">Unidad</label><select id="f-un"><option>u</option><option>kg</option><option>l</option></select></div></div>'
+    +'<div><label for="f-ven">Vencimiento (si lo tiene)</label><input id="f-ven" type="date"></div><div class="full"><p class="err" id="err" role="alert"></p><button class="btn" type="submit" id="regb">Registrar donación</button></div></form>'}
+  var NORM=[['Pan Lactal x60','Pan lactal · 60 u',0],['yogurt 40kgs','Yogur · 40 kg',0],['cooperativa la huerta','Cooperativa La Huerta',0]];
+  function normHTML(){return '<p class="cap" style="margin-bottom:10px">Ejemplos de demostración: textos cargados a mano que el sistema propone ordenar. Revisalos antes de aceptar.</p><div class="list">'+NORM.map(function(n,i){return '<div class="row"><div><div class="m">Cargado como</div><div class="t">'+esc(n[0])+'</div><div class="m" style="margin-top:4px">Se propone → <b style="color:var(--ink)">'+esc(n[1])+'</b></div></div><div class="r">'+(n[2]===0?'<button class="btn g sm" type="button" data-a="norm" data-i="'+i+'">Aceptar</button>':(n[2]===1?'<span class="tg s-act">Actualizando…</span>':'<span class="ok2">Normalizado. Quedó anotado con fecha y responsable.</span>'))+'</div></div>'}).join('')+'</div>'}
+
+  function V_asig(){
+    var run=asig==='running',h=head('Depósito central','Asignaciones','El sistema propone y la administración decide. Nada se asigna hasta que lo apruebes.')
+     +'<div class="acts2" style="margin-bottom:6px"><button class="btn" type="button" data-a="run"'+(run?' disabled aria-busy="true"':'')+'>'+(run?'Actualizando…':'Ejecutar asignación')+'</button><span class="cap">'+(run?'El sistema está armando propuestas.':(asig==='ready'?'Propuestas listas para revisar.':'Todavía no hay propuestas para revisar.'))+'</span></div>';
+    var props=P.length?'<div class="sec" style="margin-top:4vh"><h2 class="st">Propuestas para revisar</h2><p class="cap">'+P.filter(function(p){return p.s==='new'||p.s==='arm'}).length+' sin decidir de '+P.length+'</p>'+P.map(function(p,i){var d=don(p.id),res;
+      if(p.s==='new'||p.s==='arm')res='<div class="acts2"><button class="btn sm" type="button" data-a="ok" data-i="'+i+'">Aprobar</button><button class="lk w" type="button" data-a="no" data-i="'+i+'">'+(p.s==='arm'?'¿Confirmás? Tocá de nuevo':'Descartar')+'</button></div>';
+      else if(p.s==='wait')res='<span class="tg s-act">Actualizando…</span>';
+      else if(p.s==='ok')res='<span class="ok2">Aprobada. Ahora está '+S.asi[0]+'.</span>';
+      else res='<span class="cap">Descartada. Sigue sin asignar.</span>';
+      return '<div class="prop"><div><div class="t">'+d.id+' · '+esc(d.item)+' <span class="arrow">→</span> '+esc(p.to)+'</div><div class="cap">'+esc(p.why)+'</div></div><div>'+res+'</div></div>'}).join('')+'</div>':'';
+    var sin=D.filter(function(d){return d.st==='asi'&&d.id!=='DT-0415'});
+    return h+props+'<div class="grid sec"><section><h2 class="st">Asignadas sin camión</h2><p class="cap">2 donaciones ya tienen destino pero todavía no están cargadas</p><div class="list">'+sin.map(function(d){return '<div class="row"><div><div class="t">'+d.id+' · '+esc(d.item)+'</div><div class="m">→ '+esc(d.to)+' · '+ageTxt(d)+' asignada'+(d.w?' <span class="w">· '+d.w+'</span>':'')+'</div></div><div class="r">'+tag('asi')+'</div></div>'}).join('')+'</div></section><section><h2 class="st">Lo que se necesita</h2><p class="cap">Necesidades abiertas de las entidades</p>'+needsHTML()+'</section></div>'}
+  function V_camiones(){return head('Depósito central','Camiones','Dos en ruta, uno cargando. Cada ruta se lee como un recorrido de paradas.')+TR.map(truckHTML).join('')+'<p class="cap" style="margin-top:14px">Los camiones y sus rutas se actualizan por eventos: cuando algo tarda, vas a ver “Actualizando…”. No hay seguimiento en vivo por GPS.</p>'}
+  function V_donantes(){return head('Quienes donan','Donantes','Personas humanas y jurídicas que llevan donaciones al depósito.')+'<div class="big"><div><b>86</b><span>donantes activos</span></div><div><b>52</b><span>Colaboradores</span></div><div><b>26</b><span>Sostenedores</span></div><div><b>8</b><span>Transformadores</span></div></div>'
+    +'<div class="sec" style="margin-top:6vh"><h2 class="st">Importar donantes desde un CSV</h2><p class="cap" style="margin-bottom:14px">Subí un archivo con las personas donantes. Antes de importar vas a ver cuántas filas se leyeron.</p><div class="drop"><label class="cap" for="csv">Archivo CSV</label><br><input type="file" id="csv" accept=".csv,text/csv"><p style="margin-top:10px" id="csvi" class="cap" aria-live="polite">'+(CSV?csvInfo():'Todavía no elegiste ningún archivo.')+'</p><p style="margin-top:12px"><button class="btn sm" type="button" data-a="csv" id="csvb"'+(CSV&&CSV.s==='read'?'':' disabled')+'>'+(CSV&&CSV.s==='wait'?'Actualizando…':'Importar')+'</button></p></div></div>'
+    +'<div class="sec" style="margin-top:6vh"><h2 class="st">Ranking del mes</h2><p class="cap">Ejemplo</p>'+rankHTML()+'</div>'}
+  function csvInfo(){return CSV.s==='done'?'<span class="ok2">Listo. '+CSV.n+' filas procesadas de '+esc(CSV.f)+'. Quedó anotado con fecha y responsable.</span>':esc(CSV.f)+': se leyeron '+CSV.n+(CSV.n===1?' fila.':' filas.')+(CSV.s==='wait'?' Actualizando…':' Revisá y confirmá con Importar.')}
+  function V_entidades(){var pend=ENT.filter(function(e){return e.s!=='ok'}).length;
+    return head('Quienes reciben','Entidades','34 entidades ayudadas hasta ahora. '+(pend?pend+' nuevas esperan aprobación.':'No quedan solicitudes por aprobar.'))+'<div class="grid"><section><h2 class="st">Esperan aprobación</h2><p class="cap">Solicitudes de entidades nuevas</p><div class="list">'+ENT.map(function(e,i){return '<div class="row"><div><div class="t">'+e.n+' · entidad nueva</div><div class="m">Datos de demostración</div></div><div class="r">'+(e.s==='new'?'<button class="btn g sm" type="button" data-a="ent" data-i="'+i+'">Aprobar</button>':(e.s==='wait'?'<span class="tg s-act">Actualizando…</span>':'<span class="ok2">Aprobada. Quedó anotado.</span>'))+'</div></div>'}).join('')+'</div></section><section><h2 class="st">Lo que se necesita</h2><p class="cap">Necesidades abiertas con su cobertura</p>'+needsHTML()+'</section></div>'}
+  function V_rank(){return head('Reconocimiento','Rankings','Quienes más donaron este mes (ejemplo).')+'<div class="grid"><section>'+rankHTML()+'</section><section><h2 class="st">Lo que ya se cosechó</h2><p class="cap">2.450 kg distribuidos a 34 entidades</p>'+bars()+'</section></div>'}
+  var VIEWS={inicio:V_inicio,donantes:V_donantes,entidades:V_entidades,donaciones:V_donaciones,asignaciones:V_asig,camiones:V_camiones,rankings:V_rank};
+
+  function render(keep){
+    var y=window.scrollY;$('view').innerHTML=VIEWS[sec]();
+    [].forEach.call($('nav').children,function(a){if(a.dataset.v===sec)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+    document.title='DonaTrack · '+NAV.filter(function(n){return n[0]===sec})[0][1]+' · Huerto del depósito';
+    if(keep)window.scrollTo(0,y);
+    var qi=$('q');if(qi&&document.activeElement&&document.activeElement.dataset&&document.activeElement.dataset.focusq)qi.focus();
+    if(sec==='donaciones'&&tab==='registrar')$('reg').addEventListener('submit',submitReg);
+    if(qi){qi.addEventListener('input',function(){q=qi.value;var p=qi.selectionStart;render(true);var n=$('q');n.focus();n.setSelectionRange(p,p)})}
+    var cs=$('csv');if(cs)cs.addEventListener('change',function(){var f=cs.files[0];if(!f)return;f.text().then(function(t){var ls=t.split(/\r?\n/).filter(function(x){return x.trim()});CSV={f:f.name,n:Math.max(0,ls.length-1),s:'read'};render(true)})})}
+  function go(v,o){o=o||{};sec=v;if(o.tab)tab=o.tab;if('fst' in o)fst=o.fst;if('todo' in o)todo=o.todo;closeDr();    try{history.replaceState(null,'','#'+v)}catch(e){}render();if(!o.keep)window.scrollTo(0,0)}
+
+  /* ---- acciones ---- */
+  function submitReg(e){e.preventDefault();var g=function(i){return $(i).value.trim()},err=$('err');
+    if(!g('f-don')||!g('f-des')||!(+g('f-qty')>0)){err.textContent='Completá donante, qué es y una cantidad mayor a cero.';return}
+    err.textContent='';var b=$('regb');b.disabled=true;b.textContent='Actualizando…';
+    setTimeout(function(){var id='DT-0'+(nextId++);D.unshift({id:id,item:g('f-des')+' · '+g('f-qty')+' '+$('f-un').value,fr:g('f-don'),to:null,st:'dep',age:0,w:g('f-ven')?'vence el '+g('f-ven').split('-').reverse().join('/'):'',busy:false});C.dep++;
+      tab='inventario';fst='dep';toast('Listo. '+id+' quedó En depósito, con fecha y responsable.');render();window.scrollTo(0,0)},reduce?0:1200)}
+  function checkQ1(){if(P.length&&P.every(function(p){return p.s==='ok'||p.s==='no'})){finish('q1');toast('Asignación revisada: ya no quedan propuestas sin decidir.')}}
+  document.addEventListener('click',function(e){
+    var v=e.target.closest('[data-v]');if(v&&!v.dataset.a){e.preventDefault();go(v.dataset.v);return}
+    var b=e.target.closest('[data-a]');if(!b){if(!e.target.closest('#drw'))closeDr();return}var a=b.dataset.a,k=b.dataset.k,i=+b.dataset.i,id=b.dataset.id;
+    if(a==='plot'){go('donaciones',{tab:'inventario',fst:k});return}
+    if(a==='todo'){todo=!todo;render(true);if(todo)setTimeout(function(){$('all').scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'})},30);return}
+    if(a==='later'){var o=open(),p=o.map(function(x){return x.id}).indexOf(idx);idx=o[(p+1)%o.length].id;armedKey=null;render(true);return}
+    if(a==='front'){idx=id;render(true);window.scrollTo({top:0,behavior:reduce?'auto':'smooth'});return}
+    if(a==='resolve'){if(armedKey!=='r'+idx){armedKey='r'+idx;render(true);return}armedKey=null;finish(idx);toast('Anotado como resuelto.');render(true);return}
+    if(a==='do'){var qq=Q.filter(function(x){return x.id===idx})[0];
+      if(qq.id==='q1'){if(qq.ph===1){go('asignaciones');return}busy(b,function(){runAsig(true)},1400);asig='running';return}
+      if(qq.go){go(qq.go,qq.id==='q2'?{tab:'inventario',fst:'v48'}:{});return}
+      if(qq.id==='q3'){busy(b,function(){chPend=true;qq.ph=1;qq.w='Pedimos la confirmación al chofer. Cuando responda, el Camión 3 queda listo. Hasta entonces sigue pendiente.';toast('Actualizando… falta la respuesta del chofer.');render(true)});return}
+      if(qq.id==='q4'){busy(b,function(){qq.ph=1;qq.w='Avisamos a Hogar Esperanza. La recepción la confirma la entidad: hasta entonces sigue pendiente.';toast('Aviso enviado a Hogar Esperanza. Actualizando… falta su confirmación.');render(true)});return}}
+    if(a==='chofer'){var ob=b;busy(b,function(){chPend=true;var q3=Q.filter(function(x){return x.id==='q3'})[0];q3.ph=1;toast('Actualizando… falta la respuesta del chofer.');render(true)});return}
+    if(a==='tab'){tab=b.dataset.t;render(true);return}
+    if(a==='fst'){fst=k||null;render(true);return}
+    if(a==='hist'){openDr(id,b);return}
+    if(a==='venc'){var key='v'+id;if(armedKey!==key){armedKey=key;render(true);clearTimeout(armT);armT=setTimeout(function(){if(armedKey===key){armedKey=null;render(true)}},4000);return}
+      armedKey=null;var d=don(id);d.busy=true;render(true);setTimeout(function(){d.busy=false;d.st='ven';d.age=0;d.w='registrada como vencida';C.dep--;C.ven++;toast('Listo. '+id+' quedó Vencida, con fecha y responsable.');render(true)},reduce?0:1300);return}
+    if(a==='run'){asig='running';render(true);setTimeout(function(){runAsig(false)},reduce?0:1400);return}
+    if(a==='ok'){var p=P[i];p.s='wait';render(true);setTimeout(function(){p.s='ok';var d=don(p.id);d.st='asi';d.to=p.to;d.age=0;d.w=d.w;C.dep--;C.asi++;toast('Listo. '+p.id+' quedó Asignada, con fecha y responsable.');checkQ1();render(true)},reduce?0:1300);return}
+    if(a==='no'){var p2=P[i];if(p2.s!=='arm'){p2.s='arm';render(true);return}p2.s='wait';render(true);setTimeout(function(){p2.s='no';toast('Propuesta descartada. La donación sigue sin asignar.');checkQ1();render(true)},reduce?0:1100);return}
+    if(a==='norm'){var n=NORM[i];n[2]=1;render(true);setTimeout(function(){n[2]=2;toast('Listo. Quedó anotado con fecha y responsable.');render(true)},reduce?0:1200);return}
+    if(a==='ent'){var en=ENT[i];en.s='wait';render(true);setTimeout(function(){en.s='ok';if(ENT.every(function(x){return x.s==='ok'}))finish('q5');toast('Listo. Entidad aprobada, con fecha y responsable.');render(true)},reduce?0:1300);return}
+    if(a==='csv'&&CSV&&CSV.s==='read'){CSV.s='wait';render(true);setTimeout(function(){CSV.s='done';toast('Listo. Importación registrada.');render(true)},reduce?0:1600);return}
+  });
+  var armT,nextId=417;
+  function runAsig(fromFocus){
+    var cand=D.filter(function(d){return d.st==='dep'&&!d.to&&d.id!=='DT-0416'});
+    var why={'DT-0398':['Comedor Los Girasoles','Necesidad urgente: Frazadas 18 de 30. Lleva 8 días en el depósito.'],'DT-0401':['Merendero Norte','Necesidad del mismo rubro: Leche en polvo 6 de 40, urgente. Vence en 48 h.']};
+    P=cand.filter(function(d){return why[d.id]}).map(function(d){return {id:d.id,to:why[d.id][0],why:why[d.id][1],s:'new'}});
+    asig=P.length?'ready':'idle';
+    var q1=Q.filter(function(x){return x.id==='q1'})[0];
+    if(P.length&&done.indexOf('q1')<0){q1.ph=1;q1.t='Hay '+P.length+' propuestas de asignación para revisar.';q1.w='El sistema ya propuso destinos. Aprobá o descartá cada una: nada cambia hasta que decidas.';q1.b='Revisar propuestas'}
+    toast(P.length?'Listo. '+P.length+' propuestas para revisar.':'No hay donaciones sin asignar para proponer.');render(true)}
+
+  /* ---- cajón de historial ---- */
+  var lastF;
+  function openDr(id,from){var d=don(id),path=d.st==='ven'?['dep','ven']:(d.st==='fal'?['dep','asi','lis','tra','fal']:ORD.slice(0,ORD.indexOf(d.st)+1).filter(function(k){return k!=='fal'&&k!=='ven'}));
+    var who={dep:'Administración del depósito',asi:'Sistema (propuesta) y administración (aprobó)',lis:'Administración del depósito',tra:'Administración del depósito',ent:'Entidad (confirmó la recepción)',fal:'Registro del sistema',ven:'Administración del depósito'};
+    var n=path.length;lastF=from;
+    $('drc').innerHTML='<p class="eyebrow">Historial</p><h2 id="drt">'+d.id+' · '+esc(d.item)+'</h2><p class="cap">'+esc(d.fr)+' → '+(d.to?esc(d.to):'sin asignar')+'</p><div style="margin-top:12px">'+tag(d.st)+'</div><p class="cap" style="margin-top:14px">Cada cambio queda con fecha y responsable. Datos de demostración.</p><ol class="hist">'+path.map(function(k,j){var back=Math.max(0,d.age+(n-1-j)*(d.age>1?1:0));return '<li class="'+(j===n-1?'now':'')+'">'+tag(k)+'<small>'+dstr(back)+' · '+who[k]+'</small></li>'}).join('')+'</ol>';
+    $('drw').classList.add('on');$('drx').focus()}
+  function closeDr(){if(!$('drw').classList.contains('on'))return;$('drw').classList.remove('on');if(lastF&&document.body.contains(lastF))lastF.focus()}
+  $('drx').onclick=closeDr;
+
+  /* ---- paleta ---- */
+  var CMD=[['Ejecutar asignación','Asignaciones',function(){go('asignaciones');asig='running';render();setTimeout(function(){runAsig(false)},reduce?0:1400)}],['Registrar donación','Donaciones',function(){go('donaciones',{tab:'registrar'})}],['Revisión de normalización de datos','Donaciones',function(){go('donaciones',{tab:'normalizacion'})}],['Marcar vencida: ir al inventario En depósito','Donaciones',function(){go('donaciones',{tab:'inventario',fst:'dep'});toast('Tocá “Marcar vencida” en la donación y confirmá.')}],['Ver donaciones que vencen en 48 h','Donaciones',function(){go('donaciones',{tab:'inventario',fst:'v48'})}],['Ver camiones','Camiones',function(){go('camiones')}],['Importar CSV de donantes','Donantes',function(){go('donantes');setTimeout(function(){var c=$('csv');if(c)c.focus()},60)}],['Rankings del mes','Rankings',function(){go('rankings')}],['Ver todo el huerto','Inicio',function(){go('inicio',{todo:true});setTimeout(function(){var a=$('all');if(a)a.scrollIntoView()},40)}],['Volver a una sola cosa','Inicio',function(){go('inicio',{todo:false})}]]
+    .concat(NAV.map(function(n){return ['Ir a '+n[1],'Ir a',function(){go(n[0])}]}))
+    .concat(ORD.map(function(k){return ['Filtrar por estado: '+S[k][0]+' ('+S[k][1].toLowerCase()+')','Estado',function(){go('donaciones',{tab:'inventario',fst:k})}]}));
+  var pal=$('pal'),pi=$('pi'),pul=$('pl'),sel=0,list=CMD,lastP;
+  function norm(s){return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'')}
+  function renderP(){list=CMD.filter(function(c){return norm(c[0]+' '+c[1]).indexOf(norm(pi.value))>-1});sel=0;pul.innerHTML='';list.forEach(function(c,i){var li=document.createElement('li');li.innerHTML='<button type="button" class="'+(i===0?'sel':'')+'"><span>'+c[0]+'</span><small>'+c[1]+'</small></button>';li.firstChild.onclick=function(){runP(c)};pul.appendChild(li)})}
+  function runP(c){closeP();c[2]()}
+  function openP(){lastP=document.activeElement;pal.classList.add('on');pi.value='';renderP();pi.focus()}
+  function closeP(){pal.classList.remove('on');if(lastP&&lastP.focus)lastP.focus()}
+  $('open-pal').onclick=openP;pal.addEventListener('click',function(e){if(e.target===pal)closeP()});pi.oninput=renderP;
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();pal.classList.contains('on')?closeP():openP();return}
+    if(e.key==='Escape'&&!pal.classList.contains('on')){closeDr();return}
+    if(!pal.classList.contains('on'))return;
+    var bs=pul.querySelectorAll('button');
+    if(e.key==='Escape')closeP();
+    if((e.key==='ArrowDown'||e.key==='ArrowUp')&&bs.length){e.preventDefault();sel=(sel+(e.key==='ArrowDown'?1:-1)+bs.length)%bs.length;[].forEach.call(bs,function(b,i){b.classList.toggle('sel',i===sel)});bs[sel].scrollIntoView({block:'nearest'})}
+    if(e.key==='Enter'&&list[sel]){e.preventDefault();runP(list[sel])}
+  });
+  window.addEventListener('hashchange',function(){var h=location.hash.slice(1);if(VIEWS[h]&&h!==sec)go(h)});
+
+  /* ---- arranque: #vista o ?vista=...&tab=...&estado=...&todo=1&prop=1&det=DT-0401 ---- */
+  var qs={};location.search.replace(/[?&]([^=&]+)=([^&]*)/g,function(_,k,v){qs[k]=decodeURIComponent(v)});
+  var h0=location.hash.slice(1);sec=VIEWS[qs.vista]?qs.vista:(VIEWS[h0]?h0:'inicio');
+  if(qs.tab)tab=qs.tab;if(qs.estado)fst=qs.estado;if(qs.todo==='1')todo=true;
+  if(qs.prop==='1'){runAsig(false)}
+  if(qs.foco){idx=qs.foco}
+  render();
+  if(qs.det){var dd=don(qs.det);if(dd)openDr(qs.det,null)}
+  if(qs.paleta==='1')openP();
+})();
+</script>
+</body>
+</html>

@@ -25,7 +25,7 @@ public class AreaPrivadaController {
     this.catalogo = catalogo;
   }
 
-  @GetMapping({"/entidad", "/admin"})
+  @GetMapping("/entidad")
   public String inicio(@RequestParam(required = false) String aviso, Model model) {
     model.addAttribute("aviso", aviso);
     return "privado/inicio";
@@ -35,7 +35,7 @@ public class AreaPrivadaController {
   public String buscar(HttpServletRequest request, Model model) {
     String ruta = request.getRequestURI().substring(request.getContextPath().length());
     model.addAttribute("seccion", new ItemNavegacion("Búsqueda", ruta, "buscar", false));
-    return "privado/en-construccion";
+    return plantillaEnConstruccion(Rol.duenioDe(ruta));
   }
 
   @GetMapping({"/donante/{seccion}", "/entidad/{seccion}", "/admin/{seccion}"})
@@ -47,6 +47,11 @@ public class AreaPrivadaController {
             .findFirst()
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     model.addAttribute("seccion", item);
-    return "privado/en-construccion";
+    return plantillaEnConstruccion(rol);
+  }
+
+  /** El donante ya usa el panel de la variante H; los otros roles, el layout privado. */
+  private static String plantillaEnConstruccion(Rol rol) {
+    return rol == Rol.DONANTE ? "donante/en-construccion" : "privado/en-construccion";
   }
 }

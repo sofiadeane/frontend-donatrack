@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico-g :: layout(~{::title}, ~{::contenido})}">
+<head><title>DonaTrack — Cada donación, de punta a punta</title></head>
+<body>
+<th:block th:fragment="contenido">
+
+  <!-- ===== HERO: donación → trazabilidad → logística → impacto ===== -->
+  <section class="ch" aria-labelledby="titulo-hero" data-ruta-viva>
+    <span class="ch__forma ch__forma--a" aria-hidden="true"></span>
+    <span class="ch__forma ch__forma--b" aria-hidden="true"></span>
+    <div class="ch__arriba">
+      <div class="ch__texto">
+        <ul class="ch__chips" aria-label="Qué cubre DonaTrack">
+          <li>Trazabilidad</li><li>Logística</li><li>Impacto</li>
+        </ul>
+        <h1 id="titulo-hero" class="c-display ch__titulo">Lo que donás, <em>de punta a punta.</em></h1>
+        <p class="ch__lead">DonaTrack registra cada donación desde que entra al depósito hasta que una entidad la recibe, con estado, fecha y responsable en cada paso.</p>
+        <div class="ch__acciones">
+          <a class="c-btn c-btn--lime" th:href="@{/registro(tipo='humana')}">Quiero donar<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+          <a class="c-btn c-btn--white" th:href="@{/registro(tipo='entidad')}">Soy una entidad<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+        </div>
+        <a class="c-link ch__mapa" th:href="@{/mapa-de-impacto}">Ver mapa de impacto</a>
+      </div>
+
+      <div class="ch__ilus">
+      <svg class="gm-escena" viewBox="0 0 600 430" role="img" aria-label="Brújula sobre un mapa con una ruta punteada del depósito a la entidad">
+          <circle class="gm-sol" cx="238" cy="190" r="118"/>
+          <circle class="gm-l" cx="300" cy="210" r="168"/><circle class="gm-l" cx="300" cy="210" r="136"/>
+          <line class="gm-l" x1="300.0" y1="54.0" x2="300.0" y2="44.0"/><line class="gm-l" x1="320.4" y1="55.3" x2="321.1" y2="49.4"/><line class="gm-l" x1="340.4" y1="59.3" x2="341.9" y2="53.5"/><line class="gm-l" x1="359.7" y1="65.9" x2="363.5" y2="56.6"/><line class="gm-l" x1="378.0" y1="74.9" x2="381.0" y2="69.7"/><line class="gm-l" x1="395.0" y1="86.2" x2="398.6" y2="81.5"/><line class="gm-l" x1="410.3" y1="99.7" x2="417.4" y2="92.6"/><line class="gm-l" x1="423.8" y1="115.0" x2="428.5" y2="111.4"/><line class="gm-l" x1="435.1" y1="132.0" x2="440.3" y2="129.0"/><line class="gm-l" x1="444.1" y1="150.3" x2="453.4" y2="146.5"/><line class="gm-l" x1="450.7" y1="169.6" x2="456.5" y2="168.1"/><line class="gm-l" x1="454.7" y1="189.6" x2="460.6" y2="188.9"/><line class="gm-l" x1="456.0" y1="210.0" x2="466.0" y2="210.0"/><line class="gm-l" x1="454.7" y1="230.4" x2="460.6" y2="231.1"/><line class="gm-l" x1="450.7" y1="250.4" x2="456.5" y2="251.9"/><line class="gm-l" x1="444.1" y1="269.7" x2="453.4" y2="273.5"/><line class="gm-l" x1="435.1" y1="288.0" x2="440.3" y2="291.0"/><line class="gm-l" x1="423.8" y1="305.0" x2="428.5" y2="308.6"/><line class="gm-l" x1="410.3" y1="320.3" x2="417.4" y2="327.4"/><line class="gm-l" x1="395.0" y1="333.8" x2="398.6" y2="338.5"/><line class="gm-l" x1="378.0" y1="345.1" x2="381.0" y2="350.3"/><line class="gm-l" x1="359.7" y1="354.1" x2="363.5" y2="363.4"/><line class="gm-l" x1="340.4" y1="360.7" x2="341.9" y2="366.5"/><line class="gm-l" x1="320.4" y1="364.7" x2="321.1" y2="370.6"/><line class="gm-l" x1="300.0" y1="366.0" x2="300.0" y2="376.0"/><line class="gm-l" x1="279.6" y1="364.7" x2="278.9" y2="370.6"/><line class="gm-l" x1="259.6" y1="360.7" x2="258.1" y2="366.5"/><line class="gm-l" x1="240.3" y1="354.1" x2="236.5" y2="363.4"/><line class="gm-l" x1="222.0" y1="345.1" x2="219.0" y2="350.3"/><line class="gm-l" x1="205.0" y1="333.8" x2="201.4" y2="338.5"/><line class="gm-l" x1="189.7" y1="320.3" x2="182.6" y2="327.4"/><line class="gm-l" x1="176.2" y1="305.0" x2="171.5" y2="308.6"/><line class="gm-l" x1="164.9" y1="288.0" x2="159.7" y2="291.0"/><line class="gm-l" x1="155.9" y1="269.7" x2="146.6" y2="273.5"/><line class="gm-l" x1="149.3" y1="250.4" x2="143.5" y2="251.9"/><line class="gm-l" x1="145.3" y1="230.4" x2="139.4" y2="231.1"/><line class="gm-l" x1="144.0" y1="210.0" x2="134.0" y2="210.0"/><line class="gm-l" x1="145.3" y1="189.6" x2="139.4" y2="188.9"/><line class="gm-l" x1="149.3" y1="169.6" x2="143.5" y2="168.1"/><line class="gm-l" x1="155.9" y1="150.3" x2="146.6" y2="146.5"/><line class="gm-l" x1="164.9" y1="132.0" x2="159.7" y2="129.0"/><line class="gm-l" x1="176.2" y1="115.0" x2="171.5" y2="111.4"/><line class="gm-l" x1="189.7" y1="99.7" x2="182.6" y2="92.6"/><line class="gm-l" x1="205.0" y1="86.2" x2="201.4" y2="81.5"/><line class="gm-l" x1="222.0" y1="74.9" x2="219.0" y2="69.7"/><line class="gm-l" x1="240.3" y1="65.9" x2="236.5" y2="56.6"/><line class="gm-l" x1="259.6" y1="59.3" x2="258.1" y2="53.5"/><line class="gm-l" x1="279.6" y1="55.3" x2="278.9" y2="49.4"/>
+          <polygon class="gm-f0" points="296.7,186.2 300.0,60.0 303.3,186.2"/><polygon class="gm-f1" points="306.0,186.8 332.9,130.5 312.2,189.3"/><polygon class="gm-f0" points="314.4,190.8 383.4,126.6 319.2,195.6"/><polygon class="gm-f1" points="320.7,197.8 379.5,177.1 323.2,204.0"/><polygon class="gm-f0" points="323.8,206.7 450.0,210.0 323.8,213.3"/><polygon class="gm-f1" points="323.2,216.0 379.5,242.9 320.7,222.2"/><polygon class="gm-f0" points="319.2,224.4 383.4,293.4 314.4,229.2"/><polygon class="gm-f1" points="312.2,230.7 332.9,289.5 306.0,233.2"/><polygon class="gm-f0" points="303.3,233.8 300.0,360.0 296.7,233.8"/><polygon class="gm-f1" points="294.0,233.2 267.1,289.5 287.8,230.7"/><polygon class="gm-f0" points="285.6,229.2 216.6,293.4 280.8,224.4"/><polygon class="gm-f1" points="279.3,222.2 220.5,242.9 276.8,216.0"/><polygon class="gm-f0" points="276.2,213.3 150.0,210.0 276.2,206.7"/><polygon class="gm-f1" points="276.8,204.0 220.5,177.1 279.3,197.8"/><polygon class="gm-f0" points="280.8,195.6 216.6,126.6 285.6,190.8"/><polygon class="gm-f1" points="287.8,189.3 267.1,130.5 294.0,186.8"/>
+          <circle class="gm-p" cx="300" cy="210" r="14"/><circle class="gm-l" cx="300" cy="210" r="7"/>
+          <text class="gm-t" x="300" y="22" text-anchor="middle">N</text>
+          <path class="gm-l" d="M10 360l34 -50l22 28l28 -44l36 66M470 372l30 -46l24 24l32 -54l40 76"/><path class="gm-l" d="M40 392q10 -8 20 0t20 0t20 0"/><path class="gm-l" d="M180 400q10 -8 20 0t20 0t20 0"/><path class="gm-l" d="M330 396q10 -8 20 0t20 0t20 0"/><path class="gm-l" d="M470 404q10 -8 20 0t20 0t20 0"/><path class="gm-l" d="M120 410q10 -8 20 0t20 0t20 0"/>
+          <path class="gm-ruta" d="M70 330C130 250 190 320 250 380S420 330 470 250S540 130 560 70"/>
+          <path class="gm-x" d="M62 322l16 16M78 322l-16 16"/>
+          <path class="gm-l" d="M552 70l8 -22l8 22z"/><circle class="gm-punto" r="7"/>
+          <text class="gm-t gm-t--s" x="70" y="360" text-anchor="middle">Depósito</text>
+          <text class="gm-t gm-t--s" x="560" y="96" text-anchor="middle">Entidad</text>
+        </svg>
+      <!-- Ficha de seguimiento: cambia de estado al ritmo de la ruta -->
+      <aside class="ficha" aria-label="Ejemplo de ficha de seguimiento">
+        <div class="ficha__cab">
+          <span class="ficha__ico c-ico"><span th:replace="~{fragments/iconos :: icono('donaciones', 22)}"></span></span>
+          <div>
+            <p class="ficha__codigo c-mono" data-ficha-codigo>DT-0412</p>
+            <p class="ficha__bien">Arroz largo fino · 50 kg</p>
+          </div>
+          <span class="c-demo">Ejemplo</span>
+        </div>
+        <p class="ficha__estado"><span class="c-tag" data-estado="EN_DEPOSITO" data-ficha-estado>En depósito</span></p>
+        <dl class="ficha__datos">
+          <div><dt>Donó</dt><dd>Cooperativa La Huerta</dd></div>
+          <div><dt>Destino</dt><dd data-ficha-destino>Sin asignar todavía</dd></div>
+        </dl>
+        <div class="ficha__barra" aria-hidden="true">
+          <i class="is-on"></i><i></i><i></i><i></i>
+        </div>
+      </aside>
+      </div>
+    </div>
+
+    <ol class="ruta" aria-label="Recorrido de una donación en cuatro estaciones">
+      <li class="ruta__est" data-estacion="0" data-estado="EN_DEPOSITO" data-destino="Sin asignar todavía">
+        <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('donaciones', 26)}"></span></span>
+        <span class="ruta__num c-mono">01</span>
+        <h2 class="c-display">Donación</h2>
+        <p class="ruta__dato">Entra al depósito</p>
+        <p class="ruta__texto">Se registra con su categoría, cantidad y vencimiento.</p>
+      </li>
+      <li class="ruta__est" data-estacion="1" data-estado="ASIGNACION_REALIZADA" data-destino="Comedor Los Girasoles">
+        <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('asignaciones', 26)}"></span></span>
+        <span class="ruta__num c-mono">02</span>
+        <h2 class="c-display">Trazabilidad</h2>
+        <p class="ruta__dato">Se asigna a una necesidad</p>
+        <p class="ruta__texto">El sistema la vincula con lo que una entidad pidió.</p>
+      </li>
+      <li class="ruta__est" data-estacion="2" data-estado="EN_TRASLADO" data-destino="Comedor Los Girasoles · camión 2">
+        <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('camiones', 26)}"></span></span>
+        <span class="ruta__num c-mono">03</span>
+        <h2 class="c-display">Logística</h2>
+        <p class="ruta__dato">Sale en camión</p>
+        <p class="ruta__texto">Rutas, paradas y horarios a la vista de quien espera.</p>
+      </li>
+      <li class="ruta__est" data-estacion="3" data-estado="ENTREGADA" data-destino="Comedor Los Girasoles · recibida">
+        <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('check', 26)}"></span></span>
+        <span class="ruta__num c-mono">04</span>
+        <h2 class="c-display">Impacto</h2>
+        <p class="ruta__dato">Se entrega y se confirma</p>
+        <p class="ruta__texto">La entidad confirma la recepción y el donante lo ve.</p>
+      </li>
+    </ol>
+  </section>
+
+  <div class="cinta" aria-hidden="true">
+    <div class="cinta__pista">
+      <span class="cinta__grupo">
+        <span><i data-estado="EN_TRASLADO"></i>DT-0412 · Arroz 50 kg · En traslado</span>
+        <span><i data-estado="ENTREGADA"></i>DT-0409 · Frazadas ×30 · Entregada</span>
+        <span><i data-estado="ASIGNACION_REALIZADA"></i>DT-0415 · Útiles escolares · Asignada</span>
+        <span><i data-estado="EN_DEPOSITO"></i>DT-0416 · Conservas 24 kg · En depósito</span>
+        <span><i data-estado="LISTA_PARA_ENTREGAR"></i>DT-0411 · Camperas ×18 · Lista para entregar</span>
+      </span>
+      <span class="cinta__grupo">
+        <span><i data-estado="EN_TRASLADO"></i>DT-0412 · Arroz 50 kg · En traslado</span>
+        <span><i data-estado="ENTREGADA"></i>DT-0409 · Frazadas ×30 · Entregada</span>
+        <span><i data-estado="ASIGNACION_REALIZADA"></i>DT-0415 · Útiles escolares · Asignada</span>
+        <span><i data-estado="EN_DEPOSITO"></i>DT-0416 · Conservas 24 kg · En depósito</span>
+        <span><i data-estado="LISTA_PARA_ENTREGAR"></i>DT-0411 · Camperas ×18 · Lista para entregar</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- ===== PROBLEMA ===== -->
+  <section class="cp" aria-labelledby="titulo-problema">
+    <div class="cp__izq">
+      <p class="c-kicker rev">El problema</p>
+      <h2 id="titulo-problema" class="c-display rev" style="--i:1">Donar es fácil. <em>Saber qué pasó después,</em> no tanto.</h2>
+      <ul class="cp__notas rev" style="--i:2" aria-label="Cómo suele resolverse hoy">
+        <li><s>planilla_final_v3.xlsx</s></li>
+        <li><s>“¿llegó lo del jueves?”</s></li>
+        <li><s>te paso por WhatsApp</s></li>
+        <li><s>lo anoté en una libreta</s></li>
+      </ul>
+    </div>
+    <div class="cp__tabla rev" style="--i:1">
+      <table>
+        <caption class="sr-only">Antes y con DonaTrack</caption>
+        <thead><tr><th scope="col">Qué pasa</th><th scope="col">Antes</th><th scope="col">Con DonaTrack</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Registro</th><td>Planillas y mensajes sueltos</td><td>Una ficha por donación</td></tr>
+          <tr><th scope="row">Destino</th><td>Se decide de palabra</td><td>Vinculada a una necesidad concreta</td></tr>
+          <tr><th scope="row">Estado</th><td>“Creo que salió”</td><td>Siete estados, cada uno con fecha</td></tr>
+          <tr><th scope="row">Entrega</th><td>Sin constancia</td><td>Confirmada por la entidad</td></tr>
+          <tr><th scope="row">Quién ve</th><td>Solo quien lo hizo</td><td>Donante, entidad y administración</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== CÓMO FUNCIONA ===== -->
+  <section class="cc" id="como" aria-labelledby="titulo-como">
+    <div class="cc__cab">
+      <div>
+        <p class="c-kicker rev">Cómo funciona</p>
+        <h2 id="titulo-como" class="c-display rev" style="--i:1">Cinco pasos, <em>un solo expediente.</em></h2>
+      </div>
+      <p class="c-lead rev" style="--i:2">Cada paso lo hace una persona concreta y deja un registro que los demás pueden ver.</p>
+    </div>
+    <ol class="cc__bento">
+      <li class="paso paso--1 rev">
+        <span class="paso__n">Paso 01</span>
+        <h3>Registro</h3>
+        <p>Personas donantes y entidades beneficiarias crean su perfil. Las entidades cargan lo que necesitan.</p>
+        <span class="paso__pie"><span class="c-tag c-tag--plano">Donante</span><span class="c-tag c-tag--plano">Entidad</span></span>
+      </li>
+      <li class="paso paso--2 rev" style="--i:1">
+        <span class="paso__n">Paso 02</span>
+        <h3>Recepción</h3>
+        <p>Una persona administradora registra en el depósito lo que llegó: qué es, cuánto y cuándo vence.</p>
+        <span class="paso__pie"><span class="c-tag" data-estado="EN_DEPOSITO">En depósito</span></span>
+      </li>
+      <li class="paso paso--3 rev" style="--i:2">
+        <span class="paso__n">Paso 03</span>
+        <h3>Asignación</h3>
+        <p>El sistema vincula donaciones con necesidades materiales concretas y avisa a ambas partes.</p>
+        <span class="paso__pie"><span class="c-tag" data-estado="ASIGNACION_REALIZADA">Asignada</span></span>
+      </li>
+      <li class="paso paso--4 rev">
+        <span class="paso__n">Paso 04</span>
+        <h3>Traslado</h3>
+        <p>La donación queda lista, se carga en un camión y sale hacia la entidad por una ruta con paradas.</p>
+        <span class="paso__pie"><span class="c-tag" data-estado="LISTA_PARA_ENTREGAR">Lista</span><span class="c-tag" data-estado="EN_TRASLADO">En traslado</span></span>
+        <span class="paso__ruta" aria-hidden="true"><i></i><i></i><i class="is-on"></i><b></b></span>
+      </li>
+      <li class="paso paso--5 rev" style="--i:1">
+        <span class="paso__n">Paso 05</span>
+        <h3>Entrega</h3>
+        <p>La entidad confirma la recepción. El donante ve que llegó y el sistema suma al impacto.</p>
+        <span class="paso__pie"><span class="c-tag" data-estado="ENTREGADA">Entregada</span></span>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ===== RECORRIDO: estados + libro de movimientos ===== -->
+  <section class="cr" id="recorrido" aria-labelledby="titulo-recorrido">
+    <div class="cr__marco" data-recorrido>
+      <div class="cr__cab">
+        <div>
+          <p class="c-kicker rev">Recorrido de una donación</p>
+          <h2 id="titulo-recorrido" class="c-display rev" style="--i:1">Un día en la vida de <em>DT‑0412.</em></h2>
+        </div>
+        <button type="button" class="c-btn c-btn--sm c-btn--plain" data-reproducir hidden>▶ Reproducir recorrido</button>
+      </div>
+
+      <div class="cr__cuerpo rev">
+        <div class="mapa" role="group" aria-label="Estados de una donación. Elegí uno para ver su registro">
+          <button type="button" class="mapa__n" data-paso="1" data-estado="EN_DEPOSITO"><span class="c-mono">1</span>En depósito</button>
+          <button type="button" class="mapa__n" data-paso="2" data-estado="ASIGNACION_REALIZADA"><span class="c-mono">2</span>Asignada</button>
+          <button type="button" class="mapa__n" data-paso="3" data-estado="LISTA_PARA_ENTREGAR"><span class="c-mono">3</span>Lista para entregar</button>
+          <button type="button" class="mapa__n" data-paso="4" data-estado="EN_TRASLADO"><span class="c-mono">4</span>En traslado</button>
+          <button type="button" class="mapa__n" data-paso="5" data-estado="ENTREGADA"><span class="c-mono">5</span>Entregada</button>
+          <p class="mapa__rama"><span class="c-tag" data-estado="VENCIDA">Vencida</span><small>si vence antes de salir</small></p>
+          <p class="mapa__rama"><span class="c-tag" data-estado="ENTREGA_FALLIDA">Entrega fallida</span><small>si nadie recibe</small></p>
+        </div>
+
+        <div class="libro">
+          <table>
+            <caption class="sr-only">Libro de movimientos de la donación DT-0412</caption>
+            <thead><tr><th scope="col">Hora</th><th scope="col">Estado</th><th scope="col">Quién</th><th scope="col">Qué pasó</th></tr></thead>
+            <tbody>
+              <tr data-paso="1"><td class="c-mono">08:12</td><td><span class="c-tag" data-estado="EN_DEPOSITO">En depósito</span></td><td>admin</td><td>Recibida: arroz, 50 kg. Se crea la ficha DT-0412.</td></tr>
+              <tr data-paso="2"><td class="c-mono">09:40</td><td><span class="c-tag" data-estado="ASIGNACION_REALIZADA">Asignada</span></td><td>sistema</td><td>Vinculada a la necesidad de Comedor Los Girasoles.</td></tr>
+              <tr data-paso="3"><td class="c-mono">11:05</td><td><span class="c-tag" data-estado="LISTA_PARA_ENTREGAR">Lista para entregar</span></td><td>logística</td><td>Embalada y asignada al camión 2.</td></tr>
+              <tr data-paso="4"><td class="c-mono">13:30</td><td><span class="c-tag" data-estado="EN_TRASLADO">En traslado</span></td><td>logística</td><td>Salió del depósito. Parada 2 de 3.</td></tr>
+              <tr data-paso="5"><td class="c-mono">14:22</td><td><span class="c-tag" data-estado="ENTREGADA">Entregada</span></td><td>entidad</td><td>Los Girasoles confirmó la recepción.</td></tr>
+            </tbody>
+          </table>
+          <p class="libro__nota">Cada fila es un evento que ven el donante, la entidad y la administración. Los siete estados son los del backend; las transiciones a “Vencida” y “Entrega fallida” se muestran a modo ilustrativo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACTORES ===== -->
+  <section class="ca" id="actores" aria-labelledby="titulo-actores">
+    <div class="ca__cab">
+      <p class="c-kicker rev">Quién participa</p>
+      <h2 id="titulo-actores" class="c-display rev" style="--i:1">Tres roles, <em>una misma verdad.</em></h2>
+    </div>
+    <div class="ca__bento">
+      <article class="actor actor--donante rev" aria-labelledby="a-donante">
+        <p class="actor__etq">Persona o empresa donante</p>
+        <h3 id="a-donante" class="c-display">Quiero donar</h3>
+        <p>Llevá tu donación al depósito y seguila hasta que llega. Ganá insignias por constancia.</p>
+        <ul class="actor__mini" aria-label="Ejemplo de mis donaciones">
+          <li><span>Arroz · 50 kg</span><span class="c-tag" data-estado="EN_TRASLADO">En traslado</span></li>
+          <li><span>Frazadas · 12 u</span><span class="c-tag" data-estado="ENTREGADA">Entregada</span></li>
+          <li><span>Conservas · 24 kg</span><span class="c-tag" data-estado="EN_DEPOSITO">En depósito</span></li>
+        </ul>
+        <a class="c-btn c-btn--sm" th:href="@{/registro(tipo='humana')}">Registrarme como donante<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+      </article>
+
+      <article class="actor actor--entidad rev" style="--i:1" aria-labelledby="a-entidad">
+        <div class="actor__txt">
+          <p class="actor__etq">Entidad beneficiaria</p>
+          <h3 id="a-entidad" class="c-display">Necesitamos ayuda</h3>
+          <p>Registrá tu organización, cargá lo que necesitás y confirmá cada recepción.</p>
+          <a class="c-btn c-btn--sm" th:href="@{/registro(tipo='entidad')}">Registrar mi entidad<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+        </div>
+        <div class="actor__need" aria-label="Ejemplo de una necesidad abierta">
+          <p class="actor__need-t">Necesidad · Frazadas</p>
+          <p class="actor__need-n"><b class="c-num">18</b><span>de 30 cubiertas</span></p>
+          <div class="c-barra" role="img" aria-label="18 de 30 cubiertas"><i style="--p:60"></i></div>
+        </div>
+      </article>
+
+      <article class="actor actor--admin c-dark rev" style="--i:2" aria-labelledby="a-admin">
+        <div class="actor__txt">
+          <p class="actor__etq">Administración del depósito</p>
+          <h3 id="a-admin" class="c-display">Ordenamos todo</h3>
+          <p>Recibe, asigna, despacha camiones y atiende las alertas desde un panel.</p>
+          <a class="c-btn c-btn--sm c-btn--lime" th:href="@{/ingresar}">Ver el panel<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+        </div>
+        <div class="actor__flujo" role="img" aria-label="Donaciones en circulación por estado: 18 en depósito, 11 asignadas, 7 listas, 9 en traslado">
+          <i style="flex:18" data-estado="EN_DEPOSITO"></i><i style="flex:11" data-estado="ASIGNACION_REALIZADA"></i><i style="flex:7" data-estado="LISTA_PARA_ENTREGAR"></i><i style="flex:9" data-estado="EN_TRASLADO"></i>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== IMPACTO / TRANSPARENCIA ===== -->
+  <section class="ci" id="impacto" aria-labelledby="titulo-numeros">
+    <div class="ci__cab">
+      <p class="c-kicker rev">Impacto</p>
+      <h2 id="titulo-numeros" class="c-display rev" style="--i:1">Transparencia <em>en números.</em></h2>
+      <span class="c-demo" th:if="${metricas.demo}">Cifras de demostración</span>
+    </div>
+
+    <ul class="ci__cifras">
+      <li class="cifra rev" th:each="m, it : ${metricas.valores}" th:style="'--i:' + ${it.index}" th:classappend="'cifra--' + ${it.index}">
+        <span class="cifra__valor c-num" data-contar th:attr="data-valor=${m.valor}" th:text="${#numbers.formatInteger(m.valor, 1, 'POINT')}">128</span>
+        <span class="cifra__etq" th:text="${m.etiqueta}">Donaciones entregadas</span>
+        <span class="cifra__det"><b th:text="${m.detalleTitulo}">+23 este mes</b> <span th:text="${m.detalleTexto}">Detalle</span></span>
+      </li>
+    </ul>
+
+    <div class="ci__entregas rev">
+      <div class="ci__entregas-cab">
+        <h3>Entregadas en el último mes</h3>
+        <span class="c-demo" th:if="${destacadas.demo}">Datos de demostración</span>
+        <a class="c-link" th:href="@{/donaciones-entregadas}">Ver todas</a>
+      </div>
+      <table class="entregas" th:if="${destacadas.ok()}">
+        <caption class="sr-only">Donaciones entregadas en los últimos 30 días</caption>
+        <thead><tr><th scope="col">Fecha</th><th scope="col">Donación</th><th scope="col">Categoría</th><th scope="col">Donó</th></tr></thead>
+        <tbody>
+          <tr th:each="d : ${destacadas.datos}">
+            <td class="c-mono"><time th:datetime="${#temporals.formatISO(d.entregadaEl)}" th:text="${#temporals.format(d.entregadaEl, 'dd/MM')}">12/09</time></td>
+            <th scope="row" th:text="${d.titulo}">Cajas de arroz</th>
+            <td><span class="entregas__cat"><span th:replace="~{fragments/iconos :: icono(${d.iconoCategoria}, 16)}"></span><span th:text="${d.categoria}">Alimentos</span></span></td>
+            <td th:text="${d.donante != null} ? ${d.donante} : '—'">Cooperativa La Huerta</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="ci__msg" th:if="${destacadas.vacia()}">Este mes todavía no hay entregas registradas. Volvé pronto para ver las próximas.</p>
+      <p class="ci__msg ci__msg--error" role="alert" th:if="${destacadas.conError()}" th:text="${destacadas.error.mensaje}">No pudimos cargar las donaciones.</p>
+    </div>
+  </section>
+
+  <!-- ===== FUNCIONALIDADES: carrusel ===== -->
+  <section class="cf" aria-labelledby="titulo-func">
+    <div class="cf__cab">
+      <div>
+        <p class="c-kicker rev">Qué incluye</p>
+        <h2 id="titulo-func" class="c-display rev" style="--i:1">Todo lo que <em>mueve</em> una donación.</h2>
+      </div>
+      <div class="cf__flechas" hidden data-carrusel-ctl>
+        <button type="button" class="c-ico" data-carrusel-prev aria-label="Anterior"><span th:replace="~{fragments/iconos :: icono('chevron-izq', 20)}"></span></button>
+        <button type="button" class="c-ico cf__sig" data-carrusel-next aria-label="Siguiente"><span th:replace="~{fragments/iconos :: icono('chevron-der', 20)}"></span></button>
+      </div>
+    </div>
+    <ul class="cf__pista" data-carrusel tabindex="0" aria-label="Funcionalidades">
+      <li class="func func--seg">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('seguimiento', 24)}"></span></span>
+        <h3>Seguimiento paso a paso</h3>
+        <p>Cada donación tiene su línea de tiempo. Se actualiza sola cuando cambia el estado.</p>
+        <ol class="func__linea" aria-hidden="true"><li></li><li></li><li></li><li class="is-act"></li><li></li></ol>
+      </li>
+      <li class="func func--asig">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('asignaciones', 24)}"></span></span>
+        <h3>Asignación por necesidad</h3>
+        <p>Lo que se dona se vincula con lo que alguien pidió.</p>
+      </li>
+      <li class="func func--log">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('camiones', 24)}"></span></span>
+        <h3>Logística y camiones</h3>
+        <p>Rutas con paradas, carga y horarios.</p>
+        <div class="c-barra" role="img" aria-label="Camión 2: parada 2 de 3"><i style="--p:66"></i></div>
+      </li>
+      <li class="func func--inc">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('incentivos', 24)}"></span></span>
+        <h3>Incentivos y misiones</h3>
+        <p>Categorías de donante y misiones por constancia.</p>
+        <p class="func__sello">2/3 · Donante constante</p>
+      </li>
+      <li class="func func--not">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('notificaciones', 24)}"></span></span>
+        <h3>Avisos en cada cambio</h3>
+        <p>“Tu donación salió del depósito.” Sin preguntar.</p>
+      </li>
+      <li class="func func--map">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('mapa', 24)}"></span></span>
+        <h3>Mapa de impacto</h3>
+        <p>Dónde llegó cada entrega.</p>
+        <span class="c-tag c-tag--plano">Próximamente</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ===== PREGUNTAS FRECUENTES ===== -->
+  <section class="faq" aria-labelledby="titulo-faq">
+    <div class="faq__cab">
+      <p class="c-kicker rev">Preguntas frecuentes</p>
+      <h2 id="titulo-faq" class="c-display rev" style="--i:1">Lo que <em>más nos preguntan.</em></h2>
+      <p class="c-lead rev" style="--i:2">Si no está acá, escribinos a contacto@donatrack.edu.</p>
+    </div>
+    <div class="faq__lista">
+      <details class="faq__item rev" style="--i:0" open>
+        <summary><span>¿Qué puedo donar?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>Alimentos, bebidas, vestimenta, mobiliario, útiles escolares y artículos de higiene. Cada donación se registra con su categoría, cantidad y vencimiento.</p>
+      </details>
+      <details class="faq__item rev" style="--i:1">
+        <summary><span>¿Cómo sé que mi donación llegó?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>Cada cambio de estado queda con fecha. Cuando la entidad confirma la recepción, lo ves en la ficha de tu donación.</p>
+      </details>
+      <details class="faq__item rev" style="--i:2">
+        <summary><span>¿Tengo que llevarla al depósito?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>Sí. Una persona administradora la registra al recibirla y desde ahí se asigna a una necesidad y se traslada en camión.</p>
+      </details>
+      <details class="faq__item rev" style="--i:3">
+        <summary><span>¿Qué pasa si vence antes de salir?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>La administración recibe una alerta para priorizarla. Si vence, la donación pasa al estado Vencida.</p>
+      </details>
+      <details class="faq__item rev" style="--i:4">
+        <summary><span>¿Quién ve la información?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>Donantes, entidades y administración ven lo que les corresponde. La galería pública solo muestra donaciones ya entregadas.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== BITÁCORA DE A BORDO ===== -->
+  <section class="bt" aria-labelledby="titulo-bitacora">
+    <div class="bt__marco">
+      <div class="bt__cab">
+        <p class="c-kicker rev">Bitácora de a bordo</p>
+        <h2 id="titulo-bitacora" class="c-display rev" style="--i:1">Cada donación lleva <em>su diario de viaje.</em></h2>
+        <p class="bt__nota rev" style="--i:2">Ejemplo ilustrativo de cómo se lee el registro de una donación.</p>
+      </div>
+      <ol class="bt__lista">
+        <li class="bt__item rev" style="--i:0"><time>Día 1 · 08:12</time><h3>Zarpa del depósito</h3><p>Se recibe el arroz, se pesa y se abre la ficha DT‑0412.</p></li>
+        <li class="bt__item rev" style="--i:1"><time>Día 1 · 09:40</time><h3>Rumbo fijado</h3><p>El sistema vincula la carga con la necesidad de Comedor Los Girasoles.</p></li>
+        <li class="bt__item rev" style="--i:2"><time>Día 1 · 11:05</time><h3>Carga a bordo</h3><p>Queda embalada y asignada al camión 2.</p></li>
+        <li class="bt__item rev" style="--i:3"><time>Día 1 · 13:30</time><h3>En ruta</h3><p>Sale del depósito. Segunda parada de tres.</p></li>
+        <li class="bt__item rev" style="--i:4"><time>Día 1 · 14:22</time><h3>Tierra a la vista</h3><p>La entidad confirma la recepción y el registro se cierra.</p></li>
+      </ol>
+      <p class="bt__sello rev" aria-hidden="true"><span>Recibido</span><b>Los Girasoles</b></p>
+    </div>
+  </section>
+
+  <!-- ===== LLAMADA A LA ACCIÓN ===== -->
+  <section class="ck" aria-labelledby="titulo-cta">
+    <h2 id="titulo-cta" class="sr-only">Sumate</h2>
+    <a class="ck__lado ck__lado--donar" th:href="@{/registro(tipo='humana')}">
+      <span class="ck__etq">Si querés ayudar</span>
+      <span class="ck__gran c-display">Quiero <em>donar</em></span>
+      <span class="c-btn__dot ck__flecha"><span th:replace="~{fragments/iconos :: icono('flecha', 22)}"></span></span>
+    </a>
+    <a class="ck__lado ck__lado--ayuda" th:href="@{/registro(tipo='entidad')}">
+      <span class="ck__etq">Si necesitás ayuda</span>
+      <span class="ck__gran c-display">Registrar <em>mi entidad</em></span>
+      <span class="c-btn__dot ck__flecha"><span th:replace="~{fragments/iconos :: icono('flecha', 22)}"></span></span>
+    </a>
+  </section>
+</th:block>
+</body>
+</html>

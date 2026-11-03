@@ -52,6 +52,8 @@ class MisDonacionesTest {
       mvc.perform(get("/donante/donaciones").session(ingresar(mvc)))
           .andExpect(status().isOk())
           .andExpect(content().string(containsString("7 donaciones")))
+          .andExpect(content().string(containsString("Comedor Los Girasoles")))
+          .andExpect(content().string(containsString("Sin asignar todavía")))
           .andExpect(
               content()
                   .string(

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico-h :: layout(~{::title}, ~{::contenido})}">
+<head><title>DonaTrack — Tu granito de arena puede llegar más lejos</title></head>
+<body>
+<th:block th:fragment="contenido">
+
+  <!-- ===== HERO: el granito que llevan las hormigas ===== -->
+  <section class="ch" aria-labelledby="titulo-hero" data-ruta-viva>
+    <div class="ch__arriba">
+      <div class="ch__texto">
+        <p class="c-kicker">Trazabilidad de donaciones</p>
+        <h1 id="titulo-hero" class="c-display ch__titulo">Tu granito de arena puede llegar <em>más lejos</em></h1>
+        <p class="ch__lead">Con DonaTrack, conectá con organizaciones que necesitan tu ayuda y seguí el recorrido de tu donación de principio a fin.</p>
+        <div class="ch__acciones">
+          <a class="c-btn" th:href="@{/registro(tipo='humana')}">Quiero ser parte del cambio<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+          <a class="c-btn c-btn--white" th:href="@{/registro(tipo='entidad')}">Soy una entidad<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+        </div>
+      </div>
+
+      <div class="ch__ilus">
+        <svg class="hm-escena" viewBox="0 0 600 470" role="img" aria-label="Hormigas llevando granos de arena hasta una montaña que crece">
+          <ellipse class="hm-suelo" cx="340" cy="408" rx="262" ry="46"/>
+          <path class="hm-montana" d="M156 398 C128 336 168 236 236 186 C292 144 352 140 414 170 C494 210 562 282 552 340 C544 392 476 418 384 424 C292 430 180 444 156 398Z"/>
+          <!-- Granitos ya dejados en la cima -->
+          <g class="hm-cima">
+            <circle class="hm-grano" cx="316" cy="141" r="7"/><circle class="hm-grano" cx="331" cy="138" r="8.5"/><circle class="hm-grano" cx="347" cy="141" r="7.5"/><circle class="hm-grano" cx="339" cy="127" r="7"/><circle class="hm-grano" cx="323" cy="128" r="6"/>
+          </g>
+          <g class="hm-lluvia">
+            <circle class="hm-grano hm-cae hm-cae--1" cx="486" cy="96" r="15"/>
+            <circle class="hm-grano hm-cae hm-cae--2" cx="452" cy="40" r="10"/>
+            <circle class="hm-grano hm-cae hm-cae--3" cx="532" cy="22" r="7"/>
+          </g>
+          <!-- Hormigas: entran por la izquierda, suben, dejan el granito arriba y bajan por la derecha. Separación irregular. -->
+          <path id="hm-camino" class="hm-camino" d="M-80 412 L150 410 C132 360 166 238 236 186 C292 144 352 140 414 170 C494 210 562 282 556 340 L580 410 L700 412"/>
+          <g class="hm-fila" data-hm-fila>
+            <g class="hm-hormiga">
+              <use href="#h-hormiga" x="-28" y="-40" width="56" height="42"/>
+              <circle class="hm-grano hm-carga" cx="16" cy="-35" r="6.5"><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.53;0.545;1" dur="16s" begin="0s" repeatCount="indefinite"/></circle>
+              <animateMotion dur="16s" begin="0s" repeatCount="indefinite" rotate="auto" calcMode="linear" keyPoints="0;1" keyTimes="0;1"><mpath href="#hm-camino"/></animateMotion>
+            </g>
+            <g class="hm-hormiga">
+              <use href="#h-hormiga" x="-28" y="-40" width="56" height="42"/>
+              <circle class="hm-grano hm-carga" cx="16" cy="-35" r="6.5"><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.53;0.545;1" dur="16s" begin="-4.6s" repeatCount="indefinite"/></circle>
+              <animateMotion dur="16s" begin="-4.6s" repeatCount="indefinite" rotate="auto" calcMode="linear" keyPoints="0;1" keyTimes="0;1"><mpath href="#hm-camino"/></animateMotion>
+            </g>
+            <g class="hm-hormiga">
+              <use href="#h-hormiga" x="-28" y="-40" width="56" height="42"/>
+              <circle class="hm-grano hm-carga" cx="16" cy="-35" r="6.5"><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.53;0.545;1" dur="16s" begin="-6.4s" repeatCount="indefinite"/></circle>
+              <animateMotion dur="16s" begin="-6.4s" repeatCount="indefinite" rotate="auto" calcMode="linear" keyPoints="0;1" keyTimes="0;1"><mpath href="#hm-camino"/></animateMotion>
+            </g>
+            <g class="hm-hormiga">
+              <use href="#h-hormiga" x="-28" y="-40" width="56" height="42"/>
+              <circle class="hm-grano hm-carga" cx="16" cy="-35" r="6.5"><animate attributeName="opacity" values="1;1;0;0" keyTimes="0;0.53;0.545;1" dur="16s" begin="-12.9s" repeatCount="indefinite"/></circle>
+              <animateMotion dur="16s" begin="-12.9s" repeatCount="indefinite" rotate="auto" calcMode="linear" keyPoints="0;1" keyTimes="0;1"><mpath href="#hm-camino"/></animateMotion>
+            </g>
+          </g>
+        </svg>
+
+        <!-- Ficha de seguimiento: cambia de estado al ritmo de la ruta -->
+        <aside class="ficha" aria-label="Ejemplo de ficha de seguimiento">
+          <div class="ficha__cab">
+            <span class="ficha__ico c-ico"><span th:replace="~{fragments/iconos :: icono('donaciones', 22)}"></span></span>
+            <div>
+              <p class="ficha__codigo">Tu donación</p>
+              <p class="ficha__bien">Arroz largo fino · 50 kg</p>
+            </div>
+            <span class="c-demo">Ejemplo</span>
+          </div>
+          <p class="ficha__estado"><span class="c-tag" data-estado="EN_DEPOSITO" data-ficha-estado>En depósito</span></p>
+          <dl class="ficha__datos">
+            <div><dt>Donó</dt><dd>Cooperativa La Huerta</dd></div>
+            <div><dt>Destino</dt><dd data-ficha-destino>Sin asignar todavía</dd></div>
+          </dl>
+          <div class="ficha__barra" aria-hidden="true">
+            <i class="is-on"></i><i></i><i></i><i></i>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <ol class="ruta" aria-label="Recorrido de una donación en cuatro estaciones">
+      <li class="ruta__est" data-estacion="0" data-estado="EN_DEPOSITO" data-destino="Sin asignar todavía">
+        <svg class="ruta__escena esc-mano" viewBox="0 0 160 56" aria-hidden="true">
+          <g class="esc-mano__mano">
+            <rect class="esc-mano__puno" x="63" y="-50" width="26" height="12" rx="3"/>
+            <path class="esc-mano__palma" d="M65 -40 V-4 C65 6 71 11 77 11 C83 11 88 6 88 -1 V-40 Z"/>
+            <path class="esc-mano__linea" d="M72 2 v7 M78 3 v8 M84 1 v6"/>
+            <path class="esc-mano__pulgar" d="M66 -18 C59 -17 56 -8 59 -1 C60 2 62 4 65 4"/>
+          </g>
+          <circle class="esc-grano esc-mano__grano" cx="66" cy="10" r="5.5"/>
+        </svg>
+        <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('donaciones', 26)}"></span></span>
+        <span class="ruta__num c-mono">01</span>
+        <h2 class="c-display">Donación</h2>
+        <p class="ruta__dato">Entra al depósito</p>
+        <p class="ruta__texto">Se registra con su categoría, cantidad y vencimiento.</p>
+      </li>
+      <li class="ruta__est" data-estacion="1" data-estado="ASIGNACION_REALIZADA" data-destino="Comedor Los Girasoles">
+        <svg class="ruta__escena esc-recoge" viewBox="0 0 160 56" aria-hidden="true">
+          <circle class="esc-grano esc-recoge__grano" cx="105" cy="47.5" r="4.5"/>
+          <use class="esc-recoge__hormiga" href="#h-hormiga" x="0" y="23" width="40" height="30"/>
+        </svg>
+        <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('asignaciones', 26)}"></span></span>
+        <span class="ruta__num c-mono">02</span>
+        <h2 class="c-display">Trazabilidad</h2>
+        <p class="ruta__dato">Se asigna a una necesidad</p>
+        <p class="ruta__texto">El sistema la vincula con lo que una entidad pidió.</p>
+      </li>
+      <li class="ruta__est" data-estacion="2" data-estado="EN_TRASLADO" data-destino="Comedor Los Girasoles · camión 2">
+        <svg class="ruta__escena esc-lleva" viewBox="0 0 160 56" aria-hidden="true">
+          <use class="esc-lleva__hormiga" href="#h-hormiga-grano" x="0" y="20.5" width="40" height="33"/>
+        </svg>
+        <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('camiones', 26)}"></span></span>
+        <span class="ruta__num c-mono">03</span>
+        <h2 class="c-display">Logística</h2>
+        <p class="ruta__dato">Sale en camión</p>
+        <p class="ruta__texto">Rutas, paradas y horarios a la vista de quien espera.</p>
+      </li>
+      <li class="ruta__est" data-estacion="3" data-estado="ENTREGADA" data-destino="Comedor Los Girasoles · recibida">
+        <svg class="ruta__escena esc-deja" viewBox="0 0 160 56" aria-hidden="true">
+          <path class="esc-deja__monticulo" d="M108 53 C116 40 124 35 133 35 C142 35 150 42 158 53Z"/>
+          <circle class="esc-grano esc-deja__grano" cx="31" cy="26.6" r="4.5"/>
+          <use class="esc-deja__hormiga" href="#h-hormiga" x="0" y="23" width="40" height="30"/>
+        </svg>
+        <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('check', 26)}"></span></span>
+        <span class="ruta__num c-mono">04</span>
+        <h2 class="c-display">Impacto</h2>
+        <p class="ruta__dato">Se entrega y se confirma</p>
+        <p class="ruta__texto">La entidad confirma la recepción y el donante lo ve.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- Divisor: el sendero de la hormiga -->
+  <div class="h-sendero" aria-hidden="true">
+    <span class="h-sendero__linea"></span>
+    <i></i><i></i><i></i><i></i><i></i>
+    <svg class="h-sendero__hormiga"><use href="#h-hormiga-grano"/></svg>
+  </div>
+
+  <!-- ===== PROBLEMA: lo que hoy se pierde, según quién sos, y lo que DonaTrack devuelve ===== -->
+  <section class="cp" id="problema" aria-labelledby="titulo-problema">
+    <div class="cp__cab">
+      <p class="c-kicker rev">El problema</p>
+      <h2 id="titulo-problema" class="c-display rev" style="--i:1">Una donación no termina <em>cuando la entregás.</em></h2>
+      <p class="cp__texto rev" style="--i:2">Cada aporte tiene un recorrido. Cuando nadie lo registra, algo se pierde en el camino. No es culpa de nadie: es lo que pasa cuando todo depende de planillas y mensajes.</p>
+    </div>
+
+    <div class="pq rev" style="--i:3">
+      <!-- Selector solo con CSS: dos radios y :has(), sin JavaScript -->
+      <div class="pq__rol" role="radiogroup" aria-label="Ver desde el lado de">
+        <input class="sr-only" type="radio" name="pq-rol" id="pq-r-donante" checked>
+        <label for="pq-r-donante">Soy donante</label>
+        <input class="sr-only" type="radio" name="pq-rol" id="pq-r-entidad">
+        <label for="pq-r-entidad">Soy una entidad</label>
+        <span class="pq__pulgar" aria-hidden="true"></span>
+      </div>
+
+      <div class="pq__panel" id="pq-donante">
+        <p class="pq__titulo">Sin seguimiento, esto se pierde:</p>
+        <ol class="pq__perdidas">
+          <li><span class="pq__grano" aria-hidden="true"></span><h3>Saber si llegó</h3><p>Entregás la bolsa y ahí se corta la historia. No hay forma de confirmar que salió del depósito.</p></li>
+          <li><span class="pq__grano" aria-hidden="true"></span><h3>Saber a quién ayudó</h3><p>No te enterás qué entidad la recibió ni qué necesidad cubrió.</p></li>
+          <li><span class="pq__grano" aria-hidden="true"></span><h3>Lo que vence</h3><p>Si nadie controla las fechas, un alimento puede vencer en el depósito antes de salir.</p></li>
+        </ol>
+        <div class="pq__gana">
+          <p class="pq__gana-etq">Con DonaTrack lo recuperás</p>
+          <p>Ves cada paso con fecha, sabés qué entidad la recibió y te avisamos cuando llega.</p>
+          <a class="c-btn c-btn--sm" th:href="@{/registro(tipo='humana')}">Registrarme como donante<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+        </div>
+      </div>
+
+      <div class="pq__panel" id="pq-entidad">
+        <p class="pq__titulo">Sin seguimiento, esto se pierde:</p>
+        <ol class="pq__perdidas">
+          <li><span class="pq__grano" aria-hidden="true"></span><h3>Saber qué viene</h3><p>Pedís frazadas y no sabés cuántas van a llegar ni cuándo.</p></li>
+          <li><span class="pq__grano" aria-hidden="true"></span><h3>Recibir lo que necesitás</h3><p>Llegan cosas que no pediste y lo urgente queda esperando.</p></li>
+          <li><span class="pq__grano" aria-hidden="true"></span><h3>Horas de coordinación</h3><p>Llamadas y mensajes para preguntar por cada entrega.</p></li>
+        </ol>
+        <div class="pq__gana">
+          <p class="pq__gana-etq">Con DonaTrack lo recuperás</p>
+          <p>Cargás tu necesidad una vez, ves lo que se te asignó y el camión en camino, y confirmás la recepción en un paso.</p>
+          <a class="c-btn c-btn--sm" th:href="@{/registro(tipo='entidad')}">Registrar mi entidad<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ACTORES: cada una con su tarea en el hormiguero ===== -->
+  <section class="ca" id="actores" aria-labelledby="titulo-actores">
+    <div class="ca__cab">
+      <p class="c-kicker rev">Quién participa</p>
+      <h2 id="titulo-actores" class="c-display rev" style="--i:1">Tres roles, <em>un mismo hormiguero.</em></h2>
+    </div>
+    <div class="ca__bento">
+      <article class="actor actor--donante rev" aria-labelledby="a-donante">
+        <svg class="actor__hormiga" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
+        <p class="actor__etq">Persona o empresa donante</p>
+        <h3 id="a-donante" class="c-display">Quiero donar</h3>
+        <p>Llevá tu granito al depósito y seguilo hasta que llega. Ganá insignias por constancia.</p>
+        <ul class="actor__mini" aria-label="Ejemplo de mis donaciones">
+          <li><span>Arroz · 50 kg</span><span class="c-tag" data-estado="EN_TRASLADO">En traslado</span></li>
+          <li><span>Frazadas · 12 u</span><span class="c-tag" data-estado="ENTREGADA">Entregada</span></li>
+          <li><span>Conservas · 24 kg</span><span class="c-tag" data-estado="EN_DEPOSITO">En depósito</span></li>
+        </ul>
+        <a class="c-btn c-btn--sm" th:href="@{/registro(tipo='humana')}">Registrarme como donante<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+      </article>
+
+      <article class="actor actor--entidad rev" style="--i:1" aria-labelledby="a-entidad">
+        <div class="actor__txt">
+          <p class="actor__etq">Entidad beneficiaria</p>
+          <h3 id="a-entidad" class="c-display">Necesitamos ayuda</h3>
+          <p>Registrá tu organización, cargá lo que necesitás y confirmá cada recepción.</p>
+          <a class="c-btn c-btn--sm" th:href="@{/registro(tipo='entidad')}">Registrar mi entidad<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+        </div>
+        <div class="actor__need" aria-label="Ejemplo de una necesidad abierta">
+          <p class="actor__need-t">Necesidad · Frazadas</p>
+          <p class="actor__need-n"><b class="c-num">18</b><span>de 30 cubiertas</span></p>
+          <div class="c-barra" role="img" aria-label="18 de 30 cubiertas"><i style="--p:60"></i></div>
+        </div>
+      </article>
+
+      <article class="actor actor--admin c-dark rev" style="--i:2" aria-labelledby="a-admin">
+        <div class="actor__txt">
+          <p class="actor__etq">Administración del depósito</p>
+          <h3 id="a-admin" class="c-display">Ordenamos todo</h3>
+          <p>Recibe, asigna, despacha camiones y atiende las alertas desde un panel.</p>
+          <a class="c-btn c-btn--sm c-btn--lime" th:href="@{/ingresar}">Ver el panel<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+        </div>
+        <div class="actor__flujo" role="img" aria-label="Donaciones en circulación por estado: 18 en depósito, 11 asignadas, 7 listas, 9 en traslado">
+          <i style="flex:18" data-estado="EN_DEPOSITO"></i><i style="flex:11" data-estado="ASIGNACION_REALIZADA"></i><i style="flex:7" data-estado="LISTA_PARA_ENTREGAR"></i><i style="flex:9" data-estado="EN_TRASLADO"></i>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===== IMPACTO: grano a grano ===== -->
+  <section class="ci" id="impacto" aria-labelledby="titulo-numeros">
+    <div class="ci__cab">
+      <p class="c-kicker rev">Impacto</p>
+      <h2 id="titulo-numeros" class="c-display rev" style="--i:1">Grano a grano, <em>se nota.</em></h2>
+      <span class="c-demo" th:if="${metricas.demo}">Cifras de demostración</span>
+    </div>
+
+    <ul class="ci__cifras">
+      <li class="cifra rev" th:each="m, it : ${metricas.valores}" th:style="'--i:' + ${it.index}" th:classappend="'cifra--' + ${it.index}">
+        <span class="cifra__valor c-num" data-contar th:attr="data-valor=${m.valor}" th:text="${#numbers.formatInteger(m.valor, 1, 'POINT')}">128</span>
+        <span class="cifra__etq" th:text="${m.etiqueta}">Donaciones entregadas</span>
+        <span class="cifra__det"><b th:text="${m.detalleTitulo}">+23 este mes</b> <span th:text="${m.detalleTexto}">Detalle</span></span>
+        <svg class="cifra__pila" viewBox="0 0 160 70" preserveAspectRatio="none" aria-hidden="true"><path class="hm-montana" d="M2 70 C22 40 48 6 82 6 C112 6 140 38 158 70Z"/></svg>
+        <svg class="cifra__hormiga" th:if="${it.index == 0}" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
+      </li>
+    </ul>
+
+    <div class="ci__entregas rev">
+      <div class="ci__entregas-cab">
+        <h3>Entregadas en el último mes</h3>
+        <span class="c-demo" th:if="${destacadas.demo}">Datos de demostración</span>
+        <a class="c-link" th:href="@{/donaciones-entregadas}">Ver todas</a>
+      </div>
+      <table class="entregas" th:if="${destacadas.ok()}">
+        <caption class="sr-only">Donaciones entregadas en los últimos 30 días</caption>
+        <thead><tr><th scope="col">Fecha</th><th scope="col">Donación</th><th scope="col">Categoría</th><th scope="col">Donó</th></tr></thead>
+        <tbody>
+          <tr th:each="d : ${destacadas.datos}">
+            <td class="c-mono"><time th:datetime="${#temporals.formatISO(d.entregadaEl)}" th:text="${#temporals.format(d.entregadaEl, 'dd/MM')}">12/09</time></td>
+            <th scope="row" th:text="${d.titulo}">Cajas de arroz</th>
+            <td><span class="entregas__cat"><span th:replace="~{fragments/iconos :: icono(${d.iconoCategoria}, 16)}"></span><span th:text="${d.categoria}">Alimentos</span></span></td>
+            <td th:text="${d.donante != null} ? ${d.donante} : '—'">Cooperativa La Huerta</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="ci__msg" th:if="${destacadas.vacia()}">Este mes todavía no hay entregas registradas. Volvé pronto para ver las próximas.</p>
+      <p class="ci__msg ci__msg--error" role="alert" th:if="${destacadas.conError()}" th:text="${destacadas.error.mensaje}">No pudimos cargar las donaciones.</p>
+    </div>
+  </section>
+
+  <!-- ===== FUNCIONALIDADES: carrusel ===== -->
+  <section class="cf" aria-labelledby="titulo-func">
+    <div class="cf__cab">
+      <div>
+        <p class="c-kicker rev">Qué incluye</p>
+        <h2 id="titulo-func" class="c-display rev" style="--i:1">Todo lo que <em>mueve</em> una donación.</h2>
+      </div>
+      <div class="cf__flechas" hidden data-carrusel-ctl>
+        <button type="button" class="c-ico" data-carrusel-prev aria-label="Anterior"><span th:replace="~{fragments/iconos :: icono('chevron-izq', 20)}"></span></button>
+        <button type="button" class="c-ico cf__sig" data-carrusel-next aria-label="Siguiente"><span th:replace="~{fragments/iconos :: icono('chevron-der', 20)}"></span></button>
+      </div>
+    </div>
+    <ul class="cf__pista" data-carrusel tabindex="0" aria-label="Funcionalidades">
+      <li class="func func--seg">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('seguimiento', 24)}"></span></span>
+        <h3>Seguimiento paso a paso</h3>
+        <p>Cada donación tiene su línea de tiempo. Se actualiza sola cuando cambia el estado.</p>
+        <ol class="func__linea" aria-hidden="true"><li></li><li></li><li></li><li class="is-act"></li><li></li></ol>
+      </li>
+      <li class="func func--asig">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('asignaciones', 24)}"></span></span>
+        <h3>Asignación por necesidad</h3>
+        <p>Lo que se dona se vincula con lo que alguien pidió.</p>
+      </li>
+      <li class="func func--log">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('camiones', 24)}"></span></span>
+        <h3>Logística y camiones</h3>
+        <p>Rutas con paradas, carga y horarios.</p>
+        <div class="c-barra" role="img" aria-label="Camión 2: parada 2 de 3"><i style="--p:66"></i></div>
+      </li>
+      <li class="func func--inc">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('incentivos', 24)}"></span></span>
+        <h3>Incentivos y misiones</h3>
+        <p>Categorías de donante y misiones por constancia.</p>
+        <p class="func__sello">2/3 · Donante constante</p>
+      </li>
+      <li class="func func--not">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('notificaciones', 24)}"></span></span>
+        <h3>Avisos en cada cambio</h3>
+        <p>“Tu donación salió del depósito.” Sin preguntar.</p>
+      </li>
+      <li class="func func--map">
+        <span class="func__ico c-ico"><span th:replace="~{fragments/iconos :: icono('mapa', 24)}"></span></span>
+        <h3>Mapa de impacto</h3>
+        <p>Dónde llegó cada entrega.</p>
+        <span class="c-tag c-tag--plano">Próximamente</span>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ===== PREGUNTAS FRECUENTES ===== -->
+  <section class="faq" aria-labelledby="titulo-faq">
+    <div class="faq__cab">
+      <p class="c-kicker rev">Preguntas frecuentes</p>
+      <h2 id="titulo-faq" class="c-display rev" style="--i:1">Lo que <em>más nos preguntan.</em></h2>
+      <p class="c-lead rev" style="--i:2">Si no está acá, escribinos a contacto@donatrack.edu.</p>
+    </div>
+    <div class="faq__lista">
+      <details class="faq__item rev" style="--i:0" open>
+        <summary><span>¿Qué puedo donar?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>Alimentos, bebidas, vestimenta, mobiliario, útiles escolares y artículos de higiene. Cada donación se registra con su categoría, cantidad y vencimiento.</p>
+      </details>
+      <details class="faq__item rev" style="--i:1">
+        <summary><span>¿Cómo sé que mi donación llegó?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>Cada cambio de estado queda con fecha. Cuando la entidad confirma la recepción, lo ves en la ficha de tu donación.</p>
+      </details>
+      <details class="faq__item rev" style="--i:2">
+        <summary><span>¿Tengo que llevarla al depósito?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>Sí. Una persona administradora la registra al recibirla y desde ahí se asigna a una necesidad y se traslada en camión.</p>
+      </details>
+      <details class="faq__item rev" style="--i:3">
+        <summary><span>¿Qué pasa si vence antes de salir?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>La administración recibe una alerta para priorizarla. Si vence, la donación pasa al estado Vencida.</p>
+      </details>
+      <details class="faq__item rev" style="--i:4">
+        <summary><span>¿Quién ve la información?</span><span class="faq__mas" aria-hidden="true"></span></summary>
+        <p>Donantes, entidades y administración ven lo que les corresponde. La galería pública solo muestra donaciones ya entregadas.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ===== LLAMADA A LA ACCIÓN: dunas y fila de hormigas ===== -->
+  <section class="ck" aria-labelledby="titulo-cta">
+    <h2 id="titulo-cta" class="sr-only">Sumate</h2>
+    <a class="ck__lado ck__lado--donar" th:href="@{/registro(tipo='humana')}">
+      <span class="ck__etq">Si querés ayudar</span>
+      <span class="ck__gran c-display">Sumá tu <em>granito</em></span>
+      <span class="c-btn__dot ck__flecha"><span th:replace="~{fragments/iconos :: icono('flecha', 22)}"></span></span>
+      <svg class="ck__duna" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 48 C140 38 290 40 440 45 S560 50 600 42 V120 H0Z"/></svg>
+      <span class="ck__hormigas" aria-hidden="true"><svg class="ck__h ck__h--1"><use href="#h-hormiga-grano"/></svg><svg class="ck__h ck__h--2"><use href="#h-hormiga-grano"/></svg><svg class="ck__h ck__h--3"><use href="#h-hormiga"/></svg><svg class="ck__h ck__h--4"><use href="#h-hormiga-grano"/></svg></span>
+    </a>
+    <a class="ck__lado ck__lado--ayuda" th:href="@{/registro(tipo='entidad')}">
+      <span class="ck__etq">Si necesitás ayuda</span>
+      <span class="ck__gran c-display">Registrá <em>tu entidad</em></span>
+      <span class="c-btn__dot ck__flecha"><span th:replace="~{fragments/iconos :: icono('flecha', 22)}"></span></span>
+      <svg class="ck__duna" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50 C110 90 230 96 330 60 S520 18 600 64 V120 H0Z"/></svg>
+    </a>
+  </section>
+</th:block>
+</body>
+</html>

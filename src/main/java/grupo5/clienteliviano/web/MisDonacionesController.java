@@ -39,6 +39,13 @@ public class MisDonacionesController {
     return "donante/donaciones";
   }
 
+  /** Seguimiento: todas las donaciones con su lugar en el recorrido, sin filtros. */
+  @GetMapping("/donante/seguimiento")
+  public String seguimiento(HttpServletRequest request, Model model) {
+    model.addAttribute("mis", servicio.listar(sesion(request), new Filtros(null, null, null)));
+    return "donante/seguimiento";
+  }
+
   @GetMapping("/donante/donaciones/{id}")
   public String detalle(@PathVariable String id, HttpServletRequest request, Model model) {
     UUID uuid = uuid(id);

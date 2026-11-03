@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DonaTrack · Administración del depósito</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e6e9e2; --ink:#14181a; --ink2:#3d4743; --lime:#d8f24a; --lime2:#aacf1f; --lime-ink:#1a2503; --moss:#3f5a0c; --rose:#f6c9c0; --rose-ink:#5a1608; --coral:#d9604a;
+  --pink:#f7c6dc; --lav:#cfc5f6; --mint:#bdeedb; --sky:#bddcf6;
+  --g:rgba(255,255,255,.55); --g2:rgba(255,255,255,.78); --solid:#f6f7f2; --line:rgba(20,24,26,.16);
+  --blur:blur(22px) saturate(1.45);
+  --font:"Figtree",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root{--g:var(--solid);--g2:var(--solid)}}
+.solid{--g:var(--solid);--g2:#fff;--blur:none}
+@media (prefers-reduced-transparency:reduce){:root{--g:var(--solid);--g2:#fff;--blur:none}}
+*{box-sizing:border-box;margin:0}
+body{font-family:var(--font);font-weight:400;color:var(--ink);background:var(--bg);font-size:14px;line-height:1.45;min-height:100vh;overflow-x:hidden;position:relative}
+.aur{position:absolute;inset:0;overflow:hidden;z-index:-1;pointer-events:none}
+.aur i{position:absolute;border-radius:50%;filter:blur(80px);opacity:.85}
+.solid .aur i{opacity:.3}
+.glass{position:relative;background:var(--g);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid rgba(255,255,255,.85);border-radius:22px;box-shadow:0 18px 38px -28px rgba(20,24,26,.5),inset 0 1px 0 rgba(255,255,255,.95)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.5),rgba(255,255,255,0) 38%);pointer-events:none}
+.glass>*{position:relative}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px;border-radius:10px}
+.shell{max-width:1440px;margin:0 auto;padding:14px 20px 60px}
+.top{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:16px}
+.logo i{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#f3ffa6,var(--lime2));display:grid;place-items:center;font-style:normal}
+.tabs{display:flex;gap:3px;padding:4px;border-radius:99px;overflow-x:auto;max-width:100%}
+.tabs a{white-space:nowrap;text-decoration:none;color:var(--ink2);padding:8px 14px;border-radius:99px;font-size:13.5px;font-weight:500}
+.tabs a:hover{background:rgba(255,255,255,.7)}
+.tabs a[aria-current=page]{background:var(--lime);color:var(--lime-ink);font-weight:600}
+.sp{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font:600 13.5px var(--font);padding:10px 18px;border-radius:99px;background:linear-gradient(135deg,#eaff7a,var(--lime) 50%,#c2e233);color:var(--lime-ink);text-decoration:none;box-shadow:inset 0 1px 0 #fff}
+.btn.dk{background:var(--ink);color:#fff;box-shadow:none}.btn.sec{background:rgba(255,255,255,.8);color:var(--ink);border:1px solid var(--line);font-weight:500;box-shadow:none}.btn.xs{padding:5px 12px;font-size:12px}
+.btn[disabled]{opacity:.8;cursor:progress}
+kbd{font:500 11px var(--font);background:rgba(20,24,26,.1);border-radius:6px;padding:2px 6px}
+.tog{font:400 12px var(--font);background:rgba(255,255,255,.4);border:1px dashed rgba(20,24,26,.4);border-radius:99px;padding:7px 11px;color:var(--ink);cursor:pointer}
+.tog[aria-pressed=true]{background:var(--ink);color:#fff;border-style:solid}
+.hd{margin:28px 0 6px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:flex-end}
+h1{font-weight:300;font-size:clamp(36px,5.4vw,80px);letter-spacing:-.045em;line-height:.98}
+h1 mark{background:linear-gradient(transparent 60%,var(--lime) 60%,var(--lime) 92%,transparent 92%);color:inherit;font-weight:500}
+.mini{font-size:12.5px;color:var(--ink2)}
+h2{font-weight:600;font-size:15px;letter-spacing:-.01em}
+h3{font-weight:600;font-size:14px}
+.inline{display:flex;gap:10px 36px;flex-wrap:wrap;margin:16px 0 20px;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.inline div b{display:block;font-weight:200;font-size:clamp(34px,4vw,56px);letter-spacing:-.05em;line-height:1}
+.inline div b sup{font-size:13px;color:var(--moss);font-weight:600;letter-spacing:0;margin-left:3px}
+.inline div span{font-size:12.5px;color:var(--ink2)}
+.main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start}
+.lanes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.lane{padding:12px;min-height:300px;display:flex;flex-direction:column;gap:9px}
+.lane h2{display:flex;justify-content:space-between;align-items:baseline;padding:4px 4px 0}
+.lane h2 b{font-weight:200;font-size:32px;letter-spacing:-.04em}
+.lane .ticks{height:8px;border-radius:9px;background:repeating-linear-gradient(90deg,var(--lime2) 0 3px,transparent 3px 6px);margin:0 4px 4px;opacity:.9}
+.chip{border-radius:16px;padding:11px 12px;background:var(--g2);border:1px solid rgba(255,255,255,.95);text-align:left;font:inherit;color:inherit;cursor:pointer;width:100%;display:block}
+.chip:hover{border-color:var(--ink)}
+.chip[aria-expanded=true]{background:var(--lime);border-color:var(--lime2)}
+.chip b{font-weight:600;display:block;font-size:13px}
+.chip small{display:block;font-size:11.5px;color:var(--ink2)}.chip[aria-expanded=true] small{color:#2b3a06}
+.urg{display:inline-block;font:600 10.5px var(--font);background:var(--rose);color:var(--rose-ink);border-radius:6px;padding:2px 7px;margin-top:5px}
+.det{display:none;margin-top:9px;padding-top:9px;border-top:1px solid rgba(20,24,26,.25);font-size:12px}
+.chip[aria-expanded=true] .det{display:block}
+.acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.more{font-size:12px;color:var(--ink2);padding:4px}
+.fuera{margin-top:12px;padding:12px 16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.side{display:grid;gap:12px}
+.side>section{padding:16px 18px}
+.pend{display:grid;gap:8px;margin-top:10px}
+.pi{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;background:var(--g2);border-radius:14px;font-size:13px;cursor:pointer}
+.pi input{margin-top:3px;accent-color:#14181a;width:16px;height:16px;flex:none}.pi.done>span{text-decoration:line-through;opacity:.55}
+.pi small{display:block;font-size:11.5px;color:var(--ink2)}
+.lvl{font:600 10px var(--font);text-transform:uppercase;letter-spacing:.05em;padding:2px 7px;border-radius:6px;margin-right:6px}
+.lvl.u{background:var(--rose);color:var(--rose-ink)}.lvl.h{background:var(--lime);color:var(--lime-ink)}.lvl.s{background:#d4d8cf;color:#2f3733}
+.bars{display:flex;align-items:flex-end;gap:6px;height:110px;margin-top:12px}
+.bars div{flex:1;display:flex;align-items:flex-end;gap:2px;height:100%}.bars i{flex:1;border-radius:6px 6px 2px 2px}
+.axis{display:flex;gap:6px;font-size:10.5px;color:var(--ink2);margin-top:5px}.axis span{flex:1;text-align:center}
+.routes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.rt{padding:16px 18px}
+.rl{display:flex;align-items:center;margin:14px 0 6px}
+.rl i{width:13px;height:13px;border-radius:50%;border:2px solid var(--ink);background:#fff;flex:none}.rl i.on{background:var(--ink)}.rl i.cur{background:var(--lime);box-shadow:0 0 0 4px rgba(170,207,31,.45)}
+.rl u{flex:1;height:2px;background:var(--ink);text-decoration:none;min-width:8px}.rl u.dsh{background:repeating-linear-gradient(90deg,#79827e 0 3px,transparent 3px 7px)}
+.lb{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:var(--ink2)}
+.lb span:nth-child(2){text-align:center}.lb span:last-child{text-align:right}
+.tag{display:inline-block;font:600 11px var(--font);padding:3px 10px;border-radius:99px;background:var(--lime);color:var(--lime-ink);white-space:nowrap}.tag.o{background:rgba(255,255,255,.6);border:1px solid var(--ink);color:var(--ink)}.tag.r{background:var(--rose);color:var(--rose-ink)}.tag.g{background:#d4d8cf;color:#2f3733}
+.meter{height:7px;border-radius:9px;background:rgba(20,24,26,.13);margin-top:8px;overflow:hidden}.meter i{display:block;height:100%;background:var(--ink)}
+.low{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:12px}
+.low>section{padding:16px 18px}
+.need{margin-top:10px}.need .lb b{color:var(--ink);font-weight:600;font-size:12.5px}.need .meter i{background:var(--lime2)}.need.u .meter i{background:#e27d6b}
+.act{list-style:none;padding:0;display:grid;gap:8px;margin-top:10px}.act li{font-size:12.5px;color:var(--ink2);padding-left:14px;position:relative}.act li::before{content:"";position:absolute;left:0;top:6px;width:7px;height:7px;border-radius:50%;background:var(--lime2)}.act li.bad::before{background:var(--coral)}.act b{color:var(--ink);font-weight:600}
+.cat{display:flex;height:12px;border-radius:99px;overflow:hidden;margin:12px 0 8px}.cat i{display:block}
+/* vistas */
+.view{display:none}.view.on{display:block}
+.vh{margin:26px 0 14px;display:flex;gap:16px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between}
+.vh h1{font-size:clamp(34px,4.6vw,64px)}
+.sub{display:flex;gap:4px;padding:4px;border-radius:99px;width:max-content;max-width:100%;overflow-x:auto}
+.sub button{font:500 13px var(--font);border:0;background:transparent;padding:7px 14px;border-radius:99px;color:var(--ink2);cursor:pointer;white-space:nowrap}
+.sub button[aria-pressed=true]{background:var(--ink);color:#fff}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.fc{font:500 13px var(--font);padding:7px 14px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.7);cursor:pointer;color:var(--ink)}
+.fc[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.fc small{opacity:.75;margin-left:4px}
+input.f,select.f,textarea.f{font:400 14px var(--font);padding:9px 14px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.85);color:var(--ink);min-width:0}
+.lst{display:grid;gap:8px}
+.rw{display:grid;grid-template-columns:96px minmax(150px,1.2fr) minmax(180px,1.6fr) 150px 190px;gap:10px;align-items:center;padding:11px 16px;border-radius:18px;background:var(--g2);border:1px solid rgba(255,255,255,.95)}
+.rw.hdr{background:transparent;border:0;font-size:11.5px;color:var(--ink2);font-weight:600;text-transform:uppercase;letter-spacing:.05em;padding-top:0;padding-bottom:0}
+.rw b{font-weight:600}.rw small{display:block;color:var(--ink2);font-size:11.5px}
+.rw .acts{margin:0;justify-content:flex-end}
+.rw.gone{opacity:.65}
+.two{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:14px;align-items:start}
+.card{padding:16px 18px}
+.card+.card{margin-top:12px}
+.prop{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px 14px;border-radius:16px;background:var(--g2);margin-top:8px}
+.prop b{font-weight:600}.prop .mini{display:block}
+.trucks{display:grid;gap:12px}
+.tr{padding:18px 20px;display:grid;grid-template-columns:200px minmax(0,1fr) 250px;gap:20px;align-items:center}
+.stops{display:flex;align-items:flex-start;gap:0;margin:6px 0 0}
+.stop{flex:1;text-align:center;font-size:11.5px;position:relative;color:var(--ink2);min-width:0}
+.stop::before{content:"";display:block;height:2px;background:var(--ink);position:absolute;left:-50%;right:50%;top:6px}
+.stop:first-child::before{display:none}.stop.dsh::before{background:repeating-linear-gradient(90deg,#79827e 0 3px,transparent 3px 7px)}
+.stop i{display:block;width:14px;height:14px;border-radius:50%;border:2px solid var(--ink);background:#fff;margin:0 auto 6px;position:relative}.stop.on i{background:var(--ink)}.stop.cur i{background:var(--lime);box-shadow:0 0 0 4px rgba(170,207,31,.45)}
+.stop b{display:block;color:var(--ink);font-weight:600;font-size:12px}
+.sum{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.sum div{padding:14px 18px}.sum b{display:block;font-weight:200;font-size:44px;letter-spacing:-.05em;line-height:1}
+.rk{display:flex;align-items:center;gap:14px;padding:12px 4px;border-top:1px solid var(--line)}
+.rk:first-of-type{border-top:0}
+.rk .n{font-weight:200;font-size:44px;letter-spacing:-.05em;width:44px;line-height:1}
+.rk b{font-weight:600;font-size:15px}
+.pal{position:fixed;inset:0;background:rgba(20,24,26,.32);display:none;align-items:flex-start;justify-content:center;padding-top:12vh;z-index:30}
+.pal.on{display:flex}
+.pbox{width:min(560px,92vw);padding:14px;background:rgba(255,255,255,.9);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);border:1px solid #fff;border-radius:26px;box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+.solid .pbox{background:var(--solid);backdrop-filter:none}
+.pbox input{width:100%;font:400 17px var(--font);border:0;background:rgba(20,24,26,.07);border-radius:14px;padding:14px 16px;color:var(--ink)}
+.pbox ul{list-style:none;padding:0;margin-top:8px;max-height:44vh;overflow:auto}
+.pbox li button{width:100%;text-align:left;border:0;background:none;font:400 14.5px var(--font);padding:11px 14px;border-radius:12px;cursor:pointer;display:flex;justify-content:space-between;gap:10px;color:var(--ink)}
+.pbox li button:hover,.pbox li button.sel{background:var(--lime)}.pbox li small{color:var(--ink2)}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--ink);color:#fff;padding:11px 20px;border-radius:99px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:40;max-width:92vw;text-align:center}.toast.on{opacity:1}
+.fm{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.fm label{display:grid;gap:5px;font-size:12.5px;font-weight:500}.fm .w{grid-column:1/-1}
+@media (max-width:1180px){.main,.two{grid-template-columns:1fr}.lanes{grid-template-columns:1fr 1fr}.routes,.low{grid-template-columns:1fr}.tr{grid-template-columns:1fr}
+ .rw{grid-template-columns:90px 1fr 1fr}.rw.hdr{display:none}.rw .acts{grid-column:1/-1;justify-content:flex-start}}
+@media (max-width:620px){.lanes{grid-template-columns:1fr}.sp{margin-left:0}.rw{grid-template-columns:1fr 1fr}.fm{grid-template-columns:1fr}.sum{grid-template-columns:1fr}.inline{gap:12px 24px}.prop{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="aur" aria-hidden="true">
+  <i style="left:-8%;top:-4%;width:560px;height:560px;background:var(--pink)"></i>
+  <i style="right:-6%;top:0;width:640px;height:640px;background:var(--lime);opacity:.5"></i>
+  <i style="left:34%;top:14%;width:520px;height:520px;background:var(--lav)"></i>
+  <i style="right:-8%;top:42%;width:560px;height:560px;background:var(--mint)"></i>
+  <i style="left:-8%;top:50%;width:600px;height:600px;background:var(--sky)"></i>
+  <i style="left:30%;top:80%;width:620px;height:620px;background:var(--pink);opacity:.6"></i>
+</div>
+<div class="shell">
+  <header class="top">
+    <span class="logo"><i>d</i>DonaTrack</span>
+    <nav class="tabs glass" style="border-radius:99px" aria-label="Administración" id="tabs"></nav>
+    <div class="sp"><button class="tog" id="solid" aria-pressed="false">Sin transparencia</button><button class="btn sec" id="open">Comandos <kbd>Ctrl K</kbd></button><button class="btn" id="reg">Registrar donación</button></div>
+  </header>
+
+  <!-- INICIO -->
+  <div class="view" id="v-inicio">
+    <div class="hd">
+      <div><p class="mini">Depósito central · sábado 31 de octubre · Datos de demostración</p>
+      <h1><span id="h1n">45</span> donaciones <mark>en carriles</mark></h1></div>
+      <p class="mini" style="max-width:34ch">Tocá una donación para abrir su detalle y las acciones disponibles.</p>
+    </div>
+    <div class="inline" id="inline"></div>
+    <div class="main">
+      <div>
+        <div class="lanes" id="lanes"></div>
+        <div class="glass fuera" id="offl"></div>
+        <h2 style="margin-top:22px">Camiones · rutas con paradas</h2>
+        <div class="routes" id="routes"></div>
+        <div class="low">
+          <section class="glass"><h2>Necesidades abiertas</h2><div id="needs"></div></section>
+          <section class="glass"><h2>Actividad reciente</h2><ul class="act" id="actv"></ul></section>
+          <section class="glass"><h2>Impacto acumulado</h2><p class="mini">2.450 kg distribuidos a 34 entidades</p>
+            <div class="cat" role="img" aria-label="Alimentos 62 %, vestimenta 18 %, útiles escolares 12 %, higiene 8 %"><i style="width:62%;background:#14181a"></i><i style="width:18%;background:#7fae14"></i><i style="width:12%;background:var(--lime)"></i><i style="width:8%;background:#f3a9c6"></i></div>
+            <p class="mini">Alimentos 62 % · Vestimenta 18 % · Útiles escolares 12 % · Higiene 8 %</p>
+            <h2 style="margin-top:14px">Ranking del mes</h2><p class="mini" style="margin-top:4px">1 Cooperativa La Huerta · 2 Nicolás Pérez · 3 Panadería El Molino</p></section>
+        </div>
+      </div>
+      <aside class="side">
+        <section class="glass"><h2>Pendientes</h2><p class="mini">Marcalos cuando los resuelvas.</p><div class="pend" id="pend"></div></section>
+        <section class="glass"><h2>Recibidas y entregadas · S34–S41</h2>
+          <div class="bars" id="bars" role="img" aria-label="Barras semanales de recibidas y entregadas"></div><div class="axis" id="axis"></div>
+          <p class="mini" style="margin-top:8px"><span style="color:#8d978f">■</span> Recibidas &nbsp; <span style="color:var(--moss)">■</span> Entregadas &nbsp; <span style="background:var(--lime);padding:0 5px;border-radius:4px">■</span> la mayor entrega: S40 (13)</p></section>
+      </aside>
+    </div>
+  </div>
+
+  <!-- DONACIONES -->
+  <div class="view" id="v-donaciones">
+    <div class="vh"><div><p class="mini">Datos de demostración</p><h1>Donaciones <mark>en depósito</mark></h1></div>
+      <div class="sub glass" style="border-radius:99px" id="dsub" role="group" aria-label="Sección de donaciones"><button data-s="inventario">Inventario</button><button data-s="registrar">Registrar</button><button data-s="normalizacion">Normalización</button></div></div>
+    <div id="d-inventario">
+      <div class="bar" id="stf" role="group" aria-label="Filtrar por estado"></div>
+      <div class="bar"><input class="f" id="q" placeholder="Buscar por código, producto o donante" aria-label="Buscar donaciones" style="flex:1;min-width:200px;max-width:380px"><select class="f" id="catf" aria-label="Categoría"><option value="">Todas las categorías</option><option>Alimentos</option><option>Bebidas</option><option>Vestimenta</option><option>Mobiliario</option><option>Útiles escolares</option><option>Higiene</option></select><span class="mini" id="cnt"></span></div>
+      <div class="lst"><div class="rw hdr"><span>Código</span><span>Donación</span><span>Donante → entidad</span><span>Estado</span><span style="text-align:right">Acción</span></div><div id="inv" class="lst"></div></div>
+    </div>
+    <div id="d-registrar" hidden>
+      <section class="glass card" style="max-width:720px"><h2>Registrar donación</h2><p class="mini" style="margin:4px 0 12px">Qué es, cantidad, vencimiento y categoría. Entra como “En depósito”.</p>
+        <form id="regf" class="fm">
+          <label>Qué es<input class="f" id="rq" required placeholder="Ej.: Leche en polvo"></label>
+          <label>Donante<input class="f" id="rd" required placeholder="Ej.: Nicolás Pérez"></label>
+          <label>Cantidad<input class="f" id="rc" type="number" min="1" required placeholder="24"></label>
+          <label>Unidad<select class="f" id="ru"><option>kg</option><option>u</option><option>l</option></select></label>
+          <label>Vencimiento<input class="f" id="rv" type="date"></label>
+          <label>Categoría<select class="f" id="rg"><option>Alimentos</option><option>Bebidas</option><option>Vestimenta</option><option>Mobiliario</option><option>Útiles escolares</option><option>Higiene</option></select></label>
+          <div class="w"><button class="btn" type="submit" id="rbtn">Registrar donación</button> <span class="mini" id="rmsg" role="status"></span></div>
+        </form></section>
+    </div>
+    <div id="d-normalizacion" hidden>
+      <section class="glass card" style="max-width:820px"><h2>Revisión de normalización de datos</h2><p class="mini" style="margin:4px 0 4px">Ejemplos ilustrativos de cómo se propone ordenar lo cargado.</p><div id="norm"></div></section>
+    </div>
+  </div>
+
+  <!-- ASIGNACIONES -->
+  <div class="view" id="v-asignaciones">
+    <div class="vh"><div><p class="mini">Datos de demostración</p><h1>Asignaciones <mark>para revisar</mark></h1></div>
+      <button class="btn" id="algo">Ejecutar algoritmos de asignación</button></div>
+    <div class="two">
+      <div>
+        <section class="glass card"><h2>Propuestas para aprobar o descartar <span class="tag g" id="pc"></span></h2><div id="props"></div></section>
+        <section class="glass card"><h2>Sin asignar <span class="tag r" id="sc"></span></h2><p class="mini" style="margin-top:4px">Donaciones en depósito esperando una propuesta del algoritmo.</p><div id="sin"></div></section>
+      </div>
+      <section class="glass card"><h2>Necesidades abiertas</h2><div id="needs2"></div></section>
+    </div>
+  </div>
+
+  <!-- CAMIONES -->
+  <div class="view" id="v-camiones">
+    <div class="vh"><div><p class="mini">Datos de demostración</p><h1>Camiones <mark>y rutas</mark></h1></div></div>
+    <div class="sum"><div class="glass"><b>3</b><span class="mini">camiones en la flota</span></div><div class="glass"><b>2</b><span class="mini">en ruta</span></div><div class="glass"><b>1</b><span class="mini">cargando (Camión 3)</span></div></div>
+    <div class="trucks" id="trucks" style="margin-top:12px"></div>
+    <section class="glass card" style="margin-top:12px"><h2>Listas para cargar</h2><div id="load"></div></section>
+  </div>
+
+  <!-- DONANTES -->
+  <div class="view" id="v-donantes">
+    <div class="vh"><div><p class="mini">Datos de demostración</p><h1>Donantes <mark>del depósito</mark></h1></div><button class="btn" id="csv">Importar CSV de donantes</button></div>
+    <div class="two"><section class="glass card"><h2>Donantes con donaciones en circulación</h2><div id="dons"></div></section>
+      <section class="glass card"><h2>Categorías de donante</h2><div class="cat" role="img" aria-label="52 Colaboradores, 26 Sostenedores, 8 Transformadores"><i style="width:60.5%;background:#14181a"></i><i style="width:30.2%;background:#7fae14"></i><i style="width:9.3%;background:#f3a9c6"></i></div><p class="mini">86 donantes activos: 52 Colaboradores · 26 Sostenedores · 8 Transformadores</p><p class="mini" style="margin-top:10px" id="csvm" role="status"></p></section></div>
+  </div>
+
+  <!-- ENTIDADES -->
+  <div class="view" id="v-entidades">
+    <div class="vh"><div><p class="mini">Datos de demostración</p><h1>Entidades <mark>beneficiarias</mark></h1></div><button class="btn" id="ent">Revisar solicitudes (3)</button></div>
+    <div class="two"><section class="glass card"><h2>Entidades con necesidades abiertas</h2><div id="ents"></div></section>
+      <section class="glass card"><h2>Esperan aprobación</h2><p style="font:200 56px var(--font);letter-spacing:-.05em;line-height:1;margin:8px 0">3</p><p class="mini">entidades nuevas esperan aprobación esta semana.</p><p class="mini" style="margin-top:10px" id="entm" role="status"></p></section></div>
+  </div>
+
+  <!-- RANKINGS -->
+  <div class="view" id="v-rankings">
+    <div class="vh"><div><p class="mini">Ranking del mes · ejemplo · Datos de demostración</p><h1>Rankings <mark>de donantes</mark></h1></div></div>
+    <section class="glass card" style="max-width:720px"><div class="rk"><span class="n">1</span><div><b>Cooperativa La Huerta</b><p class="mini">Tres donaciones en circulación: DT-0398, DT-0396 y DT-0412</p></div></div><div class="rk"><span class="n">2</span><div><b>Nicolás Pérez</b><p class="mini">DT-0407, DT-0411 y DT-0416</p></div></div><div class="rk"><span class="n">3</span><div><b>Panadería El Molino</b><p class="mini">DT-0403 · Pan lactal · 60 u</p></div></div></section>
+  </div>
+</div>
+
+<div class="pal" id="pal" role="dialog" aria-modal="true" aria-label="Paleta de comandos"><div class="pbox"><input id="pin" placeholder="Escribí una acción: registrar, asignar, importar…" aria-label="Buscar acción" autocomplete="off"><ul id="pl"></ul></div></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const $=id=>document.getElementById(id);
+const root=document.documentElement;
+function setSolid(on){root.classList.toggle('solid',on);$('solid').setAttribute('aria-pressed',on);try{localStorage.setItem('dt-solid',on?'1':'0')}catch(e){}}
+try{if(localStorage.getItem('dt-solid')==='1')setSolid(true)}catch(e){}
+if(location.search.includes('solid=1'))setSolid(true);
+$('solid').onclick=()=>setSolid(!root.classList.contains('solid'));
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),2600)}
+const ST={dep:"En depósito",asi:"Asignada",lis:"Lista para entregar",tra:"En traslado",fal:"Entrega fallida",ven:"Vencida"};
+const BASE={dep:18,asi:11,lis:7,tra:9};
+/* id, producto, donante, entidad, estado, urgente, texto, categoría, camión */
+const D=[
+["DT-0398","Frazadas · 30 u","Cooperativa La Huerta","","dep",1,"8 días en depósito","Vestimenta"],
+["DT-0401","Yogur · 40 kg","Lácteos del Sur","","dep",1,"3 días · vence en 48 h","Alimentos"],
+["DT-0396","Fideos · 35 kg","Cooperativa La Huerta","Merendero Norte","dep",1,"6 días en depósito","Alimentos"],
+["DT-0416","Conservas · 24 kg","Nicolás Pérez","","dep",0,"Recibida hace 2 h","Alimentos"],
+["DT-0403","Pan lactal · 60 u","Panadería El Molino","Comedor Los Girasoles","asi",1,"Asignada 2 días · vence en 48 h","Alimentos"],
+["DT-0407","Conservas · 24 kg","Nicolás Pérez","Escuela 12","asi",0,"Asignada 5 días","Alimentos"],
+["DT-0415","Útiles · 40 u","Librería Central","Escuela 12","asi",0,"Asignada hace 1 h","Útiles escolares"],
+["DT-0411","Camperas · 18 u","Nicolás Pérez","Hogar Esperanza","lis",0,"Lista 1 día · en Camión 3","Vestimenta"],
+["DT-0412","Arroz · 50 kg","Cooperativa La Huerta","Comedor Los Girasoles","tra",0,"En traslado hoy · Camión 2","Alimentos"],
+["DT-0414","Útiles · 120 u","Librería Central","Escuela 12","tra",0,"En traslado hoy · Camión 1","Útiles escolares"],
+["DT-0390","Fideos · 20 kg","Cooperativa La Huerta","Merendero Norte","fal",1,"Nadie la recibió · vuelve al depósito (ayer)","Alimentos"]];
+const idx=Object.fromEntries(D.map((d,i)=>[d[0],d]));
+const SHOWN=new Set(["dep","asi","lis","tra"]);
+const open=new Set(),busy=new Set();
+const delta={dep:0,asi:0,lis:0,tra:0};let nVenc=0,extraLog=[];
+function setState(d,n,txt){const o=d[4];if(delta[o]!==undefined)delta[o]--;if(delta[n]!==undefined)delta[n]++;d[4]=n;d[6]=txt;if(n==='ven')nVenc++}
+const ACTS={dep:["Ejecutar asignación","Marcar vencida"],asi:["Aprobar","Descartar"],lis:["Cargar en camión"],tra:[],fal:["Reasignar"],ven:[]};
+function acts(d){let a=ACTS[d[4]].slice();if(d[4]==='dep'&&d[0]!=='DT-0401'&&d[0]!=='DT-0403')a=a.filter(x=>x!=='Marcar vencida'||true);if(d[4]==='lis'&&/Camión/.test(d[6]))a=[];return a}
+function runAct(id,a,btn){
+  if(busy.has(id+a))return;busy.add(id+a);const d=idx[id];
+  if(btn){btn.textContent='Actualizando…';btn.disabled=true}
+  toast('Actualizando… el estado cambia cuando el sistema lo confirma');
+  setTimeout(()=>{busy.delete(id+a);let m='';
+    if(a==='Ejecutar asignación'){setState(d,'asi',"Propuesta de asignación para revisar");if(!d[3])d[3]=id==='DT-0398'?'Comedor Los Girasoles':id==='DT-0401'?'Merendero Norte':'Escuela 12';m=id+': propuesta generada, quedó Asignada para tu revisión'}
+    else if(a==='Aprobar'){setState(d,'lis','Lista para entregar · sin camión');m=id+': asignación aprobada, pasa a Lista para entregar'}
+    else if(a==='Descartar'){setState(d,'dep','Propuesta descartada · vuelve a En depósito');d[3]='';m=id+': propuesta descartada, vuelve a En depósito'}
+    else if(a==='Cargar en camión'){d[6]='Lista · cargada en Camión 3';m=id+': cargada en el Camión 3'}
+    else if(a==='Marcar vencida'){setState(d,'ven','Marcada como vencida hoy');m=id+': registrada como Vencida (fecha y responsable guardados)'}
+    else if(a==='Reasignar'){setState(d,'dep','Vuelve al depósito para reasignar');m=id+': vuelve a En depósito para reasignar'}
+    extraLog.unshift(m);toast(m);renderAll()},1500)}
+function btns(d){return acts(d).map(a=>`<button class="btn xs dk" data-id="${d[0]}" data-a="${a}" ${busy.has(d[0]+a)?'disabled':''}>${busy.has(d[0]+a)?'Actualizando…':a}</button>`).join('')}
+document.addEventListener('keydown',e=>{const c=e.target.closest&&e.target.closest('.chip');if(c&&e.target===c&&(e.key==='Enter'||e.key===' ')){e.preventDefault();c.click()}});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b){e.stopPropagation();runAct(b.dataset.id,b.dataset.a,b);return}
+  const c=e.target.closest('.chip');if(c){const id=c.dataset.id;if(open.has(id))open.delete(id);else open.add(id);c.setAttribute('aria-expanded',open.has(id))}});
+/* ---------- render inicio ---------- */
+const cnt=k=>BASE[k]+delta[k];
+function renderInicio(){
+  const tot=cnt('dep')+cnt('asi')+cnt('lis')+cnt('tra');$('h1n').textContent=tot;
+  $('inline').innerHTML=`<div><b>${tot}</b><span>en circulación</span></div><div><b>23<sup>+15 %</sup></b><span>entregadas este mes</span></div><div><b>31<sup>+8 %</sup></b><span>recibidas este mes</span></div><div><b>3</b><span>camiones en ruta</span></div><div><b>4</b><span>llevan más de 5 días en depósito</span></div>`;
+  $('lanes').innerHTML=['dep','asi','lis','tra'].map(k=>{const it=D.filter(d=>d[4]===k);return `<section class="glass lane" aria-label="${ST[k]}"><h2><span>${ST[k]}</span><b>${cnt(k)}</b></h2><div class="ticks" style="width:${Math.min(100,cnt(k)/18*100)}%"></div>${it.map(d=>`<div class="chip" role="button" tabindex="0" data-id="${d[0]}" aria-expanded="${open.has(d[0])}"><b>${d[0]} · ${d[1]}</b><small>${d[2]}${d[3]?' → '+d[3]:' → sin asignar'}</small>${d[5]?`<span class="urg">${d[6]}</span>`:`<small>${d[6]}</small>`}<div class="det"><p>${d[7]} · ${d[2]}${d[3]?' → '+d[3]:''}</p><div class="acts">${btns(d)||'<span class="mini">Sin acciones: en camino.</span>'}</div></div></div>`).join('')}<p class="more">Mostrando ${it.length} de ${cnt(k)} · las que piden atención</p></section>`}).join('');
+  const off=D.filter(d=>d[4]==='fal'||d[4]==='ven');
+  $('offl').innerHTML=`<span class="tag o">Fuera de carril</span>`+(off.map(d=>`<span><b style="font-weight:600">${d[0]}</b> · ${d[2]} · <span class="tag ${d[4]==='ven'?'g':'r'}">${ST[d[4]]}</span> ${d[6]}</span>${d[4]==='fal'?btns(d):''}`).join('')||'<span class="mini">Nada fuera de carril.</span>');
+  $('actv').innerHTML=extraLog.map(m=>`<li><b>Ahora</b> · ${m}</li>`).join('')+`<li><b>Los Girasoles</b> confirmó la recepción de DT-0409 (frazadas ×30) · hace 12 min</li><li><b>Camión 2</b> salió con 6 donaciones hacia Los Girasoles · hace 40 min</li><li>El sistema asignó <b>DT-0415</b> (útiles) a la necesidad de Escuela 12 · hace 1 h</li><li>Recibida <b>DT-0416</b> (conservas 24 kg, Nicolás Pérez) · hace 2 h</li><li><b>DT-0411</b> quedó lista y se sumó al camión 3 · hace 3 h</li><li class="bad">Nadie recibió <b>DT-0390</b> en Merendero Norte, vuelve al depósito (Entrega fallida) · ayer</li>`;
+}
+const T=[["Camión 1","En ruta",["Depósito","Escuela 12","Hogar Esperanza"],1,"1/3 paradas · ETA 14:20",78,"DT-0414 · Útiles · 120 u"],["Camión 2","En ruta",["Depósito","Los Girasoles","Merendero Norte"],2,"2/3 paradas · ETA 15:05",54,"6 donaciones, entre ellas DT-0412 · Arroz · 50 kg"],["Camión 3","Cargando",["Depósito","Parada 1","Parada 2","Parada 3","Parada 4"],0,"Ruta Sur · 4 paradas · ETA mañana 08:00",31,"DT-0411 · Camperas · 18 u (y más)"]];
+function routeMini(t){const n=t[2].length;let h='';for(let i=0;i<n;i++){const st=t[3]>=i+1?'on':(t[3]===i&&t[3]>0?'cur':'');h+=(i?`<u class="${t[3]>=i?'':'dsh'}"></u>`:'')+`<i class="${i===0?'on':t[3]>i?'on':t[3]===i&&t[3]>0?'cur':''}"></i>`}return h}
+function renderRoutes(){$('routes').innerHTML=T.map(t=>`<article class="glass rt"><div class="lb"><b style="color:var(--ink);font-weight:600;font-size:15px">${t[0]}</b><span class="tag ${t[3]?'':'o'}">${t[1]}</span></div><div class="rl">${routeMini(t)}</div><div class="lb">${t[2].length===3?t[2].map(s=>`<span>${s}</span>`).join(''):`<span>${t[2][0]}</span><span>4 paradas</span>`}</div><div class="lb" style="margin-top:10px"><span>${t[4]}</span><span>Carga ${t[5]} %</span></div><div class="meter"><i style="width:${t[5]}%"></i></div></article>`).join('')}
+const NEED=[["Frazadas","Comedor Los Girasoles",18,30,1],["Útiles escolares","Escuela 12",90,120,0],["Leche en polvo","Merendero Norte",6,40,1],["Camperas","Hogar Esperanza",18,18,0]];
+const needH=()=>NEED.map(n=>`<div class="need ${n[4]?'u':''}"><div class="lb"><b>${n[0]} · ${n[2]}/${n[3]}</b><span>${n[4]?'Urgente':n[2]===n[3]?'Cubierta':'Abierta'}</span></div><div class="lb"><span>${n[1]}</span></div><div class="meter"><i style="width:${n[2]/n[3]*100}%"></i></div></div>`).join('');
+const P=[["u","Urgente","4 donaciones llevan más de 5 días sin asignar","Ejecutá la asignación"],["u","Urgente","2 vencen en 48 h: lácteos y panificados","DT-0401 y DT-0403"],["h","Hoy","Camión 3 sin chofer confirmado para mañana","Ruta Sur · 4 paradas · sale 08:00"],["h","Hoy","Entrega pendiente de confirmar en Hogar Esperanza","Llegó ayer 17:40"],["s","Semana","3 entidades nuevas esperan aprobación","Entidades"]];
+$('pend').innerHTML=P.map(p=>`<label class="pi"><input type="checkbox"><span><span class="lvl ${p[0]}">${p[1]}</span>${p[2]}<small>${p[3]}</small></span></label>`).join('');
+document.querySelectorAll('#pend input').forEach(c=>c.onchange=()=>c.closest('.pi').classList.toggle('done',c.checked));
+const R=[9,12,7,14,11,16,10,8],E=[6,8,9,10,12,11,13,5];
+$('bars').innerHTML=R.map((r,i)=>`<div><i style="height:${r/16*100}%;background:#a8b1a9" title="S${34+i} recibidas ${r}"></i><i style="height:${E[i]/16*100}%;background:${E[i]===13?'var(--lime2)':'#4d6c12'}" title="S${34+i} entregadas ${E[i]}"></i></div>`).join('');
+$('axis').innerHTML=R.map((_,i)=>`<span>S${34+i}</span>`).join('');
+$('needs').innerHTML=needH();$('needs2').innerHTML=needH();
+/* ---------- donaciones / inventario ---------- */
+let fst='todas',dsub='inventario';
+function tagOf(d){return `<span class="tag ${d[4]==='fal'?'r':d[4]==='ven'?'g':d[4]==='dep'?'o':''}">${ST[d[4]]}</span>`}
+function renderInv(){
+  const q=$('q').value.toLowerCase(),c=$('catf').value;
+  const order=['todas','dep','asi','lis','tra','fal','ven'];
+  $('stf').innerHTML=order.map(k=>{const n=k==='todas'?D.length:D.filter(d=>d[4]===k).length;return `<button class="fc" data-f="${k}" aria-pressed="${fst===k}">${k==='todas'?'Todas':ST[k]}<small>${n}</small></button>`}).join('');
+  $('stf').querySelectorAll('button').forEach(b=>b.onclick=()=>{fst=b.dataset.f;renderInv()});
+  const it=D.filter(d=>(fst==='todas'||d[4]===fst)&&(!c||d[7]===c)&&(!q||(d.join(' ')).toLowerCase().includes(q)));
+  $('cnt').textContent=it.length+' de '+D.length+' donaciones mostradas · prioridad primero';
+  it.sort((a,b)=>b[5]-a[5]);
+  $('inv').innerHTML=it.map(d=>`<div class="rw ${d[4]==='ven'?'gone':''}"><b>${d[0]}</b><div><b>${d[1]}</b><small>${d[7]}</small></div><div>${d[2]}<small>${d[3]?'→ '+d[3]:'→ sin asignar'}</small></div><div>${tagOf(d)}<small>${d[6]}</small></div><div class="acts">${btns(d)}</div></div>`).join('')||'<p class="mini" style="padding:14px">Ninguna donación coincide con el filtro.</p>';
+}
+['q','catf'].forEach(i=>$(i).addEventListener('input',renderInv));
+function showSub(s){dsub=s;['inventario','registrar','normalizacion'].forEach(k=>$('d-'+k).hidden=k!==s);$('dsub').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.s===s))}
+$('dsub').querySelectorAll('button').forEach(b=>b.onclick=()=>{location.hash='donaciones/'+b.dataset.s});
+let nn=417;
+$('regf').onsubmit=e=>{e.preventDefault();const b=$('rbtn');b.textContent='Actualizando…';b.disabled=true;$('rmsg').textContent='Actualizando… el sistema confirma el registro.';
+  setTimeout(()=>{const id='DT-0'+(nn++),u=$('ru').value;D.unshift([id,$('rq').value+' · '+$('rc').value+' '+u,$('rd').value,'','dep',0,'Registrada hoy','Alimentos'.length&&$('rg').value]);delta.dep++;idx[id]=D[0];
+    b.textContent='Registrar donación';b.disabled=false;$('rmsg').textContent=id+' registrada: En depósito.';$('regf').reset();extraLog.unshift(id+' registrada en depósito');renderAll()},1400)};
+const NM=[["Pan lactal x60","Pan lactal · 60 u","Alimentos"],["Yogur 40k","Yogur · 40 kg","Alimentos"],["frazadas 30","Frazadas · 30 u","Vestimenta"]];
+function renderNorm(){$('norm').innerHTML=NM.map((n,i)=>`<div class="prop" id="nm${i}"><div><b>“${n[0]}” → ${n[1]}</b><span class="mini">Categoría sugerida: ${n[2]}</span></div><div class="acts" style="margin:0"><button class="btn xs dk" data-n="${i}">Aceptar</button><button class="btn xs sec" data-n="${i}" data-x="1">Corregir</button></div></div>`).join('');
+  $('norm').querySelectorAll('button').forEach(b=>b.onclick=()=>{b.textContent='Actualizando…';b.disabled=true;setTimeout(()=>{const p=$('nm'+b.dataset.n);p.innerHTML=`<div><b>${b.dataset.x?'Pendiente de corrección manual':'Normalización aceptada'}</b><span class="mini">${NM[b.dataset.n][1]}</span></div><span class="tag ${b.dataset.x?'g':''}">${b.dataset.x?'A corregir':'Aceptada'}</span>`},1200)})}
+/* ---------- asignaciones ---------- */
+function renderAsig(){
+  const pr=D.filter(d=>d[4]==='asi'),sn=D.filter(d=>d[4]==='dep');
+  $('pc').textContent=pr.length;$('sc').textContent=sn.length;
+  $('props').innerHTML=pr.map(d=>`<div class="prop"><div><b>${d[0]} · ${d[1]}</b><span class="mini">${d[2]} → <b style="color:var(--ink)">${d[3]}</b> · ${d[6]}</span></div><div class="acts" style="margin:0">${btns(d)}</div></div>`).join('')||'<p class="mini" style="padding:10px 0">No hay propuestas pendientes.</p>';
+  $('sin').innerHTML=sn.map(d=>`<div class="prop"><div><b>${d[0]} · ${d[1]}</b><span class="mini">${d[2]} · ${d[6]}</span></div><div class="acts" style="margin:0">${d[4]==='dep'?`<button class="btn xs dk" data-id="${d[0]}" data-a="Ejecutar asignación" ${busy.has(d[0]+'Ejecutar asignación')?'disabled':''}>${busy.has(d[0]+'Ejecutar asignación')?'Actualizando…':'Ejecutar asignación'}</button>`:''}</div></div>`).join('')||'<p class="mini" style="padding:10px 0">Todo asignado.</p>';
+}
+let algoBusy=false;
+function runAlgo(){if(algoBusy)return;algoBusy=true;const b=$('algo');b.textContent='Actualizando…';b.disabled=true;toast('Actualizando… los algoritmos están generando propuestas');
+  setTimeout(()=>{algoBusy=false;b.textContent='Ejecutar algoritmos de asignación';b.disabled=false;const n=D.filter(d=>d[4]==='dep').length;toast('Listo: revisá las propuestas. Quedan '+n+' donaciones sin asignar para el próximo intento.');extraLog.unshift('Algoritmos de asignación ejecutados');renderAll()},2000)}
+$('algo').onclick=runAlgo;
+/* ---------- camiones ---------- */
+function renderTrucks(){
+  $('trucks').innerHTML=T.map(t=>{const n=t[2].length;return `<article class="glass tr"><div><h2 style="font-size:19px">${t[0]}</h2><span class="tag ${t[3]?'':'o'}" style="margin-top:6px">${t[1]}</span><p class="mini" style="margin-top:8px">${t[4]}</p></div><div><div class="stops">${t[2].map((s,i)=>`<div class="stop ${i===0||t[3]>i?'on':''} ${t[3]>0&&t[3]===i?'cur':''} ${i>t[3]?'dsh':''}"><i></i><b>${s}</b>${i===0?'salida':t[3]>i?'visitada':t[3]===i&&t[3]>0?'próxima':'pendiente'}</div>`).join('')}</div></div><div><div class="lb"><span>Carga</span><span><b style="color:var(--ink)">${t[5]} %</b></span></div><div class="meter"><i style="width:${t[5]}%"></i></div><p class="mini" style="margin-top:8px">A bordo: ${t[6]}</p></div></article>`}).join('')+`<p class="mini">Camión 3 sin chofer confirmado para mañana (Ruta Sur, sale 08:00): figura en Pendientes de Inicio.</p>`;
+  const li=D.filter(d=>d[4]==='lis');
+  $('load').innerHTML=li.map(d=>`<div class="prop"><div><b>${d[0]} · ${d[1]}</b><span class="mini">${d[2]} → ${d[3]} · ${d[6]}</span></div><div class="acts" style="margin:0">${btns(d)||'<span class="tag">En el camión</span>'}</div></div>`).join('')||'<p class="mini" style="padding:8px 0">Nada para cargar.</p>';
+}
+/* ---------- donantes / entidades ---------- */
+function renderMisc(){
+  $('dons').innerHTML=[["Cooperativa La Huerta","Persona jurídica","DT-0398, DT-0396, DT-0412"],["Nicolás Pérez","Persona humana","DT-0407, DT-0411, DT-0416"],["Panadería El Molino","Persona jurídica","DT-0403"],["Lácteos del Sur","Persona jurídica","DT-0401"],["Librería Central","Persona jurídica","DT-0414, DT-0415"]].map(d=>`<div class="prop"><div><b>${d[0]}</b><span class="mini">${d[1]} · ${d[2]}</span></div><span class="tag g">Activa</span></div>`).join('');
+  $('ents').innerHTML=[["Comedor Los Girasoles","Frazadas 18/30 · urgente"],["Escuela 12","Útiles escolares 90/120"],["Merendero Norte","Leche en polvo 6/40 · urgente"],["Hogar Esperanza","Camperas 18/18 · cubierta"]].map(d=>`<div class="prop"><div><b>${d[0]}</b><span class="mini">${d[1]}</span></div><span class="tag ${/urgente/.test(d[1])?'r':''}">${/urgente/.test(d[1])?'Urgente':/cubierta/.test(d[1])?'Cubierta':'Abierta'}</span></div>`).join('')}
+function simple(btn,out,msg){btn.onclick=()=>{const o=btn.textContent;btn.textContent='Actualizando…';btn.disabled=true;toast('Actualizando…');setTimeout(()=>{btn.textContent=o;btn.disabled=false;$(out).textContent=msg;toast(msg)},1600)}}
+simple($('csv'),'csvm','Importación recibida: revisá el resumen antes de confirmar los donantes.');
+simple($('ent'),'entm','Solicitudes listas para revisar una por una.');
+function renderAll(){renderInicio();renderInv();renderAsig();renderTrucks()}
+renderRoutes();renderNorm();renderMisc();renderAll();
+/* ---------- rutas / vistas ---------- */
+const V=[["inicio","Inicio"],["donantes","Donantes"],["entidades","Entidades"],["donaciones","Donaciones"],["asignaciones","Asignaciones"],["camiones","Camiones"],["rankings","Rankings"]];
+$('tabs').innerHTML=V.map(v=>`<a href="#${v[0]}" data-v="${v[0]}">${v[1]}</a>`).join('');
+function route(){let h=(new URLSearchParams(location.search).get('vista')||location.hash.replace('#','')||'inicio').split('/');let v=V.some(x=>x[0]===h[0])?h[0]:'inicio';
+  V.forEach(x=>$('v-'+x[0]).classList.toggle('on',x[0]===v));
+  document.querySelectorAll('#tabs a').forEach(a=>{if(a.dataset.v===v)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')});
+  if(v==='donaciones')showSub(['inventario','registrar','normalizacion'].includes(h[1])?h[1]:'inventario');
+  document.title='DonaTrack · '+V.find(x=>x[0]===v)[1]+' · Administración';window.scrollTo(0,0)}
+addEventListener('hashchange',route);route();
+/* ---------- paleta ---------- */
+const A=[["Registrar donación","Donaciones","donaciones/registrar"],["Revisar normalización de datos","Donaciones","donaciones/normalizacion"],["Ejecutar algoritmos de asignación","Asignaciones","asignaciones","algo"],["Revisar propuestas de asignación","Asignaciones","asignaciones"],["Importar CSV de donantes","Donantes","donantes"],["Aprobar entidades nuevas (3)","Entidades","entidades"],["Ver inventario en depósito","Donaciones","donaciones/inventario"],["Marcar donación como vencida","Donaciones","donaciones/inventario"],["Ver camiones y rutas","Camiones","camiones"],["Ver rankings del mes","Rankings","rankings"],["Ir a Inicio","Inicio","inicio"]];
+let sel=0,fl=A,last=null;const pl=$('pl');
+function drawP(){pl.innerHTML=fl.map((a,i)=>`<li><button class="${i===sel?'sel':''}" data-i="${i}">${a[0]}<small>${a[1]}</small></button></li>`).join('')||'<li class="mini" style="padding:12px">Sin coincidencias.</li>';pl.querySelectorAll('button').forEach(b=>b.onclick=()=>run(+b.dataset.i))}
+function run(i){const a=fl[i];if(!a)return;closeP();location.hash=a[2];if(a[3]==='algo')setTimeout(runAlgo,50);else toast(a[0])}
+function openP(){last=document.activeElement;$('pal').classList.add('on');$('pin').value='';fl=A;sel=0;drawP();$('pin').focus()}
+function closeP(){$('pal').classList.remove('on');if(last&&last.focus)last.focus()}
+$('open').onclick=openP;$('reg').onclick=()=>{location.hash='donaciones/registrar'};
+$('pin').oninput=e=>{const q=e.target.value.toLowerCase();fl=A.filter(a=>a[0].toLowerCase().includes(q)||a[1].toLowerCase().includes(q));sel=0;drawP()};
+$('pal').onclick=e=>{if(e.target.id==='pal')closeP()};
+addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openP();return}
+ if(!$('pal').classList.contains('on'))return;if(e.key==='Escape')closeP();if(e.key==='ArrowDown'){sel=Math.min(fl.length-1,sel+1);drawP();e.preventDefault()}if(e.key==='ArrowUp'){sel=Math.max(0,sel-1);drawP();e.preventDefault()}if(e.key==='Enter')run(sel)});
+</script>
+</body>
+</html>

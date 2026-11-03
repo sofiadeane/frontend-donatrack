@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/panel-h :: layout(~{::title}, ~{::contenido})}">
+<head><title>Inicio · Persona donante · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+  <p class="pc-aviso" role="status" th:if="${aviso == 'sin-permiso'}">Esa sección no corresponde a tu perfil, así que te trajimos a tu inicio.</p>
+
+  <th:block th:with="p=${panel}, e=${panel.entregas}, i=${panel.impacto}, r=${panel.recorrido}">
+
+  <!-- Cabecera -->
+  <header class="pc-cab">
+    <div>
+      <p class="c-kicker">Tu hormiguero</p>
+      <h1 class="c-display" th:text="'Hola, ' + ${sesion.primerNombre} + '.'">Hola, Nicolás.</h1>
+    </div>
+    <div class="pc-cab__acc">
+      <span class="c-demo" th:if="${e.demo or i.demo or p.notificaciones.demo}">Datos de demostración</span>
+      <a class="c-btn c-btn--white c-btn--sm" th:href="@{/donante/donaciones}">Mis donaciones<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+      <a class="c-btn c-btn--sm" th:href="@{/donante/seguimiento}">Ver seguimiento<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
+    </div>
+  </header>
+
+  <!-- A · Tu montañita: un grano por donación -->
+  <div class="pc-fila dh-fila--hero">
+    <section class="dh-monte" aria-labelledby="t-monte">
+      <div class="dh-monte__txt">
+        <h2 id="t-monte" class="dh-monte__titulo" th:if="${e.ok()}"><b class="c-num" th:text="${e.datos.total}">6</b> <span th:text="${e.datos.total == 1} ? 'granito aportado' : 'granitos aportados'">granitos aportados</span></h2>
+        <p class="dh-monte__msg" th:text="${p.mensaje}">Tu última donación ya está en camino.</p>
+        <ul class="dh-monte__datos" th:if="${e.ok()}">
+          <li><b class="c-mono" th:text="${e.datos.entregadas}">2</b> ya llegaron</li>
+          <li><b class="c-mono" th:text="${e.datos.enCamino}">1</b> en camino</li>
+          <li th:if="${i.ok() and i.datos.entidadesAyudadas != null}"><b class="c-mono" th:text="${i.datos.entidadesAyudadas}">2</b> entidades ayudadas</li>
+        </ul>
+        <th:block th:if="${e.conError()}"><div th:replace="~{fragments/estados-h :: error(${e.error}, '/donante')}"></div></th:block>
+      </div>
+      <!-- El encuadre arranca justo arriba del grano más alto: con pocas donaciones no queda cielo vacío -->
+      <svg class="dh-monte__ilus" role="img" th:if="${e.ok()}"
+           th:with="y0=${ {146,146,139,139,139,139,139,139,139,123,121,121,121,121,121,121,121,103,102,102,102,102,102,102,102,102,102,86,85,85,85,85,85,85,70,70,70,68,68}[e.datos.total > 38 ? 38 : e.datos.total] }"
+           th:attr="viewBox=${'0 ' + y0 + ' 320 ' + (204 - y0)},aria-label=${'Montaña de ' + e.datos.total + ' granos, uno por cada donación'}">
+        <ellipse class="dh-monte__suelo" cx="160" cy="192" rx="150" ry="10"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 1} ? 'is-lleno' : (${e.datos.total + 1 == 1} ? 'is-proximo' : '')" cx="168.4" cy="178.1" r="9.3"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 2} ? 'is-lleno' : (${e.datos.total + 1 == 2} ? 'is-proximo' : '')" cx="148.6" cy="176.6" r="9.8"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 3} ? 'is-lleno' : (${e.datos.total + 1 == 3} ? 'is-proximo' : '')" cx="160.7" cy="159.5" r="9.6"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 4} ? 'is-lleno' : (${e.datos.total + 1 == 4} ? 'is-proximo' : '')" cx="191.2" cy="176.3" r="8.8"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 5} ? 'is-lleno' : (${e.datos.total + 1 == 5} ? 'is-proximo' : '')" cx="126.3" cy="178.0" r="8.7"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 6} ? 'is-lleno' : (${e.datos.total + 1 == 6} ? 'is-proximo' : '')" cx="181.9" cy="159.7" r="9.2"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 7} ? 'is-lleno' : (${e.datos.total + 1 == 7} ? 'is-proximo' : '')" cx="136.8" cy="158.2" r="9.0"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 8} ? 'is-lleno' : (${e.datos.total + 1 == 8} ? 'is-proximo' : '')" cx="211.1" cy="178.5" r="10.3"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 9} ? 'is-lleno' : (${e.datos.total + 1 == 9} ? 'is-proximo' : '')" cx="107.1" cy="179.3" r="8.8"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 10} ? 'is-lleno' : (${e.datos.total + 1 == 10} ? 'is-proximo' : '')" cx="150.3" cy="143.1" r="9.6"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 11} ? 'is-lleno' : (${e.datos.total + 1 == 11} ? 'is-proximo' : '')" cx="172.4" cy="141.3" r="9.9"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 12} ? 'is-lleno' : (${e.datos.total + 1 == 12} ? 'is-proximo' : '')" cx="118.4" cy="159.8" r="9.1"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 13} ? 'is-lleno' : (${e.datos.total + 1 == 13} ? 'is-proximo' : '')" cx="203.5" cy="160.8" r="9.0"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 14} ? 'is-lleno' : (${e.datos.total + 1 == 14} ? 'is-proximo' : '')" cx="231.2" cy="179.4" r="9.1"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 15} ? 'is-lleno' : (${e.datos.total + 1 == 15} ? 'is-proximo' : '')" cx="86.9" cy="177.6" r="10.4"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 16} ? 'is-lleno' : (${e.datos.total + 1 == 16} ? 'is-proximo' : '')" cx="129.0" cy="142.3" r="9.4"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 17} ? 'is-lleno' : (${e.datos.total + 1 == 17} ? 'is-proximo' : '')" cx="193.2" cy="143.8" r="9.5"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 18} ? 'is-lleno' : (${e.datos.total + 1 == 18} ? 'is-proximo' : '')" cx="168.6" cy="123.0" r="9.3"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 19} ? 'is-lleno' : (${e.datos.total + 1 == 19} ? 'is-proximo' : '')" cx="147.6" cy="122.2" r="10.0"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 20} ? 'is-lleno' : (${e.datos.total + 1 == 20} ? 'is-proximo' : '')" cx="97.4" cy="160.1" r="10.2"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 21} ? 'is-lleno' : (${e.datos.total + 1 == 21} ? 'is-proximo' : '')" cx="224.1" cy="159.2" r="10.4"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 22} ? 'is-lleno' : (${e.datos.total + 1 == 22} ? 'is-proximo' : '')" cx="213.2" cy="144.0" r="10.1"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 23} ? 'is-lleno' : (${e.datos.total + 1 == 23} ? 'is-proximo' : '')" cx="191.7" cy="125.5" r="10.1"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 24} ? 'is-lleno' : (${e.datos.total + 1 == 24} ? 'is-proximo' : '')" cx="256.1" cy="176.7" r="9.6"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 25} ? 'is-lleno' : (${e.datos.total + 1 == 25} ? 'is-proximo' : '')" cx="63.7" cy="176.5" r="9.2"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 26} ? 'is-lleno' : (${e.datos.total + 1 == 26} ? 'is-proximo' : '')" cx="108.3" cy="140.2" r="9.9"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 27} ? 'is-lleno' : (${e.datos.total + 1 == 27} ? 'is-proximo' : '')" cx="130.4" cy="122.3" r="9.4"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 28} ? 'is-lleno' : (${e.datos.total + 1 == 28} ? 'is-proximo' : '')" cx="169.2" cy="105.9" r="9.7"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 29} ? 'is-lleno' : (${e.datos.total + 1 == 29} ? 'is-proximo' : '')" cx="147.8" cy="104.7" r="9.0"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 30} ? 'is-lleno' : (${e.datos.total + 1 == 30} ? 'is-proximo' : '')" cx="242.3" cy="160.0" r="8.7"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 31} ? 'is-lleno' : (${e.datos.total + 1 == 31} ? 'is-proximo' : '')" cx="74.1" cy="159.7" r="10.0"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 32} ? 'is-lleno' : (${e.datos.total + 1 == 32} ? 'is-proximo' : '')" cx="231.1" cy="141.8" r="8.9"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 33} ? 'is-lleno' : (${e.datos.total + 1 == 33} ? 'is-proximo' : '')" cx="211.8" cy="125.5" r="10.3"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 34} ? 'is-lleno' : (${e.datos.total + 1 == 34} ? 'is-proximo' : '')" cx="109.3" cy="123.1" r="9.3"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 35} ? 'is-lleno' : (${e.datos.total + 1 == 35} ? 'is-proximo' : '')" cx="150.5" cy="90.1" r="9.7"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 36} ? 'is-lleno' : (${e.datos.total + 1 == 36} ? 'is-proximo' : '')" cx="85.4" cy="141.5" r="9.8"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 37} ? 'is-lleno' : (${e.datos.total + 1 == 37} ? 'is-proximo' : '')" cx="190.8" cy="106.3" r="10.3"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 38} ? 'is-lleno' : (${e.datos.total + 1 == 38} ? 'is-proximo' : '')" cx="171.4" cy="88.2" r="10.2"/>
+          <circle class="dh-grano" th:classappend="${e.datos.total >= 39} ? 'is-lleno' : (${e.datos.total + 1 == 39} ? 'is-proximo' : '')" cx="127.3" cy="104.0" r="9.4"/>
+        <use class="dh-monte__hormiga" href="#h-hormiga-grano" x="6" y="152" width="48" height="40"/>
+      </svg>
+    </section>
+
+    <!-- Categoría y misión -->
+    <aside class="dh-cat" aria-labelledby="t-cat" th:if="${i.ok()}">
+      <p class="dh-cat__etq" id="t-cat">Tu categoría</p>
+      <p class="dh-cat__nombre" th:text="${i.datos.categoria}">Colaborador</p>
+      <th:block th:if="${i.datos.mision != null}" th:with="m=${i.datos.mision}">
+        <p class="dh-cat__mision"><b th:text="${m.nombre}">Donante constante</b> <span th:text="${m.descripcion}">Doná tres meses seguidos</span></p>
+        <div class="dh-arena" role="progressbar" aria-valuemin="0" aria-valuemax="100" th:attr="aria-valuenow=${m.porcentaje}" aria-label="Progreso de la misión">
+          <i th:style="'--p:' + ${m.porcentaje}"></i>
+        </div>
+        <p class="dh-cat__pie"><span th:text="${m.progreso + ' de ' + m.objetivo}">2 de 3</span><span th:text="${m.falta}">falta 1 paso</span></p>
+        <p class="dh-cat__prox" th:if="${i.datos.proximaCategoria != null}">Próxima: <b th:text="${i.datos.proximaCategoria}">Sostenedor</b></p>
+      </th:block>
+      <p class="dh-cat__mision" th:if="${i.datos.mision == null}">No tenés misiones activas por ahora.</p>
+      <a class="c-link" th:href="@{/donante/incentivos}">Ver incentivos</a>
+    </aside>
+    <aside class="dh-cat" aria-labelledby="t-cat-vacia" th:if="${i.vacio()}">
+      <p class="dh-cat__etq" id="t-cat-vacia">Tu categoría</p>
+      <p class="dh-cat__mision">Tus totales aparecen cuando registres tu primera donación.</p>
+    </aside>
+    <th:block th:if="${i.conError()}"><div th:replace="~{fragments/estados-h :: error(${i.error}, '/donante')}"></div></th:block>
+  </div>
+
+  <!-- B · Recorrido de la última donación: el sendero de la hormiga -->
+  <section class="dh-rec" aria-labelledby="t-rec">
+    <div class="pc-tit">
+      <div>
+        <h2 id="t-rec">Dónde está tu última donación</h2>
+        <p th:if="${r.ok()}" th:text="${r.datos.descripcion + ' · ' + r.datos.detalle}">Arroz · 50 kg</p>
+      </div>
+      <a class="c-link" th:if="${r.ok()}" th:href="@{/donante/donaciones/{id}(id=${r.datos.id})}">Ver el detalle</a>
+    </div>
+    <ol class="dh-sendero" th:if="${r.ok()}" th:style="'--n:' + ${#lists.size(r.datos.pasos)}">
+      <li th:each="s : ${r.datos.pasos}" class="dh-paso" th:classappend="${'dh-paso--' + s.clase}"
+          th:attr="aria-current=${s.actual()} ? 'step' : null">
+        <svg class="dh-paso__hormiga" th:if="${s.actual()}" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
+        <span class="dh-paso__grano" aria-hidden="true"></span>
+        <span class="dh-paso__etq" th:text="${s.etiqueta}">En depósito</span>
+        <small th:text="${s.cuando}">01/10</small>
+      </li>
+    </ol>
+    <p class="dh-vacio" th:if="${r.vacio()}">Todavía no registraste donaciones. Cuando lleves una al depósito, vas a poder seguir su recorrido desde acá.</p>
+    <th:block th:if="${r.conError()}"><div th:replace="~{fragments/estados-h :: error(${r.error}, '/donante')}"></div></th:block>
+  </section>
+
+  <!-- C · Mes a mes y estado de todas -->
+  <div class="pc-fila dh-fila--dos">
+    <section class="dh-meses" aria-labelledby="t-meses" th:if="${i.ok()}">
+      <div class="pc-tit">
+        <h2 id="t-meses">Mes a mes</h2>
+        <p th:with="suma=${#aggregates.sum(i.datos.grafico.![valor])}" th:text="${suma == 1} ? '1 donación en estos meses' : ${suma + ' donaciones en estos meses'}">7 donaciones en estos meses</p>
+      </div>
+      <ol class="dh-meses__graf" role="img" th:attr="aria-label=${i.datos.graficoDescripcion}">
+        <li th:each="b : ${i.datos.grafico}" th:classappend="${b.actual} ? 'actual'" th:style="'--h:' + ${b.alto}">
+          <i></i><span class="dh-mes--largo" th:text="${b.mes}">Octubre</span><span class="dh-mes--corto" aria-hidden="true" th:text="${#strings.substring(b.mes, 0, 3)}">Oct</span>
+        </li>
+      </ol>
+    </section>
+
+    <section class="dh-estado" aria-labelledby="t-estado" th:if="${e.ok()}">
+      <div class="pc-tit"><h2 id="t-estado">Todas tus donaciones</h2><p th:text="${e.datos.total + ' en total'}">6 en total</p></div>
+      <div class="dh-estado__barra" aria-hidden="true">
+        <i class="k-entregadas" th:style="'flex:' + ${e.datos.entregadas}"></i>
+        <i class="k-camino" th:style="'flex:' + ${e.datos.enCamino}"></i>
+        <i class="k-proceso" th:style="'flex:' + ${e.datos.enProceso}"></i>
+        <i class="k-interrumpidas" th:style="'flex:' + ${e.datos.interrumpidas}"></i>
+      </div>
+      <ul class="dh-estado__ley">
+        <li class="k-entregadas" th:text="${e.datos.entregadas == 1} ? '1 entregada' : ${e.datos.entregadas + ' entregadas'}">2 entregadas</li>
+        <li class="k-camino" th:text="${e.datos.enCamino + ' en camino'}">1 en camino</li>
+        <li class="k-proceso" th:text="${e.datos.enProceso + ' en proceso'}">2 en proceso</li>
+        <li class="k-interrumpidas" th:text="${e.datos.interrumpidas + ' sin entregar'}">1 sin entregar</li>
+      </ul>
+    </section>
+  </div>
+
+  <!-- D · Notificaciones -->
+  <section class="dh-notas" aria-labelledby="t-notas">
+    <div class="pc-tit">
+      <h2 id="t-notas">Lo último que pasó</h2>
+      <a class="c-link" th:href="@{/donante/notificaciones}">Ver todas</a>
+    </div>
+    <ul th:if="${p.notificaciones.ok()}">
+      <li th:each="n : ${p.notificaciones.datos}">
+        <span class="dh-notas__grano" aria-hidden="true"></span>
+        <p th:text="${n.mensaje}">Tu donación salió del depósito.</p>
+        <time th:datetime="${#temporals.formatISO(n.fecha)}" th:text="${n.cuando}">hace 2 h</time>
+      </li>
+    </ul>
+    <p class="dh-vacio" th:if="${p.notificaciones.vacia()}">No tenés notificaciones. Te avisamos acá cada vez que tu donación avance.</p>
+    <th:block th:if="${p.notificaciones.conError()}"><div th:replace="~{fragments/estados-h :: error(${p.notificaciones.error}, '/donante')}"></div></th:block>
+  </section>
+  </th:block>
+</th:block>
+</body>
+</html>

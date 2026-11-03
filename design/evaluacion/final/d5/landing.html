@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DonaTrack · Lima translúcida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#e6e9e2; --ink:#14181a; --ink2:#3d4743; --lime:#d8f24a; --lime2:#aacf1f; --lime-ink:#1a2503; --moss:#3f5a0c; --rose:#f6c9c0; --rose-ink:#5a1608;
+  --pink:#f7c6dc; --lav:#cfc5f6; --mint:#bdeedb; --sky:#bddcf6;
+  --g:rgba(255,255,255,.52); --g2:rgba(255,255,255,.72); --solid:#f6f7f2; --line:rgba(20,24,26,.16);
+  --blur:blur(22px) saturate(1.45);
+  --font:"Figtree",ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){:root{--g:var(--solid);--g2:var(--solid)}}
+.solid{--g:var(--solid);--g2:#fff;--blur:none}
+@media (prefers-reduced-transparency:reduce){:root{--g:var(--solid);--g2:#fff;--blur:none}}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font);font-weight:300;color:var(--ink);background:var(--bg);line-height:1.55;min-height:100vh;overflow-x:hidden;position:relative}
+.aur{position:absolute;inset:0;overflow:hidden;z-index:-1;pointer-events:none}
+.aur i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.85}
+.solid .aur i{opacity:.35}
+.glass{position:relative;background:var(--g);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid rgba(255,255,255,.85);border-radius:28px;box-shadow:0 22px 44px -30px rgba(20,24,26,.45),inset 0 1px 0 rgba(255,255,255,.95)}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(135deg,rgba(255,255,255,.55),rgba(255,255,255,0) 40%);pointer-events:none}
+.glass>*{position:relative}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:10px}
+a{color:inherit}
+.idx{position:fixed;left:22px;top:50%;transform:translateY(-50%);z-index:10;width:206px;padding:18px 14px;display:flex;flex-direction:column;gap:3px;border-radius:26px}
+.idx .lg{font-weight:600;font-size:15px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.idx .lg i{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,#f3ffa6,var(--lime2));display:grid;place-items:center;font-style:normal;font-weight:600;font-size:14px}
+.idx a{display:flex;gap:10px;align-items:baseline;text-decoration:none;font-size:13.5px;padding:6px 10px;border-radius:12px;color:var(--ink2);font-weight:400}
+.idx a small{font-size:11px;opacity:.75;font-variant-numeric:tabular-nums}
+.idx a:hover{background:rgba(255,255,255,.6)}
+.idx a[aria-current=true]{background:var(--lime);color:var(--lime-ink);font-weight:600}
+.tog{font:400 12px var(--font);background:rgba(255,255,255,.4);border:1px dashed rgba(20,24,26,.4);border-radius:99px;padding:6px 11px;color:var(--ink);cursor:pointer;margin-top:10px}
+.tog[aria-pressed=true]{background:var(--ink);color:#fff;border-style:solid}
+main{margin-left:250px;padding:0 clamp(18px,4vw,60px) 40px}
+section{padding:clamp(56px,8vw,116px) 0 24px;max-width:1100px}
+.eyebrow{font-size:14px;color:var(--ink2);display:flex;gap:8px;align-items:center;font-weight:400}
+.eyebrow::before{content:"↗";font-size:18px}
+h1{font-weight:300;font-size:clamp(44px,7.4vw,112px);line-height:.98;letter-spacing:-.045em;margin:18px 0 24px}
+h1 mark,h2 mark{background:linear-gradient(transparent 58%,var(--lime) 58%,var(--lime) 92%,transparent 92%);color:inherit;font-weight:500}
+h2{font-weight:300;font-size:clamp(32px,4.8vw,68px);line-height:1;letter-spacing:-.042em;margin:10px 0 16px}
+h3{font-weight:500;font-size:17px}
+.lead{font-size:clamp(16px,1.5vw,19px);color:var(--ink2);max-width:54ch;font-weight:400}
+.mini{font-size:13px;color:var(--ink2);font-weight:400}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font:600 15px var(--font);padding:13px 26px;border-radius:99px;background:linear-gradient(135deg,#eaff7a,var(--lime) 50%,#c2e233);color:var(--lime-ink);text-decoration:none;box-shadow:0 10px 24px -14px #6f8f10,inset 0 1px 0 #fff}
+.btn.dk{background:var(--ink);color:#fff;box-shadow:none}.btn.sec{background:rgba(255,255,255,.75);border:1px solid var(--line);color:var(--ink);box-shadow:none;font-weight:500}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.herogrid{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
+.crystal{width:100%;max-width:440px;margin:0 auto;display:block;filter:drop-shadow(0 34px 30px rgba(70,90,20,.28))}
+.facts{display:flex;gap:10px 26px;flex-wrap:wrap;margin-top:36px;font-size:13.5px;color:var(--ink2);border-top:1px solid var(--line);padding-top:14px;font-weight:400}
+.facts span::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--lime2);margin-right:8px}
+/* problema */
+.prob{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:26px}
+.prob>div{padding:26px 28px}
+.prob .q{font-size:clamp(22px,2.4vw,32px);letter-spacing:-.03em;line-height:1.15;margin-top:8px}
+.prob .tg{font:600 12px var(--font);text-transform:uppercase;letter-spacing:.06em;color:var(--moss)}
+.prob .b{background:linear-gradient(135deg,rgba(235,255,150,.8),rgba(255,255,255,.55))}
+/* actores */
+.pills{display:grid;gap:12px;margin-top:26px}
+.pill{display:flex;align-items:center;gap:18px;padding:12px 14px 12px 12px;border-radius:99px}
+.pill .av{width:60px;height:60px;border-radius:50%;background:radial-gradient(circle at 30% 28%,#fff,var(--c) 70%);flex:none;box-shadow:inset 0 -6px 12px rgba(255,255,255,.5),0 8px 18px -10px var(--c)}
+.pill b{font-weight:500;display:block;font-size:18px}.pill span{font-size:14px;color:var(--ink2);font-weight:400}
+.pill .bt{margin-left:auto;background:var(--ink);color:#fff;border-radius:99px;padding:9px 20px;font-size:13.5px;font-weight:500;white-space:nowrap;text-decoration:none}
+/* rueda */
+.dialwrap{display:grid;grid-template-columns:1fr 1fr;gap:34px;align-items:center;margin-top:20px}
+.dial{position:relative;width:100%;max-width:500px;margin:0 auto;aspect-ratio:1;border-radius:50%;padding:2%}
+.dial svg{width:100%;height:100%;display:block}
+.dc{position:absolute;inset:25%;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px}
+.dc .n{font-size:clamp(60px,9vw,104px);font-weight:200;letter-spacing:-.05em;line-height:1}
+.dc .s{font-weight:500;font-size:clamp(14px,1.7vw,20px)}
+.dc .k{font-size:12px;color:var(--ink2);font-weight:400}
+.tk{stroke:rgba(20,24,26,.3);stroke-width:2.2;stroke-linecap:round;transition:stroke .3s,stroke-width .3s}
+.tk.dv{stroke:rgba(150,70,50,.5)}
+.tk.on{stroke:var(--lime2);stroke-width:3.4}
+.tk.cur{stroke:var(--ink);stroke-width:4.2}
+.nl{font:600 7px var(--font);fill:var(--ink2);text-anchor:middle}
+.nl.cur{fill:var(--ink)}
+#mk{transition:transform .5s cubic-bezier(.4,.1,.2,1)}
+.steps{display:grid;gap:7px}
+.step{display:flex;gap:12px;align-items:center;text-align:left;width:100%;border:1px solid var(--line);background:rgba(255,255,255,.6);padding:10px 16px;border-radius:18px;font:400 15px var(--font);color:var(--ink);cursor:pointer}
+.step small{margin-left:auto;font-size:12px;color:var(--ink2)}
+.step em{font-style:normal;font-variant-numeric:tabular-nums;font-size:12px;color:var(--ink2);width:16px}
+.step i{width:10px;height:10px;border-radius:50%;background:rgba(20,24,26,.28);flex:none}
+.step.dv i{background:#c98374}
+.step[aria-pressed=true]{background:var(--lime);border-color:var(--lime2);font-weight:600}.step[aria-pressed=true] i{background:var(--ink)}.step[aria-pressed=true] small,.step[aria-pressed=true] em{color:var(--lime-ink)}
+.dinfo{margin-top:14px;padding:18px 20px;font-size:15px;font-weight:400}
+.log{margin-top:14px;padding:16px 20px}
+.log ol{list-style:none;padding:0;display:grid;gap:7px;margin-top:8px;font-size:13.5px;font-weight:400}
+.log li{display:flex;gap:10px;align-items:center}
+.log li i{width:8px;height:8px;border-radius:50%;background:var(--lime2);flex:none}
+.log li span{color:var(--ink2);margin-left:auto;font-size:12.5px;text-align:right}
+.log li.dv i{background:#c98374}
+/* números */
+.nums{display:grid;grid-template-columns:repeat(2,1fr);gap:0 30px;margin-top:20px}
+.nm{padding:26px 6px 22px;border-top:1px solid var(--line)}
+.nm .big{font-size:clamp(60px,9.5vw,136px);font-weight:200;letter-spacing:-.06em;line-height:.95}
+.nm .big sup{font-size:.28em;vertical-align:top;color:var(--moss);letter-spacing:0;font-weight:500}
+.nm p{font-size:15px;color:var(--ink2);font-weight:400}
+.gauge{height:12px;border-radius:99px;background:rgba(20,24,26,.1);margin-top:12px;overflow:hidden;display:flex;max-width:360px}
+.gauge i{display:block;height:100%}
+/* galería */
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+.fc{font:400 14px var(--font);padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:rgba(255,255,255,.65);cursor:pointer;color:var(--ink)}
+.fc[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.gal{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gal article{padding:20px 22px;overflow:hidden;min-height:132px}
+.gal article::after{content:"";position:absolute;right:-36px;top:-36px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,var(--c,var(--lime)),transparent 70%);opacity:.9;pointer-events:none}
+.gal article[hidden]{display:none}.gal b{font-weight:500;display:block;font-size:18px}
+.tag{display:inline-block;font:600 12px var(--font);padding:4px 11px;border-radius:99px;background:var(--lime);color:var(--lime-ink);margin-top:12px}
+.tag.o{background:rgba(255,255,255,.6);border:1px solid var(--ink);color:var(--ink)}
+.soon{padding:34px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;margin-top:20px}
+.final{padding:38px;margin-top:20px;background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(228,250,140,.55))}
+.priv{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
+.priv div{padding:20px 22px;font-size:14.5px;color:var(--ink2);font-weight:400}.priv b{display:block;color:var(--ink);font-weight:500;font-size:17px;margin-bottom:4px}
+footer{padding:34px 0 10px;font-size:13px;color:var(--ink2);font-weight:400}
+@media (max-width:900px){
+  .idx{position:sticky;top:8px;left:auto;transform:none;flex-direction:row;overflow-x:auto;margin:8px 10px 0;padding:8px;border-radius:99px;gap:2px;align-items:center;width:auto;max-width:calc(100vw - 20px)}
+  .idx .lg{margin:0 6px 0 4px}.idx a{white-space:nowrap;padding:7px 12px}.idx a small{display:none}.idx .tog{margin:0 0 0 4px;white-space:nowrap}
+  main{margin-left:0}
+  .herogrid,.dialwrap,.soon,.prob,.priv{grid-template-columns:1fr}.gal{grid-template-columns:1fr 1fr}
+  .pill .bt{display:none}.nums{grid-template-columns:1fr}
+}
+@media (max-width:520px){.crystal{max-width:260px}.gal{grid-template-columns:1fr}.pill{border-radius:36px}.pill .av{width:46px;height:46px}.final,.soon{padding:24px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="aur" aria-hidden="true">
+  <i style="left:-8%;top:-2%;width:560px;height:560px;background:var(--pink)"></i>
+  <i style="right:-10%;top:4%;width:620px;height:620px;background:var(--lime);opacity:.55"></i>
+  <i style="left:30%;top:16%;width:520px;height:520px;background:var(--lav)"></i>
+  <i style="right:-6%;top:34%;width:560px;height:560px;background:var(--mint)"></i>
+  <i style="left:-10%;top:48%;width:600px;height:600px;background:var(--sky)"></i>
+  <i style="right:10%;top:62%;width:560px;height:560px;background:var(--pink);opacity:.7"></i>
+  <i style="left:10%;top:78%;width:620px;height:620px;background:var(--lime);opacity:.5"></i>
+  <i style="right:-8%;top:90%;width:520px;height:520px;background:var(--lav)"></i>
+</div>
+<nav class="idx glass" aria-label="Índice">
+  <span class="lg"><i>d</i>DonaTrack</span>
+  <a href="#inicio" data-s="inicio"><small>00</small>Inicio</a>
+  <a href="#problema" data-s="problema"><small>01</small>El problema</a>
+  <a href="#actores" data-s="actores"><small>02</small>Tres actores</a>
+  <a href="#rueda" data-s="rueda"><small>03</small>La rueda</a>
+  <a href="#cifras" data-s="cifras"><small>04</small>Cifras</a>
+  <a href="#galeria" data-s="galeria"><small>05</small>Galería y mapa</a>
+  <a href="#privacidad" data-s="privacidad"><small>06</small>Privacidad</a>
+  <a href="#entrar" data-s="entrar"><small>07</small>Entrar</a>
+  <button class="tog" id="solid" aria-pressed="false">Sin transparencia</button>
+</nav>
+
+<main>
+  <section id="inicio" style="padding-top:clamp(40px,6vw,80px)">
+    <div class="herogrid">
+      <div>
+        <p class="eyebrow">Trazabilidad de donaciones solidarias</p>
+        <h1>Dar es fácil. <mark>Saber adónde llegó</mark>, también.</h1>
+        <p class="lead">DonaTrack muestra el camino completo de cada donación, desde que entra al depósito hasta que la entidad confirma que la recibió.</p>
+        <div class="row"><a class="btn" href="#rueda">Ver la rueda de estados</a><a class="btn sec" href="#entrar">Ingresar</a></div>
+      </div>
+      <svg class="crystal" viewBox="0 0 400 430" role="img" aria-label="Bloque de cristal translúcido con degradé lima y rosado">
+        <defs>
+          <linearGradient id="a" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7c6dc"/><stop offset=".5" stop-color="#e9ffa0"/><stop offset="1" stop-color="#8fc21c"/></linearGradient>
+          <linearGradient id="b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#cfc5f6" stop-opacity=".55"/></linearGradient>
+          <linearGradient id="c" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bdeedb" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity=".45"/></linearGradient>
+          <linearGradient id="e" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#e6ff7a" stop-opacity=".75"/><stop offset="1" stop-color="#f7c6dc" stop-opacity=".55"/></linearGradient>
+          <radialGradient id="d"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#d8f24a" stop-opacity=".45"/></radialGradient>
+        </defs>
+        <polygon points="200,60 340,130 340,290 200,360 60,290 60,130" fill="url(#a)" opacity=".4"/>
+        <polygon points="200,60 340,130 200,200 60,130" fill="url(#b)" stroke="#fff" stroke-opacity=".95"/>
+        <polygon points="60,130 200,200 200,360 60,290" fill="url(#c)" stroke="#fff" stroke-opacity=".7"/>
+        <polygon points="340,130 200,200 200,360 340,290" fill="url(#e)" stroke="#fff" stroke-opacity=".7"/>
+        <path d="M80 118L200 178 320 118" stroke="#fff" stroke-opacity=".8" fill="none" stroke-width="2"/>
+        <g stroke="#14181a" stroke-opacity=".3" fill="none" stroke-width="1.4"><path d="M130 165L200 200 270 165"/><path d="M200 200V290"/></g>
+        <circle cx="200" cy="215" r="34" fill="url(#d)" stroke="#fff" stroke-width="2"/>
+        <ellipse cx="190" cy="204" rx="11" ry="6" fill="#fff" opacity=".85"/>
+        <rect x="258" y="238" width="68" height="24" rx="12" fill="#fff" fill-opacity=".88"/><text x="292" y="254" text-anchor="middle" font-family="Figtree,sans-serif" font-size="11.5" font-weight="600" fill="#1a2503">DT-0412</text>
+        <rect x="72" y="300" width="84" height="24" rx="12" fill="#fff" fill-opacity=".8"/><text x="114" y="316" text-anchor="middle" font-family="Figtree,sans-serif" font-size="11" font-weight="600" fill="#1a2503">En depósito</text>
+        <ellipse cx="200" cy="398" rx="110" ry="14" fill="#6f8f10" opacity=".14"/>
+      </svg>
+    </div>
+    <div class="facts"><span>Registro con fecha y responsable</span><span>Asignación revisada por la administración</span><span>Entrega confirmada por la entidad</span></div>
+  </section>
+
+  <section id="problema">
+    <p class="eyebrow">01 · El problema</p>
+    <h2>Donar es un acto de fe. <mark>Hasta ahora.</mark></h2>
+    <div class="prob">
+      <div class="glass"><span class="tg">Sin trazabilidad</span><p class="q">Se entrega en el depósito y no se vuelve a saber nada: si se asignó, si salió, si llegó.</p><p class="mini" style="margin-top:12px">La donante no ve el camino y la entidad no sabe qué viene en camino.</p></div>
+      <div class="glass b"><span class="tg">Con DonaTrack</span><p class="q">Cada cambio de estado queda registrado con fecha y responsable, y se muestra completo.</p><p class="mini" style="margin-top:12px">De la entrada al depósito a la confirmación de recepción de la entidad.</p></div>
+    </div>
+  </section>
+
+  <section id="actores">
+    <p class="eyebrow">02 · Tres actores</p>
+    <h2>Una donación, <mark>tres manos</mark></h2>
+    <p class="lead">Cada actor ve lo que le toca. La trazabilidad une las tres miradas.</p>
+    <div class="pills">
+      <div class="pill glass" style="--c:#f2a9c8"><span class="av"></span><div><b>Donantes</b><span>Personas humanas o jurídicas. Siguen sus donaciones con el historial de estados, conocen las necesidades de las entidades y suman misiones e insignias.</span></div><a class="bt" href="#entrar">Quiero donar</a></div>
+      <div class="pill glass" style="--c:#a9cff2"><span class="av"></span><div><b>Entidades beneficiarias</b><span>Publican necesidades con su cobertura (ej. 18 de 30 frazadas) y confirman la recepción de lo asignado.</span></div><a class="bt" href="#entrar">Soy una entidad</a></div>
+      <div class="pill glass" style="--c:#c9e56a"><span class="av"></span><div><b>Administración del depósito</b><span>Registra lo que llega, revisa y aprueba o descarta las asignaciones, y organiza los camiones y sus rutas.</span></div><a class="bt" href="#entrar">Administro</a></div>
+    </div>
+  </section>
+
+  <section id="rueda">
+    <p class="eyebrow">03 · Cómo funciona: la rueda de estados</p>
+    <h2>Siete estados, <mark>una vuelta</mark></h2>
+    <p class="lead">Girá la rueda (clic, flechas del teclado o reproducir) para ver qué significa cada estado. Cinco forman el camino; dos son desvíos.</p>
+    <div class="dialwrap">
+      <div class="dial glass">
+        <svg viewBox="-128 -128 256 256" id="dsvg" aria-hidden="true"></svg>
+        <div class="dc" aria-live="polite"><span class="n" id="dn">1</span><span class="s" id="ds"></span><span class="k" id="dk"></span></div>
+      </div>
+      <div>
+        <div class="steps" id="steps" role="group" aria-label="Estados de una donación"></div>
+        <p class="glass dinfo" id="dinfo"></p>
+        <div class="glass log"><h3>Registro de ejemplo · DT-0412</h3><ol id="log"></ol><p class="mini" style="margin-top:8px">Ejemplo ilustrativo del historial: cada línea guarda fecha y responsable.</p></div>
+        <div class="row" style="margin-top:14px"><button class="btn dk" id="play">Reproducir recorrido</button></div>
+      </div>
+    </div>
+    <p class="mini" style="margin-top:18px">Algunas transiciones dependen de eventos asíncronos: mientras el sistema confirma, la plataforma muestra “Actualizando…” y no un éxito inmediato.</p>
+  </section>
+
+  <section id="cifras">
+    <p class="eyebrow">04 · Transparencia en números</p>
+    <h2>Lo que llegó, <mark>sin maquillaje</mark></h2>
+    <p class="mini">Datos de demostración</p>
+    <div class="nums">
+      <div class="nm"><div class="big">128</div><p>donaciones entregadas</p></div>
+      <div class="nm"><div class="big">34</div><p>entidades ayudadas</p></div>
+      <div class="nm"><div class="big">2.448<sup>kg</sup></div><p>de alimentos distribuidos</p></div>
+      <div class="nm"><div class="big">86</div><p>donantes activos</p><div class="gauge" role="img" aria-label="52 Colaboradores, 26 Sostenedores, 8 Transformadores"><i style="width:60.5%;background:#14181a"></i><i style="width:30.2%;background:#7fae14"></i><i style="width:9.3%;background:#f3a9c6"></i></div><p class="mini" style="margin-top:8px">52 Colaboradores · 26 Sostenedores · 8 Transformadores</p></div>
+    </div>
+  </section>
+
+  <section id="galeria">
+    <p class="eyebrow">05 · Galería de lo entregado</p>
+    <h2>Cada cosa, <mark>con su destino</mark></h2>
+    <p class="mini">Entregas de demostración. Filtrá por categoría.</p>
+    <div class="chips" id="chips" role="group" aria-label="Filtrar por categoría"></div>
+    <div class="gal" id="gal"></div>
+    <p class="mini" id="empty" hidden style="margin-top:10px">Todavía no hay entregas de demostración en esta categoría.</p>
+    <div class="soon glass"><div><span class="tag o" style="margin:0 0 10px">Próximamente</span><h2 style="font-size:clamp(28px,3.2vw,44px);margin:6px 0">Mapa de impacto</h2><p class="mini">Todavía no está disponible. El esquema es ilustrativo y no muestra ubicaciones reales.</p></div>
+      <svg viewBox="0 0 300 130" role="img" aria-label="Esquema ilustrativo del mapa de impacto"><g fill="none" stroke="#14181a" stroke-opacity=".28"><circle cx="150" cy="62" r="20"/><circle cx="150" cy="62" r="40"/><circle cx="150" cy="62" r="58"/></g><g fill="#d8f24a" stroke="#14181a"><circle cx="150" cy="62" r="6"/><circle cx="96" cy="40" r="4"/><circle cx="205" cy="84" r="4"/><circle cx="212" cy="32" r="4"/></g><text x="150" y="126" text-anchor="middle" font-size="10" fill="#3d4743" font-family="sans-serif">Esquema ilustrativo</text></svg></div>
+  </section>
+
+  <section id="privacidad">
+    <p class="eyebrow">06 · Privacidad</p>
+    <h2>Se muestra el camino, <mark>no a las personas</mark></h2>
+    <div class="priv">
+      <div class="glass"><b>Cifras agregadas</b>Lo público son totales de demostración: entregas, entidades, kilos y donantes activos.</div>
+      <div class="glass"><b>Cada rol, lo suyo</b>Donantes, entidades y administración ven la información que corresponde a su rol.</div>
+      <div class="glass"><b>Política completa</b>El texto definitivo vive en la página de privacidad. <a href="#">Leer privacidad</a></div>
+    </div>
+  </section>
+
+  <section id="entrar">
+    <p class="eyebrow">07 · Entrar</p>
+    <div class="glass final">
+      <h2>Probá la plataforma <mark>por rol</mark></h2>
+      <p class="lead">Sesión demo para donante, entidad o administración. O registrate como persona humana, jurídica o entidad.</p>
+      <div class="row"><a class="btn" href="#">Ingresar como donante</a><a class="btn dk" href="#">Ingresar como administración</a><a class="btn sec" href="#">Registrarme</a></div>
+    </div>
+    <footer>DonaTrack · Proyecto académico UTN-FRBA · Datos de demostración · <a href="#">Privacidad</a></footer>
+  </section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+/* sin transparencia */
+const root=document.documentElement;
+function setSolid(on){root.classList.toggle('solid',on);$('solid').setAttribute('aria-pressed',on);try{localStorage.setItem('dt-solid',on?'1':'0')}catch(e){}}
+try{if(localStorage.getItem('dt-solid')==='1')setSolid(true)}catch(e){}
+if(location.search.includes('solid=1'))setSolid(true);
+$('solid').onclick=()=>setSolid(!root.classList.contains('solid'));
+/* rueda */
+const S=[
+["En depósito","Camino","Entró al depósito y la administración la registró: qué es, cantidad, vencimiento y categoría.","Administración del depósito","27 oct"],
+["Asignada","Camino","El sistema la asignó a una necesidad concreta de una entidad; la administración revisa y aprueba o descarta la propuesta.","Sistema · aprueba la administración","28 oct"],
+["Lista para entregar","Camino","Está lista y se carga en un camión.","Administración del depósito","29 oct"],
+["En traslado","Camino","El camión sale por una ruta con paradas.","Administración del depósito","31 oct"],
+["Entregada","Camino","La entidad confirmó la recepción y la donación suma al impacto.","Entidad beneficiaria","Al confirmar"],
+["Entrega fallida","Desvío","Nadie la recibió: vuelve al depósito y el hecho queda registrado.","Administración del depósito","Si ocurre"],
+["Vencida","Desvío","Pasó su vencimiento y la administración la marcó como vencida.","Administración del depósito","Si ocurre"]];
+const N=84,PER=12;let ticks=[],cur=0,timer=null;
+const R=((a,r)=>[(r*Math.cos(a)).toFixed(2),(r*Math.sin(a)).toFixed(2)]);
+let h='';
+for(let i=0;i<N;i++){const a=(i+.5)/N*2*Math.PI-Math.PI/2,p=R(a,86),q=R(a,102);h+=`<line class="tk ${Math.floor(i/PER)>4?'dv':''}" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/>`}
+for(let s=0;s<7;s++){const a=(s*PER+PER/2)/N*2*Math.PI-Math.PI/2,p=R(a,114);h+=`<text class="nl" id="nl${s}" x="${p[0]}" y="${(+p[1]+2.5).toFixed(2)}">${s+1}</text>`}
+h+='<g id="mk"><circle cx="0" cy="-114" r="0" /></g>';
+$('dsvg').innerHTML=h;ticks=[...$('dsvg').querySelectorAll('.tk')];
+const sb=$('steps');
+S.forEach((s,i)=>{const b=document.createElement('button');b.className='step'+(i>4?' dv':'');b.innerHTML=`<em>${i+1}</em><i></i>${s[0]}<small>${s[1]}</small>`;b.onclick=()=>{stop();set(i)};sb.appendChild(b)});
+function set(i){cur=i;
+ ticks.forEach((t,k)=>{const idx=Math.floor(k/PER);t.classList.toggle('on',idx<i&&idx<5);t.classList.toggle('cur',idx===i)});
+ for(let s=0;s<7;s++)$('nl'+s).classList.toggle('cur',s===i);
+ [...sb.children].forEach((b,k)=>b.setAttribute('aria-pressed',k===i));
+ $('dn').textContent=i+1;$('ds').textContent=S[i][0];$('dk').textContent=S[i][1];$('dinfo').textContent=S[i][2];
+ const L=i>4?[0,1,2,3,i]:Array.from({length:i+1},(_,k)=>k);
+ $('log').innerHTML=L.map(k=>`<li class="${k>4?'dv':''}"><i></i>${S[k][0]}<span>${S[k][3]} · ${S[k][4]}</span></li>`).join('');}
+function stop(){clearInterval(timer);timer=null;$('play').textContent='Reproducir recorrido'}
+$('play').onclick=()=>{if(timer){stop();return}set(0);if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;$('play').textContent='Detener';timer=setInterval(()=>{if(cur>=4){stop();return}set(cur+1)},1400)};
+document.addEventListener('keydown',e=>{if(!e.target.closest||!e.target.closest('#rueda'))return;if(e.key==='ArrowRight'||e.key==='ArrowDown'){stop();set((cur+1)%7);e.preventDefault()}if(e.key==='ArrowLeft'||e.key==='ArrowUp'){stop();set((cur+6)%7);e.preventDefault()}});
+set(0);
+/* galería */
+const C=["Todas","Alimentos","Bebidas","Vestimenta","Mobiliario","Útiles escolares","Higiene"];
+const G=[["Arroz · 50 kg","Alimentos","Comedor Los Girasoles","#cfe88a"],["Frazadas · 30 u","Vestimenta","Comedor Los Girasoles","#f7c6dc"],["Útiles · 120 u","Útiles escolares","Escuela 12","#bddcf6"],["Camperas · 18 u","Vestimenta","Hogar Esperanza","#f7c6dc"],["Fideos · 35 kg","Alimentos","Merendero Norte","#cfe88a"],["Jugos · 40 l","Bebidas","Merendero Norte","#bdeedb"],["Sillas · 12 u","Mobiliario","Escuela 12","#cfc5f6"]];
+$('gal').innerHTML=G.map(g=>`<article class="glass" style="--c:${g[3]}" data-c="${g[1]}"><b>${g[0]}</b><span class="mini">${g[1]} · ${g[2]}</span><br><span class="tag">Entregada</span></article>`).join('');
+C.forEach((c,i)=>{const b=document.createElement('button');b.className='fc';b.textContent=c;b.setAttribute('aria-pressed',i===0);b.onclick=()=>{[...$('chips').children].forEach(x=>x.setAttribute('aria-pressed',x===b));let n=0;[...$('gal').children].forEach(a=>{a.hidden=i>0&&a.dataset.c!==c;if(!a.hidden)n++});$('empty').hidden=n>0};$('chips').appendChild(b)});
+/* índice por scroll */
+const links=[...document.querySelectorAll('.idx a')];
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>{if(l.dataset.s===e.target.id)l.setAttribute('aria-current','true');else l.removeAttribute('aria-current')})}),{rootMargin:'-40% 0px -50% 0px'});
+document.querySelectorAll('main section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

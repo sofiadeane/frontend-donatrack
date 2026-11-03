@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/panel-h :: layout(~{::title}, ~{::contenido})}">
+<head><title>Seguimiento · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido"
+          th:with="orden=${ {'EN_DEPOSITO','ASIGNACION_REALIZADA','LISTA_PARA_ENTREGAR','EN_TRASLADO','ENTREGADA'} }">
+  <header class="pc-cab">
+    <div>
+      <p class="c-kicker">Seguimiento</p>
+      <h1 class="c-display">Dónde está cada una</h1>
+    </div>
+    <span class="c-demo" th:if="${mis.donaciones.demo}">Datos de demostración</span>
+  </header>
+
+  <th:block th:if="${mis.donaciones.conError()}"><div th:replace="~{fragments/estados-h :: error(${mis.donaciones.error}, '/donante/seguimiento')}"></div></th:block>
+  <div class="dh-vacio" th:if="${mis.donaciones.vacia()}"><b>Todavía no registraste donaciones.</b> Cuando lleves una al depósito, vas a poder seguir su recorrido desde acá.</div>
+
+  <th:block th:if="${mis.donaciones.ok()}">
+  <!-- En camino: una tarjeta por donación con el sendero de cinco pasos -->
+  <section class="dh-seg" aria-labelledby="t-camino">
+    <div class="pc-tit"><h2 id="t-camino">En camino</h2><p>Las que todavía no llegaron a destino</p></div>
+    <ul class="dh-seg__lista">
+      <li th:each="d : ${mis.donaciones.datos}" th:if="${d.estado.codigo != 'ENTREGADA'}" class="dh-caja dh-seg__item"
+          th:with="pos=${orden.indexOf(d.estado.codigo)}">
+        <div class="dh-seg__cab">
+          <a class="dh-seg__titulo" th:href="@{/donante/donaciones/{id}(id=${d.id})}"><b th:text="${d.descripcion}">Arroz</b><span th:text="${d.detalle}">Arroz · 50 kg</span></a>
+          <span class="c-tag" th:attr="data-estado=${d.estado.codigo}" th:text="${d.estado.etiqueta}">En depósito</span>
+        </div>
+        <ol class="dh-sendero dh-sendero--mini" style="--n:5" th:if="${pos >= 0}">
+          <li th:each="c, it : ${orden}" class="dh-paso"
+              th:classappend="${it.index < pos} ? 'dh-paso--hecho' : (${it.index == pos} ? 'dh-paso--actual' : 'dh-paso--siguiente')"
+              th:attr="aria-current=${it.index == pos} ? 'step' : null">
+            <svg class="dh-paso__hormiga" th:if="${it.index == pos}" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
+            <span class="dh-paso__grano" aria-hidden="true"></span>
+            <span class="dh-paso__etq" th:text="#{'estado.donacion.' + ${c}}">En depósito</span>
+          </li>
+        </ol>
+        <p class="dh-seg__corte" th:if="${pos < 0}">El recorrido se interrumpió. Abrí el detalle para ver el motivo.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Entregadas: compactas, ya llegaron -->
+  <section class="dh-caja" aria-labelledby="t-llegaron">
+    <div class="pc-tit"><h2 id="t-llegaron">Ya llegaron</h2></div>
+    <ul class="dh-lista">
+      <li th:each="d : ${mis.donaciones.datos}" th:if="${d.estado.codigo == 'ENTREGADA'}">
+        <a class="dh-fila dh-fila--completada" th:href="@{/donante/donaciones/{id}(id=${d.id})}">
+          <span class="dh-fila__grano" aria-hidden="true"></span>
+          <span class="dh-fila__txt"><b th:text="${d.descripcion}">Frazadas</b><span th:text="${d.detalle}">Frazadas · 12 u</span></span>
+          <span class="c-tag" data-estado="ENTREGADA">Entregada</span>
+          <time th:datetime="${#temporals.formatISO(d.fechaRegistro)}" th:text="${#temporals.format(d.fechaRegistro, 'd MMM yyyy')}">1 oct 2026</time>
+          <span class="dh-fila__ir" aria-hidden="true"><span th:replace="~{fragments/iconos :: icono('chevron-der', 18)}"></span></span>
+        </a>
+      </li>
+    </ul>
+  </section>
+  </th:block>
+</th:block>
+</body>
+</html>

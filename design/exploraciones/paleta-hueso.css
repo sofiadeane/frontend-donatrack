@@ -1,0 +1,105 @@
+/*
+ * DonaTrack · variante HUESO (exploración, no aplicada)
+ *
+ * Reparto: 70 % hueso neutro (fondos, tarjetas, texto) · 20 % verdes (superficies de marca, nodos,
+ * bandas) · 10 % naranjas (acción primaria y destellos). Rojo oscuro solo para errores.
+ *
+ * Se cargan DESPUÉS de tokens.css. Los nombres viejos (--teal-*, --green-*, --turquoise-*, --gray-*)
+ * se conservan como alias para no tocar componentes; el mapa completo está en la respuesta de la sesión.
+ * No dejar bajo static/: FuenteUnicaDeColorTest exige que solo tokens.css declare colores.
+ */
+:root {
+  /* ===== Paleta de origen (7 franjas de la imagen) ===== */
+  --p-burdeos: #6b2327;
+  --p-terracota: #9e593c;
+  --p-naranja: #dc9f66;
+  --p-durazno: #fad096;
+  --p-salvia: #b1b28a;
+  --p-verde: #6a967f;
+  --p-verde-gris: #527571;
+
+  /* ===== Derivados (no estaban en la imagen) ===== */
+  --d-verde-profundo: #2c4543;   /* verde-gris oscurecido: texto fuerte y superficies oscuras */
+  --d-verde-oscuro: #34504d;
+  --d-verde-medio: #3f605c;
+  --d-salvia-suave: #e7e8d6;     /* tinte de salvia para fondos de marca */
+  --d-hueso-50: #fbf9f4;         /* tarjetas */
+  --d-hueso-100: #f5f1e8;        /* fondo de página (el 70 %) */
+  --d-hueso-200: #ebe6d8;        /* superficies atenuadas */
+  --d-tinta: #26302e;            /* texto */
+  --d-tinta-suave: #5b6663;      /* texto secundario */
+  --d-burdeos-suave: #f6e7e4;
+
+  /* ===== Primitivos viejos → nuevo significado ===== */
+  --teal-900: var(--d-verde-profundo);
+  --teal-800: var(--d-verde-medio);
+  --teal-750: var(--d-verde-oscuro);
+  --teal-100: var(--d-salvia-suave);
+  --green-500: var(--p-verde);
+  --green-400: var(--p-verde);
+  --green-50: var(--d-salvia-suave);
+  --turquoise-500: var(--p-naranja);
+  --slate-green: var(--p-verde-gris);
+  --ink: var(--d-tinta);
+  --ink-muted: var(--d-tinta-suave);
+  --gray-100: var(--d-hueso-200);
+  --gray-75: var(--d-hueso-50);
+  --gray-50: var(--d-hueso-100);
+  --red-600: var(--p-burdeos);
+  --red-50: var(--d-burdeos-suave);
+
+  /* Transparencias derivadas (mismos canales) */
+  --white-a78: rgb(245 241 232 / 0.78);
+  --ink-a40: rgb(38 48 46 / 0.4);
+  --ink-a62: rgb(38 48 46 / 0.62);
+  --ink-a78: rgb(38 48 46 / 0.78);
+  --slate-a39: rgb(82 117 113 / 0.39);
+  --green-500-a20: rgb(106 150 127 / 0.2);
+  --green-500-a16: rgb(106 150 127 / 0.16);
+  --teal-a06: rgb(44 69 67 / 0.06);
+  --teal-a08: rgb(44 69 67 / 0.08);
+  --teal-a14: rgb(44 69 67 / 0.14);
+  --teal-a15: rgb(44 69 67 / 0.15);
+  --teal-a35: rgb(44 69 67 / 0.35);
+  --teal-a45: rgb(44 69 67 / 0.45);
+  --green-a28: rgb(106 150 127 / 0.28);
+  --green-a30: rgb(106 150 127 / 0.3);
+  --green-a35: rgb(106 150 127 / 0.35);
+  --green-a40: rgb(106 150 127 / 0.4);
+  --green-a55: rgb(106 150 127 / 0.55);
+  --green-a70: rgb(106 150 127 / 0.7);
+  --green-a80: rgb(106 150 127 / 0.8);
+  --turquoise-a35: rgb(220 159 102 / 0.35);
+  --red-600-a16: rgb(107 35 39 / 0.16);
+
+  /* ===== Semánticos que cambian de rol (no solo de color) ===== */
+  /* Superficies: hueso domina */
+  --surface: var(--d-hueso-50);
+  --surface-muted: var(--d-hueso-200);
+  --surface-page: var(--d-hueso-100);
+  --surface-brand-soft: var(--d-salvia-suave);
+  --surface-band: var(--p-salvia);          /* banda de marca: salvia, texto oscuro */
+  --surface-circle: var(--p-naranja);       /* círculos/monedas: naranja */
+  --surface-card-muted: var(--d-hueso-200);
+
+  /* Acción primaria: naranja (el 10 %) con texto verde profundo */
+  --action-primary-bg: var(--p-naranja);
+  --action-primary-text: var(--d-verde-profundo);
+  --text-brand: var(--p-terracota);         /* acento de texto sobre hueso (logo, asterisco) */
+  --focus-ring-on-dark: var(--p-durazno);
+
+  /* Marca */
+  --brand: var(--p-verde);
+  --brand-bright: var(--p-verde);
+  --brand-alt: var(--p-naranja);
+  --brand-soft: var(--d-salvia-suave);
+
+  /* Gradientes */
+  --grad-hero: linear-gradient(144.6deg, var(--d-verde-profundo) 0%, var(--d-verde-medio) 60%, var(--d-verde-profundo) 100%);
+  --grad-sidebar: linear-gradient(170deg, var(--d-verde-profundo) 0%, var(--d-verde-medio) 55%, var(--d-verde-profundo) 100%);
+  --grad-impulso: linear-gradient(120deg, var(--p-naranja) 0%, var(--p-salvia) 100%);
+  --grad-page: radial-gradient(900px 420px at 100% 0%, var(--d-salvia-suave) 0%, transparent 70%), var(--d-hueso-100);
+  --grad-cta: radial-gradient(120% 140% at 50% 50%, var(--p-durazno) 0%, var(--p-naranja) 100%);
+  --grad-fade-card: linear-gradient(180deg, transparent 0%, var(--d-hueso-200) 72%, var(--d-hueso-200) 100%);
+  --grad-fade-band: linear-gradient(90deg, transparent 0%, var(--p-salvia) 100%);
+}

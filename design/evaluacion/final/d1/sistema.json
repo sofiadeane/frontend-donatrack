@@ -1,0 +1,62 @@
+{
+ "concepto": "La Gaceta (d1-c2): DonaTrack como diario de barrio. Portada, titulares, libro de registro y clasificados; el dashboard es una columna de lectura con titulares numerados, libro con filas expandibles y paleta de comandos.",
+ "principios": [
+  "Lo que se dona se anota, se verifica y se publica: todo dato lleva fecha y responsable.",
+  "Se lee antes de operar: primero el titular, después la acción.",
+  "Lo asíncrono no se da por hecho: Actualizando… y estado pendiente hasta que responda el otro actor.",
+  "Papel y tinta: mucho papel cálido, bloques de color con borde grueso y sombra dura solo donde hay que mirar.",
+  "Grotesca pesada para lo que se afirma, serif itálica para lo que se cuenta.",
+  "Teclado primero en la administración (Ctrl/Cmd+K)."
+ ],
+ "tokens": {
+  "color": {"--paper":"#F4ECD8 fondo","--paper2":"#EADFC3 fondo secundario","--paper3":"#FBE6B5 fila abierta / seleccionada","--ink":"#15130F texto, bordes, sombras","--mostaza":"#F2B705 En depósito, acento primario","--celeste":"#7FB2F0 Asignada","--rosa":"#F59BB8 Lista para entregar","--tomato":"#E8452C En traslado, énfasis en titulares grandes","--tomato-d":"#B02A14 énfasis en texto chico","--verde":"#3FA566 Entregada"},
+  "tipografia": {"titulares":"Archivo Black (fallback Arial Black, Impact), interletrado -0.02 a -0.05em","cuerpo":"Archivo 500/700/800 (fallback system-ui)","editorial":"Instrument Serif itálica para bajadas, énfasis de titulares, números de página, relatos (fallback Georgia)","escala":"h1 portada clamp(40px,6.4vw,100px); h2 sección clamp(28-32px,3.6-4.6vw,50-68px); cuerpo 15-16px; etiquetas 11px mayúsculas con tracking .05em"},
+  "espaciado": "Base 4/8 px; columnas de gutter 24-32 px; secciones separadas por 44-46 px; contenedor 1280 px (dashboard) y 1360 px (landing).",
+  "radios": "0 en todo: ángulos rectos como la caja de imprenta.",
+  "bordes/sombras": "Borde 3 px tinta; etiquetas 2 px; sombra dura sin blur 6x6 (bloques), 4x4 (botones), 3x3 (botones chicos); filete doble de 8 px bajo cabeceras; borde punteado para lo no confirmado o sin registro."
+ },
+ "componentes": [
+  {"nombre":"Cabecera de diario (mast)","uso":"Marca gigante DonaTrack con orejas, fecha, sello Datos de demostración y filete doble."},
+  {"nombre":"Pestañas de página (landing) / Índice de pantallas (dashboard)","uso":"Navegación como páginas del diario: 'Pág. N' + nombre; flechas, Home y End en la landing; badge con cantidad de pendientes."},
+  {"nombre":"Titular numerado","uso":"Asunto del día con urgencia, texto en serif itálica, botón de acción y línea de resultado pendiente."},
+  {"nombre":"Libro de registro","uso":"Tabla de renglones; cada fila se abre con su historial y acciones contextuales; filtros por estado como chips con conteo."},
+  {"nombre":"Cinta de circulación","uso":"Barra segmentada 18/11/7/9 clicable que filtra el libro."},
+  {"nombre":"Tren de estados","uso":"Los 7 estados como pestañas numeradas más desvíos (fallida, vencida) con detalle y código del backend."},
+  {"nombre":"Caja / Ear / Firma","uso":"Bloques de color con borde y sombra dura para cifras, avisos y los tres actores."},
+  {"nombre":"Clasificado","uso":"Aviso con borde punteado que al pasar el mouse se llena y se vuelve sólido: CTA de registro."},
+  {"nombre":"Hoja de ruta","uso":"Paradas como cuadrados unidos por línea sólida (hecha) o punteada (por hacer)."},
+  {"nombre":"Columnas de cuadritos","uso":"Ocho semanas: cuadro amarillo recibida, verde entregada, en lugar de gráfico de barras."},
+  {"nombre":"Paleta de comandos","uso":"Ir a, filtrar o actuar con Ctrl/Cmd+K, flechas, Enter, Esc."},
+  {"nombre":"Botón en espera","uso":"Texto Actualizando…, fondo rayado, deshabilitado y aria-busy mientras responde la acción."},
+  {"nombre":"Sello Próximamente / Ilustrativo","uso":"Para lo no disponible o esquemático."}
+ ],
+ "patrones": [
+  "Una página, una idea: cada pestaña es una página del diario.",
+  "Titular → acción → resultado pendiente (nunca éxito inmediato si depende de otro actor).",
+  "Fila expandible con historial fechado y acción contextual.",
+  "Filtro por chips con conteo; filtros también por la cinta de circulación y la paleta.",
+  "Vista resumida de pantallas secundarias (Donantes, Entidades, Rankings) con la misma tipografía y cajas.",
+  "Datos de demostración rotulados en cabecera y pie."
+ ],
+ "tono": "Periodístico, preciso, con ironía suave y frases afirmativas. Voseo rioplatense (Tocá, Revisá, Elegí, Sumate).",
+ "copyEjemplos": {
+  "headline": "Lo que se dona se cuenta. Y se cuenta bien.",
+  "cta": "Leer el registro de una donación",
+  "titular": "4 donaciones llevan más de 5 días sin asignar.",
+  "pendiente": "Pedido enviado. Pendiente: falta la respuesta del chofer.",
+  "asincrono": "Actualizando…",
+  "vacio": "Nada con ese estado entre las que piden atención.",
+  "regla": "Una donación no termina cuando sale el camión. Termina cuando alguien la confirma."
+ },
+ "estados": {
+  "EN_DEPOSITO": "Etiqueta mostaza 'En depósito'; primer tramo de la cinta.",
+  "ASIGNACION_REALIZADA": "Etiqueta celeste 'Asignada'.",
+  "LISTA_PARA_ENTREGAR": "Etiqueta rosa 'Lista para entregar'.",
+  "EN_TRASLADO": "Etiqueta tomate 'En traslado'; en el registro lleva 'Actualizando…' hasta que el evento asíncrono responda.",
+  "ENTREGADA": "Etiqueta verde 'Entregada'; solo se cuenta tras la confirmación de la entidad (antes, renglón 'pendiente' atenuado).",
+  "ENTREGA_FALLIDA": "Etiqueta con rayado diagonal rosado tenue; desvío punteado en el tren.",
+  "VENCIDA": "Etiqueta tinta sobre fondo oscuro con texto claro; cierra las acciones de la fila."
+ },
+ "accesibilidad": "Texto de estado siempre presente (nunca solo color); foco visible de 3 px con halo mostaza; enlace 'Saltar al contenido'; pestañas con role=tab y flechas; paleta con role=dialog, listbox y aria-selected; aria-busy y regiones aria-live para Actualizando…; respeta prefers-reduced-motion (se detienen cinta y transiciones); contraste de tinta sobre papel y sobre colores de bloque por encima de 4,5:1; tomate oscuro para texto chico. Pendiente de medir con herramienta formal.",
+ "paraExtender": "Donante: 'Mis donaciones' como libro personal con historial de estados, misiones e insignias como sección de logros del diario, notificaciones como crónica. Entidad: necesidades como avisos clasificados con barra de cobertura y 'Confirmar recepción' como titular del día. Formularios (registro humana/jurídica/entidad, registrar donación): usar el patrón de form.reg del dashboard con estados de error y ayuda en serif. Falta resolver: tablas largas con paginación, edición de fila, estados de carga y error en la landing, versión impresa, pantallas Donantes/Entidades/Rankings completas y un sistema de ayuda de la paleta."
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- Layout del panel de la variante B: barra superior fina, riel de íconos y navegación inferior en celular. -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
+<head th:replace="~{fragments/cabeza-b :: cabeza(${titulo}, 'b-panel')}"></head>
+<body class="b b-app">
+<a class="skip-link" href="#contenido">Saltar al contenido</a>
+
+<header class="pb-barra">
+  <a class="b-marca" th:href="@{${sesion.rol.inicio}}" aria-label="DonaTrack, ir al inicio">
+    <span class="b-marca__sello"><img th:src="@{/img/logo.svg}" alt=""></span>
+    <span class="pb-barra__nombre">Dona<em>Track</em></span>
+  </a>
+  <form class="pb-buscar" role="search" th:action="@{${sesion.rol.inicio} + '/buscar'}" method="get">
+    <label class="sr-only" for="pb-q">Buscar</label>
+    <span th:replace="~{fragments/iconos :: icono('buscar', 18)}"></span>
+    <input id="pb-q" name="q" type="search" placeholder="Buscar código, bien o entidad…" autocomplete="off">
+  </form>
+  <div class="pb-barra__fin">
+    <a class="pb-icono pb-icono--buscar" th:href="@{${sesion.rol.inicio} + '/buscar'}" aria-label="Buscar">
+      <span th:replace="~{fragments/iconos :: icono('buscar', 20)}"></span>
+    </a>
+    <a class="pb-icono" th:href="@{${sesion.rol.inicio} + '/notificaciones'}" aria-label="Notificaciones">
+      <span th:replace="~{fragments/iconos :: icono('notificaciones', 20)}"></span>
+    </a>
+    <details class="pb-cuenta">
+      <summary th:aria-label="'Cuenta de ' + ${sesion.nombre}" th:text="${sesion.iniciales}">AD</summary>
+      <div class="pb-cuenta__menu">
+        <p><b th:text="${sesion.nombre}">Nombre</b><span th:text="${sesion.rol.etiqueta} + ' · sesión de demostración'">Rol</span></p>
+        <form th:unless="${exportEstatico}" th:action="@{/salir}" method="post">
+          <button class="b-btn b-btn--sm" type="submit">Salir</button>
+        </form>
+        <a th:if="${exportEstatico}" class="b-btn b-btn--sm" th:href="@{/ingresar}">Cambiar de perfil</a>
+      </div>
+    </details>
+  </div>
+</header>
+
+<div class="pb-shell">
+  <nav class="pb-riel" aria-label="Secciones">
+    <ul>
+      <li th:each="item : ${nav}">
+        <a th:href="@{${item.href}}" th:attr="aria-current=${item.activo} ? 'page' : null">
+          <span th:replace="~{fragments/iconos :: icono(${item.icono}, 22)}"></span>
+          <span th:text="${item.etiquetaMovil}">Sección</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <main id="contenido" class="pb-main" tabindex="-1" th:insert="${contenido}"></main>
+</div>
+
+<nav class="pb-inferior" aria-label="Navegación principal">
+  <a th:each="item : ${navMovil}" th:href="@{${item.href}}" th:attr="aria-current=${item.activo} ? 'page' : null">
+    <span th:replace="~{fragments/iconos :: icono(${item.icono}, 22)}"></span>
+    <span th:text="${item.etiquetaMovil}">Sección</span>
+  </a>
+</nav>
+</body>
+</html>

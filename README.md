@@ -58,6 +58,24 @@ python3 scripts/exportar_estatico.py
 
 El resultado queda en `dist/` (servilo bajo `/frontend-donatrack/`).
 
+## Variantes visuales (exploración)
+
+Seis direcciones nuevas, solo para la landing y el panel de administración. El resto de las pantallas sigue con la versión anterior.
+
+| Ruta | Variante |
+|---|---|
+| `/` y `/admin` | **v6 · "Cartografía"** (G): pergamino, sepia y latón, brújula, numeración romana, bitácora |
+| `/f` y `/admin/f` | **v5 · "Cristal"** (F): vidrio esmerilado, degradés pastel, acento lima |
+| `/e` y `/admin/e` | **v4 · "Calma"** (E): minimalista y aireada, salvia y crema, títulos serif, líneas finas |
+| `/d` y `/admin/d` | **v3 · "Trazo"** (D): dibujo lineal en tinta, relleno naranja y amarillo, mascota propia |
+| `/c` y `/admin/c` | **v2 · "Suave"** (C): plana, redondeada, pastel sobre crema |
+| `/b` y `/admin/b` | **v1 · "Ruta"** (B): papel y tinta, bordes gruesos, neobrutalista |
+| `/v1` | Landing original |
+
+Para el panel, ingresar como "Administración Depósito"; los datos salen de `fixtures/admin/panel.json`.
+
+Archivos: C es la base estructural (`c-base.css`, `c-landing.css`, `c-panel.css`, plantillas `*-c.html`). D, E, F y G reutilizan esa estructura y la remapean con `d-theme.css`, `e-theme.css`, `f-theme.css` y `g-theme.css` (tokens `--d-*` a `--g-*`); sus plantillas son `*-d.html` a `*-g.html`. B tiene `b-*.css` y `*-b.html`. Todas comparten `static/js/b.js`; los tokens están al final de `tokens.css`.
+
 ## Documentación
 
 - [Progreso y decisiones](docs/PROGRESO.md)

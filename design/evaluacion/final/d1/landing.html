@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DonaTrack · La Gaceta</title>
+<meta name="description" content="DonaTrack, el diario de lo que se dona, se asigna y llega a destino. Registro público de donaciones con fecha y responsable.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Archivo:wght@500;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#F4ECD8;--paper2:#EADFC3;--paper3:#FBE6B5;--ink:#15130F;--tomato:#E8452C;--tomato-d:#B02A14;--mostaza:#F2B705;--celeste:#7FB2F0;--rosa:#F59BB8;--verde:#3FA566;--b:3px;--sh:6px 6px 0 var(--ink);--sh-s:4px 4px 0 var(--ink);--f-head:"Archivo Black","Arial Black",Impact,sans-serif;--f-body:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,sans-serif;--f-serif:"Instrument Serif",Georgia,"Times New Roman",serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:500 16px/1.5 var(--f-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--f-head);font-weight:400;line-height:1;letter-spacing:-.02em}
+em,.it{font-family:var(--f-serif);font-style:italic;font-weight:400;letter-spacing:0}
+a{color:inherit}button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 7px var(--mostaza)}
+.skip{position:absolute;left:-9999px;top:0;background:var(--ink);color:var(--paper);padding:10px 14px;z-index:50;font-weight:800}.skip:focus{left:8px;top:8px}
+.btn{font:800 15px/1 var(--f-body);border:var(--b) solid var(--ink);background:var(--mostaza);padding:.85em 1.15em;box-shadow:var(--sh-s);cursor:pointer;text-decoration:none;display:inline-block;color:var(--ink);transition:transform .1s,box-shadow .1s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+.btn:active{transform:translate(4px,4px);box-shadow:0 0 0 var(--ink)}
+.btn.sm{font-size:13px;padding:.6em .85em;box-shadow:3px 3px 0 var(--ink)}
+.btn.ink{background:var(--ink);color:var(--paper);box-shadow:4px 4px 0 var(--tomato)}
+.btn.w{background:#fff}
+.tag{display:inline-block;font:800 11px/1 var(--f-body);letter-spacing:.05em;text-transform:uppercase;padding:5px 8px;border:2px solid var(--ink);white-space:nowrap;background:#fff}
+.s-dep{background:var(--mostaza)}.s-asig{background:var(--celeste)}.s-lista{background:var(--rosa)}.s-trasl{background:var(--tomato)}.s-ent{background:var(--verde)}
+.s-fall{background:repeating-linear-gradient(135deg,var(--paper) 0 5px,#f0b9ae 5px 9px)}.s-venc{background:var(--ink);color:var(--paper)}
+.demo{display:inline-block;font:800 11px/1 var(--f-body);letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:6px 9px}
+.chip{font:700 13px/1 var(--f-body);border:2px solid var(--ink);background:#fff;padding:9px 12px;cursor:pointer;box-shadow:2px 2px 0 var(--ink)}
+.chip[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.halft{background-image:radial-gradient(rgba(21,19,15,.28) 1.3px,transparent 1.7px);background-size:7px 7px}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+.paper{max-width:1360px;margin:0 auto;padding:16px 3vw 40px}
+.meta{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font:800 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase;border-bottom:var(--b) solid var(--ink);padding-bottom:10px}
+.meta a{text-underline-offset:3px}
+.mast{display:grid;grid-template-columns:1fr auto 1fr;gap:22px;align-items:center;padding:16px 0 12px;border-bottom:8px double var(--ink)}
+.mast .c{text-align:center}
+.mast h1{font-size:clamp(50px,9.2vw,134px);letter-spacing:-.05em;line-height:.85}
+.mast h1 i{font-family:var(--f-serif);color:var(--tomato);font-weight:400;letter-spacing:-.01em}
+.mast p.d{font-family:var(--f-serif);font-style:italic;font-size:clamp(17px,2vw,24px);margin-top:8px}
+.ear{border:var(--b) solid var(--ink);padding:10px 12px;font:700 13px/1.3 var(--f-body);box-shadow:var(--sh-s);background:var(--mostaza);max-width:230px}
+.ear.r{background:var(--rosa);justify-self:end;transform:rotate(1.5deg)}.ear.l{transform:rotate(-1.5deg)}
+.ear b{display:block;font:400 22px/1 var(--f-head);margin-bottom:4px}
+.tabs{display:flex;border-bottom:var(--b) solid var(--ink);position:sticky;top:0;background:var(--paper);z-index:5}
+.tabs button{flex:1;background:var(--paper);border:0;border-right:var(--b) solid var(--ink);padding:10px 8px;font:800 14px var(--f-body);text-transform:uppercase;letter-spacing:.05em;cursor:pointer;display:flex;flex-direction:column;gap:3px;align-items:center}
+.tabs button small{font:700 10px var(--f-body);letter-spacing:.1em;opacity:.7}
+.tabs button:last-child{border-right:0}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--paper)}
+.tabs button:hover:not([aria-selected=true]){background:var(--mostaza)}
+.panel[hidden]{display:none}
+.kick{display:flex;gap:10px;align-items:center;font:800 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase}
+.kick::after{content:"";flex:1;height:3px;background:var(--ink)}
+
+.front{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1fr);margin-top:24px}
+.lead{padding-right:30px;border-right:var(--b) solid var(--ink)}
+.lead h2{font-size:clamp(40px,6.4vw,100px);line-height:.9;margin:14px 0 18px;letter-spacing:-.04em}
+.lead h2 em{color:var(--tomato)}
+.lead .sub{font-size:clamp(18px,1.6vw,22px);font-weight:600;max-width:44ch;margin-bottom:20px}
+.cta{display:flex;gap:14px;flex-wrap:wrap}
+.what{margin-top:30px;border-top:var(--b) solid var(--ink);padding-top:10px}
+.cols{column-count:2;column-gap:28px;column-rule:2px solid var(--ink);font-size:15.5px;margin-top:12px}
+.cols p{margin-bottom:12px}
+.cols p:first-child::first-letter{font:400 72px/.8 var(--f-head);float:left;padding:5px 9px 0 0;color:var(--tomato)}
+.pull{font-family:var(--f-serif);font-style:italic;font-size:clamp(28px,3.4vw,46px);line-height:1.08;margin:26px 0 0;padding:18px 0 0;border-top:8px double var(--ink)}
+.pull small{display:block;font:800 12px var(--f-body);font-style:normal;letter-spacing:.08em;text-transform:uppercase;margin-top:10px}
+.side{padding-left:26px;display:grid;gap:20px;align-content:start}
+.box{border:var(--b) solid var(--ink);padding:16px;background:#fff;box-shadow:var(--sh)}
+.box h3{font-size:20px;margin-bottom:10px}
+.box.y{background:var(--mostaza)}.box.r{background:var(--rosa)}.box.c{background:var(--celeste)}.box.p{background:var(--paper2)}.box.k{background:var(--ink);color:var(--paper)}
+.idx{list-style:none;display:grid}
+.idx button{width:100%;display:flex;gap:10px;justify-content:space-between;align-items:baseline;background:none;border:0;border-bottom:2px solid var(--ink);padding:9px 0;text-align:left;cursor:pointer;font-weight:800}
+.idx li:last-child button{border:0}.idx button:hover{background:var(--mostaza)}
+.idx i{font-family:var(--f-serif);font-weight:400;font-size:20px}
+.seg{display:flex;height:34px;border:2px solid var(--ink);margin:8px 0}
+.seg span{display:grid;place-items:center;font:800 12px var(--f-body);border-right:2px solid var(--ink)}.seg span:last-child{border:0}
+.lg{display:grid;gap:4px;font-weight:700;font-size:14px}.lg div{display:flex;justify-content:space-between}
+.band{margin:34px 0;border-block:var(--b) solid var(--ink);background:var(--ink);color:var(--paper);overflow:hidden;white-space:nowrap}
+.band div{display:inline-block;padding:12px 0;font:800 14px var(--f-body);letter-spacing:.06em;text-transform:uppercase;animation:tk 46s linear infinite}
+.band span{margin:0 20px}.band span::before{content:"";display:inline-block;width:11px;height:11px;border:2px solid var(--paper);margin-right:9px;background:var(--c)}
+@keyframes tk{to{transform:translateX(-50%)}}
+h2.sx{font-size:clamp(32px,4.6vw,68px);line-height:.95;letter-spacing:-.035em}
+h2.sx em{color:var(--tomato)}
+.sec{margin-top:44px}
+.sec>.it,.lede{font-size:clamp(20px,2vw,26px);line-height:1.2;margin-top:10px;max-width:46ch}
+.prob{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1.4fr);gap:36px;align-items:start}
+.prob p.t{font-size:18px;font-weight:600;margin-top:16px;max-width:40ch}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.vs .box{padding:18px}
+.vs .no{border-style:dashed;box-shadow:none;background:var(--paper)}
+.vs ul{list-style:none;display:grid;gap:10px;font-weight:600;font-size:15px}
+.vs li{padding-left:22px;position:relative}
+.vs li::before{content:"";position:absolute;left:0;top:.45em;width:11px;height:11px;border:2px solid var(--ink);background:var(--mostaza)}
+.vs .no li::before{background:#fff}
+.three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:22px}
+.firma{border:var(--b) solid var(--ink);box-shadow:var(--sh);background:#fff;display:flex;flex-direction:column}
+.firma header{padding:14px 16px;border-bottom:var(--b) solid var(--ink);display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.firma h3{font-size:28px}.firma .n{font:400 46px/.8 var(--f-serif);font-style:italic}
+.firma ul{list-style:none;padding:14px 16px;display:grid;gap:9px;font-size:15px;font-weight:600}
+.firma li{padding-left:18px;position:relative}.firma li::before{content:"›";position:absolute;left:2px;font-weight:800}
+.firma p.q{margin-top:auto;padding:12px 16px;border-top:2px dashed var(--ink);font-family:var(--f-serif);font-style:italic;font-size:20px;line-height:1.15}
+.nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:var(--b) solid var(--ink);box-shadow:var(--sh);background:#fff;margin-top:22px}
+.nums div{padding:18px;border-right:var(--b) solid var(--ink)}.nums div:last-child{border:0}
+.nums b{font:400 clamp(44px,5.6vw,84px)/.95 var(--f-head);display:block;letter-spacing:-.04em}
+.nums span{font-weight:700;font-size:14px;display:block;margin-top:6px}
+.nums div:nth-child(1){background:var(--mostaza)}.nums div:nth-child(3){background:var(--celeste)}
+.endcta{margin-top:50px;background:var(--ink);color:var(--paper);border:var(--b) solid var(--ink);box-shadow:var(--sh);padding:clamp(22px,4vw,46px);display:grid;grid-template-columns:minmax(0,1.5fr) auto;gap:24px;align-items:center}
+.endcta h2{font-size:clamp(32px,4.4vw,62px);line-height:.95}.endcta h2 em{color:var(--mostaza)}
+.endcta p{font-size:18px;margin-top:10px;font-weight:600}
+
+.train{display:flex;flex-wrap:wrap;gap:0;margin-top:20px;align-items:stretch}
+.train .st{flex:1 1 130px;border:var(--b) solid var(--ink);margin:0 -3px 0 0;background:#fff;padding:10px;text-align:left;cursor:pointer;display:grid;gap:8px;align-content:start;min-height:84px}
+.train .st i{font:400 28px/.8 var(--f-serif);font-style:italic}
+.train .st[aria-pressed=true]{background:var(--ink);color:var(--paper);box-shadow:var(--sh-s);position:relative;z-index:1}
+.train .st:hover{transform:translateY(-3px)}
+.detour{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;font:800 12px var(--f-body);letter-spacing:.06em;text-transform:uppercase}
+.detour .st{flex:0 1 auto;margin:0;min-height:0;grid-auto-flow:column;align-items:center;border-style:dashed}
+.sdet{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:20px;align-items:center;margin-top:18px;padding:18px;border:var(--b) solid var(--ink);background:var(--paper3);box-shadow:var(--sh)}
+.sdet h3{font-size:30px;margin-bottom:6px}.sdet p{font-weight:600;max-width:60ch}
+.sdet code{font:800 12px ui-monospace,Menlo,Consolas,monospace;background:var(--ink);color:var(--paper);padding:4px 7px}
+.sdet .who{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;max-width:170px}
+.two{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:30px;align-items:start;margin-top:24px}
+.ctl{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.ledger{border:var(--b) solid var(--ink);background:#fff;box-shadow:var(--sh)}
+.lr{display:grid;grid-template-columns:104px 168px minmax(0,1fr) 140px;gap:14px;padding:13px 14px;border-bottom:2px solid var(--ink);align-items:center;font-size:15px;transition:opacity .2s}
+.lr:last-child{border:0}.lr.h{background:var(--ink);color:var(--paper);font:800 11px var(--f-body);text-transform:uppercase;letter-spacing:.06em}
+.lr b{font:400 15px var(--f-head)}
+.lr.now{background:var(--paper3);box-shadow:inset 8px 0 0 var(--tomato)}
+.lr.next{opacity:.68}
+.async{display:inline-block;margin-top:4px;font:800 11px var(--f-body);text-transform:uppercase;letter-spacing:.06em;border:2px dashed var(--ink);padding:3px 6px;background:#fff}
+.story{display:none}.story.on{display:block}
+.story p{font-family:var(--f-serif);font-style:italic;font-size:clamp(22px,2.4vw,30px);line-height:1.2;border-left:8px solid var(--tomato);padding:2px 0 2px 18px;margin-bottom:18px}
+.story p b{font:800 11px var(--f-body);font-style:normal;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:3px}
+.note{font-weight:700;font-size:14px;margin-top:12px}
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.gal{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:22px;margin-top:22px}
+.gal article{border:var(--b) solid var(--ink);box-shadow:var(--sh);background:#fff;display:flex;flex-direction:column}
+.gal .ph{height:110px;border-bottom:var(--b) solid var(--ink);display:flex;align-items:flex-end;justify-content:space-between;padding:8px 10px;overflow:hidden;position:relative}
+.gal .ph i{font:400 120px/.7 var(--f-serif);font-style:italic;position:absolute;right:6px;bottom:-4px;opacity:.9}
+.gal .bd{padding:12px 14px 14px;display:grid;gap:6px}
+.gal h3{font-size:22px}.gal .m{font-size:13px;font-weight:700}
+.gal dl{display:grid;grid-template-columns:auto 1fr;gap:2px 8px;font-size:13px;font-weight:600;border-top:2px dashed var(--ink);padding-top:8px;margin-top:4px}
+.gal dt{font-weight:800;text-transform:uppercase;font-size:10px;letter-spacing:.06em;padding-top:2px}
+.soon{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:36px;align-items:center;margin-top:10px}
+.stamp{display:inline-block;transform:rotate(-4deg);border:5px double var(--tomato);color:var(--tomato-d);font:400 clamp(32px,4vw,56px) var(--f-head);padding:8px 18px;margin:20px 0;letter-spacing:.02em}
+.soon svg{width:100%;height:auto;border:var(--b) solid var(--ink);background:var(--paper2);box-shadow:var(--sh);display:block}
+.cls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:22px}
+.cls a{text-decoration:none;border:var(--b) dashed var(--ink);padding:22px;display:grid;gap:12px;background:#fff;min-height:250px;align-content:space-between;position:relative}
+.cls a:hover{background:var(--mostaza);border-style:solid;box-shadow:var(--sh)}
+.cls .ab{font:800 11px var(--f-body);letter-spacing:.1em;text-transform:uppercase}
+.cls h3{font-size:clamp(28px,3vw,40px)}.cls span.t{font-size:16px;font-weight:600}.cls b{font-weight:800;border-top:2px solid var(--ink);padding-top:10px}
+.ing{margin-top:26px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;border:var(--b) solid var(--ink);padding:16px 18px;background:var(--celeste);box-shadow:var(--sh)}
+.ing h3{font-size:24px}.ing .cta{gap:10px}
+.priv{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:22px}
+.priv .box h3{font-size:24px}.priv ul{list-style:none;display:grid;gap:10px;font-weight:600}
+.priv li{padding-left:20px;position:relative}.priv li::before{content:"§";position:absolute;left:0;font-family:var(--f-serif);font-style:italic;font-weight:400;font-size:20px;line-height:1.1}
+footer{margin-top:50px;border-top:8px double var(--ink);padding-top:18px;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:24px;font-weight:600;font-size:15px}
+footer h4{font-size:15px;margin-bottom:8px;text-transform:uppercase;letter-spacing:.04em}
+footer ul{list-style:none;display:grid;gap:5px}
+footer button.l{background:none;border:0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-weight:600;padding:0}
+footer .fb{grid-column:1/-1;border-top:3px solid var(--ink);padding-top:10px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+
+@media(max-width:1100px){.mast{grid-template-columns:1fr}.ear{display:none}}
+@media(max-width:900px){
+.front,.prob,.two,.soon,.endcta,.priv,.sdet{grid-template-columns:1fr}
+.lead{padding:0 0 26px;border:0;border-bottom:var(--b) solid var(--ink)}.side{padding:24px 0 0}
+.cols{column-count:1}.three,.cls{grid-template-columns:1fr}.vs{grid-template-columns:1fr}
+.nums{grid-template-columns:1fr 1fr}.nums div:nth-child(2){border-right:0}.nums div:nth-child(-n+2){border-bottom:var(--b) solid var(--ink)}
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);position:static}.tabs button{border-bottom:var(--b) solid var(--ink);font-size:12px;padding:9px 4px}.tabs button:nth-child(3){border-right:0}
+.lr{grid-template-columns:1fr auto;gap:6px 10px}.lr.h{display:none}.lr>span:nth-child(3){grid-column:1/-1}
+.ing{grid-template-columns:1fr}footer{grid-template-columns:1fr}.paper{padding:12px 14px 30px}
+.train .st{flex:1 1 44%}.sdet .who{max-width:none}
+}
+</style></head><body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<div class="paper">
+<div class="meta"><span>Sábado 31 de octubre · Edición del depósito central</span><span class="demo">Datos de demostración</span><span><a href="#">Ingresar</a> · <a href="#" data-go="privacidad">Privacidad</a></span></div>
+<header class="mast">
+ <div class="ear l"><b>Hoy</b>Lo que se dona se anota, se verifica y se publica.</div>
+ <div class="c"><h1>Dona<i>Track</i></h1><p class="d">El diario de lo que se dona, se asigna y llega a destino.</p></div>
+ <div class="ear r"><b>Con firma</b>Cada línea del registro tiene fecha y responsable.</div>
+</header>
+<nav class="tabs" role="tablist" aria-label="Secciones del diario">
+ <button role="tab" aria-selected="true" data-t="portada" id="t-portada" aria-controls="portada"><small>Pág. 1</small>Portada</button>
+ <button role="tab" aria-selected="false" data-t="registro" id="t-registro" aria-controls="registro" tabindex="-1"><small>Pág. 2</small>El registro</button>
+ <button role="tab" aria-selected="false" data-t="galeria" id="t-galeria" aria-controls="galeria" tabindex="-1"><small>Pág. 3</small>Entregas</button>
+ <button role="tab" aria-selected="false" data-t="mapa" id="t-mapa" aria-controls="mapa" tabindex="-1"><small>Pág. 4</small>Mapa de impacto</button>
+ <button role="tab" aria-selected="false" data-t="clasificados" id="t-clasificados" aria-controls="clasificados" tabindex="-1"><small>Pág. 5</small>Clasificados</button>
+ <button role="tab" aria-selected="false" data-t="privacidad" id="t-privacidad" aria-controls="privacidad" tabindex="-1"><small>Pág. 6</small>Privacidad</button>
+</nav>
+<main id="main">
+
+<!-- PÁGINA 1 -->
+<section class="panel" id="portada" role="tabpanel" aria-labelledby="t-portada">
+ <div class="front"><div class="lead"><div class="kick">Edición del día · Qué es DonaTrack</div>
+  <h2>Lo que se dona <em>se cuenta.</em> Y se cuenta bien.</h2>
+  <p class="sub">Cada donación queda anotada en un registro público: qué es, quién la trajo, a quién llegó y quién lo confirmó.</p>
+  <div class="cta"><a class="btn" href="#" data-go="registro">Leer el registro de una donación</a><a class="btn w" href="#" data-go="clasificados">Sumarme al registro</a></div>
+  <div class="what"><div class="kick">La nota</div>
+  <div class="cols"><p>DonaTrack es la plataforma de gestión y trazabilidad de donaciones de las organizaciones solidarias universitarias. Junta a tres actores: quien dona, la entidad que recibe y la administración del depósito. Una donación llega al depósito y alguien la anota: qué es, cuánta hay, cuándo vence y a qué categoría pertenece. Hasta ahí es una caja en un estante.</p><p>Lo que la convierte en ayuda es lo que viene después. El sistema propone a qué necesidad concreta de qué entidad va; la administración revisa y aprueba o descarta. Cuando queda lista se carga en un camión que sale por una ruta con paradas.</p><p>La historia no termina cuando el camión se va. Termina cuando la entidad confirma la recepción: ahí pasa a Entregada y suma al impacto. Si nadie la recibe, vuelve al depósito y queda anotado como Entrega fallida.</p></div></div>
+  <p class="pull">“Una donación no termina cuando sale el camión. Termina cuando alguien la confirma.”<small>Regla de la casa</small></p>
+ </div>
+ <aside class="side">
+  <div class="box c"><h3>Dentro de esta edición</h3><ul class="idx">
+   <li><button data-go="registro"><span>El registro de una donación</span><i>2</i></button></li>
+   <li><button data-go="galeria"><span>Entregas, por categoría</span><i>3</i></button></li>
+   <li><button data-go="mapa"><span>Mapa de impacto</span><i>4</i></button></li>
+   <li><button data-go="clasificados"><span>Clasificados: sumate</span><i>5</i></button></li>
+   <li><button data-go="privacidad"><span>Privacidad</span><i>6</i></button></li></ul></div>
+  <div class="box"><h3>Quiénes donan</h3><div class="seg" role="img" aria-label="52 Colaboradores, 26 Sostenedores, 8 Transformadores"><span style="flex:52;background:var(--mostaza)">52</span><span style="flex:26;background:var(--celeste)">26</span><span style="flex:8;background:var(--rosa)">8</span></div><div class="lg"><div><span>Colaboradores</span><b>52</b></div><div><span>Sostenedores</span><b>26</b></div><div><span>Transformadores</span><b>8</b></div></div></div>
+  <div class="box r"><h3>Se busca</h3><p style="font-weight:700;font-size:15px">Leche en polvo (6 de 40) para Merendero Norte. Frazadas (18 de 30) para Comedor Los Girasoles.</p></div>
+ </aside></div>
+
+ <div class="band" aria-hidden="true"><div id="band"></div></div>
+
+ <div class="prob"><div><div class="kick">El problema</div><h2 class="sx" style="margin-top:12px">Lo que no se anota <em>se sospecha.</em></h2><p class="t">Cuando una donación sale de las manos de quien la trajo y no vuelve a aparecer en ningún papel, queda la pregunta más vieja de la ayuda: ¿a dónde fue? La respuesta de DonaTrack es un registro que cualquiera puede leer.</p></div>
+  <div class="vs"><div class="box no"><h3>Sin registro</h3><ul><li>Una caja entra al depósito y nadie sabe cuándo vence.</li><li>La ayuda sale y no vuelve ninguna confirmación.</li><li>Quien donó no se entera de dónde terminó.</li></ul></div>
+  <div class="box y"><h3>Con registro</h3><ul><li>Cada cambio de estado queda con fecha y responsable.</li><li>La entidad confirma la recepción y recién ahí se cuenta.</li><li>Las cifras públicas salen del mismo libro.</li></ul></div></div></div>
+
+ <div class="sec"><div class="kick">Los tres actores</div><h2 class="sx" style="margin-top:12px">Tres firmas <em>en cada nota.</em></h2>
+  <div class="three">
+   <article class="firma"><header class="s-dep"><h3>Donante</h3><span class="n">I</span></header><ul><li>Persona humana o jurídica que lleva la donación al depósito.</li><li>Ve el historial de estados de cada una de sus donaciones.</li><li>Conoce las entidades beneficiarias y sus necesidades.</li><li>Tiene incentivos: categoría de donante, misiones con progreso e insignias, y notificaciones.</li></ul><p class="q">“Quiero saber a dónde fue.”</p></article>
+   <article class="firma"><header class="s-asig"><h3>Entidad</h3><span class="n">II</span></header><ul><li>Publica sus necesidades activas y ve la cobertura, por ejemplo 18 de 30 frazadas.</li><li>Ve las donaciones que se le asignaron.</li><li>Confirma la recepción: ese es el paso que cierra la historia.</li><li>Recibe notificaciones.</li></ul><p class="q">“Llegó. Lo confirmo yo.”</p></article>
+   <article class="firma"><header class="s-lista"><h3>Administración</h3><span class="n">III</span></header><ul><li>Registra cada donación y revisa la normalización de datos.</li><li>Maneja el inventario en depósito y marca las vencidas.</li><li>Ejecuta las asignaciones y aprueba o descarta propuestas.</li><li>Organiza camiones y rutas, mira rankings e importa donantes por CSV.</li></ul><p class="q">“Yo anoto y yo respondo.”</p></article>
+  </div></div>
+
+ <div class="sec"><div class="kick">Transparencia en números</div><h2 class="sx" style="margin-top:12px">El balance, <em>a la vista.</em></h2>
+  <div class="nums"><div><b>128</b><span>donaciones entregadas</span></div><div><b>34</b><span>entidades ayudadas</span></div><div><b>2.448</b><span>kg de alimentos distribuidos</span></div><div><b>86</b><span>donantes activos</span></div></div>
+  <p class="note"><span class="demo">Datos de demostración</span> &nbsp;Las cifras de esta edición son de ejemplo y se calculan del mismo registro que se ve en la página 2.</p></div>
+
+ <div class="endcta"><div><h2>Sumate al registro. <em>Todo queda anotado.</em></h2><p>Doná, recibí o administrá: según quién seas, el registro te nombra con tu fecha y tu responsabilidad.</p></div><div class="cta"><a class="btn" href="#" data-go="clasificados">Ver los clasificados</a><a class="btn w" href="#">Ingresar</a></div></div>
+</section>
+
+<!-- PÁGINA 2 -->
+<section class="panel" id="registro" role="tabpanel" aria-labelledby="t-registro" hidden>
+ <div class="kick" style="margin-top:26px">Pág. 2 · Cómo funciona</div>
+ <h2 class="sx" style="margin-top:12px">El registro de <em>una donación.</em></h2>
+ <p class="lede it">Siete estados, un solo libro. Tocá un estado para leer qué significa y quién lo cambia.</p>
+ <div class="train" id="train" role="group" aria-label="Estados de una donación"></div>
+ <div class="detour" id="detour"><span>Desvíos:</span></div>
+ <div class="sdet" id="sdet" aria-live="polite"></div>
+
+ <div class="sec"><div class="kick">Un renglón del libro</div>
+ <h2 class="sx" style="margin-top:12px;font-size:clamp(28px,3.6vw,52px)">DT-0412, <em>línea por línea.</em></h2>
+ <p class="lede it" style="font-size:20px">Arroz 50 kg · Cooperativa La Huerta → Comedor Los Girasoles. Cada línea tiene fecha y responsable.</p>
+ <div class="ctl" role="group" aria-label="Controles del recorrido"><button class="btn sm" id="play">Reproducir el recorrido</button><button class="btn sm w" id="step">Paso siguiente</button><button class="btn sm w" id="reset">Volver a hoy</button>
+  <span style="width:12px"></span><button class="chip" aria-pressed="true" data-v="ledger">Ver como registro</button><button class="chip" aria-pressed="false" data-v="story">Ver como relato</button></div>
+ <div class="ledger" id="ledger"><div class="lr h"><span>Fecha</span><span>Estado</span><span>Qué pasó</span><span>Responsable</span></div></div>
+ <div class="story" id="story"></div>
+ <p class="note">Fechas de ejemplo. Si un paso depende de un evento asíncrono, el registro dice <b>Actualizando…</b> y no da el éxito por hecho.</p></div>
+</section>
+
+<!-- PÁGINA 3 -->
+<section class="panel" id="galeria" role="tabpanel" aria-labelledby="t-galeria" hidden>
+ <div class="kick" style="margin-top:26px">Pág. 3 · Entregas</div>
+ <h2 class="sx" style="margin-top:12px">Galería de <em>entregas.</em></h2>
+ <p class="lede it">Lo que ya llegó a destino, por categoría. Ejemplos de demostración.</p>
+ <div class="filters" id="filters" role="group" aria-label="Filtrar por categoría"></div>
+ <p class="note" id="gcount" role="status"></p>
+ <div class="gal" id="gal"></div>
+</section>
+
+<!-- PÁGINA 4 -->
+<section class="panel" id="mapa" role="tabpanel" aria-labelledby="t-mapa" hidden>
+ <div class="kick" style="margin-top:26px">Pág. 4 · Mapa de impacto</div>
+ <div class="soon"><div><h2 class="sx">Mapa de impacto: <em>en preparación.</em></h2><div class="stamp">Próximamente</div><p style="font-size:18px;max-width:44ch;font-weight:600">Todavía no está disponible. El esquema de al lado es una ilustración de cómo podría leerse un recorrido: no tiene ubicaciones reales ni seguimiento en vivo.</p><p class="note"><span class="demo">Ilustrativo</span></p></div>
+ <svg viewBox="0 0 420 280" role="img" aria-label="Esquema ilustrativo, sin ubicaciones reales: un depósito unido por una ruta a tres paradas"><defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="#15130F" stroke-opacity=".12" stroke-width="1"/></pattern></defs><rect width="420" height="280" fill="url(#g)"/><path d="M40 220 L150 150 L260 175 L380 70" stroke="#15130F" stroke-width="9" fill="none" stroke-linejoin="round"/><path d="M40 220 L150 150 L260 175 L380 70" stroke="#F4ECD8" stroke-width="3" stroke-dasharray="10 9" fill="none"/><rect x="16" y="196" width="48" height="48" fill="#F2B705" stroke="#15130F" stroke-width="4"/><text x="40" y="226" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="12">DEP.</text><circle cx="150" cy="150" r="17" fill="#7FB2F0" stroke="#15130F" stroke-width="4"/><circle cx="260" cy="175" r="17" fill="#F59BB8" stroke="#15130F" stroke-width="4"/><circle cx="380" cy="70" r="17" fill="#3FA566" stroke="#15130F" stroke-width="4"/><text x="150" y="124" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="11">PARADA 1</text><text x="260" y="213" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="11">PARADA 2</text><text x="380" y="44" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="11">PARADA 3</text><rect x="196" y="250" width="214" height="22" fill="#15130F"/><text x="303" y="265" text-anchor="middle" font-family="Archivo,Arial,sans-serif" font-weight="800" font-size="11" fill="#F4ECD8">ILUSTRATIVO · SIN UBICACIONES</text></svg></div>
+</section>
+
+<!-- PÁGINA 5 -->
+<section class="panel" id="clasificados" role="tabpanel" aria-labelledby="t-clasificados" hidden>
+ <div class="kick" style="margin-top:26px">Pág. 5 · Clasificados</div>
+ <h2 class="sx" style="margin-top:12px">Clasificados: <em>ofrecemos y buscamos.</em></h2>
+ <p class="lede it">Tres avisos para sumarte: persona humana, persona jurídica o entidad beneficiaria.</p>
+ <div class="cls"><a href="#"><span class="ab">Aviso Nº 1 · Persona humana</span><h3>Ofrezco</h3><span class="t">Soy una persona y quiero donar. Mis donaciones quedan en el registro con su historial de estados.</span><b>Registrarme como donante →</b></a>
+ <a href="#"><span class="ab">Aviso Nº 2 · Persona jurídica</span><h3>Ofrece mi empresa</h3><span class="t">Somos una organización y queremos donar con trazabilidad.</span><b>Registrar persona jurídica →</b></a>
+ <a href="#"><span class="ab">Aviso Nº 3 · Entidad</span><h3>Necesitamos</h3><span class="t">Somos una entidad beneficiaria y publicamos lo que falta, con su cobertura.</span><b>Registrar mi entidad →</b></a></div>
+ <div class="ing"><div><h3>¿Ya tenés cuenta?</h3><p style="font-weight:600">Ingresá con la sesión de demostración por rol.</p></div><div class="cta"><a class="btn sm" href="#">Ingresar como donante</a><a class="btn sm w" href="#">Ingresar como entidad</a><a class="btn sm ink" href="#">Ingresar como administración</a></div></div>
+</section>
+
+<!-- PÁGINA 6 -->
+<section class="panel" id="privacidad" role="tabpanel" aria-labelledby="t-privacidad" hidden>
+ <div class="kick" style="margin-top:26px">Pág. 6 · Privacidad</div>
+ <h2 class="sx" style="margin-top:12px">Lo que se publica, <em>y lo que no.</em></h2>
+ <p class="lede it">Un registro público no tiene por qué ser un registro indiscreto.</p>
+ <div class="priv"><div class="box y"><h3>Lo que lee cualquiera</h3><ul><li>Cifras agregadas de transparencia: entregas, entidades, kilos y donantes activos.</li><li>La galería de entregas, por categoría.</li><li>Esta portada y el recorrido de ejemplo de una donación.</li></ul></div>
+ <div class="box"><h3>Lo que pide sesión</h3><ul><li>El historial de cada donación, para quien donó.</li><li>Las donaciones asignadas y la confirmación de recepción, para la entidad.</li><li>La operación del depósito, para la administración.</li></ul></div></div>
+ <p class="note"><span class="demo">Maqueta</span> &nbsp;Esta página resume la idea de la pantalla Privacidad. El texto legal vigente es el de esa pantalla del producto.</p>
+</section>
+</main>
+
+<footer>
+ <div><h4>DonaTrack · La Gaceta</h4><p>Plataforma de gestión y trazabilidad de donaciones para organizaciones solidarias universitarias.</p></div>
+ <div><h4>Páginas</h4><ul><li><button class="l" data-go="portada">Portada</button></li><li><button class="l" data-go="registro">El registro</button></li><li><button class="l" data-go="galeria">Entregas</button></li><li><button class="l" data-go="mapa">Mapa de impacto</button></li></ul></div>
+ <div><h4>Participá</h4><ul><li><button class="l" data-go="clasificados">Registrarme</button></li><li><a href="#">Ingresar</a></li><li><button class="l" data-go="privacidad">Privacidad</button></li></ul></div>
+ <div class="fb"><span>Proyecto académico UTN-FRBA</span><span>Datos de demostración</span></div>
+</footer>
+</div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const tabs=$$('[role=tab]'),ids=tabs.map(t=>t.dataset.t);
+function go(id,focus){if(!ids.includes(id))id='portada';tabs.forEach(t=>{const on=t.dataset.t===id;t.setAttribute('aria-selected',on);t.tabIndex=on?0:-1});$$('.panel').forEach(p=>p.hidden=p.id!==id);try{history.replaceState(null,'','#'+id)}catch(e){}window.scrollTo({top:0});if(focus)$('#t-'+id).focus()}
+tabs.forEach((t,i)=>{t.addEventListener('click',()=>go(t.dataset.t));t.addEventListener('keydown',e=>{let n=null;if(e.key==='ArrowRight')n=(i+1)%tabs.length;if(e.key==='ArrowLeft')n=(i+tabs.length-1)%tabs.length;if(e.key==='Home')n=0;if(e.key==='End')n=tabs.length-1;if(n!==null){e.preventDefault();go(ids[n],true)}})});
+document.addEventListener('click',e=>{const a=e.target.closest('[data-go]');if(a){e.preventDefault();go(a.dataset.go)}else{const l=e.target.closest('a[href="#"]');if(l)e.preventDefault()}});
+const SL={dep:"En depósito",asig:"Asignada",lista:"Lista para entregar",trasl:"En traslado",ent:"Entregada",fall:"Entrega fallida",venc:"Vencida"};
+const CL={dep:'#F2B705',asig:'#7FB2F0',lista:'#F59BB8',trasl:'#E8452C',ent:'#3FA566',fall:'#f0b9ae',venc:'#15130F'};
+$('#band').innerHTML=Object.keys(SL).concat(Object.keys(SL)).map(k=>`<span style="--c:${CL[k]}">${SL[k]}</span>`).join('');
+/* estados */
+const SD={dep:["EN_DEPOSITO","Llegó al depósito y se registró: qué es, cuánta hay, cuándo vence y su categoría. Espera una asignación.","Cambia: Administración"],asig:["ASIGNACION_REALIZADA","El sistema propuso una necesidad concreta de una entidad y la administración revisó y aprobó.","Cambia: Sistema propone, Administración aprueba"],lista:["LISTA_PARA_ENTREGAR","Está preparada y se suma a un camión que va a salir por una ruta con paradas.","Cambia: Administración"],trasl:["EN_TRASLADO","El camión salió. Algunos cambios dependen de eventos asíncronos: mientras tanto el registro dice Actualizando…","Cambia: Administración"],ent:["ENTREGADA","La entidad confirmó la recepción. Recién ahí la donación suma al impacto y a las cifras públicas.","Cambia: Entidad"],fall:["ENTREGA_FALLIDA","Nadie recibió la donación. Vuelve al depósito y queda anotado, con fecha y responsable.","Cambia: Administración"],venc:["VENCIDA","Pasó su fecha de vencimiento. La administración la marca como vencida desde el inventario.","Cambia: Administración"]};
+const main=['dep','asig','lista','trasl','ent'];let cur='trasl';
+const mk=(k,i)=>`<button class="st" data-k="${k}" aria-pressed="false">${i?`<i>${i}</i>`:''}<span class="tag s-${k}">${SL[k]}</span></button>`;
+$('#train').innerHTML=main.map((k,i)=>mk(k,i+1)).join('');
+$('#detour').insertAdjacentHTML('beforeend',mk('fall')+mk('venc'));
+function showS(k){cur=k;$$('.st').forEach(b=>b.setAttribute('aria-pressed',b.dataset.k===k));const d=SD[k];$('#sdet').innerHTML=`<span class="tag s-${k}" style="font-size:13px;padding:8px 10px">${SL[k]}</span><div><h3>${SL[k]}</h3><p>${d[1]}</p></div><div><code>${d[0]}</code><p class="who" style="margin-top:8px">${d[2]}</p></div>`}
+$('#train').addEventListener('click',e=>{const b=e.target.closest('.st');if(b){showS(b.dataset.k);if(main.includes(b.dataset.k))setStep(main.indexOf(b.dataset.k),true)}});
+$('#detour').addEventListener('click',e=>{const b=e.target.closest('.st');if(b)showS(b.dataset.k)});
+/* libro */
+const L=[["mié 28/10","dep","Llegó al depósito y se registró: arroz, 50 kg, categoría Alimentos.","Administración"],["jue 29/10","asig","Propuesta del sistema aprobada para Comedor Los Girasoles.","Administración"],["vie 30/10","lista","Quedó lista y se cargó al Camión 2.","Administración"],["sáb 31/10","trasl","Salió en el Camión 2 con 6 donaciones.","Administración","Actualizando…"],["pendiente","ent","Falta la confirmación de recepción de la entidad. Hasta entonces no se cuenta como entregada.","Entidad"]];
+const ST=["Llegó al depósito el miércoles por la mañana y la administración la anotó.","El sistema la asignó a una necesidad de Comedor Los Girasoles y la administración aprobó.","El viernes quedó lista y se sumó al Camión 2.","Hoy salió con otras cinco donaciones y está En traslado. El estado se está actualizando.","Falta que la entidad confirme. Cuando lo haga, pasa a Entregada y suma al impacto."];
+let step=3,timer=null;
+$('#ledger').insertAdjacentHTML('beforeend',L.map((r,i)=>`<div class="lr" data-i="${i}"><b>${r[0]}</b><span><span class="tag s-${r[1]}">${SL[r[1]]}</span></span><span>${r[2]}${r[4]?`<br><span class="async">${r[4]}</span>`:''}</span><span>${r[3]}</span></div>`).join(''));
+$('#story').innerHTML=ST.map((t,i)=>`<p data-i="${i}"><b>${L[i][0]} · ${SL[L[i][1]]}</b>${t}</p>`).join('');
+function setStep(n,keep){step=n;$$('#ledger .lr:not(.h)').forEach(r=>{const i=+r.dataset.i;r.classList.toggle('now',i===n);r.classList.toggle('next',i>n)});$$('#story p').forEach(p=>p.style.opacity=+p.dataset.i>n?.35:1);if(!keep)showS(main[n])}
+function stop(){clearInterval(timer);timer=null;$('#play').textContent='Reproducir el recorrido'}
+$('#play').addEventListener('click',()=>{if(timer){stop();return}$('#play').textContent='Pausar';setStep(0);timer=setInterval(()=>{if(step>=4){stop();return}setStep(step+1)},1600)});
+$('#step').addEventListener('click',()=>{stop();setStep((step+1)%5)});
+$('#reset').addEventListener('click',()=>{stop();setStep(3)});
+$$('.ctl .chip').forEach(b=>b.addEventListener('click',()=>{$$('.ctl .chip').forEach(x=>x.setAttribute('aria-pressed',x===b));const s=b.dataset.v==='story';$('#ledger').style.display=s?'none':'block';$('#story').classList.toggle('on',s)}));
+setStep(3);showS('trasl');
+/* galería */
+const CAT={Alimentos:['#F2B705','A'],Bebidas:['#7FB2F0','B'],Vestimenta:['#F59BB8','V'],Mobiliario:['#3FA566','M'],'Útiles escolares':['#E8452C','Ú'],Higiene:['#EADFC3','H']};
+const G=[["Arroz","50 kg","Alimentos","Comedor Los Girasoles","DT-0412"],["Frazadas","30 u","Vestimenta","Comedor Los Girasoles","DT-0409"],["Útiles","120 u","Útiles escolares","Escuela 12","DT-0414"],["Conservas","24 kg","Alimentos","Escuela 12","DT-0407"],["Camperas","18 u","Vestimenta","Hogar Esperanza","DT-0411"],["Jugos","48 u","Bebidas","Merendero Norte","DT-0380"],["Sillas","12 u","Mobiliario","Escuela 12","DT-0372"],["Kits de higiene","40 u","Higiene","Hogar Esperanza","DT-0385"]];
+$('#filters').innerHTML=['Todas',...Object.keys(CAT)].map((c,i)=>`<button class="chip" aria-pressed="${i===0}" data-c="${c}">${c}</button>`).join('');
+function draw(c){const r=G.filter(g=>c==='Todas'||g[2]===c);$('#gcount').textContent=r.length+(r.length===1?' entrega de ejemplo':' entregas de ejemplo')+(c==='Todas'?'':' en '+c);$('#gal').innerHTML=r.map(g=>`<article><div class="ph" style="background:${CAT[g[2]][0]}"><span class="tag s-ent">Entregada</span><i aria-hidden="true">${CAT[g[2]][1]}</i></div><div class="bd"><h3>${g[0]} · ${g[1]}</h3><span class="m">${g[2]}</span><dl><dt>Llegó a</dt><dd>${g[3]}</dd><dt>Registro</dt><dd>${g[4]}</dd></dl></div></article>`).join('')}
+$('#filters').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$$('#filters .chip').forEach(x=>x.setAttribute('aria-pressed',x===b));draw(b.dataset.c)});
+draw('Todas');
+/* arranque por URL */
+const q=new URLSearchParams(location.search).get('vista')||location.hash.slice(1);
+if(q&&ids.includes(q))go(q);
+const q2=new URLSearchParams(location.search);if(q2.get('estado')&&SD[q2.get('estado')])showS(q2.get('estado'));if(q2.get('paso')){setStep(+q2.get('paso'))}
+if(q2.get('cat')&&CAT[q2.get('cat')]){$$('#filters .chip').forEach(x=>x.setAttribute('aria-pressed',x.dataset.c===q2.get('cat')));draw(q2.get('cat'))}
+</script></body></html>

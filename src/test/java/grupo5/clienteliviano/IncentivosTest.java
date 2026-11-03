@@ -43,9 +43,9 @@ class IncentivosTest {
               content()
                   .string(
                       stringContainsInOrder(
-                          "ruta-categorias__paso--actual",
+                          "dh-cats__paso is-actual",
                           "Colaborador",
-                          "ruta-categorias__paso--siguiente",
+                          "dh-cats__paso is-siguiente",
                           "Sostenedor")))
           .andExpect(content().string(containsString("Donante constante")))
           .andExpect(content().string(containsString("aria-valuenow=\"66\"")))
@@ -58,9 +58,9 @@ class IncentivosTest {
         "CA2: insignias ganadas y pendientes se distinguen por texto e ícono, no solo color")
     void insignias() throws Exception {
       mvc.perform(get("/donante/incentivos").session(ingresar(mvc)))
-          .andExpect(content().string(containsString("insignia--ganada")))
+          .andExpect(content().string(containsString("class=\"is-ganada\"")))
           .andExpect(content().string(containsString("Ganada el 20 abr 2026")))
-          .andExpect(content().string(containsString("insignia--pendiente")))
+          .andExpect(content().string(containsString("class=\"is-pendiente\"")))
           .andExpect(content().string(containsString("Pendiente · Donante constante")))
           .andExpect(
               content()

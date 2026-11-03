@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/** Inicio del donante. La guarda de rol garantiza que hay sesión de donante. */
+/** Inicio del donante (variante H). La guarda de rol garantiza que hay sesión de donante. */
 @Controller
 public class DonanteInicioController {
 
@@ -25,6 +25,13 @@ public class DonanteInicioController {
       @RequestParam(required = false) String aviso, HttpServletRequest request, Model model) {
     model.addAttribute("aviso", aviso);
     sessionPort.actual(request).ifPresent(s -> model.addAttribute("panel", servicio.panel(s)));
+    return "donante/inicio-h";
+  }
+
+  /** El tablero anterior (layout privado), para comparar. */
+  @GetMapping("/donante/anterior")
+  public String inicioAnterior(HttpServletRequest request, Model model) {
+    sessionPort.actual(request).ifPresent(s -> model.addAttribute("panel", servicio.panel(s)));
     return "donante/inicio";
   }
 
@@ -33,5 +40,14 @@ public class DonanteInicioController {
   public String inicioCercano(HttpServletRequest request, Model model) {
     sessionPort.actual(request).ifPresent(s -> model.addAttribute("panel", servicio.panel(s)));
     return "donante/inicio-cercano";
+  }
+
+  /** Todas las notificaciones del donante. */
+  @GetMapping("/donante/notificaciones")
+  public String notificaciones(HttpServletRequest request, Model model) {
+    sessionPort
+        .actual(request)
+        .ifPresent(s -> model.addAttribute("notificaciones", servicio.notificaciones(s)));
+    return "donante/notificaciones";
   }
 }

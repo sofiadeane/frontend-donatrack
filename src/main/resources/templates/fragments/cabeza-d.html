@@ -1,0 +1,15 @@
+<!-- <head> de la variante D. Uso: th:replace="~{fragments/cabeza-d :: cabeza(${titulo}, 'c-landing')}" -->
+<head th:fragment="cabeza(titulo, hoja)">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:replace="${titulo}">DonaTrack</title>
+  <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+  <link rel="preload" th:href="@{/fonts/dm-sans-latin.woff2}" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" th:href="@{/css/fuentes.css}">
+  <link rel="stylesheet" th:href="@{/css/tokens.css}">
+  <link rel="stylesheet" th:href="@{/css/c-base.css}">
+  <link rel="stylesheet" th:href="@{/css/{hoja}.css(hoja=${hoja})}">
+  <link rel="stylesheet" th:href="@{/css/d-theme.css}">
+  <script>document.documentElement.classList.add('js')</script>
+  <script th:src="@{/js/b.js}" defer></script>
+</head>

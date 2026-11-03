@@ -30,4 +30,12 @@ public class LectorFixtures {
       throw new UncheckedIOException("No se pudo leer el fixture " + ruta, e);
     }
   }
+
+  public <T> T objeto(String ruta, Class<T> tipo) {
+    try (InputStream in = new ClassPathResource("fixtures/" + ruta).getInputStream()) {
+      return mapper.readValue(in, tipo);
+    } catch (IOException e) {
+      throw new UncheckedIOException("No se pudo leer el fixture " + ruta, e);
+    }
+  }
 }

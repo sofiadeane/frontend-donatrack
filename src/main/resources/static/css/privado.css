@@ -86,6 +86,134 @@
   color: var(--text-on-dark-muted);
 }
 
+/* ===== Variante cercana: manzanas y rutas =====
+   Coordenadas fijas de 360 × 200 (la columna mide 360 px y se oculta debajo de 1100 px): las
+   cuadras, las calles del SVG y el recorrido de los envíos (offset-path) comparten el mismo sistema.
+   Cuatro manzanas iguales de 166 × 88 con calles de 28 px; las rutas van por el centro de las
+   calles (x 180, y 100) y por las calles de borde (x -14 y 376, y 214). Cada ruta empieza y termina
+   fuera del hero: su overflow: hidden hace que los envíos entren y se vayan por los bordes. */
+.panel-hero__ciudad {
+  position: relative;
+  align-self: center;
+  width: 360px;
+  height: 200px;
+}
+
+.panel-hero__calles {
+  position: absolute;
+  inset: 0;
+  width: 360px;
+  height: 200px;
+  overflow: visible;
+}
+
+/* Rutas en gris translúcido: acompañan sin competir con las cifras */
+.panel-hero__ruta {
+  fill: none;
+  stroke: var(--border-glass);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 8;
+  stroke-linecap: round;
+}
+
+.panel-hero__cuadra {
+  position: absolute;
+  width: 166px;
+  height: 88px;
+  display: grid;
+  place-content: center;
+  border: 1px solid var(--border-glass);
+  border-radius: 14px;
+  background: var(--surface-glass);
+  text-align: center;
+}
+
+.panel-hero__cuadra--no {
+  left: 0;
+  top: 0;
+}
+
+.panel-hero__cuadra--ne {
+  left: 194px;
+  top: 0;
+}
+
+.panel-hero__cuadra--so {
+  left: 0;
+  top: 112px;
+}
+
+.panel-hero__cuadra--se {
+  left: 194px;
+  top: 112px;
+}
+
+.panel-hero__cuadra b {
+  font-size: 1.375rem;
+  line-height: 1.2;
+}
+
+.panel-hero__cuadra span {
+  font-size: var(--fs-xs);
+  color: var(--text-on-dark-muted);
+}
+
+/* Cuadras sin dato: completan la manzana sin competir con las cifras */
+.panel-hero__cuadra--baldia {
+  border-style: dashed;
+  border-color: var(--border-glass-soft);
+  background: var(--surface-glass-weak);
+}
+
+/* Envíos: en el origen del contenedor, así path() y el SVG usan las mismas coordenadas. Uno por
+   ruta, lentos y desfasados: la mayor parte del ciclo transcurre fuera del hero, así que casi
+   nunca hay más de uno a la vista. */
+.panel-hero__envio {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--brand-bright);
+  box-shadow: var(--glow-node-sm);
+  offset-rotate: 0deg;
+  animation: panel-hero-envio linear infinite;
+}
+
+.panel-hero__envio--centro {
+  offset-path: path("M180 340 L180 112 Q180 100 192 100 L470 100");
+  animation-duration: 16s;
+}
+
+.panel-hero__envio--borde {
+  offset-path: path("M-14 -160 L-14 202 Q-14 214 -2 214 L470 214");
+  animation-duration: 20s;
+  animation-delay: -7s;
+}
+
+.panel-hero__envio--derecha {
+  offset-path: path("M376 340 L376 -160");
+  animation-duration: 18s;
+  animation-delay: -13s;
+}
+
+@keyframes panel-hero-envio {
+  from {
+    offset-distance: 0%;
+  }
+
+  to {
+    offset-distance: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-hero__envio {
+    display: none;
+  }
+}
+
 /* ===== Tiles ===== */
 .kpis {
   display: grid;
@@ -629,6 +757,62 @@
   background: var(--surface-muted);
 }
 
+/* El botón sube a la fila del título: la tarjeta gana una línea y queda a la altura del recorrido */
+.mision--clara {
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-areas:
+    "boton titulo"
+    "boton bajada"
+    "sello sello"
+    "barra barra"
+    "pie pie";
+}
+
+.mision--clara > h2 {
+  grid-area: titulo;
+}
+
+.mision--clara > .tarjeta__bajada {
+  grid-area: bajada;
+}
+
+.mision--clara .mision__sello-fila {
+  grid-area: sello;
+}
+
+.mision--clara .mision__barra {
+  grid-area: barra;
+}
+
+.mision--clara .mision__pie {
+  grid-area: pie;
+  margin-bottom: 0;
+}
+
+.mision--clara .mision__vacia {
+  grid-column: 1 / -1;
+}
+
+.mision--clara .boton {
+  grid-area: boton;
+  align-self: center;
+}
+
+/* Recorrido en tarjeta de alto completo: los pasos al centro, "Ver el detalle" al piso */
+.tarjeta--recorrido {
+  display: flex;
+  flex-direction: column;
+}
+
+.tarjeta--recorrido .recorrido {
+  flex: 1;
+  align-content: center;
+}
+
+.tarjeta--recorrido > .boton {
+  align-self: flex-start;
+}
+
 /* ===== Notificaciones ===== */
 .notas {
   display: grid;
@@ -687,7 +871,8 @@
     grid-template-columns: 1fr;
   }
 
-  .panel-hero__red {
+  .panel-hero__red,
+  .panel-hero__ciudad {
     display: none;
   }
 }
