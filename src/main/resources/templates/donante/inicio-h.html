@@ -11,7 +11,7 @@
   <!-- Cabecera -->
   <header class="pc-cab">
     <div>
-      <p class="c-kicker">Tu hormiguero</p>
+      <p class="c-kicker" th:text="${voc.tuCasa}">Tu hormiguero</p>
       <h1 class="c-display" th:text="'Hola, ' + ${sesion.primerNombre} + '.'">Hola, Nicolás.</h1>
     </div>
     <div class="pc-cab__acc">

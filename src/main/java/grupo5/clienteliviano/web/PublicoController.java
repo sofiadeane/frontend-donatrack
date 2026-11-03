@@ -30,6 +30,16 @@ public class PublicoController {
     return "publico/inicio-h";
   }
 
+  /**
+   * Variante H con el tema abejas: la misma landing con abejas, polen y panal (el advice elige el
+   * tema por la ruta).
+   */
+  @GetMapping("/i")
+  public String inicioI(Model model) {
+    cargarLanding(model);
+    return "publico/inicio-h";
+  }
+
   /** Landing de la variante visual F, "Cristal" (v5). */
   @GetMapping("/f")
   public String inicioF(Model model) {

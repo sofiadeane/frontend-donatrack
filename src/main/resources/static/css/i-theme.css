@@ -1,0 +1,107 @@
+/*
+ * Variante H · tema abejas ("Colmena"). Se carga después de h-theme.css, solo con body.i: misma paleta, grano y
+ * sombras punteadas que las hormigas; cambia los bichos por abejas, la arena por polen y el hormiguero por un panal.
+ * Más sobria que las hormigas: las abejas no caminan en fila ni mueven las patas, y las escenas de la landing quedan quietas.
+ */
+body.i {
+  --i-miel: var(--h-saffron);
+  --i-cera: var(--h-saffron-100);
+  /* Contorno de celda para la trama de panal (máscara: el color lo pone el fondo) */
+  --i-trama: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='90' viewBox='0 0 52 90'%3E%3Cpath d='M26 2 L50 16 V44 L26 58 L2 44 V16Z M26 58 V88 M50 44 L52 45 M2 44 L0 45' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E");
+}
+
+/* ===== La abeja ===== */
+.i-abeja__cuerpo { fill: var(--h-saffron); filter: url(#h-arena); }
+.i-abeja__franja, .i-abeja__cabeza, .i-abeja__aguijon { fill: currentColor; }
+.i-abeja__ojo { fill: var(--h-shell-3); }
+.i-abeja__alas ellipse { fill: var(--i-ala); stroke: currentColor; stroke-width: 1.6; }
+.i .h-ant__grano { fill: var(--h-saffron-2); }
+.i-flor__petalos ellipse { fill: var(--h-shell-3); stroke: var(--h-line); stroke-width: 0.8; }
+.i-flor__centro { fill: var(--h-saffron); filter: url(#h-arena); }
+
+/* ===== Menos movimiento: las abejas flotan en lugar de caminar ===== */
+.i .h-ant__pata { animation: none; }
+.i :is(.esc-mano__mano, .esc-mano__pulgar, .esc-mano__grano, .esc-recoge__hormiga, .esc-recoge__grano, .esc-lleva__hormiga, .esc-deja__hormiga, .esc-deja__grano) { animation: none; }
+.i .h-fila--pie, .i .ck__h--3, .i .ck__h--4 { display: none; }
+.i .ck__h { bottom: 26px; animation-duration: 34s; }
+.i .ck__h--2 { animation-delay: -17s; }
+.i .h-sendero__hormiga { animation-duration: 28s; margin-top: -10px; }
+.i .hm-cae { animation-duration: 7s; }
+.i :is(.actor__hormiga, .cifra__hormiga, .cm__abeja, .dh-monte__hormiga) { animation: i-flota 5.5s ease-in-out infinite alternate; }
+@keyframes i-flota { from { translate: 0 0; } to { translate: 0 -6px; } }
+
+/* ===== Hero: panal, flores y dos abejas ===== */
+.im-celda { stroke: var(--h-saffron-deep); stroke-width: 2.5; stroke-linejoin: round; }
+.im-celda--polen { fill: var(--i-cera); }
+.im-celda--miel { fill: var(--h-saffron); filter: url(#h-arena); }
+.im-celda--vacia { fill: var(--h-shell-3); }
+.im-tallo { fill: none; stroke: var(--h-celadon-2); stroke-width: 3; stroke-linecap: round; }
+.im-abeja { color: var(--h-graphite); }
+
+/* ===== Trama de panal sobre superficies grandes (reemplaza el damero de arena) ===== */
+.i :is(.ch, .ck__lado--donar, .dh-monte) { position: relative; isolation: isolate; }
+.i :is(.ch, .ck__lado--donar)::after {
+  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
+  background: var(--h-saffron-deep); opacity: 0.1; -webkit-mask: var(--i-trama) 0 0 / 52px 90px; mask: var(--i-trama) 0 0 / 52px 90px;
+}
+.i .ck__duna path { fill: var(--h-saffron-2); }
+
+/* ===== La colmena (Entidades) =====
+ * Celdas con la punta arriba en coordenadas axiales: x = (q + r/2) · ancho, y = r · 3/4 · alto.
+ * El panal mide (2·anillo + 1) celdas de ancho y (1 + 1,5·anillo) de alto, así que crece con cada vuelta de la espiral.
+ * --hw se resuelve contra el ancho del panal (left, width) y --hh contra su alto (top). */
+.cm { position: relative; isolation: isolate; overflow: hidden; padding: 56px clamp(16px, 3vw, 40px) 64px; border-radius: var(--c-r-l); background: var(--h-saffron-100); }
+.cm::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--h-saffron-deep); opacity: 0.12; -webkit-mask: var(--i-trama) 0 0 / 52px 90px; mask: var(--i-trama) 0 0 / 52px 90px; }
+.cm__panal {
+  --hw: calc(100% / (2 * var(--anillo) + 1));
+  --hh: calc(100% / (1 + 1.5 * var(--anillo)));
+  position: relative; margin: 0 auto;
+  width: min(100%, calc(168px * (2 * var(--anillo) + 1)));
+  aspect-ratio: calc(2 * var(--anillo) + 1) / calc(1.1547 * (1 + 1.5 * var(--anillo)));
+}
+.cm__celda {
+  position: absolute; isolation: isolate; container-type: inline-size;
+  width: var(--hw); aspect-ratio: 1 / 1.1547;
+  left: calc(50% + (var(--q) + var(--r) / 2) * var(--hw) - var(--hw) / 2);
+  top: calc(50% + var(--r) * 0.75 * var(--hh) - var(--hh) / 2);
+  animation: cm-crece 520ms cubic-bezier(0.2, 0.7, 0.3, 1) both; animation-delay: calc(var(--orden) * 70ms);
+}
+.cm__celda, .cm__celda > a, .cm__celda::before { clip-path: polygon(50% 1.5%, 97% 25.8%, 97% 74.2%, 50% 98.5%, 3% 74.2%, 3% 25.8%); }
+.cm__celda { clip-path: none; }
+.cm__celda::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--h-graphite); opacity: 0.45; -webkit-mask: var(--h-grano) 0 0 / 160px repeat; mask: var(--h-grano) 0 0 / 160px repeat; transform: translate(4px, 6px); }
+@keyframes cm-crece { from { scale: 0.86; } to { scale: 1; } }
+.cm__celda > a {
+  position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 2px;
+  padding: 18% 12%; text-align: center; text-decoration: none;
+  background: var(--h-grano-fino) 0 0 / 120px, var(--h-saffron);
+  transition: background-color 160ms, filter 160ms;
+}
+.cm__celda > a:hover { filter: brightness(1.04); }
+.cm__celda > a:focus-visible { outline: none; background: var(--h-grano-fino) 0 0 / 120px, var(--h-celadon); }
+.cm__celda > a[aria-current="true"] { background: var(--h-grano-fino) 0 0 / 120px, var(--h-celadon); }
+.cm__celda b { font-size: 0.875rem; font-weight: 800; line-height: 1.15; text-wrap: balance; }
+.cm__celda small { font-size: 0.75rem; color: var(--h-ink-2); }
+.cm__polen { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; max-width: 70px; margin-bottom: 4px; }
+.cm__polen i { width: 12px; height: 12px; border-radius: 50%; background: var(--h-grano-fino) 0 0 / 60px, var(--h-saffron-deep); }
+.cm__celda--nueva::before { display: none; }
+.cm__celda--nueva > a { background: var(--i-hueco) center / 100% 100% no-repeat; }
+.cm__celda--nueva b { color: var(--h-ink-2); font-weight: 700; }
+@container (max-width: 118px) {
+  .cm__celda b, .cm__celda small { display: none; }
+  .cm__polen { max-width: 48px; }
+  .cm__polen i { width: 9px; height: 9px; }
+}
+.cm__flor { position: absolute; z-index: -1; width: 64px; height: 64px; }
+.cm__flor--1 { left: -14px; bottom: -14px; width: 92px; height: 92px; }
+.cm__flor--2 { left: 58px; bottom: -22px; }
+.cm__flor--3 { right: -18px; top: -16px; width: 80px; height: 80px; }
+.cm__abeja { position: absolute; right: 54px; top: 18px; width: 52px; height: 43px; color: var(--h-graphite); }
+
+@media (prefers-reduced-motion: reduce) {
+  .i :is(.actor__hormiga, .cifra__hormiga, .cm__abeja, .dh-monte__hormiga, .cm__celda, .ck__h, .h-sendero__hormiga) { animation: none; }
+}
+
+/* Celdas vacías de la vuelta actual: solo el contorno de cera */
+.cm__celda--hueca { animation: none; }
+.cm__celda--hueca::before { display: none; }
+.cm__celda--hueca > span { position: absolute; inset: 0; clip-path: polygon(50% 1.5%, 97% 25.8%, 97% 74.2%, 50% 98.5%, 3% 74.2%, 3% 25.8%); background: var(--h-shell-3); opacity: 0.55; }

@@ -1,0 +1,392 @@
+<meta charset="utf-8">
+<title>DonaTrack Variante H</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="css/fuentes.css">
+<style>
+/* Carcasa de revisión: el prototipo real ocupa la pantalla; un control flotante pasa a la encuesta,
+   que pone la sección a revisar en un marco al lado de sus preguntas. Paleta de la variante H. */
+:root {
+  --bg: #f3e6e2; --panel: #fbf5f3; --ink: #2f2b30; --ink-2: #5c565d; --line: rgb(72 67 73 / 0.16);
+  --accent: #fa9500; --accent-soft: #fde2bd; --slate: #3a606e; --on-slate: #fbf5f3; --ok: #5f9e67;
+  --frame: #e9dad5; --shadow: 0 1px 0 rgb(72 67 73 / 0.12), 0 14px 36px -18px rgb(72 67 73 / 0.45);
+  --font: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1f1c20; --panel: #2a262b; --ink: #f3e6e2; --ink-2: #c3b8b4; --line: rgb(243 230 226 / 0.14);
+  --accent: #fbae3c; --accent-soft: #4a3a22; --slate: #8fb8c6; --on-slate: #1f1c20; --ok: #8fcf98;
+  --frame: #151316; --shadow: 0 1px 0 rgb(0 0 0 / 0.3), 0 14px 36px -18px rgb(0 0 0 / 0.8); color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #1f1c20; --panel: #2a262b; --ink: #f3e6e2; --ink-2: #c3b8b4; --line: rgb(243 230 226 / 0.14);
+  --accent: #fbae3c; --accent-soft: #4a3a22; --slate: #8fb8c6; --on-slate: #1f1c20; --ok: #8fcf98;
+  --frame: #151316; --shadow: 0 1px 0 rgb(0 0 0 / 0.3), 0 14px 36px -18px rgb(0 0 0 / 0.8); color-scheme: dark; }
+html, body { height: 100%; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.45; overflow: hidden; }
+*, *::before, *::after { box-sizing: border-box; }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--slate); outline-offset: 2px; }
+
+/* ===== Navegación libre: el prototipo a pantalla completa ===== */
+.libre { position: fixed; inset: 0; }
+.libre iframe { width: 100%; height: 100%; border: 0; display: block; background: #fbf5f3; }
+
+/* ===== Encuesta ===== */
+.enc { position: fixed; inset: 0; display: grid; grid-template-columns: minmax(340px, 420px) minmax(0, 1fr); }
+.enc__panel { display: flex; flex-direction: column; min-height: 0; background: var(--panel); border-right: 1px solid var(--line); }
+.enc__cab { display: grid; gap: 10px; padding-block: 20px 14px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: 20px; border-bottom: 1px solid var(--line); }
+.enc__marca { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.enc__marca h1 { margin: 0; font-size: 1.15rem; font-weight: 850; letter-spacing: -0.02em; }
+.enc__progreso { font-size: 0.8125rem; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.barra { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.barra i { display: block; height: 100%; width: var(--p, 0%); background: var(--accent); transition: width 240ms; }
+.pasos { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: thin; }
+.pasos button { flex: none; display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 0; border-radius: 999px; background: transparent; box-shadow: inset 0 0 0 1px var(--line); font-size: 0.8125rem; font-weight: 600; cursor: pointer; white-space: nowrap; }
+.pasos button[aria-current="step"] { background: var(--ink); color: var(--panel); box-shadow: none; }
+.pasos button .hecho { width: 8px; height: 8px; border-radius: 50%; background: var(--line); }
+.pasos button.is-hecho .hecho { background: var(--ok); }
+.enc__cuerpo { flex: 1; min-height: 0; overflow-y: auto; padding-block: 20px 120px; padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: 20px; display: grid; align-content: start; gap: 18px; }
+.sec__etq { margin: 0; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-2); }
+.sec__tit { margin: 2px 0 0; font-size: 1.5rem; font-weight: 850; letter-spacing: -0.025em; line-height: 1.1; text-wrap: balance; }
+.sec__mira { margin: 0; padding: 12px 14px; border-radius: 12px; background: var(--accent-soft); font-size: 0.9375rem; }
+.sec__mira b { display: block; font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px; }
+.preg { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; }
+.preg legend, .preg > label { padding: 0; font-weight: 700; font-size: 0.9875rem; line-height: 1.3; }
+.preg__ayuda { margin: -4px 0 0; font-size: 0.8125rem; color: var(--ink-2); }
+.escala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.escala label, .opciones label { position: relative; }
+.escala input, .opciones input { position: absolute; opacity: 0; pointer-events: none; }
+.escala span { display: grid; place-items: center; height: 42px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--line); font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; }
+.escala__fin { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--ink-2); }
+.opciones { display: grid; gap: 6px; }
+.opciones span { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--line); cursor: pointer; }
+.opciones span::before { content: ""; flex: none; width: 14px; height: 14px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--ink-2); }
+:is(.escala, .opciones) input:checked + span { background: var(--slate); color: var(--on-slate); box-shadow: none; }
+.opciones input:checked + span::before { box-shadow: inset 0 0 0 4px var(--on-slate); }
+:is(.escala, .opciones) input:focus-visible + span { outline: 3px solid var(--accent); outline-offset: 2px; }
+textarea, .campo { width: 100%; padding: 10px 12px; border: 0; border-radius: 10px; background: var(--bg); box-shadow: inset 0 0 0 1px var(--line); resize: vertical; min-height: 44px; }
+textarea { min-height: 84px; }
+.sec__pie { display: flex; justify-content: space-between; gap: 10px; padding-top: 4px; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; padding: 0 16px; border: 0; border-radius: 999px; font-weight: 700; cursor: pointer; background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+.btn--fuerte { background: var(--ink); color: var(--panel); box-shadow: none; }
+.btn[disabled] { opacity: 0.4; cursor: default; }
+.estado { margin: 0; font-size: 0.8125rem; color: var(--ink-2); }
+.estado.is-ok::before { content: "● "; color: var(--ok); }
+.copia { display: grid; gap: 8px; padding: 14px; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--line); }
+.copia p { margin: 0; font-size: 0.875rem; }
+.copia pre { margin: 0; max-height: 160px; overflow: auto; padding: 10px; border-radius: 8px; background: var(--bg); font-size: 0.75rem; white-space: pre-wrap; }
+
+.enc__vista { display: flex; flex-direction: column; min-width: 0; min-height: 0; padding: 14px; padding-right: max(14px, env(safe-area-inset-right, 0px)); gap: 10px; background: var(--frame); }
+.vista__barra { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.vista__pag { margin: 0; font-size: 0.875rem; font-weight: 700; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vista__marco { flex: 1; min-height: 0; display: grid; justify-items: center; }
+.vista__marco iframe { width: 100%; height: 100%; border: 0; border-radius: 14px; background: #fbf5f3; box-shadow: var(--shadow); transition: width 240ms; }
+.vista__marco.is-celu iframe { width: min(100%, 390px); }
+
+/* Controles segmentados (modo, tema, tipografía, ancho) */
+.seg { display: inline-flex; padding: 3px; border-radius: 999px; background: var(--panel); box-shadow: inset 0 0 0 1px var(--line); }
+.seg button { min-height: 34px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; font-size: 0.8125rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--panel); }
+
+/* ===== Control flotante: siempre en la esquina ===== */
+.flota { position: fixed; z-index: 20; right: max(16px, calc(env(safe-area-inset-right, 0px) + 12px)); bottom: max(16px, calc(env(safe-area-inset-bottom, 0px) + 12px)); display: flex; align-items: center; gap: 8px; padding: 6px; border-radius: 999px; background: var(--panel); box-shadow: var(--shadow), inset 0 0 0 1px var(--line); }
+.flota__modo button { min-height: 40px; padding: 0 16px; }
+.flota details { position: relative; }
+.flota summary { list-style: none; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--line); font-size: 0.8125rem; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.flota summary::-webkit-details-marker { display: none; }
+.flota__pop { position: absolute; right: 0; bottom: calc(100% + 10px); display: grid; gap: 14px; width: min(320px, calc(100vw - 32px)); padding: 16px; border-radius: 16px; background: var(--panel); box-shadow: var(--shadow), inset 0 0 0 1px var(--line); }
+.flota__pop p { margin: 0 0 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
+.tipos { display: grid; gap: 6px; }
+.tipos button { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 0; border-radius: 10px; background: transparent; box-shadow: inset 0 0 0 1px var(--line); cursor: pointer; text-align: left; }
+.tipos button[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--slate); }
+.tipos b { font-size: 1.25rem; font-weight: 850; letter-spacing: -0.02em; }
+.tipos small { font-size: 0.75rem; color: var(--ink-2); }
+
+@media (max-width: 900px) {
+  body { overflow: auto; }
+  .enc { position: static; display: flex; flex-direction: column-reverse; min-height: 100%; }
+  .enc__vista { height: 58vh; position: sticky; top: 0; z-index: 5; padding-left: max(12px, env(safe-area-inset-left, 0px)); }
+  .enc__panel { border-right: 0; }
+  .enc__cuerpo { overflow: visible; padding-bottom: 110px; }
+  .vista__ancho { display: none; }
+  .flota__etq { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<!-- Navegación libre -->
+<div class="libre" id="libre">
+  <iframe id="marco-libre" title="Prototipo de DonaTrack, navegación libre" src="h-inicio.html"></iframe>
+</div>
+
+<!-- Encuesta por sección -->
+<div class="enc" id="encuesta" hidden>
+  <section class="enc__panel" aria-labelledby="enc-tit">
+    <header class="enc__cab">
+      <div class="enc__marca"><h1 id="enc-tit">Revisión de la variante H</h1><span class="enc__progreso" id="progreso">0 de 9</span></div>
+      <div class="barra" aria-hidden="true"><i id="barra"></i></div>
+      <nav class="pasos" id="pasos" aria-label="Secciones de la encuesta"></nav>
+    </header>
+    <div class="enc__cuerpo" id="cuerpo"></div>
+  </section>
+  <section class="enc__vista" aria-label="Sección a revisar">
+    <div class="vista__barra">
+      <p class="vista__pag" id="vista-pag">Portada</p>
+      <div class="seg vista__ancho" role="group" aria-label="Ancho de la vista">
+        <button type="button" id="ancho-esc" aria-pressed="true">Escritorio</button>
+        <button type="button" id="ancho-cel" aria-pressed="false">Celular</button>
+      </div>
+    </div>
+    <div class="vista__marco" id="vista-marco"><iframe id="marco-enc" title="Sección a revisar"></iframe></div>
+  </section>
+</div>
+
+<!-- Control flotante -->
+<div class="flota" role="region" aria-label="Controles de la revisión">
+  <div class="seg flota__modo" role="group" aria-label="Modo">
+    <button type="button" id="modo-libre" aria-pressed="true">Navegar</button>
+    <button type="button" id="modo-enc" aria-pressed="false">Encuesta</button>
+  </div>
+  <details id="vista-det">
+    <summary aria-label="Tema y tipografía"><span id="resumen">Hormigas · A</span></summary>
+    <div class="flota__pop">
+      <div><p>Tema</p>
+        <div class="seg" role="group" aria-label="Tema">
+          <button type="button" data-tema="h" aria-pressed="true">Hormigas</button>
+          <button type="button" data-tema="i" aria-pressed="false">Abejas</button>
+        </div>
+      </div>
+      <div><p>Tipografía de títulos</p>
+        <div class="tipos" id="tipos" role="group" aria-label="Tipografía de títulos"></div>
+      </div>
+    </div>
+  </details>
+</div>
+
+<script>
+/* ===== Contenido de la encuesta ===== */
+const SECCIONES = [
+  { id: "portada", pagina: "inicio.html", ancla: "", etiqueta: "Portada", titulo: "La portada de la landing",
+    mira: "El título, la ilustración animada y la ficha de ejemplo que cambia de estado sola.",
+    preguntas: [
+      { id: "claridad", tipo: "escala", texto: "En cinco segundos, ¿se entiende qué hace DonaTrack?", min: "Nada claro", max: "Clarísimo" },
+      { id: "ilustracion", tipo: "opcion", texto: "La ilustración del costado…", opciones: ["Ayuda a entender la idea", "Es linda pero no suma", "Distrae del mensaje"] },
+      { id: "titulo", tipo: "texto", texto: "¿Qué cambiarías del título o del texto de abajo?" } ] },
+  { id: "problema", pagina: "inicio.html", ancla: "problema", etiqueta: "El problema", titulo: "Por qué existe DonaTrack",
+    mira: "La sección que cuenta qué pasa con una donación cuando nadie la sigue.",
+    preguntas: [
+      { id: "identifica", tipo: "escala", texto: "¿Te identificás con el problema que plantea?", min: "Para nada", max: "Totalmente" },
+      { id: "tono", tipo: "opcion", texto: "El tono de esta parte es…", opciones: ["Demasiado serio", "Justo", "Demasiado liviano"] },
+      { id: "comentario", tipo: "texto", texto: "¿Falta algo para que convenza?" } ] },
+  { id: "roles", pagina: "inicio.html", ancla: "actores", etiqueta: "Roles", titulo: "Quién participa",
+    mira: "Las tres tarjetas: persona donante, entidad y administración.",
+    preguntas: [
+      { id: "claros", tipo: "opcion", texto: "¿Queda claro qué hace cada rol?", opciones: ["Sí, los tres", "Más o menos", "No"] },
+      { id: "menos", tipo: "opcion", texto: "¿Qué tarjeta entendiste menos?", opciones: ["Persona donante", "Entidad", "Administración", "Las entendí todas"] },
+      { id: "comentario", tipo: "texto", texto: "¿Algo que sobre o que falte en las tarjetas?" } ] },
+  { id: "impacto", pagina: "inicio.html", ancla: "impacto", etiqueta: "Impacto", titulo: "Las cifras de impacto",
+    mira: "Los números grandes y las pilas que los acompañan.",
+    preguntas: [
+      { id: "creibles", tipo: "escala", texto: "¿Las cifras te parecen creíbles?", min: "Nada", max: "Mucho" },
+      { id: "otra", tipo: "texto", texto: "¿Qué otra cifra te gustaría ver?" } ] },
+  { id: "inicio", pagina: "donante.html", ancla: "", etiqueta: "Inicio donante", titulo: "El inicio de la persona donante",
+    mira: "La primera pantalla después de ingresar: tus granitos, tu categoría y dónde está tu última donación.",
+    preguntas: [
+      { id: "primero", tipo: "texto", texto: "¿Qué es lo primero que mirás? ¿Es lo más importante?" },
+      { id: "monticulo", tipo: "opcion", texto: "La pila de granitos (uno por donación)…", opciones: ["Me motiva a donar más", "Me da igual", "No la entiendo"] },
+      { id: "ultima", tipo: "escala", texto: "¿Qué tan fácil es saber dónde está tu última donación?", min: "Muy difícil", max: "Muy fácil" } ] },
+  { id: "donaciones", pagina: "donante-donaciones.html", ancla: "", etiqueta: "Mis donaciones", titulo: "La lista de tus donaciones",
+    mira: "La tabla con qué donaste, a qué entidad llegó, su estado y la fecha.",
+    preguntas: [
+      { id: "columnas", tipo: "opcion", texto: "Las columnas de la tabla…", opciones: ["Son las que necesito", "Sobra alguna", "Falta alguna"] },
+      { id: "cuales", tipo: "texto", texto: "Si sobra o falta alguna, ¿cuál?" },
+      { id: "estados", tipo: "escala", texto: "¿Se distinguen bien los estados (los rótulos de color)?", min: "Nada", max: "Perfecto" } ] },
+  { id: "entidades", pagina: "donante-entidades.html", ancla: "", etiqueta: "Entidades", titulo: "Hormiguero o colmena",
+    mira: "Probá los dos temas desde el control de abajo: cada cámara o celda es una entidad a la que llegaron tus donaciones.",
+    preguntas: [
+      { id: "ayuda", tipo: "escala", texto: "¿El dibujo te ayuda a ver a quién llegaron tus donaciones?", min: "Nada", max: "Mucho" },
+      { id: "metafora", tipo: "opcion", texto: "¿Qué funciona mejor en esta pantalla?", opciones: ["El hormiguero", "La colmena", "Ninguno, prefiero una lista"] },
+      { id: "comentario", tipo: "texto", texto: "¿Qué le cambiarías?" } ] },
+  { id: "incentivos", pagina: "donante-incentivos.html", ancla: "", etiqueta: "Incentivos", titulo: "Categorías, misiones e insignias",
+    mira: "El recorrido de categorías, la misión activa y las insignias.",
+    preguntas: [
+      { id: "subir", tipo: "opcion", texto: "¿Entendés cómo subir de categoría?", opciones: ["Sí", "Más o menos", "No"] },
+      { id: "ganas", tipo: "escala", texto: "¿Las insignias te dan ganas de donar más seguido?", min: "Nada", max: "Mucho" } ] },
+  { id: "cierre", pagina: "inicio.html", ancla: "", etiqueta: "Cierre", titulo: "Identidad general",
+    mira: "Antes de responder, cambiá el tema y la tipografía desde el control de la esquina y recorré un par de pantallas.",
+    preguntas: [
+      { id: "tema", tipo: "opcion", texto: "¿Qué tema preferís para DonaTrack?", opciones: ["Hormigas", "Abejas", "Me da igual"] },
+      { id: "porque", tipo: "texto", texto: "¿Por qué?" },
+      { id: "tipografia", tipo: "opcion", texto: "¿Qué tipografía de títulos preferís?", opciones: ["A · DM Sans", "B · Archivo expandida", "C · Bricolage Grotesque"] },
+      { id: "animacion", tipo: "opcion", texto: "La cantidad de animación es…", opciones: ["Demasiada", "Justa", "Poca"] },
+      { id: "general", tipo: "texto", texto: "Comentario general" },
+      { id: "nombre", tipo: "linea", texto: "Tu nombre (opcional)" } ] },
+];
+
+/* Pruebas A/B/C: tipografías pesadas sin serifa para los títulos del prototipo */
+const TIPOS = {
+  A: { nombre: "DM Sans", nota: "La actual, peso 800", familia: '"DM Sans"' },
+  B: { nombre: "Archivo", nota: "Expandida, peso 850", familia: '"Archivo"', estirar: "118%", peso: 850,
+       href: "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" },
+  C: { nombre: "Bricolage Grotesque", nota: "Con carácter, peso 800", familia: '"Bricolage Grotesque"', peso: 800,
+       href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" },
+};
+document.fonts && Object.values(TIPOS).forEach(t => { if (t.href && !document.querySelector(`link[href="${t.href}"]`)) { const l = document.createElement("link"); l.rel = "stylesheet"; l.href = t.href; document.head.append(l); } });
+
+/* ===== Estado ===== */
+const guardado = leer("dt-revision") || {};
+const estado = { modo: "libre", tema: guardado.tema || "h", tipo: guardado.tipo || "A", sec: guardado.sec || 0, celu: false, respuestas: guardado.respuestas || {} };
+function leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
+function escribirLocal() { try { localStorage.setItem("dt-revision", JSON.stringify({ tema: estado.tema, tipo: estado.tipo, sec: estado.sec, respuestas: estado.respuestas })); } catch {} }
+
+const $ = s => document.querySelector(s);
+const marcoLibre = $("#marco-libre"), marcoEnc = $("#marco-enc");
+
+/* Aplica la tipografía elegida dentro del prototipo (mismo origen: se puede tocar su documento) */
+function aplicarTipo(marco) {
+  let doc; try { doc = marco.contentDocument; } catch { return; }
+  if (!doc || !doc.head) return;
+  const t = TIPOS[estado.tipo];
+  doc.getElementById("dt-tipo")?.remove();
+  if (t.href && !doc.querySelector(`link[href="${t.href}"]`)) { const l = doc.createElement("link"); l.rel = "stylesheet"; l.href = t.href; doc.head.append(l); }
+  if (estado.tipo === "A") return;
+  const s = doc.createElement("style"); s.id = "dt-tipo";
+  s.textContent = `.h :is(h1, h2, .c-display, .c-num, .dh-cat__nombre, .ck__gran, .hg__ficha h3) { font-family: ${t.familia}, "DM Sans", system-ui, sans-serif !important; font-weight: ${t.peso} !important; ${t.estirar ? `font-stretch: ${t.estirar};` : ""} }`;
+  doc.head.append(s);
+}
+[marcoLibre, marcoEnc].forEach(m => m.addEventListener("load", () => aplicarTipo(m)));
+
+/* Cambiar de tema conserva la página: h-donante.html ⇄ i-donante.html */
+function conTema(nombre) { return nombre.replace(/^[hi]-/, "") ; }
+function rutaActual(marco) { try { return marco.contentWindow.location.pathname.split("/").pop() + marco.contentWindow.location.hash; } catch { return ""; } }
+
+function pintarControles() {
+  document.querySelectorAll("[data-tema]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tema === estado.tema)));
+  $("#tipos").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tipo === estado.tipo)));
+  $("#resumen").textContent = (estado.tema === "h" ? "Hormigas" : "Abejas") + " · " + estado.tipo;
+  $("#modo-libre").setAttribute("aria-pressed", String(estado.modo === "libre"));
+  $("#modo-enc").setAttribute("aria-pressed", String(estado.modo === "enc"));
+  $("#libre").hidden = estado.modo !== "libre";
+  $("#encuesta").hidden = estado.modo !== "enc";
+}
+
+$("#tipos").innerHTML = Object.entries(TIPOS).map(([k, t]) =>
+  `<button type="button" data-tipo="${k}" aria-pressed="false"><b style="font-family:${t.familia.replace(/"/g, "'")}, system-ui; font-weight:${t.peso || 800}; ${t.estirar ? `font-stretch:${t.estirar}` : ""}">${k} · Hola, Nicolás</b><small>${t.nombre} · ${t.nota}</small></button>`).join("");
+$("#tipos").addEventListener("click", e => { const b = e.target.closest("[data-tipo]"); if (!b) return; estado.tipo = b.dataset.tipo; escribirLocal(); pintarControles(); aplicarTipo(marcoLibre); aplicarTipo(marcoEnc); });
+document.querySelectorAll("[data-tema]").forEach(b => b.addEventListener("click", () => {
+  if (estado.tema === b.dataset.tema) return;
+  const libre = rutaActual(marcoLibre);
+  estado.tema = b.dataset.tema; escribirLocal(); pintarControles();
+  if (libre) marcoLibre.src = estado.tema + "-" + conTema(libre);
+  mostrarSeccion(false);
+}));
+
+function cambiarModo(m) {
+  estado.modo = m; pintarControles();
+  if (m === "enc") mostrarSeccion(true);
+  else { const s = SECCIONES[estado.sec]; const actual = rutaActual(marcoLibre); const deseada = estado.tema + "-" + s.pagina; if (!actual.startsWith(deseada)) marcoLibre.src = deseada + (s.ancla ? "#" + s.ancla : ""); }
+}
+$("#modo-libre").addEventListener("click", () => cambiarModo("libre"));
+$("#modo-enc").addEventListener("click", () => cambiarModo("enc"));
+$("#ancho-esc").addEventListener("click", () => { estado.celu = false; $("#vista-marco").classList.remove("is-celu"); $("#ancho-esc").setAttribute("aria-pressed", "true"); $("#ancho-cel").setAttribute("aria-pressed", "false"); });
+$("#ancho-cel").addEventListener("click", () => { estado.celu = true; $("#vista-marco").classList.add("is-celu"); $("#ancho-esc").setAttribute("aria-pressed", "false"); $("#ancho-cel").setAttribute("aria-pressed", "true"); });
+
+/* ===== Encuesta: pasos, preguntas y guardado ===== */
+function respondida(s) { const r = estado.respuestas[s.id] || {}; return s.preguntas.some(p => r[p.id] !== undefined && r[p.id] !== ""); }
+function pintarPasos() {
+  $("#pasos").innerHTML = SECCIONES.map((s, i) => `<button type="button" data-i="${i}" class="${respondida(s) ? "is-hecho" : ""}" ${i === estado.sec ? 'aria-current="step"' : ""}><span class="hecho" aria-hidden="true"></span>${s.etiqueta}</button>`).join("");
+  const hechas = SECCIONES.filter(respondida).length;
+  $("#progreso").textContent = `${hechas} de ${SECCIONES.length} secciones`;
+  $("#barra").style.setProperty("--p", (hechas / SECCIONES.length * 100) + "%");
+}
+$("#pasos").addEventListener("click", e => { const b = e.target.closest("[data-i]"); if (b) { estado.sec = +b.dataset.i; escribirLocal(); mostrarSeccion(true); } });
+
+const esc = t => String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function campo(s, p) {
+  const v = (estado.respuestas[s.id] || {})[p.id];
+  const id = `q-${s.id}-${p.id}`;
+  if (p.tipo === "escala") return `<fieldset class="preg"><legend>${esc(p.texto)}</legend><div class="escala">${[1, 2, 3, 4, 5].map(n => `<label><input type="radio" name="${id}" id="${id}-${n}" value="${n}" ${v == n ? "checked" : ""}><span>${n}</span></label>`).join("")}</div><div class="escala__fin"><span>${esc(p.min)}</span><span>${esc(p.max)}</span></div></fieldset>`;
+  if (p.tipo === "opcion") return `<fieldset class="preg"><legend>${esc(p.texto)}</legend><div class="opciones">${p.opciones.map((o, k) => `<label><input type="radio" name="${id}" id="${id}-${k}" value="${esc(o)}" ${v === o ? "checked" : ""}><span>${esc(o)}</span></label>`).join("")}</div></fieldset>`;
+  if (p.tipo === "linea") return `<div class="preg"><label for="${id}">${esc(p.texto)}</label><input class="campo" id="${id}" name="${id}" value="${esc(v || "")}" autocomplete="name"></div>`;
+  return `<div class="preg"><label for="${id}">${esc(p.texto)}</label><textarea id="${id}" name="${id}">${esc(v || "")}</textarea></div>`;
+}
+function mostrarSeccion(cargarMarco) {
+  const i = estado.sec, s = SECCIONES[i], ultima = i === SECCIONES.length - 1;
+  $("#cuerpo").innerHTML = `
+    <div><p class="sec__etq">Sección ${i + 1} de ${SECCIONES.length}</p><h2 class="sec__tit">${esc(s.titulo)}</h2></div>
+    <p class="sec__mira"><b>Qué mirar</b>${esc(s.mira)}</p>
+    <form id="form-sec" novalidate>${s.preguntas.map(p => campo(s, p)).join("")}</form>
+    <div class="sec__pie"><button class="btn" type="button" id="ant" ${i === 0 ? "disabled" : ""}>Anterior</button>${ultima ? `<button class="btn btn--fuerte" type="button" id="listo">Terminé</button>` : `<button class="btn btn--fuerte" type="button" id="sig">Siguiente</button>`}</div>
+    <p class="estado" id="estado-guardado" role="status">${textoEstado()}</p>
+    ${ultima ? `<div class="copia" id="copia"><p>Si tus respuestas se guardan solo en este navegador, copialas y mandalas por el grupo.</p><button class="btn" type="button" id="copiar">Copiar mis respuestas</button><pre id="resumen-txt"></pre></div>` : ""}`;
+  $("#form-sec").addEventListener("input", e => { const el = e.target; const pid = el.name.slice(`q-${s.id}-`.length); responder(s, pid, el.type === "radio" && el.closest(".escala") ? +el.value : el.value); });
+  $("#form-sec").addEventListener("submit", e => e.preventDefault());
+  $("#ant").addEventListener("click", () => { estado.sec--; escribirLocal(); mostrarSeccion(true); });
+  $("#sig")?.addEventListener("click", () => { estado.sec++; escribirLocal(); mostrarSeccion(true); $("#cuerpo").scrollTop = 0; });
+  $("#listo")?.addEventListener("click", () => { guardarYa(); $("#estado-guardado").textContent = puedeEscribir ? "¡Gracias! Tus respuestas quedaron guardadas." : "¡Gracias! Copiá tus respuestas y mandalas por el grupo."; });
+  $("#copiar")?.addEventListener("click", copiar);
+  if (ultima) $("#resumen-txt").textContent = resumen();
+  $("#vista-pag").textContent = `${s.etiqueta} · ${estado.tema === "h" ? "Hormigas" : "Abejas"}`;
+  const src = estado.tema + "-" + s.pagina + (s.ancla ? "#" + s.ancla : "");
+  if (cargarMarco !== false || !marcoEnc.getAttribute("src") || !rutaActual(marcoEnc).startsWith(estado.tema + "-")) marcoEnc.src = src;
+  pintarPasos();
+}
+function responder(s, pid, valor) {
+  estado.respuestas[s.id] = { ...(estado.respuestas[s.id] || {}), [pid]: valor, _vista: estado.tema + estado.tipo };
+  escribirLocal(); pintarPasos(); programarGuardado();
+  const r = $("#resumen-txt"); if (r) r.textContent = resumen();
+}
+function resumen() {
+  const r = estado.respuestas;
+  return SECCIONES.map(s => { const a = r[s.id]; if (!a) return null;
+    const lineas = s.preguntas.filter(p => a[p.id] !== undefined && a[p.id] !== "").map(p => `- ${p.texto} ${a[p.id]}`);
+    return lineas.length ? `${s.etiqueta} (visto en ${a._vista === undefined ? "" : (a._vista[0] === "h" ? "hormigas" : "abejas") + ", tipografía " + a._vista[1]})\n${lineas.join("\n")}` : null; })
+    .filter(Boolean).join("\n\n") || "Todavía no respondiste nada.";
+}
+async function copiar() {
+  const txt = resumen();
+  try { await navigator.clipboard.writeText(txt); $("#copiar").textContent = "Copiado"; }
+  catch { const pre = $("#resumen-txt"); const rango = document.createRange(); rango.selectNodeContents(pre); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(rango); $("#copiar").textContent = "Seleccioné el texto: copialo con Ctrl+C"; }
+}
+
+/* Guardado compartido: cada persona escribe solo su documento respuestas/<su id>; Sofía las lee todas.
+   Sin permiso de escritura (visitas de afuera de la organización) queda en este navegador. */
+let db = null, uid = null, puedeEscribir = false, guardando = false, pendiente = false, temporizador = null, errorGuardado = "";
+function textoEstado() {
+  if (errorGuardado) return errorGuardado;
+  return puedeEscribir ? "Tus respuestas se guardan solas." : "Tus respuestas se guardan en este navegador.";
+}
+function programarGuardado() { clearTimeout(temporizador); temporizador = setTimeout(guardarYa, 900); }
+async function guardarYa() {
+  if (!puedeEscribir) return;
+  if (guardando) { pendiente = true; return; }
+  guardando = true;
+  try {
+    await db.doc("respuestas/" + uid).set({ respuestas: estado.respuestas, actualizado: new Date().toISOString() });
+    errorGuardado = ""; const el = $("#estado-guardado"); if (el) { el.textContent = "Guardado."; el.classList.add("is-ok"); }
+  } catch (e) {
+    if (e && e.code === "invalid_argument") { puedeEscribir = false; errorGuardado = "No tenés permiso para guardar acá: tus respuestas quedan en este navegador."; }
+    else errorGuardado = "No se pudo guardar. Lo intento de nuevo con tu próxima respuesta.";
+    const el = $("#estado-guardado"); if (el) { el.textContent = errorGuardado; el.classList.remove("is-ok"); }
+  } finally { guardando = false; if (pendiente) { pendiente = false; guardarYa(); } }
+}
+(async () => {
+  try {
+    const [d, u] = await Promise.all([window.claude?.use?.("db"), window.claude?.use?.("user")]);
+    if (!d || !u) return;
+    const id = await u.id(); const puede = await u.can("data.write");
+    if (!id || puede === false) return;
+    db = d; uid = id; puedeEscribir = true;
+    const snap = await db.doc("respuestas/" + uid).get();
+    const previas = snap.exists ? (snap.data() || {}).respuestas : null;
+    if (previas && Object.keys(estado.respuestas).length === 0) { estado.respuestas = JSON.parse(JSON.stringify(previas)); escribirLocal(); }
+    if (estado.modo === "enc") mostrarSeccion(false); else pintarPasos();
+    if (Object.keys(estado.respuestas).length) programarGuardado();
+  } catch { /* sin db: queda en el navegador */ }
+})();
+
+/* Arranque: #encuesta abre directo la encuesta */
+pintarControles(); pintarPasos();
+marcoLibre.src = estado.tema + "-inicio.html";
+if (location.hash === "#encuesta") cambiarModo("enc");
+document.addEventListener("click", e => { const d = $("#vista-det"); if (d.open && !d.contains(e.target)) d.open = false; });
+</script>
