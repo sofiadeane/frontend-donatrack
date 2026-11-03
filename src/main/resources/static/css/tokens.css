@@ -612,5 +612,15 @@
   --h-soil-deep: #e9a24b;
   /* Tema abejas (i-theme.css): alas translúcidas y contorno punteado de la celda vacía */
   --i-ala: rgb(251 245 243 / 0.78);
+  /* Base amarilla del tema abejas: el fondo, sus superficies y las cosas de la miel (potes, barril, oso) */
+  --i-shell: #faefcd;
+  --i-shell-2: #f1dfab;
+  --i-shell-3: #fffaf0;
+  --i-cafe: #9b5a2a;
+  --i-cafe-2: #74401c;
+  --i-oso: #8f5b34;
+  --i-oso-2: #d2a06a;
+  --i-vidrio: rgb(255 250 240 / 0.55);
+  --i-te: #c9772a;
   --i-hueco: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 115.47' preserveAspectRatio='none'%3E%3Cpath d='M50 3 L96 29.7 V85.8 L50 112.5 L4 85.8 V29.7Z' fill='none' stroke='%23484349' stroke-opacity='0.5' stroke-width='2.5' stroke-dasharray='6 6'/%3E%3C/svg%3E");
 }

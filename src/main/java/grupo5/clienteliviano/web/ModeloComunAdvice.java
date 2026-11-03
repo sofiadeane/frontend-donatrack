@@ -46,23 +46,37 @@ public class ModeloComunAdvice {
   static final Map<String, Map<String, String>> VOCABULARIO =
       Map.of(
           "hormigas",
-          Map.of(
-              "casa", "hormiguero",
-              "tuCasa", "Tu hormiguero",
-              "unaMismaCasa", "un mismo hormiguero",
-              "material", "arena",
-              "bicho", "hormiga",
-              "lugar", "cámara",
-              "lugares", "cámaras"),
+          Map.ofEntries(
+              Map.entry("casa", "hormiguero"),
+              Map.entry("tuCasa", "Tu hormiguero"),
+              Map.entry("unaMismaCasa", "un mismo hormiguero"),
+              Map.entry("bicho", "hormiga"),
+              Map.entry("lugar", "cámara"),
+              Map.entry("lugares", "cámaras"),
+              Map.entry("unidad", "granito"),
+              Map.entry("unidades", "granitos"),
+              Map.entry("aportados", "aportados"),
+              Map.entry("tuAporte", "Tu granito de arena"),
+              Map.entry("suma", "Sumá tu"),
+              Map.entry("aPoco", "Grano a grano"),
+              Map.entry("tuProximo", "tu próximo granito"),
+              Map.entry("cadaUna", "cada grano es una donación")),
           "abejas",
-          Map.of(
-              "casa", "colmena",
-              "tuCasa", "Tu colmena",
-              "unaMismaCasa", "una misma colmena",
-              "material", "polen",
-              "bicho", "abeja",
-              "lugar", "celda",
-              "lugares", "celdas"));
+          Map.ofEntries(
+              Map.entry("casa", "colmena"),
+              Map.entry("tuCasa", "Tu colmena"),
+              Map.entry("unaMismaCasa", "una misma colmena"),
+              Map.entry("bicho", "abeja"),
+              Map.entry("lugar", "celda"),
+              Map.entry("lugares", "celdas"),
+              Map.entry("unidad", "gota"),
+              Map.entry("unidades", "gotas"),
+              Map.entry("aportados", "aportadas"),
+              Map.entry("tuAporte", "Tu gota de miel"),
+              Map.entry("suma", "Sumá tu"),
+              Map.entry("aPoco", "Gota a gota"),
+              Map.entry("tuProximo", "tu próxima gota"),
+              Map.entry("cadaUna", "cada celda que se llena es una donación entregada")));
 
   /**
    * Tema elegido: {@code ?tema=abejas} o {@code ?tema=hormigas} lo guarda en la sesión; por

@@ -17,7 +17,7 @@
   <section class="hg" aria-labelledby="t-hg">
     <div class="pc-tit">
       <h2 id="t-hg">Entidades a las que llegaron tus donaciones</h2>
-      <p th:if="${h.ok()}" th:text="${#lists.size(h.datos) == 1} ? |1 ${voc.lugar} · cada grano es una donación| : |${#lists.size(h.datos)} ${voc.lugares} · cada grano es una donación|">3 cámaras</p>
+      <p th:if="${h.ok()}" th:text="${#lists.size(h.datos) == 1} ? |1 ${voc.lugar} · ${voc.cadaUna}| : |${#lists.size(h.datos)} ${voc.lugares} · ${voc.cadaUna}|">3 cámaras</p>
     </div>
 
     <th:block th:if="${h.conError()}"><div th:replace="~{fragments/estados-h :: error(${h.error}, '/donante/entidades')}"></div></th:block>
@@ -76,18 +76,16 @@
                     anillo=${n == 0 ? 0 : (n <= 6 ? 1 : (n <= 18 ? 2 : 3))}"
            th:style="|--anillo: ${anillo}|">
         <svg class="cm__flor cm__flor--1" aria-hidden="true"><use href="#i-flor"/></svg>
-        <svg class="cm__flor cm__flor--2" aria-hidden="true"><use href="#i-flor"/></svg>
-        <svg class="cm__flor cm__flor--3" aria-hidden="true"><use href="#i-flor"/></svg>
         <svg class="cm__abeja" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
         <ol class="cm__panal">
           <li th:each="c, it : ${h.datos}" th:if="${it.index < 36}" class="cm__celda"
-              th:style="|--q: ${qs[it.index]}; --r: ${rs[it.index]}; --orden: ${it.index}|">
+              th:classappend="${c.entregadas == c.cantidad} ? 'is-llena' : (${c.entregadas == 0} ? 'is-sin-miel')"
+              th:style="|--q: ${qs[it.index]}; --r: ${rs[it.index]}; --orden: ${it.index}; --nivel: ${c.entregadas * 100 / c.cantidad}%|">
             <a th:href="@{/donante/entidades(entidad=${c.entidad.id})} + '#ficha'"
                th:attr="aria-current=${sel != null and sel.entidad.id == c.entidad.id} ? 'true' : null,
-                        aria-label=${c.entidad.nombre + ', ' + (c.cantidad == 1 ? '1 donación' : c.cantidad + ' donaciones')}">
-              <span class="cm__polen" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, c.cantidad > 12 ? 12 : c.cantidad)}"></i></span>
+                        aria-label=${c.entidad.nombre + ', ' + c.entregadas + ' de ' + c.cantidad + (c.cantidad == 1 ? ' donación entregada' : ' donaciones entregadas')}">
               <b th:text="${c.entidad.nombre}">Comedor Los Girasoles</b>
-              <small th:text="${c.cantidad == 1} ? '1 donación' : ${c.cantidad + ' donaciones'}">2 donaciones</small>
+              <small th:text="${c.entregadas} + ' de ' + ${c.cantidad} + (${c.cantidad == 1} ? ' llegó' : ' llegaron')">1 de 2 llegaron</small>
             </a>
           </li>
           <!-- La celda siguiente de la espiral: se completa cuando una donación llega a una entidad nueva -->
@@ -103,6 +101,11 @@
               th:each="k : ${#numbers.sequence(n + 1, 3 * anillo * (anillo + 1))}" th:style="|--q: ${qs[k]}; --r: ${rs[k]}; --orden: ${k}|"><span></span></li>
           </th:block>
         </ol>
+        <ul class="cm__ley">
+          <li class="is-sin-miel">Vacía: todavía no llegó ninguna</li>
+          <li class="is-media">Se llena a medida que llegan</li>
+          <li class="is-llena">Llena: llegaron todas</li>
+        </ul>
       </div>
 
       <!-- Ficha de la cámara abierta -->
@@ -139,7 +142,7 @@
       <h2 id="t-otras">Otras entidades</h2>
       <output th:text="${#lists.size(p.otras) == 1} ? '1 entidad' : ${#lists.size(p.otras) + ' entidades'}">7 entidades</output>
     </div>
-    <p class="hg__nota">Las donaciones se asignan desde el depósito según lo que cada entidad necesita. Acá podés conocer a dónde puede llegar tu próximo granito.</p>
+    <p class="hg__nota">Las donaciones se asignan desde el depósito según lo que cada entidad necesita. Acá podés conocer a dónde puede llegar <th:block th:text="${voc.tuProximo}">tu próximo granito</th:block>.</p>
 
     <form class="dh-filtros dh-filtros--claro" th:action="@{/donante/entidades} + '#otras'" method="get" aria-label="Filtrar entidades">
       <input type="hidden" name="entidad" th:if="${sel != null}" th:value="${sel.entidad.id}">

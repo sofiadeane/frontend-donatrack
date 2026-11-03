@@ -1,13 +1,17 @@
 /*
  * Variante H · tema abejas ("Colmena"). Se carga después de h-theme.css, solo con body.i: misma paleta, grano y
- * sombras punteadas que las hormigas; cambia los bichos por abejas, la arena por polen y el hormiguero por un panal.
- * Más sobria que las hormigas: las abejas no caminan en fila ni mueven las patas, y las escenas de la landing quedan quietas.
+ * sombras punteadas que las hormigas sobre una base más amarilla. Cambia los bichos por abejas, la arena por miel y
+ * el hormiguero por un panal. Es un tema transversal y sobrio, no una temática: el panal aparece como racimos tenues
+ * en el fondo y en pocas piezas, y las abejas flotan en lugar de caminar.
  */
-body.i {
+body.i, .i.c-app {
+  --h-shell: var(--i-shell);
+  --h-shell-2: var(--i-shell-2);
+  --h-shell-3: var(--i-shell-3);
   --i-miel: var(--h-saffron);
   --i-cera: var(--h-saffron-100);
-  /* Contorno de celda para la trama de panal (máscara: el color lo pone el fondo) */
-  --i-trama: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='90' viewBox='0 0 52 90'%3E%3Cpath d='M26 2 L50 16 V44 L26 58 L2 44 V16Z M26 58 V88 M50 44 L52 45 M2 44 L0 45' fill='none' stroke='%23000' stroke-width='2'/%3E%3C/svg%3E");
+  /* Racimos de celdas en contorno, muy tenues y espaciados (no una trama pareja) */
+  background: url("../img/i-panal-fondo.svg") 0 0 / 1200px 1400px, var(--i-shell);
 }
 
 /* ===== La abeja ===== */
@@ -19,44 +23,111 @@ body.i {
 .i-flor__petalos ellipse { fill: var(--h-shell-3); stroke: var(--h-line); stroke-width: 0.8; }
 .i-flor__centro { fill: var(--h-saffron); filter: url(#h-arena); }
 
+/* ===== Piezas de miel (potes, frascos, panal, cucharón) ===== */
+.i-t { stroke: var(--h-graphite); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.i-t--fino { fill: none; stroke-width: 1.5; }
+path.i-t:not([class*="i-f-"]) { fill: none; }
+.i-f-miel { fill: var(--h-saffron); filter: url(#h-arena); }
+.i-f-cera { fill: var(--i-cera); }
+.i-f-concha { fill: var(--h-shell-3); }
+.i-f-vidrio { fill: var(--i-vidrio); }
+.i-f-cafe { fill: var(--i-cafe); filter: url(#h-arena); }
+.i-f-cafe2 { fill: var(--i-cafe-2); }
+.i-f-oso { fill: var(--i-oso); filter: url(#h-arena); }
+.i-f-oso2 { fill: var(--i-oso-2); }
+.i-f-te { fill: var(--i-te); }
+.i-f-tinta { fill: var(--h-graphite); }
+.i-brillo { fill: none; stroke: var(--h-shell-3); stroke-width: 4; stroke-linecap: round; opacity: 0.6; }
+.i-vapor { fill: none; stroke: var(--h-dots); stroke-width: 2; stroke-linecap: round; }
+.i-aro { fill: none; stroke: var(--i-cafe-2); stroke-width: 6; stroke-linecap: round; }
+.i-mango { fill: none; stroke: var(--i-cafe); stroke-width: 7; stroke-linecap: round; }
+.i-pata-oso { fill: none; stroke: var(--i-oso); stroke-width: 12; stroke-linecap: round; }
+
 /* ===== Menos movimiento: las abejas flotan en lugar de caminar ===== */
 .i .h-ant__pata { animation: none; }
-.i :is(.esc-mano__mano, .esc-mano__pulgar, .esc-mano__grano, .esc-recoge__hormiga, .esc-recoge__grano, .esc-lleva__hormiga, .esc-deja__hormiga, .esc-deja__grano) { animation: none; }
-.i .h-fila--pie, .i .ck__h--3, .i .ck__h--4 { display: none; }
-.i .ck__h { bottom: 26px; animation-duration: 34s; }
-.i .ck__h--2 { animation-delay: -17s; }
+.i .h-fila--pie { display: none; }
 .i .h-sendero__hormiga { animation-duration: 28s; margin-top: -10px; }
 .i .hm-cae { animation-duration: 7s; }
-.i :is(.actor__hormiga, .cifra__hormiga, .cm__abeja, .dh-monte__hormiga) { animation: i-flota 5.5s ease-in-out infinite alternate; }
+.i :is(.actor__hormiga, .cm__abeja, .ck__abeja) { animation: i-flota 5.5s ease-in-out infinite alternate; }
 @keyframes i-flota { from { translate: 0 0; } to { translate: 0 -6px; } }
 
-/* ===== Hero: panal, flores y dos abejas ===== */
+/* ===== Hero: panal que se llena, flores y dos abejas ===== */
 .im-celda { stroke: var(--h-saffron-deep); stroke-width: 2.5; stroke-linejoin: round; }
-.im-celda--polen { fill: var(--i-cera); }
+.im-celda--media { fill: var(--i-cera); }
 .im-celda--miel { fill: var(--h-saffron); filter: url(#h-arena); }
 .im-celda--vacia { fill: var(--h-shell-3); }
 .im-tallo { fill: none; stroke: var(--h-celadon-2); stroke-width: 3; stroke-linecap: round; }
 .im-abeja { color: var(--h-graphite); }
 
-/* ===== Trama de panal sobre superficies grandes (reemplaza el damero de arena) ===== */
-.i :is(.ch, .ck__lado--donar, .dh-monte) { position: relative; isolation: isolate; }
-.i :is(.ch, .ck__lado--donar)::after {
-  content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
-  background: var(--h-saffron-deep); opacity: 0.1; -webkit-mask: var(--i-trama) 0 0 / 52px 90px; mask: var(--i-trama) 0 0 / 52px 90px;
-}
-.i .ck__duna path { fill: var(--h-saffron-2); }
+/* ===== Recorrido: una sola abeja cruza las cuatro estaciones =====
+ * Cada estación anima su tramo mientras está activa (b.js la cambia cada 2,6 s): la abeja llega a la flor, junta el
+ * polen y despega, vuela, y llega al panal, que se llena de miel. Las posiciones van en % del ancho de la tarjeta, así
+ * que cada tramo empieza y termina en los bordes: el viaje arranca en la primera estación y termina en la última. */
+.ei { position: absolute; left: 0; right: 0; top: -62px; height: 64px; pointer-events: none; }
+.ei__flor { position: absolute; bottom: 0; width: 40px; height: 64px; }
+.ei--flor .ei__flor { right: 16%; }
+.ei--junta .ei__flor { left: 10%; }
+.ei__estela { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity 400ms; }
+.ruta__est.is-act .ei__estela { opacity: 1; }
+.ei-estela { fill: none; stroke: var(--h-dots); stroke-width: 1.5; stroke-dasharray: 2 6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.ei__panal { position: absolute; right: 8%; bottom: 0; width: 72px; height: 64px; overflow: visible; }
+.ei-panal__miel { fill: var(--h-saffron); filter: url(#h-arena); }
+.ei__abeja { position: absolute; left: 0; top: 0; width: 36px; height: 29px; opacity: 0; color: var(--h-graphite); overflow: visible; }
+.ei-polen { fill: var(--h-saffron-2); transform-box: fill-box; transform-origin: center; scale: 0; }
+.ruta__est.is-act .ei--flor .ei__abeja { animation: ei-llega 2.6s ease-out both; }
+.ruta__est.is-act .ei--junta .ei__abeja { animation: ei-junta 2.6s ease-in-out both; }
+.ruta__est.is-act .ei-polen { animation: ei-polen 2.6s ease-out both; }
+.ruta__est.is-act .ei--vuela .ei__abeja { animation: ei-vuela 2.6s linear both; }
+.ruta__est.is-act .ei--panal .ei__abeja { animation: ei-arriba 2.6s ease-out both; }
+.ruta__est.is-act .ei-panal__miel { animation: ei-llena 2.6s ease-in-out both; }
+@keyframes ei-llega { 0% { opacity: 1; left: -14%; top: 30px; } 45% { left: 38%; top: 2px; } 75% { left: 62%; top: 16px; } 100% { opacity: 1; left: calc(84% - 38px); top: -2px; } }
+@keyframes ei-junta { 0% { opacity: 1; left: calc(10% + 2px); top: -2px; rotate: 0deg; } 14% { rotate: -5deg; } 28% { rotate: 4deg; } 42% { left: calc(10% + 2px); top: -2px; rotate: 0deg; } 100% { opacity: 1; left: 112%; top: -14px; } }
+@keyframes ei-polen { 0%, 8% { scale: 0; } 40%, 100% { scale: 1; } }
+@keyframes ei-vuela { 0% { opacity: 1; left: -14%; top: 22px; } 25% { left: 18%; top: 4px; } 50% { left: 48%; top: 20px; } 75% { left: 78%; top: 2px; } 100% { opacity: 1; left: 112%; top: 12px; } }
+@keyframes ei-arriba { 0% { opacity: 1; left: -14%; top: 16px; } 55% { left: calc(92% - 104px); top: 2px; } 70% { left: calc(92% - 100px); top: -2px; } 85% { left: calc(92% - 103px); top: 3px; } 100% { opacity: 1; left: calc(92% - 101px); top: 0; } }
+@keyframes ei-llena { 0%, 55% { transform: translateY(36px); } 100% { transform: translateY(0); } }
+
+/* El problema: los puntos de la lista son celdas vacías */
+.i .pq__grano { width: 20px; height: 23px; border: 0; border-radius: 0; background: var(--i-hueco) center / 100% 100% no-repeat; }
+
+/* ===== Tarjetas amarillas · prueba A/B (html[data-tarjeta]) =====
+ * A (por defecto): un racimo de celdas en la esquina. B: miel que gotea desde el borde de arriba.
+ * El fondo va en la tarjeta: su ::after lo hereda y lo pinta encima de la sombra punteada. */
+.i :is(.actor--donante, .ck__lado--donar, .dh-cat) { background: url("../img/i-panal-esquina.svg") right -70px bottom -90px / 380px auto no-repeat, var(--h-saffron); }
+[data-tarjeta="b"] .i :is(.actor--donante, .ck__lado--donar, .dh-cat) { background: url("../img/i-miel-goteo.svg") 0 0 / 420px 70px repeat-x, var(--h-grano-fino) 0 0 / 120px, var(--h-saffron); }
+[data-tarjeta="b"] .i :is(.actor--donante, .dh-cat) { padding-top: 64px; }
+[data-tarjeta="b"] .i .ck__lado--donar { padding-top: clamp(64px, 7vw, 84px); }
+
+/* ===== Ordenamos todo: estados con nombre ===== */
+.i .actor__flujo i { border-radius: 10px; }
+
+/* ===== Impacto: de la colmena a la mesa ===== */
+.cifra__miel { position: absolute; right: 24px; top: 30px; width: 108px; height: 56px; overflow: visible; color: var(--h-graphite); }
+.cifra--0 .cifra__miel { top: auto; right: clamp(22px, 3vw, 40px); bottom: clamp(22px, 3vw, 40px); width: min(44%, 230px); height: auto; aspect-ratio: 220 / 150; }
+.cifra--1 .cifra__miel { width: 118px; height: 55px; }
+.cifra--2 .cifra__miel { width: 104px; height: 61px; }
+.cifra--3 .cifra__miel { width: 104px; height: 56px; }
+.i .cifra > .cifra__miel { position: absolute; z-index: 0; }
+
+/* ===== Cierre: flores al pie de las dos tarjetas ===== */
+.ck__flores { position: absolute; left: 0; right: 0; bottom: 0; height: clamp(84px, 9vw, 110px); overflow: hidden; border-radius: 0 0 var(--c-r-xl) var(--c-r-xl); pointer-events: none; }
+.ck__flores svg { position: absolute; bottom: -22px; width: 72px; height: 72px; }
+.ck__flores svg:nth-child(1) { left: 6%; }
+.ck__flores svg:nth-child(2) { left: 17%; bottom: -34px; width: 58px; height: 58px; }
+.ck__flores svg:nth-child(3) { right: 8%; width: 64px; height: 64px; }
+.ck__flores .ck__abeja { left: 27%; bottom: 40px; width: 48px; height: 40px; color: var(--h-graphite); }
+.i .ck__lado { padding-bottom: clamp(100px, 11vw, 140px); }
 
 /* ===== La colmena (Entidades) =====
  * Celdas con la punta arriba en coordenadas axiales: x = (q + r/2) · ancho, y = r · 3/4 · alto.
  * El panal mide (2·anillo + 1) celdas de ancho y (1 + 1,5·anillo) de alto, así que crece con cada vuelta de la espiral.
- * --hw se resuelve contra el ancho del panal (left, width) y --hh contra su alto (top). */
-.cm { position: relative; isolation: isolate; overflow: hidden; padding: 56px clamp(16px, 3vw, 40px) 64px; border-radius: var(--c-r-l); background: var(--h-saffron-100); }
-.cm::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--h-saffron-deep); opacity: 0.12; -webkit-mask: var(--i-trama) 0 0 / 52px 90px; mask: var(--i-trama) 0 0 / 52px 90px; }
+ * Cada celda se llena de miel desde abajo según la parte de las donaciones que ya llegó (--nivel); las de cera
+ * que completan la vuelta quedan solo con el contorno. */
+.cm { position: relative; isolation: isolate; overflow: hidden; display: grid; gap: 22px; padding: 48px clamp(16px, 3vw, 40px) 28px; border-radius: var(--c-r-l); background: var(--h-shell-3); box-shadow: inset 0 0 0 1px var(--h-line-soft); }
 .cm__panal {
   --hw: calc(100% / (2 * var(--anillo) + 1));
   --hh: calc(100% / (1 + 1.5 * var(--anillo)));
-  position: relative; margin: 0 auto;
-  width: min(100%, calc(168px * (2 * var(--anillo) + 1)));
+  position: relative; width: min(100%, calc(168px * (2 * var(--anillo) + 1))); margin: 0 auto;
   aspect-ratio: calc(2 * var(--anillo) + 1) / calc(1.1547 * (1 + 1.5 * var(--anillo)));
 }
 .cm__celda {
@@ -66,42 +137,125 @@ body.i {
   top: calc(50% + var(--r) * 0.75 * var(--hh) - var(--hh) / 2);
   animation: cm-crece 520ms cubic-bezier(0.2, 0.7, 0.3, 1) both; animation-delay: calc(var(--orden) * 70ms);
 }
-.cm__celda, .cm__celda > a, .cm__celda::before { clip-path: polygon(50% 1.5%, 97% 25.8%, 97% 74.2%, 50% 98.5%, 3% 74.2%, 3% 25.8%); }
-.cm__celda { clip-path: none; }
-.cm__celda::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--h-graphite); opacity: 0.45; -webkit-mask: var(--h-grano) 0 0 / 160px repeat; mask: var(--h-grano) 0 0 / 160px repeat; transform: translate(4px, 6px); }
+.cm__celda::before, .cm__celda > a, .cm__celda > span { position: absolute; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+/* La pared de cera: la celda de afuera es el contorno y la de adentro, el contenido */
+.cm__celda::before { content: ""; inset: 3%; background: var(--h-saffron-deep); opacity: 0.55; }
 @keyframes cm-crece { from { scale: 0.86; } to { scale: 1; } }
 .cm__celda > a {
-  position: absolute; inset: 0; display: grid; align-content: center; justify-items: center; gap: 2px;
+  inset: calc(3% + 3px); display: grid; align-content: center; justify-items: center; gap: 2px;
   padding: 18% 12%; text-align: center; text-decoration: none;
-  background: var(--h-grano-fino) 0 0 / 120px, var(--h-saffron);
-  transition: background-color 160ms, filter 160ms;
+  background: linear-gradient(to top, transparent var(--nivel), var(--i-cera) var(--nivel)), var(--h-grano-fino) 0 0 / 120px, var(--h-saffron);
+  transition: filter 160ms;
 }
+.cm__celda.is-sin-miel > a { background: var(--i-cera); }
 .cm__celda > a:hover { filter: brightness(1.04); }
-.cm__celda > a:focus-visible { outline: none; background: var(--h-grano-fino) 0 0 / 120px, var(--h-celadon); }
-.cm__celda > a[aria-current="true"] { background: var(--h-grano-fino) 0 0 / 120px, var(--h-celadon); }
+.cm__celda > a:focus-visible { outline: none; filter: none; background: var(--h-celadon-100); }
+.cm__celda > a[aria-current="true"] { filter: none; }
+.cm__celda:has(> a[aria-current="true"])::before { background: var(--h-slate); opacity: 1; inset: 0; }
 .cm__celda b { font-size: 0.875rem; font-weight: 800; line-height: 1.15; text-wrap: balance; }
 .cm__celda small { font-size: 0.75rem; color: var(--h-ink-2); }
-.cm__polen { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; max-width: 70px; margin-bottom: 4px; }
-.cm__polen i { width: 12px; height: 12px; border-radius: 50%; background: var(--h-grano-fino) 0 0 / 60px, var(--h-saffron-deep); }
 .cm__celda--nueva::before { display: none; }
-.cm__celda--nueva > a { background: var(--i-hueco) center / 100% 100% no-repeat; }
+.cm__celda--nueva > a { inset: 3%; clip-path: none; background: var(--i-hueco) center / 100% 100% no-repeat; }
 .cm__celda--nueva b { color: var(--h-ink-2); font-weight: 700; }
 @container (max-width: 118px) {
   .cm__celda b, .cm__celda small { display: none; }
-  .cm__polen { max-width: 48px; }
-  .cm__polen i { width: 9px; height: 9px; }
 }
-.cm__flor { position: absolute; z-index: -1; width: 64px; height: 64px; }
-.cm__flor--1 { left: -14px; bottom: -14px; width: 92px; height: 92px; }
-.cm__flor--2 { left: 58px; bottom: -22px; }
-.cm__flor--3 { right: -18px; top: -16px; width: 80px; height: 80px; }
-.cm__abeja { position: absolute; right: 54px; top: 18px; width: 52px; height: 43px; color: var(--h-graphite); }
+.cm__flor { position: absolute; z-index: -1; left: -18px; bottom: -18px; width: 92px; height: 92px; }
+.cm__abeja { position: absolute; right: 30px; top: 14px; width: 48px; height: 40px; color: var(--h-graphite); }
+/* Celdas vacías de la vuelta actual: solo la pared */
+.cm__celda--hueca { animation: none; }
+.cm__celda--hueca::before { opacity: 0.22; }
+.cm__celda--hueca > span { inset: calc(3% + 3px); background: var(--h-shell-3); }
+.cm__ley { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 20px; font-size: 0.8125rem; color: var(--h-ink-2); }
+.cm__ley li { display: flex; align-items: center; gap: 8px; }
+.cm__ley li::before { content: ""; width: 16px; height: 18px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: var(--i-cera); box-shadow: inset 0 0 0 2px var(--h-saffron-deep); }
+.cm__ley .is-media::before { background: linear-gradient(to top, var(--h-saffron) 50%, var(--i-cera) 50%); }
+.cm__ley .is-llena::before { background: var(--h-saffron); }
+
+/* ===== Panel · Tu colmena: una celda por donación · prueba A/B/C (html[data-aporte]) ===== */
+
+.ap { --k-llego: var(--h-saffron); --k-camino: var(--i-cera); --k-proceso: var(--h-shell-3); --k-corte: var(--h-failed); }
+.ap.dh-monte { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center; gap: 18px 32px; background: var(--h-celadon); }
+.ap__titulo { display: grid; gap: 2px; font-size: clamp(1.15rem, 0.9rem + 0.8vw, 1.5rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; text-transform: uppercase; color: var(--h-slate-2); }
+.ap__titulo b { font-size: clamp(5.5rem, 3.6rem + 6vw, 9.5rem); line-height: 0.82; letter-spacing: -0.05em; }
+.ap__msg { margin-top: 16px; font-size: 1.05rem; max-width: 26em; }
+/* Muestras de color por estado, compartidas por las tres versiones */
+.ap-k--llego { --k: var(--k-llego); }
+.ap-k--camino { --k: var(--k-camino); }
+.ap-k--proceso { --k: var(--k-proceso); }
+.ap-k--corte { --k: var(--k-corte); }
+.ap-b, .ap-c3 { display: none; }
+[data-aporte="b"] .ap-a, [data-aporte="c"] .ap-a { display: none; }
+[data-aporte="b"] .ap-b { display: flex; }
+[data-aporte="c"] .ap-c3 { display: grid; }
+
+/* A · Panal */
+.ap-a { display: grid; gap: 14px; justify-items: center; }
+.ap-a__panal { width: 100%; max-width: 300px; max-height: 260px; overflow: visible; }
+.ap-c { stroke: var(--h-saffron-deep); stroke-width: 2.4; stroke-linejoin: round; }
+.ap-c--llego { fill: var(--h-saffron); filter: url(#h-arena); }
+.ap-c--camino { fill: var(--i-cera); }
+.ap-c--proceso { fill: var(--h-shell-3); }
+.ap-c--corte { fill: var(--h-failed); }
+.ap-c--prox { fill: none; stroke: var(--h-slate-2); stroke-dasharray: 4 4; opacity: 0.6; }
+.ap__ley { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
+.ap__ley li { display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 8px; border-radius: 10px; background: var(--h-veil); font-size: 0.875rem; }
+.ap__ley li::before, .ap-c3__lista li::before { content: ""; flex: none; width: 13px; height: 15px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: var(--k); box-shadow: inset 0 0 0 1.5px var(--h-saffron-deep); }
+
+/* B · Tira: grupos de celdas en fila */
+.ap-b { flex-wrap: wrap; align-items: flex-start; gap: 18px 14px; }
+.ap-b__g { display: grid; gap: 8px; }
+.ap-b__celdas { display: flex; flex-wrap: wrap; gap: 4px; max-width: 220px; }
+.ap-b__celdas i { position: relative; width: 40px; height: 46px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: var(--h-saffron-deep); }
+.ap-b__celdas i::before { content: ""; position: absolute; inset: 2.5px; clip-path: inherit; background: var(--k); }
+.ap-b__g.ap-k--llego i::before { background: var(--h-grano-fino) 0 0 / 80px, var(--h-saffron); }
+.ap-b__g.ap-k--prox i { background: transparent; }
+.ap-b__g.ap-k--prox i::before { inset: 0; background: var(--i-hueco) center / 100% 100% no-repeat; }
+.ap-b__g small { font-size: 0.875rem; color: var(--h-ink-2); }
+.ap-b__g small b { font-size: 1.05rem; color: var(--h-ink); }
+
+/* C · Número dentro de la celda */
+.ap-c3 { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 22px; }
+.ap-c3__celda { position: relative; display: grid; place-content: center; justify-items: center; width: 150px; aspect-ratio: 1 / 1.1547; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: var(--i-cera); isolation: isolate; text-align: center; }
+.ap-c3__lleno { position: absolute; inset: auto 0 0; height: var(--nivel); z-index: -1; background: var(--h-grano-fino) 0 0 / 120px, var(--h-saffron); }
+.ap-c3__celda b { font-size: 3.4rem; line-height: 0.9; color: var(--h-slate-2); }
+.ap-c3__celda small { font-size: 0.8125rem; font-weight: 600; }
+.ap-c3__lista { display: grid; gap: 10px; }
+.ap-c3__lista li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 10px; font-size: 0.9375rem; }
+.ap-c3__lista li i { grid-column: 2 / -1; height: 6px; border-radius: 4px; background: linear-gradient(var(--h-saffron-deep), var(--h-saffron-deep)) 0 0 / calc(var(--p) * 1%) 100% no-repeat, var(--h-veil-soft); }
+.ap-c3__lista b { font-size: 1.05rem; }
+
+@media (max-width: 760px) {
+  .ap.dh-monte { grid-template-columns: minmax(0, 1fr); }
+  .ap__titulo { grid-template-columns: auto minmax(0, 1fr); align-items: end; column-gap: 12px; }
+  .ap__titulo b { font-size: 5.5rem; }
+  .ap-c3 { grid-template-columns: minmax(0, 1fr); justify-items: center; }
+  .ap-c3__lista { width: 100%; }
+}
+
+/* ===== Incentivos: potes de miel cada vez más grandes ===== */
+.dh-cats__miel { width: 100%; overflow: visible; color: var(--h-graphite); }
+.dh-cats__paso:nth-child(1) .dh-cats__miel { height: 70px; }
+.dh-cats__paso:nth-child(2) .dh-cats__miel { height: 104px; }
+.dh-cats__paso:nth-child(3) .dh-cats__miel { height: 130px; }
+.dh-cats__paso.is-siguiente .dh-cats__miel { opacity: 0.62; filter: grayscale(0.35); }
+.i .dh-cats__hormiga { top: -30px; width: 44px; height: 34px; animation: i-flota 5.5s ease-in-out infinite alternate; }
+.i .dh-arena { background: var(--h-veil-soft); }
+
+/* ===== Seguimiento: la abeja revolotea cerca de su paso cuando pasás por la tarjeta ===== */
+.i .dh-paso__hormiga { animation: i-flota 5.5s ease-in-out infinite alternate; }
+.i :is(.dh-seg__item, .dh-rec):hover .dh-paso__hormiga { animation: i-revuelo 1.8s ease-in-out infinite; }
+@keyframes i-revuelo {
+  0% { transform: translate(0, 0) rotate(0); }
+  15% { transform: translate(7px, -6px) rotate(6deg); }
+  32% { transform: translate(11px, -13px) rotate(2deg); }
+  50% { transform: translate(2px, -16px) rotate(-6deg); }
+  66% { transform: translate(-8px, -10px) rotate(-3deg); }
+  83% { transform: translate(-6px, -2px) rotate(4deg); }
+  100% { transform: translate(0, 0) rotate(0); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .i :is(.actor__hormiga, .cifra__hormiga, .cm__abeja, .dh-monte__hormiga, .cm__celda, .ck__h, .h-sendero__hormiga) { animation: none; }
+  .i :is(.actor__hormiga, .cm__abeja, .ck__abeja, .dh-paso__hormiga, .dh-cats__hormiga, .cm__celda, .h-sendero__hormiga) { animation: none !important; }
+  .ruta__est.is-act :is(.ei__abeja, .ei-polen, .ei-panal__miel) { animation: none; }
 }
-
-/* Celdas vacías de la vuelta actual: solo el contorno de cera */
-.cm__celda--hueca { animation: none; }
-.cm__celda--hueca::before { display: none; }
-.cm__celda--hueca > span { position: absolute; inset: 0; clip-path: polygon(50% 1.5%, 97% 25.8%, 97% 74.2%, 50% 98.5%, 3% 74.2%, 3% 25.8%); background: var(--h-shell-3); opacity: 0.55; }

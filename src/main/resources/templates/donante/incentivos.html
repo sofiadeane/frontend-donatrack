@@ -20,15 +20,20 @@
   </div>
 
   <th:block th:if="${b.ok()}" th:with="p=${b.datos}">
-  <!-- Las categorías como montañas que crecen; la hormiga está en la tuya -->
+  <!-- Las categorías como montañas que crecen (con abejas, potes de miel cada vez más grandes); el bicho está en la tuya -->
   <div class="pc-fila dh-fila--hero">
     <section class="dh-cats" aria-labelledby="t-cats">
       <h2 id="t-cats" class="sr-only">Recorrido de categorías</h2>
       <ol class="dh-cats__lista">
         <li th:each="c, it : ${p.recorrido}" class="dh-cats__paso" th:classappend="${'is-' + c.estado}"
             th:style="'--k:' + ${it.index}" th:attr="aria-current=${c.estado == 'actual'} ? 'step' : null">
+          <th:block th:unless="${abejas}">
           <svg class="dh-cats__monte" viewBox="0 0 120 70" preserveAspectRatio="none" aria-hidden="true"><path d="M2 70 C22 36 44 6 60 6 C76 6 98 36 118 70Z"/></svg>
           <svg class="dh-cats__hormiga" th:if="${c.estado == 'actual'}" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
+          </th:block>
+          <!-- Abejas: cada categoría guarda más miel · pote de barro, frasco con té, barril con oso -->
+          <svg class="dh-cats__miel" th:if="${abejas}" aria-hidden="true"><use th:href="${ {'#i-pote','#i-frasco-te','#i-barril-oso'}[it.index % 3] }" href="#i-pote"/></svg>
+          <svg class="dh-cats__hormiga" th:if="${abejas and c.estado == 'actual'}" aria-hidden="true"><use href="#h-hormiga"/></svg>
           <b th:text="${c.etiqueta}">Colaborador</b>
           <small th:if="${c.desde != null}" th:text="'desde ' + ${#temporals.format(c.desde, 'MMM yyyy')}">desde abr 2026</small>
           <small th:if="${c.estado == 'siguiente'}">próxima</small>

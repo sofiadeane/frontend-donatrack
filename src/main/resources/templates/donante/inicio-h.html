@@ -23,7 +23,58 @@
 
   <!-- A · Tu montañita: un grano por donación -->
   <div class="pc-fila dh-fila--hero">
-    <section class="dh-monte" aria-labelledby="t-monte">
+    <!-- Tema abejas · Tu colmena: una celda por donación, coloreada según dónde está. Tres diseños en prueba
+         (html[data-aporte] = a, b o c; sin atributo se ve el A): panal, tira de celdas y número dentro de la celda. -->
+    <section class="dh-monte ap" aria-labelledby="t-ap" th:if="${abejas and e.ok()}"
+             th:with="tot=${e.datos.total}, lle=${e.datos.entregadas}, cam=${e.datos.enCamino}, pro=${e.datos.enProceso}, cor=${e.datos.interrumpidas},
+                      n=${(tot > 18 ? 18 : tot) + 1}, anillo=${n <= 1 ? 0 : (n <= 7 ? 1 : 2)}">
+      <div class="ap__txt">
+        <h2 id="t-ap" class="ap__titulo"><b class="c-num" th:text="${tot}">7</b> <span th:text="${tot == 1} ? 'gota aportada' : 'gotas aportadas'">gotas aportadas</span></h2>
+        <p class="ap__msg" th:text="${p.mensaje}">Tu última donación ya está en el depósito.</p>
+      </div>
+
+      <!-- A · Panal: cada celda es una donación; la punteada es la próxima -->
+      <div class="ap-a" th:with="qs=${ {0,-1,0,1,1,0,-1,-2,-1,0,1,2,2,2,1,0,-1,-2,-2} }, rs=${ {0,1,1,0,-1,-1,0,2,2,2,1,0,-1,-2,-2,-2,-1,0,1} }">
+        <svg class="ap-a__panal" role="img"
+             th:attr="viewBox=${(-(anillo + 0.5) * 34.64 - 3) + ' ' + (-(anillo * 30 + 20) - 3) + ' ' + ((2 * anillo + 1) * 34.64 + 6) + ' ' + (anillo * 60 + 46)},
+                      aria-label=${lle + ' entregadas, ' + cam + ' en camino, ' + pro + ' en proceso' + (cor > 0 ? ', ' + cor + ' sin entregar' : '')}">
+          <use th:each="k : ${#numbers.sequence(0, n - 1)}" href="#i-celda" width="32" height="36.95"
+               th:attr="x=${(qs[k] + rs[k] / 2.0) * 34.64 - 16},y=${rs[k] * 30 - 18.47},
+                        class=${'ap-c ap-c--' + (k == n - 1 ? 'prox' : (k < lle ? 'llego' : (k < lle + cam ? 'camino' : (k < lle + cam + pro ? 'proceso' : 'corte'))))}"/>
+        </svg>
+        <ul class="ap__ley">
+          <li class="ap-k--llego"><b class="c-mono" th:text="${lle}">2</b> <th:block th:text="${lle == 1} ? 'llegó' : 'llegaron'">llegaron</th:block></li>
+          <li class="ap-k--camino"><b class="c-mono" th:text="${cam}">1</b> en camino</li>
+          <li class="ap-k--proceso"><b class="c-mono" th:text="${pro}">4</b> en el depósito</li>
+          <li class="ap-k--corte" th:if="${cor > 0}"><b class="c-mono" th:text="${cor}">1</b> sin entregar</li>
+        </ul>
+      </div>
+
+      <!-- B · Tira: las celdas en fila, agrupadas por estado, con el conteo debajo de cada grupo -->
+      <ol class="ap-b" aria-label="Tus donaciones por estado">
+        <li class="ap-b__g ap-k--llego" th:if="${lle > 0}"><span class="ap-b__celdas" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, lle)}"></i></span><small><b th:text="${lle}">2</b> <th:block th:text="${lle == 1} ? 'llegó' : 'llegaron'">llegaron</th:block></small></li>
+        <li class="ap-b__g ap-k--camino" th:if="${cam > 0}"><span class="ap-b__celdas" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, cam)}"></i></span><small><b th:text="${cam}">1</b> en camino</small></li>
+        <li class="ap-b__g ap-k--proceso" th:if="${pro > 0}"><span class="ap-b__celdas" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, pro)}"></i></span><small><b th:text="${pro}">4</b> en el depósito</small></li>
+        <li class="ap-b__g ap-k--corte" th:if="${cor > 0}"><span class="ap-b__celdas" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, cor)}"></i></span><small><b th:text="${cor}">1</b> sin entregar</small></li>
+        <li class="ap-b__g ap-k--prox"><span class="ap-b__celdas" aria-hidden="true"><i></i></span><small>la próxima</small></li>
+      </ol>
+
+      <!-- C · La celda grande se llena con la parte que ya llegó; al lado, el desglose -->
+      <div class="ap-c3" th:style="'--nivel:' + ${tot == 0 ? 0 : lle * 100 / tot} + '%'">
+        <div class="ap-c3__celda" role="img" th:attr="aria-label=${lle + ' de ' + tot + ' ya llegaron'}">
+          <span class="ap-c3__lleno" aria-hidden="true"></span>
+          <b class="c-num" th:text="${lle}">2</b><small th:text="'de ' + ${tot} + ' llegaron'">de 7 llegaron</small>
+        </div>
+        <ul class="ap-c3__lista">
+          <li class="ap-k--llego" th:style="'--p:' + ${tot == 0 ? 0 : lle * 100 / tot}"><span>Llegaron</span><b class="c-mono" th:text="${lle}">2</b><i></i></li>
+          <li class="ap-k--camino" th:style="'--p:' + ${tot == 0 ? 0 : cam * 100 / tot}"><span>En camino</span><b class="c-mono" th:text="${cam}">1</b><i></i></li>
+          <li class="ap-k--proceso" th:style="'--p:' + ${tot == 0 ? 0 : pro * 100 / tot}"><span>En el depósito</span><b class="c-mono" th:text="${pro}">4</b><i></i></li>
+          <li class="ap-k--corte" th:if="${cor > 0}" th:style="'--p:' + ${cor * 100 / tot}"><span>Sin entregar</span><b class="c-mono" th:text="${cor}">1</b><i></i></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="dh-monte" aria-labelledby="t-monte" th:unless="${abejas and e.ok()}">
       <div class="dh-monte__txt">
         <h2 id="t-monte" class="dh-monte__titulo" th:if="${e.ok()}"><b class="c-num" th:text="${e.datos.total}">6</b> <span th:text="${e.datos.total == 1} ? 'granito aportado' : 'granitos aportados'">granitos aportados</span></h2>
         <p class="dh-monte__msg" th:text="${p.mensaje}">Tu última donación ya está en camino.</p>

@@ -52,7 +52,7 @@
 <nav class="pc-inferior" aria-label="Navegación principal">
   <a th:each="item : ${navMovil}" th:href="@{${item.href}}" th:attr="aria-current=${item.activo} ? 'page' : null">
     <span th:replace="~{fragments/iconos :: icono(${item.icono}, 22)}"></span>
-    <span class="sr-only" th:text="${item.etiquetaMovil}">Sección</span>
+    <span class="pc-inferior__etq" th:text="${item.etiquetaMovil}">Sección</span>
   </a>
 </nav>
 </body>

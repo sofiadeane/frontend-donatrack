@@ -68,6 +68,8 @@ body.h {
 /* ===== Tipografía: mayúsculas compactas con textura de arena ===== */
 .h .c-display { font-weight: 800; letter-spacing: -0.035em; line-height: 0.98; }
 .h .c-display em { font-family: inherit; font-style: normal; font-weight: inherit; letter-spacing: inherit; }
+/* Títulos y cifras en Archivo expandida y muy pesada (prueba de tipografías: ganó la B) */
+.h :is(h1, h2, .c-display, .c-num, .dh-cat__nombre, .ck__gran, .hg__ficha h3) { font-family: "Archivo", "DM Sans", system-ui, sans-serif; font-weight: 850; font-stretch: 118%; }
 .h :is(.ch__titulo, .ca__cab h2, .ci__cab h2, .cf__cab h2, .faq__cab h2, .cp h2, .ck__gran, .pc-cab h1) {
   text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.95;
   background: var(--h-grano-fino) 0 0 / 160px repeat, var(--h-slate);
@@ -219,6 +221,17 @@ body.h {
 .h .actor__mini li { border-radius: 12px; background: var(--h-shell-3); }
 .h .actor__need { background: var(--h-shell-3); }
 .h .actor__flujo i { border-radius: 12px; }
+/* Administración: la barra muestra cuántas donaciones hay en cada estado, con su nombre debajo */
+.actor__estados { flex: 1 1 220px; align-self: flex-end; display: grid; gap: 12px; }
+.actor__estados .actor__flujo { flex: none; height: 72px; }
+.actor__ley { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 0.8125rem; color: var(--h-shell-2); }
+.actor__ley li { display: flex; align-items: center; gap: 6px; }
+.actor__ley li::before { content: ""; width: 10px; height: 10px; border-radius: 3px; background: var(--k); }
+.actor__ley b { color: var(--h-shell-3); }
+.actor__ley [data-estado="EN_DEPOSITO"] { --k: var(--cs-deposito); }
+.actor__ley [data-estado="ASIGNACION_REALIZADA"] { --k: var(--cs-asignada); }
+.actor__ley [data-estado="LISTA_PARA_ENTREGAR"] { --k: var(--cs-lista); }
+.actor__ley [data-estado="EN_TRASLADO"] { --k: var(--cs-traslado); box-shadow: 0 0 0 1px var(--h-shell-2); }
 .actor__hormiga { position: absolute; right: clamp(28px, 4vw, 52px); top: -34px; width: 58px; height: 48px; color: var(--h-graphite); transform: scaleX(-1); }
 
 /* ===== Impacto: una pila de arena por cifra ===== */
@@ -299,6 +312,10 @@ body.h {
 .h .pc-cuenta__menu { background: var(--h-shell-3); border-radius: 18px; }
 .h .pc-inferior { background: var(--h-graphite); border-radius: 20px; }
 .h .pc-inferior a[aria-current="page"] { background: var(--h-celadon); color: var(--h-graphite); }
+/* Barra inferior del celular: ícono y nombre de la sección */
+.h .pc-inferior { padding: 6px; gap: 2px; }
+.h .pc-inferior a { display: flex; flex-direction: column; justify-content: center; gap: 3px; height: 56px; max-width: none; padding: 0 1px; font-size: 0.625rem; font-weight: 600; letter-spacing: -0.02em; }
+.pc-inferior__etq { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .h .pc-aviso { background: var(--h-saffron-100); border-radius: 14px; }
 .h .pc-tit h2 { font-weight: 800; }
 .h .pc-cab h1 { font-size: clamp(2.2rem, 1.4rem + 3vw, 3.6rem); }
@@ -329,7 +346,7 @@ body.h {
 /* Categoría y misión */
 .dh-cat { display: flex; flex-direction: column; gap: 8px; padding: 26px; background: var(--h-saffron); border-radius: var(--c-r-l); container-type: inline-size; min-width: 0; }
 .dh-cat__etq { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
-.dh-cat__nombre { font-size: clamp(1.5rem, 13cqi, 3rem); overflow-wrap: anywhere; font-weight: 800; letter-spacing: -0.03em; line-height: 1; text-transform: uppercase; }
+.dh-cat__nombre { font-size: clamp(1.3rem, 9.5cqi, 2.6rem); overflow-wrap: break-word; font-weight: 800; letter-spacing: -0.03em; line-height: 1; text-transform: uppercase; }
 .dh-cat__mision { margin-top: auto; padding-top: 18px; font-size: 0.9375rem; }
 .dh-cat__mision b { display: block; }
 .dh-arena { height: 14px; border-radius: 8px; background: var(--h-veil-soft); overflow: hidden; }
@@ -596,17 +613,29 @@ body.h {
   .hg__ficha { position: static; }
 }
 @media (max-width: 760px) {
+  /* Tablas en celular: cada fila es una tarjeta con el estado y la fecha arriba, sin repetir datos */
   .dh-tabla thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .dh-tabla, .dh-tabla tbody, .dh-tabla tr, .dh-tabla th, .dh-tabla td { display: block; }
-  .dh-tabla tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 12px; padding: 14px 6px; border-top: 1px solid var(--h-line-soft); }
+  .dh-tabla tbody tr { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "tag fecha" "tit tit" "que que" "ent ent"; gap: 6px 12px; padding: 16px 4px; border-top: 1px solid var(--h-line-soft); }
+  .dh-tabla tbody tr:first-child { border-top: 0; }
   .dh-tabla th, .dh-tabla td { padding: 0; border: 0; }
-  .dh-tabla th[scope="row"] { grid-column: 1 / -1; }
-  .dh-tabla__que, .dh-tabla__ent { grid-column: 1 / -1; padding-left: 26px !important; }
-  .dh-tabla--ent tbody tr { grid-template-columns: minmax(0, 1fr); gap: 6px; }
-  .dh-tabla--ent td { padding-left: 0 !important; color: var(--h-ink-2); }
-  .dh-tabla--ent .dh-tabla__n::before { content: "Necesidades abiertas: "; font-size: 0.8125rem; }
-  .dh-tabla td:has(.c-tag) { padding-left: 26px !important; }
-  .dh-tabla__fecha { justify-self: end; font-size: 0.8125rem; }
+  .dh-tabla th[scope="row"] { grid-area: tit; font-size: 1rem; line-height: 1.25; }
+  .dh-tabla .dh-fila__grano { display: none; }
+  .dh-tabla td:has(.c-tag) { grid-area: tag; align-self: center; }
+  .dh-tabla__fecha { grid-area: fecha; align-self: center; font-size: 0.8125rem; }
+  .dh-tabla__fecha::before { content: "Registrada "; color: var(--h-ink-3); }
+  .dh-tabla__que { grid-area: que; font-size: 0.9375rem; }
+  .dh-tabla__ent { grid-area: ent; margin-top: 4px; padding: 10px 12px !important; border-radius: 12px; background: var(--h-shell); }
+  .dh-tabla__ent::before { content: "Entidad"; display: block; margin-bottom: 2px; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--h-ink-3); }
+  /* Entidades: nombre y tipo, localidad, lo que necesita; las necesidades abiertas a la derecha */
+  .dh-tabla--ent tbody tr { grid-template-areas: "tit n" "loc n" "cat cat"; }
+  .dh-tabla--ent td { color: var(--h-ink-2); }
+  .dh-tabla--ent td:nth-child(2) { grid-area: loc; font-size: 0.875rem; }
+  .dh-tabla--ent td:nth-child(3) { grid-area: cat; margin-top: 4px; }
+  .dh-tabla--ent .dh-tabla__n { grid-area: n; display: grid; justify-items: end; align-content: start; gap: 4px; text-align: right; }
+  .dh-tabla--ent .dh-tabla__n b { margin: 0; font-size: 1.4rem; color: var(--h-ink); }
+  .dh-tabla--ent .dh-tabla__n::after { content: "abiertas"; order: 1; font-size: 0.75rem; color: var(--h-ink-3); }
+  .dh-tabla--ent .dh-tabla__n .hg__urgente { order: 2; }
   .hg__mapa { --esc: 1.85; }
   .hg__lugar { --w: min(62%, 210px) !important; }
 }

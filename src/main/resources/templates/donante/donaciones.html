@@ -6,7 +6,7 @@
 <th:block th:fragment="contenido">
   <header class="pc-cab">
     <div>
-      <p class="c-kicker">Tus granitos</p>
+      <p class="c-kicker" th:text="'Tus ' + ${voc.unidades}">Tus granitos</p>
       <h1 class="c-display">Mis donaciones</h1>
     </div>
     <span class="c-demo" th:if="${mis.donaciones.demo}">Datos de demostración</span>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layouts/publico-h :: layout(~{::title}, ~{::contenido})}">
-<head><title th:text="|DonaTrack — Tu granito de ${voc.material} puede llegar más lejos|">DonaTrack — Tu granito de arena puede llegar más lejos</title></head>
+<head><title th:text="|DonaTrack — ${voc.tuAporte} puede llegar más lejos|">DonaTrack — Tu granito de arena puede llegar más lejos</title></head>
 <body>
 <th:block th:fragment="contenido">
 
@@ -10,7 +10,7 @@
     <div class="ch__arriba">
       <div class="ch__texto">
         <p class="c-kicker">Trazabilidad de donaciones</p>
-        <h1 id="titulo-hero" class="c-display ch__titulo">Tu granito de <th:block th:text="${voc.material}">arena</th:block> puede llegar <em>más lejos</em></h1>
+        <h1 id="titulo-hero" class="c-display ch__titulo"><th:block th:text="${voc.tuAporte}">Tu granito de arena</th:block> puede llegar <em>más lejos</em></h1>
         <p class="ch__lead">Con DonaTrack, conectá con organizaciones que necesitan tu ayuda y seguí el recorrido de tu donación de principio a fin.</p>
         <div class="ch__acciones">
           <a class="c-btn" th:href="@{/registro(tipo='humana')}">Quiero ser parte del cambio<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
@@ -19,42 +19,25 @@
       </div>
 
       <div class="ch__ilus">
-        <svg class="hm-escena im-escena" th:if="${abejas}" viewBox="0 0 600 470" role="img" aria-label="Abejas que llevan polen de las flores a un panal">
+        <svg class="hm-escena im-escena" th:if="${abejas}" viewBox="0 0 600 470" role="img" aria-label="Abejas que vuelan de las flores a un panal que se llena de miel">
           <ellipse class="hm-suelo" cx="330" cy="430" rx="270" ry="34"/>
           <g class="im-panal" transform="translate(-10 -62)">
-            <path class="im-celda im-celda--polen" d="M380.0 171.0 L409.4 188.0 L409.4 222.0 L380.0 239.0 L350.6 222.0 L350.6 188.0Z"/>
+            <path class="im-celda im-celda--media" d="M380.0 171.0 L409.4 188.0 L409.4 222.0 L380.0 239.0 L350.6 222.0 L350.6 188.0Z"/>
             <path class="im-celda im-celda--miel" d="M442.4 171.0 L471.8 188.0 L471.8 222.0 L442.4 239.0 L412.9 222.0 L412.9 188.0Z"/>
-            <path class="im-celda im-celda--polen" d="M317.6 171.0 L347.1 188.0 L347.1 222.0 L317.6 239.0 L288.2 222.0 L288.2 188.0Z"/>
+            <path class="im-celda im-celda--media" d="M317.6 171.0 L347.1 188.0 L347.1 222.0 L317.6 239.0 L288.2 222.0 L288.2 188.0Z"/>
             <path class="im-celda im-celda--miel" d="M348.8 117.0 L378.3 134.0 L378.3 168.0 L348.8 185.0 L319.4 168.0 L319.4 134.0Z"/>
             <path class="im-celda im-celda--vacia" d="M411.2 117.0 L440.6 134.0 L440.6 168.0 L411.2 185.0 L381.7 168.0 L381.7 134.0Z"/>
-            <path class="im-celda im-celda--polen" d="M348.8 225.0 L378.3 242.0 L378.3 276.0 L348.8 293.0 L319.4 276.0 L319.4 242.0Z"/>
+            <path class="im-celda im-celda--media" d="M348.8 225.0 L378.3 242.0 L378.3 276.0 L348.8 293.0 L319.4 276.0 L319.4 242.0Z"/>
             <path class="im-celda im-celda--miel" d="M411.2 225.0 L440.6 242.0 L440.6 276.0 L411.2 293.0 L381.7 276.0 L381.7 242.0Z"/>
-            <path class="im-celda im-celda--polen" d="M473.5 117.0 L503.0 134.0 L503.0 168.0 L473.5 185.0 L444.1 168.0 L444.1 134.0Z"/>
+            <path class="im-celda im-celda--media" d="M473.5 117.0 L503.0 134.0 L503.0 168.0 L473.5 185.0 L444.1 168.0 L444.1 134.0Z"/>
             <path class="im-celda im-celda--vacia" d="M473.5 225.0 L503.0 242.0 L503.0 276.0 L473.5 293.0 L444.1 276.0 L444.1 242.0Z"/>
             <path class="im-celda im-celda--vacia" d="M286.5 225.0 L315.9 242.0 L315.9 276.0 L286.5 293.0 L257.0 276.0 L257.0 242.0Z"/>
             <path class="im-celda im-celda--miel" d="M504.7 171.0 L534.2 188.0 L534.2 222.0 L504.7 239.0 L475.3 222.0 L475.3 188.0Z"/>
             <path class="im-celda im-celda--vacia" d="M286.5 117.0 L315.9 134.0 L315.9 168.0 L286.5 185.0 L257.0 168.0 L257.0 134.0Z"/>
-            <path class="im-celda im-celda--polen" d="M442.4 279.0 L471.8 296.0 L471.8 330.0 L442.4 347.0 L412.9 330.0 L412.9 296.0Z"/>
+            <path class="im-celda im-celda--media" d="M442.4 279.0 L471.8 296.0 L471.8 330.0 L442.4 347.0 L412.9 330.0 L412.9 296.0Z"/>
             <path class="im-celda im-celda--vacia" d="M317.6 279.0 L347.1 296.0 L347.1 330.0 L317.6 347.0 L288.2 330.0 L288.2 296.0Z"/>
             <path class="im-celda im-celda--vacia" d="M380.0 63.0 L409.4 80.0 L409.4 114.0 L380.0 131.0 L350.6 114.0 L350.6 80.0Z"/>
             <path class="im-celda im-celda--miel" d="M380.0 279.0 L409.4 296.0 L409.4 330.0 L380.0 347.0 L350.6 330.0 L350.6 296.0Z"/>
-          </g>
-          <g class="hm-cima" transform="translate(-10 -62)">
-            <circle class="hm-grano" cx="373.0" cy="209.0" r="7"/>
-            <circle class="hm-grano" cx="386.0" cy="211.0" r="6.5"/>
-            <circle class="hm-grano" cx="380.0" cy="199.0" r="6"/>
-            <circle class="hm-grano" cx="310.6" cy="209.0" r="7"/>
-            <circle class="hm-grano" cx="323.6" cy="211.0" r="6.5"/>
-            <circle class="hm-grano" cx="317.6" cy="199.0" r="6"/>
-            <circle class="hm-grano" cx="341.8" cy="263.0" r="7"/>
-            <circle class="hm-grano" cx="354.8" cy="265.0" r="6.5"/>
-            <circle class="hm-grano" cx="348.8" cy="253.0" r="6"/>
-            <circle class="hm-grano" cx="466.5" cy="155.0" r="7"/>
-            <circle class="hm-grano" cx="479.5" cy="157.0" r="6.5"/>
-            <circle class="hm-grano" cx="473.5" cy="145.0" r="6"/>
-            <circle class="hm-grano" cx="435.4" cy="317.0" r="7"/>
-            <circle class="hm-grano" cx="448.4" cy="319.0" r="6.5"/>
-            <circle class="hm-grano" cx="442.4" cy="307.0" r="6"/>
           </g>
           <path class="im-tallo" d="M70 392 C64 422 78 442 72 470"/>
           <path class="im-tallo" d="M128 356 C122 386 136 406 130 470"/>
@@ -139,7 +122,11 @@
 
     <ol class="ruta" aria-label="Recorrido de una donación en cuatro estaciones">
       <li class="ruta__est" data-estacion="0" data-estado="EN_DEPOSITO" data-destino="Sin asignar todavía">
-        <svg class="ruta__escena esc-mano" viewBox="0 0 160 56" aria-hidden="true">
+        <div class="ei ei--flor" th:if="${abejas}" aria-hidden="true">
+          <svg class="ei__flor" viewBox="0 0 40 64"><path class="im-tallo" d="M20 64 C18 54 22 46 20 36"/><use href="#i-flor" x="4" y="6" width="32" height="32"/></svg>
+          <svg class="ei__abeja" viewBox="0 -10 66 50"><use href="#h-hormiga" x="0" y="-10" width="66" height="50"/></svg>
+        </div>
+        <svg class="ruta__escena esc-mano" th:unless="${abejas}" viewBox="0 0 160 56" aria-hidden="true">
           <g class="esc-mano__mano">
             <rect class="esc-mano__puno" x="63" y="-50" width="26" height="12" rx="3"/>
             <path class="esc-mano__palma" d="M65 -40 V-4 C65 6 71 11 77 11 C83 11 88 6 88 -1 V-40 Z"/>
@@ -155,7 +142,11 @@
         <p class="ruta__texto">Se registra con su categoría, cantidad y vencimiento.</p>
       </li>
       <li class="ruta__est" data-estacion="1" data-estado="ASIGNACION_REALIZADA" data-destino="Comedor Los Girasoles">
-        <svg class="ruta__escena esc-recoge" viewBox="0 0 160 56" aria-hidden="true">
+        <div class="ei ei--junta" th:if="${abejas}" aria-hidden="true">
+          <svg class="ei__flor" viewBox="0 0 40 64"><path class="im-tallo" d="M20 64 C18 54 22 46 20 36"/><use href="#i-flor" x="4" y="6" width="32" height="32"/></svg>
+          <svg class="ei__abeja" viewBox="0 -14 66 54"><use href="#h-hormiga" x="0" y="-10" width="66" height="50"/><circle class="ei-polen" cx="28" cy="33" r="6"/></svg>
+        </div>
+        <svg class="ruta__escena esc-recoge" th:unless="${abejas}" viewBox="0 0 160 56" aria-hidden="true">
           <circle class="esc-grano esc-recoge__grano" cx="105" cy="47.5" r="4.5"/>
           <use class="esc-recoge__hormiga" href="#h-hormiga" x="0" y="23" width="40" height="30"/>
         </svg>
@@ -166,7 +157,11 @@
         <p class="ruta__texto">El sistema la vincula con lo que una entidad pidió.</p>
       </li>
       <li class="ruta__est" data-estacion="2" data-estado="EN_TRASLADO" data-destino="Comedor Los Girasoles · camión 2">
-        <svg class="ruta__escena esc-lleva" viewBox="0 0 160 56" aria-hidden="true">
+        <div class="ei ei--vuela" th:if="${abejas}" aria-hidden="true">
+          <svg class="ei__estela" viewBox="0 0 300 64" preserveAspectRatio="none"><path class="ei-estela" d="M0 44 C40 14 80 50 140 28 S240 14 300 30"/></svg>
+          <svg class="ei__abeja" viewBox="0 -14 66 54"><use href="#h-hormiga-grano" x="0" y="-14" width="66" height="54"/></svg>
+        </div>
+        <svg class="ruta__escena esc-lleva" th:unless="${abejas}" viewBox="0 0 160 56" aria-hidden="true">
           <use class="esc-lleva__hormiga" href="#h-hormiga-grano" x="0" y="20.5" width="40" height="33"/>
         </svg>
         <span class="ruta__ico c-ico"><span th:replace="~{fragments/iconos :: icono('camiones', 26)}"></span></span>
@@ -176,7 +171,18 @@
         <p class="ruta__texto">Rutas, paradas y horarios a la vista de quien espera.</p>
       </li>
       <li class="ruta__est" data-estacion="3" data-estado="ENTREGADA" data-destino="Comedor Los Girasoles · recibida">
-        <svg class="ruta__escena esc-deja" viewBox="0 0 160 56" aria-hidden="true">
+        <div class="ei ei--panal" th:if="${abejas}" aria-hidden="true">
+          <svg class="ei__panal" viewBox="0 0 72 64">
+            <path class="im-celda im-celda--miel" d="M30 4 L44 12 V28 L30 36 L16 28 V12Z"/>
+            <path class="im-celda im-celda--media" d="M58 4 L72 12 V28 L58 36 L44 28 V12Z"/>
+            <path class="im-celda im-celda--vacia" d="M44 28 L58 36 V52 L44 60 L30 52 V36Z"/>
+            <clipPath id="ei-panal-hueco"><path d="M16 28 L30 36 V52 L16 60 L2 52 V36Z"/></clipPath>
+            <path class="im-celda im-celda--vacia" d="M16 28 L30 36 V52 L16 60 L2 52 V36Z"/>
+            <g clip-path="url(#ei-panal-hueco)"><rect class="ei-panal__miel" x="0" y="26" width="32" height="36"/></g>
+          </svg>
+          <svg class="ei__abeja" viewBox="0 -14 66 54"><use href="#h-hormiga-grano" x="0" y="-14" width="66" height="54"/></svg>
+        </div>
+        <svg class="ruta__escena esc-deja" th:unless="${abejas}" viewBox="0 0 160 56" aria-hidden="true">
           <path class="esc-deja__monticulo" d="M108 53 C116 40 124 35 133 35 C142 35 150 42 158 53Z"/>
           <circle class="esc-grano esc-deja__grano" cx="31" cy="26.6" r="4.5"/>
           <use class="esc-deja__hormiga" href="#h-hormiga" x="0" y="23" width="40" height="30"/>
@@ -256,7 +262,7 @@
         <svg class="actor__hormiga" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
         <p class="actor__etq">Persona o empresa donante</p>
         <h3 id="a-donante" class="c-display">Quiero donar</h3>
-        <p>Llevá tu granito al depósito y seguilo hasta que llega. Ganá insignias por constancia.</p>
+        <p>Llevá <th:block th:text="${abejas} ? 'tu donación' : 'tu granito'">tu granito</th:block> al depósito y seguilo hasta que llega. Ganá insignias por constancia.</p>
         <ul class="actor__mini" aria-label="Ejemplo de mis donaciones">
           <li><span>Arroz · 50 kg</span><span class="c-tag" data-estado="EN_TRASLADO">En traslado</span></li>
           <li><span>Frazadas · 12 u</span><span class="c-tag" data-estado="ENTREGADA">Entregada</span></li>
@@ -286,8 +292,16 @@
           <p>Recibe, asigna, despacha camiones y atiende las alertas desde un panel.</p>
           <a class="c-btn c-btn--sm c-btn--lime" th:href="@{/ingresar}">Ver el panel<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
         </div>
+        <div class="actor__estados">
         <div class="actor__flujo" role="img" aria-label="Donaciones en circulación por estado: 18 en depósito, 11 asignadas, 7 listas, 9 en traslado">
           <i style="flex:18" data-estado="EN_DEPOSITO"></i><i style="flex:11" data-estado="ASIGNACION_REALIZADA"></i><i style="flex:7" data-estado="LISTA_PARA_ENTREGAR"></i><i style="flex:9" data-estado="EN_TRASLADO"></i>
+        </div>
+        <ul class="actor__ley" aria-hidden="true">
+          <li data-estado="EN_DEPOSITO"><b>18</b> en depósito</li>
+          <li data-estado="ASIGNACION_REALIZADA"><b>11</b> asignadas</li>
+          <li data-estado="LISTA_PARA_ENTREGAR"><b>7</b> listas</li>
+          <li data-estado="EN_TRASLADO"><b>9</b> en traslado</li>
+        </ul>
         </div>
       </article>
     </div>
@@ -297,7 +311,7 @@
   <section class="ci" id="impacto" aria-labelledby="titulo-numeros">
     <div class="ci__cab">
       <p class="c-kicker rev">Impacto</p>
-      <h2 id="titulo-numeros" class="c-display rev" style="--i:1">Grano a grano, <em>se nota.</em></h2>
+      <h2 id="titulo-numeros" class="c-display rev" style="--i:1"><th:block th:text="${voc.aPoco}">Grano a grano</th:block>, <em>se nota.</em></h2>
       <span class="c-demo" th:if="${metricas.demo}">Cifras de demostración</span>
     </div>
 
@@ -306,8 +320,11 @@
         <span class="cifra__valor c-num" data-contar th:attr="data-valor=${m.valor}" th:text="${#numbers.formatInteger(m.valor, 1, 'POINT')}">128</span>
         <span class="cifra__etq" th:text="${m.etiqueta}">Donaciones entregadas</span>
         <span class="cifra__det"><b th:text="${m.detalleTitulo}">+23 este mes</b> <span th:text="${m.detalleTexto}">Detalle</span></span>
+        <th:block th:unless="${abejas}">
         <svg class="cifra__pila" viewBox="0 0 160 70" preserveAspectRatio="none" aria-hidden="true"><path class="hm-montana" d="M2 70 C22 40 48 6 82 6 C112 6 140 38 158 70Z"/></svg>
         <svg class="cifra__hormiga" th:if="${it.index == 0}" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
+        </th:block>
+        <svg class="cifra__miel" th:if="${abejas}" aria-hidden="true"><use th:href="${ {'#i-panal-gotea','#i-frascos','#i-cucharon','#i-enjambre'}[it.index % 4] }" href="#i-panal-gotea"/></svg>
       </li>
     </ul>
 
@@ -420,16 +437,18 @@
     <h2 id="titulo-cta" class="sr-only">Sumate</h2>
     <a class="ck__lado ck__lado--donar" th:href="@{/registro(tipo='humana')}">
       <span class="ck__etq">Si querés ayudar</span>
-      <span class="ck__gran c-display">Sumá tu <em>granito</em></span>
+      <span class="ck__gran c-display">Sumá tu <em th:text="${voc.unidad}">granito</em></span>
       <span class="c-btn__dot ck__flecha"><span th:replace="~{fragments/iconos :: icono('flecha', 22)}"></span></span>
-      <svg class="ck__duna" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 48 C140 38 290 40 440 45 S560 50 600 42 V120 H0Z"/></svg>
-      <span class="ck__hormigas" aria-hidden="true"><svg class="ck__h ck__h--1"><use href="#h-hormiga-grano"/></svg><svg class="ck__h ck__h--2"><use href="#h-hormiga-grano"/></svg><svg class="ck__h ck__h--3"><use href="#h-hormiga"/></svg><svg class="ck__h ck__h--4"><use href="#h-hormiga-grano"/></svg></span>
+      <svg class="ck__duna" th:unless="${abejas}" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 48 C140 38 290 40 440 45 S560 50 600 42 V120 H0Z"/></svg>
+      <span class="ck__flores" th:if="${abejas}" aria-hidden="true"><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg class="ck__abeja"><use href="#h-hormiga-grano"/></svg></span>
+      <span class="ck__hormigas" th:unless="${abejas}" aria-hidden="true"><svg class="ck__h ck__h--1"><use href="#h-hormiga-grano"/></svg><svg class="ck__h ck__h--2"><use href="#h-hormiga-grano"/></svg><svg class="ck__h ck__h--3"><use href="#h-hormiga"/></svg><svg class="ck__h ck__h--4"><use href="#h-hormiga-grano"/></svg></span>
     </a>
     <a class="ck__lado ck__lado--ayuda" th:href="@{/registro(tipo='entidad')}">
       <span class="ck__etq">Si necesitás ayuda</span>
       <span class="ck__gran c-display">Registrá <em>tu entidad</em></span>
       <span class="c-btn__dot ck__flecha"><span th:replace="~{fragments/iconos :: icono('flecha', 22)}"></span></span>
-      <svg class="ck__duna" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50 C110 90 230 96 330 60 S520 18 600 64 V120 H0Z"/></svg>
+      <svg class="ck__duna" th:unless="${abejas}" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50 C110 90 230 96 330 60 S520 18 600 64 V120 H0Z"/></svg>
+      <span class="ck__flores" th:if="${abejas}" aria-hidden="true"><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg></span>
     </a>
   </section>
 </th:block>

@@ -95,11 +95,10 @@ textarea { min-height: 84px; }
 .flota summary::-webkit-details-marker { display: none; }
 .flota__pop { position: absolute; right: 0; bottom: calc(100% + 10px); display: grid; gap: 14px; width: min(320px, calc(100vw - 32px)); padding: 16px; border-radius: 16px; background: var(--panel); box-shadow: var(--shadow), inset 0 0 0 1px var(--line); }
 .flota__pop p { margin: 0 0 6px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-2); }
-.tipos { display: grid; gap: 6px; }
-.tipos button { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 10px 12px; border: 0; border-radius: 10px; background: transparent; box-shadow: inset 0 0 0 1px var(--line); cursor: pointer; text-align: left; }
-.tipos button[aria-pressed="true"] { box-shadow: inset 0 0 0 2px var(--slate); }
-.tipos b { font-size: 1.25rem; font-weight: 850; letter-spacing: -0.02em; }
-.tipos small { font-size: 0.75rem; color: var(--ink-2); }
+.prueba { display: grid; gap: 6px; }
+.prueba + .prueba { margin-top: 10px; }
+.prueba small { font-size: 0.75rem; color: var(--ink-2); }
+.flota__nota { margin: 0; font-size: 0.8125rem; color: var(--ink-2); }
 
 @media (max-width: 900px) {
   body { overflow: auto; }
@@ -109,6 +108,10 @@ textarea { min-height: 84px; }
   .enc__cuerpo { overflow: visible; padding-bottom: 110px; }
   .vista__ancho { display: none; }
   .flota__etq { display: none; }
+  /* El prototipo termina arriba de una franja propia para el control: así no tapa su barra de navegación inferior */
+  .libre { bottom: calc(64px + env(safe-area-inset-bottom, 0px)); }
+  .flota { left: 50%; right: auto; transform: translateX(-50%); bottom: calc(8px + env(safe-area-inset-bottom, 0px)); padding: 4px; box-shadow: inset 0 0 0 1px var(--line); }
+  .flota__modo button, .flota summary { min-height: 38px; }
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -147,7 +150,7 @@ textarea { min-height: 84px; }
     <button type="button" id="modo-enc" aria-pressed="false">Encuesta</button>
   </div>
   <details id="vista-det">
-    <summary aria-label="Tema y tipografía"><span id="resumen">Hormigas · A</span></summary>
+    <summary aria-label="Tema y pruebas"><span id="resumen">Hormigas</span></summary>
     <div class="flota__pop">
       <div><p>Tema</p>
         <div class="seg" role="group" aria-label="Tema">
@@ -155,8 +158,21 @@ textarea { min-height: 84px; }
           <button type="button" data-tema="i" aria-pressed="false">Abejas</button>
         </div>
       </div>
-      <div><p>Tipografía de títulos</p>
-        <div class="tipos" id="tipos" role="group" aria-label="Tipografía de títulos"></div>
+      <div><p>Pruebas del tema abejas</p>
+        <div class="prueba"><small>Tarjetas amarillas</small>
+          <div class="seg" role="group" aria-label="Tarjetas amarillas">
+            <button type="button" data-tarjeta="a" aria-pressed="true">A · Celdas</button>
+            <button type="button" data-tarjeta="b" aria-pressed="false">B · Miel</button>
+          </div>
+        </div>
+        <div class="prueba"><small>Tarjeta de tus gotas (inicio del panel)</small>
+          <div class="seg" role="group" aria-label="Tarjeta de tus gotas">
+            <button type="button" data-aporte="a" aria-pressed="true">A · Panal</button>
+            <button type="button" data-aporte="b" aria-pressed="false">B · Tira</button>
+            <button type="button" data-aporte="c" aria-pressed="false">C · Celda</button>
+          </div>
+        </div>
+        <p class="flota__nota" id="nota-pruebas">Elegir una prueba cambia al tema abejas.</p>
       </div>
     </div>
   </details>
@@ -170,7 +186,9 @@ const SECCIONES = [
     preguntas: [
       { id: "claridad", tipo: "escala", texto: "En cinco segundos, ¿se entiende qué hace DonaTrack?", min: "Nada claro", max: "Clarísimo" },
       { id: "ilustracion", tipo: "opcion", texto: "La ilustración del costado…", opciones: ["Ayuda a entender la idea", "Es linda pero no suma", "Distrae del mensaje"] },
-      { id: "titulo", tipo: "texto", texto: "¿Qué cambiarías del título o del texto de abajo?" } ] },
+      { id: "titulo", tipo: "texto", texto: "¿Qué cambiarías del título o del texto de abajo?" },
+      { id: "metafora", tipo: "opcion", texto: "Con abejas, ¿qué frase te gusta más para tu aporte?", opciones: ["Tu gota de miel (la actual)", "Llená una celda", "Cada flor cuenta", "Sumá tu vuelo"] },
+      { id: "recorrido", tipo: "opcion", texto: "Con abejas, la abeja que cruza las cuatro estaciones (flor, polen, vuelo, panal)…", opciones: ["Se entiende como un recorrido", "Se ve linda pero no la sigo", "Distrae"] } ] },
   { id: "problema", pagina: "inicio.html", ancla: "problema", etiqueta: "El problema", titulo: "Por qué existe DonaTrack",
     mira: "La sección que cuenta qué pasa con una donación cuando nadie la sigue.",
     preguntas: [
@@ -182,24 +200,28 @@ const SECCIONES = [
     preguntas: [
       { id: "claros", tipo: "opcion", texto: "¿Queda claro qué hace cada rol?", opciones: ["Sí, los tres", "Más o menos", "No"] },
       { id: "menos", tipo: "opcion", texto: "¿Qué tarjeta entendiste menos?", opciones: ["Persona donante", "Entidad", "Administración", "Las entendí todas"] },
-      { id: "comentario", tipo: "texto", texto: "¿Algo que sobre o que falte en las tarjetas?" } ] },
+      { id: "comentario", tipo: "texto", texto: "¿Algo que sobre o que falte en las tarjetas?" },
+      { id: "tarjeta", tipo: "opcion", texto: "Con abejas, la tarjeta amarilla (Quiero donar) se ve mejor con…", opciones: ["A · Celdas en la esquina", "B · Miel que gotea", "Me da igual"] } ] },
   { id: "impacto", pagina: "inicio.html", ancla: "impacto", etiqueta: "Impacto", titulo: "Las cifras de impacto",
     mira: "Los números grandes y las pilas que los acompañan.",
     preguntas: [
       { id: "creibles", tipo: "escala", texto: "¿Las cifras te parecen creíbles?", min: "Nada", max: "Mucho" },
-      { id: "otra", tipo: "texto", texto: "¿Qué otra cifra te gustaría ver?" } ] },
+      { id: "otra", tipo: "texto", texto: "¿Qué otra cifra te gustaría ver?" },
+      { id: "piezas", tipo: "opcion", texto: "Con abejas, los dibujos de cada cifra (panal, frascos, cucharón, abejas)…", opciones: ["Cuentan algo de cada cifra", "Son decoración", "Distraen"] } ] },
   { id: "inicio", pagina: "donante.html", ancla: "", etiqueta: "Inicio donante", titulo: "El inicio de la persona donante",
-    mira: "La primera pantalla después de ingresar: tus granitos, tu categoría y dónde está tu última donación.",
+    mira: "La primera pantalla después de ingresar: tus granitos o gotas, tu categoría y dónde está tu última donación. Con abejas, probá las versiones A, B y C desde el control.",
     preguntas: [
       { id: "primero", tipo: "texto", texto: "¿Qué es lo primero que mirás? ¿Es lo más importante?" },
-      { id: "monticulo", tipo: "opcion", texto: "La pila de granitos (uno por donación)…", opciones: ["Me motiva a donar más", "Me da igual", "No la entiendo"] },
+      { id: "monticulo", tipo: "opcion", texto: "La pila de granitos o el panal de gotas (uno por donación)…", opciones: ["Me motiva a donar más", "Me da igual", "No la entiendo"] },
+      { id: "aporte", tipo: "opcion", texto: "Con abejas, ¿qué versión de la tarjeta de tus gotas se entiende mejor? (cambiala desde el control)", opciones: ["A · Panal", "B · Tira de celdas", "C · Número en la celda"] },
       { id: "ultima", tipo: "escala", texto: "¿Qué tan fácil es saber dónde está tu última donación?", min: "Muy difícil", max: "Muy fácil" } ] },
   { id: "donaciones", pagina: "donante-donaciones.html", ancla: "", etiqueta: "Mis donaciones", titulo: "La lista de tus donaciones",
     mira: "La tabla con qué donaste, a qué entidad llegó, su estado y la fecha.",
     preguntas: [
       { id: "columnas", tipo: "opcion", texto: "Las columnas de la tabla…", opciones: ["Son las que necesito", "Sobra alguna", "Falta alguna"] },
       { id: "cuales", tipo: "texto", texto: "Si sobra o falta alguna, ¿cuál?" },
-      { id: "estados", tipo: "escala", texto: "¿Se distinguen bien los estados (los rótulos de color)?", min: "Nada", max: "Perfecto" } ] },
+      { id: "estados", tipo: "escala", texto: "¿Se distinguen bien los estados (los rótulos de color)?", min: "Nada", max: "Perfecto" },
+      { id: "celu", tipo: "escala", texto: "Con el ancho Celular, ¿se lee bien cada donación?", min: "Nada", max: "Perfecto" } ] },
   { id: "entidades", pagina: "donante-entidades.html", ancla: "", etiqueta: "Entidades", titulo: "Hormiguero o colmena",
     mira: "Probá los dos temas desde el control de abajo: cada cámara o celda es una entidad a la que llegaron tus donaciones.",
     preguntas: [
@@ -210,50 +232,36 @@ const SECCIONES = [
     mira: "El recorrido de categorías, la misión activa y las insignias.",
     preguntas: [
       { id: "subir", tipo: "opcion", texto: "¿Entendés cómo subir de categoría?", opciones: ["Sí", "Más o menos", "No"] },
-      { id: "ganas", tipo: "escala", texto: "¿Las insignias te dan ganas de donar más seguido?", min: "Nada", max: "Mucho" } ] },
+      { id: "ganas", tipo: "escala", texto: "¿Las insignias te dan ganas de donar más seguido?", min: "Nada", max: "Mucho" },
+      { id: "potes", tipo: "opcion", texto: "Con abejas, el pote, el frasco con té y el barril con el oso…", opciones: ["Se entiende que cada categoría es más", "Son simpáticos pero no se entienden", "Prefiero otra cosa"] } ] },
   { id: "cierre", pagina: "inicio.html", ancla: "", etiqueta: "Cierre", titulo: "Identidad general",
-    mira: "Antes de responder, cambiá el tema y la tipografía desde el control de la esquina y recorré un par de pantallas.",
+    mira: "Antes de responder, cambiá el tema desde el control de la esquina y recorré un par de pantallas.",
     preguntas: [
       { id: "tema", tipo: "opcion", texto: "¿Qué tema preferís para DonaTrack?", opciones: ["Hormigas", "Abejas", "Me da igual"] },
       { id: "porque", tipo: "texto", texto: "¿Por qué?" },
-      { id: "tipografia", tipo: "opcion", texto: "¿Qué tipografía de títulos preferís?", opciones: ["A · DM Sans", "B · Archivo expandida", "C · Bricolage Grotesque"] },
+      { id: "fondo", tipo: "opcion", texto: "Con abejas, el fondo amarillo con racimos de celdas…", opciones: ["Suma sin molestar", "Casi no se nota", "Distrae"] },
       { id: "animacion", tipo: "opcion", texto: "La cantidad de animación es…", opciones: ["Demasiada", "Justa", "Poca"] },
       { id: "general", tipo: "texto", texto: "Comentario general" },
       { id: "nombre", tipo: "linea", texto: "Tu nombre (opcional)" } ] },
 ];
 
-/* Pruebas A/B/C: tipografías pesadas sin serifa para los títulos del prototipo */
-const TIPOS = {
-  A: { nombre: "DM Sans", nota: "La actual, peso 800", familia: '"DM Sans"' },
-  B: { nombre: "Archivo", nota: "Expandida, peso 850", familia: '"Archivo"', estirar: "118%", peso: 850,
-       href: "https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" },
-  C: { nombre: "Bricolage Grotesque", nota: "Con carácter, peso 800", familia: '"Bricolage Grotesque"', peso: 800,
-       href: "https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&display=swap" },
-};
-document.fonts && Object.values(TIPOS).forEach(t => { if (t.href && !document.querySelector(`link[href="${t.href}"]`)) { const l = document.createElement("link"); l.rel = "stylesheet"; l.href = t.href; document.head.append(l); } });
-
 /* ===== Estado ===== */
 const guardado = leer("dt-revision") || {};
-const estado = { modo: "libre", tema: guardado.tema || "h", tipo: guardado.tipo || "A", sec: guardado.sec || 0, celu: false, respuestas: guardado.respuestas || {} };
+const estado = { modo: "libre", tema: guardado.tema || "h", tarjeta: guardado.tarjeta || "a", aporte: guardado.aporte || "a", sec: guardado.sec || 0, celu: false, respuestas: guardado.respuestas || {} };
 function leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
-function escribirLocal() { try { localStorage.setItem("dt-revision", JSON.stringify({ tema: estado.tema, tipo: estado.tipo, sec: estado.sec, respuestas: estado.respuestas })); } catch {} }
+function escribirLocal() { try { localStorage.setItem("dt-revision", JSON.stringify({ tema: estado.tema, tarjeta: estado.tarjeta, aporte: estado.aporte, sec: estado.sec, respuestas: estado.respuestas })); } catch {} }
 
 const $ = s => document.querySelector(s);
 const marcoLibre = $("#marco-libre"), marcoEnc = $("#marco-enc");
 
-/* Aplica la tipografía elegida dentro del prototipo (mismo origen: se puede tocar su documento) */
-function aplicarTipo(marco) {
+/* Las pruebas A/B y A/B/C viven en el prototipo como atributos de <html> (mismo origen: se puede tocar su documento) */
+function aplicarPruebas(marco) {
   let doc; try { doc = marco.contentDocument; } catch { return; }
-  if (!doc || !doc.head) return;
-  const t = TIPOS[estado.tipo];
-  doc.getElementById("dt-tipo")?.remove();
-  if (t.href && !doc.querySelector(`link[href="${t.href}"]`)) { const l = doc.createElement("link"); l.rel = "stylesheet"; l.href = t.href; doc.head.append(l); }
-  if (estado.tipo === "A") return;
-  const s = doc.createElement("style"); s.id = "dt-tipo";
-  s.textContent = `.h :is(h1, h2, .c-display, .c-num, .dh-cat__nombre, .ck__gran, .hg__ficha h3) { font-family: ${t.familia}, "DM Sans", system-ui, sans-serif !important; font-weight: ${t.peso} !important; ${t.estirar ? `font-stretch: ${t.estirar};` : ""} }`;
-  doc.head.append(s);
+  if (!doc || !doc.documentElement) return;
+  doc.documentElement.dataset.tarjeta = estado.tarjeta;
+  doc.documentElement.dataset.aporte = estado.aporte;
 }
-[marcoLibre, marcoEnc].forEach(m => m.addEventListener("load", () => aplicarTipo(m)));
+[marcoLibre, marcoEnc].forEach(m => m.addEventListener("load", () => aplicarPruebas(m)));
 
 /* Cambiar de tema conserva la página: h-donante.html ⇄ i-donante.html */
 function conTema(nombre) { return nombre.replace(/^[hi]-/, "") ; }
@@ -261,24 +269,29 @@ function rutaActual(marco) { try { return marco.contentWindow.location.pathname.
 
 function pintarControles() {
   document.querySelectorAll("[data-tema]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tema === estado.tema)));
-  $("#tipos").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tipo === estado.tipo)));
-  $("#resumen").textContent = (estado.tema === "h" ? "Hormigas" : "Abejas") + " · " + estado.tipo;
+  document.querySelectorAll("button[data-tarjeta]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.tarjeta === estado.tarjeta)));
+  document.querySelectorAll("button[data-aporte]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.aporte === estado.aporte)));
+  $("#resumen").textContent = estado.tema === "h" ? "Hormigas" : `Abejas · ${estado.tarjeta.toUpperCase()} · ${estado.aporte.toUpperCase()}`;
+  $("#nota-pruebas").hidden = estado.tema === "i";
   $("#modo-libre").setAttribute("aria-pressed", String(estado.modo === "libre"));
   $("#modo-enc").setAttribute("aria-pressed", String(estado.modo === "enc"));
   $("#libre").hidden = estado.modo !== "libre";
   $("#encuesta").hidden = estado.modo !== "enc";
 }
 
-$("#tipos").innerHTML = Object.entries(TIPOS).map(([k, t]) =>
-  `<button type="button" data-tipo="${k}" aria-pressed="false"><b style="font-family:${t.familia.replace(/"/g, "'")}, system-ui; font-weight:${t.peso || 800}; ${t.estirar ? `font-stretch:${t.estirar}` : ""}">${k} · Hola, Nicolás</b><small>${t.nombre} · ${t.nota}</small></button>`).join("");
-$("#tipos").addEventListener("click", e => { const b = e.target.closest("[data-tipo]"); if (!b) return; estado.tipo = b.dataset.tipo; escribirLocal(); pintarControles(); aplicarTipo(marcoLibre); aplicarTipo(marcoEnc); });
-document.querySelectorAll("[data-tema]").forEach(b => b.addEventListener("click", () => {
-  if (estado.tema === b.dataset.tema) return;
+function cambiarTema(t) {
+  if (estado.tema === t) return;
   const libre = rutaActual(marcoLibre);
-  estado.tema = b.dataset.tema; escribirLocal(); pintarControles();
+  estado.tema = t; escribirLocal(); pintarControles();
   if (libre) marcoLibre.src = estado.tema + "-" + conTema(libre);
   mostrarSeccion(false);
+}
+document.querySelectorAll("button[data-tarjeta], button[data-aporte]").forEach(b => b.addEventListener("click", () => {
+  if (b.dataset.tarjeta) estado.tarjeta = b.dataset.tarjeta; else estado.aporte = b.dataset.aporte;
+  escribirLocal(); pintarControles(); aplicarPruebas(marcoLibre); aplicarPruebas(marcoEnc);
+  cambiarTema("i");
 }));
+document.querySelectorAll("button[data-tema]").forEach(b => b.addEventListener("click", () => cambiarTema(b.dataset.tema)));
 
 function cambiarModo(m) {
   estado.modo = m; pintarControles();
@@ -331,7 +344,7 @@ function mostrarSeccion(cargarMarco) {
   pintarPasos();
 }
 function responder(s, pid, valor) {
-  estado.respuestas[s.id] = { ...(estado.respuestas[s.id] || {}), [pid]: valor, _vista: estado.tema + estado.tipo };
+  estado.respuestas[s.id] = { ...(estado.respuestas[s.id] || {}), [pid]: valor, _vista: estado.tema === "h" ? "hormigas" : `abejas, tarjetas ${estado.tarjeta.toUpperCase()}, aportes ${estado.aporte.toUpperCase()}` };
   escribirLocal(); pintarPasos(); programarGuardado();
   const r = $("#resumen-txt"); if (r) r.textContent = resumen();
 }
@@ -339,7 +352,7 @@ function resumen() {
   const r = estado.respuestas;
   return SECCIONES.map(s => { const a = r[s.id]; if (!a) return null;
     const lineas = s.preguntas.filter(p => a[p.id] !== undefined && a[p.id] !== "").map(p => `- ${p.texto} ${a[p.id]}`);
-    return lineas.length ? `${s.etiqueta} (visto en ${a._vista === undefined ? "" : (a._vista[0] === "h" ? "hormigas" : "abejas") + ", tipografía " + a._vista[1]})\n${lineas.join("\n")}` : null; })
+    return lineas.length ? `${s.etiqueta}${a._vista ? ` (visto con ${a._vista})` : ""}\n${lineas.join("\n")}` : null; })
     .filter(Boolean).join("\n\n") || "Todavía no respondiste nada.";
 }
 async function copiar() {
