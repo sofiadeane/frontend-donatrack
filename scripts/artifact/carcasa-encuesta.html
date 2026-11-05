@@ -165,11 +165,10 @@ textarea { min-height: 84px; }
             <button type="button" data-tarjeta="b" aria-pressed="false">B · Miel</button>
           </div>
         </div>
-        <div class="prueba"><small>Tarjeta de tus gotas (inicio del panel)</small>
-          <div class="seg" role="group" aria-label="Tarjeta de tus gotas">
-            <button type="button" data-aporte="a" aria-pressed="true">A · Panal</button>
-            <button type="button" data-aporte="b" aria-pressed="false">B · Tira</button>
-            <button type="button" data-aporte="c" aria-pressed="false">C · Celda</button>
+        <div class="prueba"><small>Celda “sin entregar” del panal de gotas (inicio del panel)</small>
+          <div class="seg" role="group" aria-label="Celda sin entregar">
+            <button type="button" data-aporte="a" aria-pressed="true">A · Telarañas</button>
+            <button type="button" data-aporte="b" aria-pressed="false">B · Celda en pausa</button>
           </div>
         </div>
         <p class="flota__nota" id="nota-pruebas">Elegir una prueba cambia al tema abejas.</p>
@@ -209,11 +208,12 @@ const SECCIONES = [
       { id: "otra", tipo: "texto", texto: "¿Qué otra cifra te gustaría ver?" },
       { id: "piezas", tipo: "opcion", texto: "Con abejas, los dibujos de cada cifra (panal, frascos, cucharón, abejas)…", opciones: ["Cuentan algo de cada cifra", "Son decoración", "Distraen"] } ] },
   { id: "inicio", pagina: "donante.html", ancla: "", etiqueta: "Inicio donante", titulo: "El inicio de la persona donante",
-    mira: "La primera pantalla después de ingresar: tus granitos o gotas, tu categoría y dónde está tu última donación. Con abejas, probá las versiones A, B y C desde el control.",
+    mira: "La primera pantalla después de ingresar: tus granitos o gotas, tu categoría y dónde está tu última donación. Con abejas, tocá cada celda del panal para ver sus donaciones y probá las versiones A y B de la celda “sin entregar” desde el control.",
     preguntas: [
       { id: "primero", tipo: "texto", texto: "¿Qué es lo primero que mirás? ¿Es lo más importante?" },
       { id: "monticulo", tipo: "opcion", texto: "La pila de granitos o el panal de gotas (uno por donación)…", opciones: ["Me motiva a donar más", "Me da igual", "No la entiendo"] },
-      { id: "aporte", tipo: "opcion", texto: "Con abejas, ¿qué versión de la tarjeta de tus gotas se entiende mejor? (cambiala desde el control)", opciones: ["A · Panal", "B · Tira de celdas", "C · Número en la celda"] },
+      { id: "panal", tipo: "opcion", texto: "Con abejas, el panal de gotas (celda llena = llegó, con miel a medias = en camino, abierta = en el depósito) te cuenta el estado de tus donaciones…", opciones: ["Sin tocar nada", "Recién al tocar una celda", "No lo entiendo"] },
+      { id: "corte", tipo: "opcion", texto: "Con abejas, la celda “sin entregar” se entiende y no desanima más con… (cambiala desde el control)", opciones: ["A · Telarañas", "B · Celda en pausa con flecha y abeja", "Me da igual"] },
       { id: "ultima", tipo: "escala", texto: "¿Qué tan fácil es saber dónde está tu última donación?", min: "Muy difícil", max: "Muy fácil" } ] },
   { id: "donaciones", pagina: "donante-donaciones.html", ancla: "", etiqueta: "Mis donaciones", titulo: "La lista de tus donaciones",
     mira: "La tabla con qué donaste, a qué entidad llegó, su estado y la fecha.",
@@ -247,7 +247,7 @@ const SECCIONES = [
 
 /* ===== Estado ===== */
 const guardado = leer("dt-revision") || {};
-const estado = { modo: "libre", tema: guardado.tema || "h", tarjeta: guardado.tarjeta || "a", aporte: guardado.aporte || "a", sec: guardado.sec || 0, celu: false, respuestas: guardado.respuestas || {} };
+const estado = { modo: "libre", tema: guardado.tema || "h", tarjeta: guardado.tarjeta || "a", aporte: guardado.aporte === "b" ? "b" : "a", sec: guardado.sec || 0, celu: false, respuestas: guardado.respuestas || {} };
 function leer(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
 function escribirLocal() { try { localStorage.setItem("dt-revision", JSON.stringify({ tema: estado.tema, tarjeta: estado.tarjeta, aporte: estado.aporte, sec: estado.sec, respuestas: estado.respuestas })); } catch {} }
 

@@ -23,8 +23,8 @@
 
   <!-- A · Tu montañita: un grano por donación -->
   <div class="pc-fila dh-fila--hero">
-    <!-- Tema abejas · Tu colmena: una celda por donación, coloreada según dónde está. Tres diseños en prueba
-         (html[data-aporte] = a, b o c; sin atributo se ve el A): panal, tira de celdas y número dentro de la celda. -->
+    <!-- Tema abejas · Tu colmena: una celda por donación, coloreada según dónde está. Panal de estados que se toca
+         para ver el detalle. La celda de "sin entregar" tiene dos diseños en prueba (html[data-aporte] = a o b; sin atributo se ve el A). -->
     <section class="dh-monte ap" aria-labelledby="t-ap" th:if="${abejas and e.ok()}"
              th:with="tot=${e.datos.total}, lle=${e.datos.entregadas}, cam=${e.datos.enCamino}, pro=${e.datos.enProceso}, cor=${e.datos.interrumpidas},
                       n=${(tot > 18 ? 18 : tot) + 1}, anillo=${n <= 1 ? 0 : (n <= 7 ? 1 : 2)}">
@@ -33,45 +33,103 @@
         <p class="ap__msg" th:text="${p.mensaje}">Tu última donación ya está en el depósito.</p>
       </div>
 
-      <!-- A · Panal: cada celda es una donación; la punteada es la próxima -->
-      <div class="ap-a" th:with="qs=${ {0,-1,0,1,1,0,-1,-2,-1,0,1,2,2,2,1,0,-1,-2,-2} }, rs=${ {0,1,1,0,-1,-1,0,2,2,2,1,0,-1,-2,-2,-2,-1,0,1} }">
-        <svg class="ap-a__panal" role="img"
-             th:attr="viewBox=${(-(anillo + 0.5) * 34.64 - 3) + ' ' + (-(anillo * 30 + 20) - 3) + ' ' + ((2 * anillo + 1) * 34.64 + 6) + ' ' + (anillo * 60 + 46)},
-                      aria-label=${lle + ' entregadas, ' + cam + ' en camino, ' + pro + ' en proceso' + (cor > 0 ? ', ' + cor + ' sin entregar' : '')}">
-          <use th:each="k : ${#numbers.sequence(0, n - 1)}" href="#i-celda" width="32" height="36.95"
-               th:attr="x=${(qs[k] + rs[k] / 2.0) * 34.64 - 16},y=${rs[k] * 30 - 18.47},
-                        class=${'ap-c ap-c--' + (k == n - 1 ? 'prox' : (k < lle ? 'llego' : (k < lle + cam ? 'camino' : (k < lle + cam + pro ? 'proceso' : 'corte'))))}"/>
+      <!-- El panal: cada celda cuenta su estado sin tocarla (llena = llegó, con miel a medias = en camino, abierta = en el
+           depósito) y, al tocarla, abre abajo la tarjeta con las donaciones de ese estado (js/i-aporte.js).
+           La celda de "sin entregar" tiene dos diseños en prueba (html[data-aporte]): A telarañas, B celda en pausa. -->
+      <div class="ap-a" th:with="pCam=${tot == 0 ? 0 : cam * 100 / tot}">
+        <svg class="ap-a__panal" role="group" aria-label="Tus donaciones por estado" viewBox="-30 -30 345 262">
+          <defs>
+            <clipPath id="ap-hex"><path d="M50 2 L97 29.4 V86.1 L50 113.5 L3 86.1 V29.4Z"/></clipPath>
+            <path id="ap-l-cam" d="M-19.0 35.3 L66.0 -14.3"/>
+            <path id="ap-l-lle" d="M34.0 -14.3 L119.0 35.3"/>
+            <path id="ap-l-cor" d="M-24.1 88.8 L60.9 138.4"/>
+            <path id="ap-l-dep" d="M39.1 138.4 L124.1 88.8"/>
+          </defs>
+
+          <!-- En camino · arriba a la izquierda: brilla y se va llenando con miel que ondea -->
+          <g class="ap-h ap-h--camino" data-celda="camino" role="button" tabindex="0" aria-expanded="false" aria-controls="ap-det" transform="translate(2 0.3)"
+             th:attr="aria-label=${cam + ' en camino. Ver las donaciones'}">
+            <use href="#i-celda" class="ap-h__fondo" width="100" height="115.47"/>
+            <g clip-path="url(#ap-hex)"><path class="ap-h__ola" th:attr="transform=${'translate(0 ' + (112 - (pCam < 22 ? 22 : pCam) * 0.95) + ')'}" d="M-100 0 q12.5 -7 25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 t25 0 V130 H-100Z"/></g>
+            <use href="#i-celda" class="ap-h__borde" width="100" height="115.47"/>
+            <text class="ap-h__num" x="50" y="70" text-anchor="middle" th:text="${cam}">3</text>
+            <text class="ap-h__etq"><textPath startOffset="50%" text-anchor="middle" href="#ap-l-cam">EN CAMINO</textPath></text>
+          </g>
+          <circle class="ap-h__rastro" cx="-12" cy="76" r="13"/>
+          <use href="#h-hormiga" class="ap-bicho ap-bicho--vuela" x="-30" y="30" width="42" height="32"/>
+
+          <!-- Llegaron · arriba a la derecha: miel llena, brillo y una abeja dormida -->
+          <g class="ap-h ap-h--llego" data-celda="llego" role="button" tabindex="0" aria-expanded="false" aria-controls="ap-det" transform="translate(114 0.3)"
+             th:attr="aria-label=${lle + (lle == 1 ? ' llegó' : ' llegaron') + '. Ver las donaciones'}">
+            <use href="#i-celda" class="ap-h__fondo" width="100" height="115.47"/>
+            <use href="#i-celda" class="ap-h__borde" width="100" height="115.47"/>
+            <path class="ap-h__brillo" d="M28 24 Q36 18 46 15"/>
+            <path class="ap-h__brillo" d="M22 38 Q24 33 28 30"/>
+            <text class="ap-h__num" x="50" y="66" text-anchor="middle" th:text="${lle}">5</text>
+            <text class="ap-h__etq"><textPath startOffset="50%" text-anchor="middle" href="#ap-l-lle" th:text="${lle == 1} ? 'LLEGÓ' : 'LLEGARON'">LLEGARON</textPath></text>
+          </g>
+          <use href="#h-hormiga" class="ap-bicho ap-bicho--duerme" x="138" y="70" width="34" height="26"/>
+          <text class="ap-zz" x="172" y="72"><tspan>z</tspan><tspan dx="1" dy="-6">z</tspan><tspan dx="1" dy="-6">z</tspan></text>
+
+          <!-- Sin entregar · abajo al centro. A: telarañas (más clara y sin sombra). B: celda en pausa, con línea punteada,
+               una flecha de vuelta y la abeja esperando al lado. En cero, las dos quedan tenues. -->
+          <g class="ap-h ap-h--corte" th:classappend="${cor == 0} ? 'is-cero'" data-celda="corte" role="button" tabindex="0" aria-expanded="false" aria-controls="ap-det" transform="translate(58 96.3)"
+             th:attr="aria-label=${cor + ' sin entregar. Ver las donaciones'}">
+            <use href="#i-celda" class="ap-h__fondo" width="100" height="115.47"/>
+            <g clip-path="url(#ap-hex)" class="ap-h__tela ap-v-a">
+              <path d="M3 29.4 L62 108 M3 29.4 L82 70 M3 29.4 L90 40 M3 29.4 L38 114 M3 29.4 L20 116"/>
+              <path d="M12 46 Q22 45 28 52 M18 62 Q32 60 42 70 M24 78 Q44 75 58 88 M30 94 Q58 90 76 104 M38 108 Q66 104 88 96"/>
+            </g>
+            <g class="ap-h__vuelta ap-v-b" aria-hidden="true">
+              <path d="M57 94.6 A7.5 7.5 0 1 1 54.8 86.3"/>
+              <path d="M49.8 86 L54.8 86.3 L53.6 81.4"/>
+            </g>
+            <use href="#i-celda" class="ap-h__borde" width="100" height="115.47"/>
+            <text class="ap-h__num" x="50" y="72" text-anchor="middle" th:text="${cor}">0</text>
+            <text class="ap-h__etq"><textPath startOffset="50%" text-anchor="middle" href="#ap-l-cor">SIN ENTREGAR</textPath></text>
+          </g>
+          <use href="#h-hormiga" class="ap-bicho ap-bicho--espera ap-v-b" x="26" y="132" width="30" height="23"/>
+
+          <!-- En el depósito · abajo a la derecha: celda abierta, todavía sin cerrar -->
+          <g class="ap-h ap-h--proceso" data-celda="proceso" role="button" tabindex="0" aria-expanded="false" aria-controls="ap-det" transform="translate(170 96.3)"
+             th:attr="aria-label=${pro + ' en el depósito. Ver las donaciones'}">
+            <path class="ap-h__zona" d="M3 29.4 L50 2 L97 29.4 V86.1 L50 113.5 L3 86.1Z"/>
+            <path class="ap-h__abierta" d="M3 29.4 V86.1 L50 113.5 L97 86.1 V29.4"/>
+            <text class="ap-h__num" x="50" y="72" text-anchor="middle" th:text="${pro}">1</text>
+            <text class="ap-h__etq"><textPath startOffset="50%" text-anchor="middle" href="#ap-l-dep" th:text="'EN EL DEPÓSITO'">EN EL DEPÓSITO</textPath></text>
+          </g>
+          <use href="#h-hormiga" class="ap-bicho ap-bicho--lleva" x="248" y="92" width="34" height="26"/>
         </svg>
-        <ul class="ap__ley">
-          <li class="ap-k--llego"><b class="c-mono" th:text="${lle}">2</b> <th:block th:text="${lle == 1} ? 'llegó' : 'llegaron'">llegaron</th:block></li>
-          <li class="ap-k--camino"><b class="c-mono" th:text="${cam}">1</b> en camino</li>
-          <li class="ap-k--proceso"><b class="c-mono" th:text="${pro}">4</b> en el depósito</li>
-          <li class="ap-k--corte" th:if="${cor > 0}"><b class="c-mono" th:text="${cor}">1</b> sin entregar</li>
-        </ul>
+        <p class="ap__pista">Tocá una celda para ver sus donaciones</p>
       </div>
 
-      <!-- B · Tira: las celdas en fila, agrupadas por estado, con el conteo debajo de cada grupo -->
-      <ol class="ap-b" aria-label="Tus donaciones por estado">
-        <li class="ap-b__g ap-k--llego" th:if="${lle > 0}"><span class="ap-b__celdas" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, lle)}"></i></span><small><b th:text="${lle}">2</b> <th:block th:text="${lle == 1} ? 'llegó' : 'llegaron'">llegaron</th:block></small></li>
-        <li class="ap-b__g ap-k--camino" th:if="${cam > 0}"><span class="ap-b__celdas" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, cam)}"></i></span><small><b th:text="${cam}">1</b> en camino</small></li>
-        <li class="ap-b__g ap-k--proceso" th:if="${pro > 0}"><span class="ap-b__celdas" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, pro)}"></i></span><small><b th:text="${pro}">4</b> en el depósito</small></li>
-        <li class="ap-b__g ap-k--corte" th:if="${cor > 0}"><span class="ap-b__celdas" aria-hidden="true"><i th:each="k : ${#numbers.sequence(1, cor)}"></i></span><small><b th:text="${cor}">1</b> sin entregar</small></li>
-        <li class="ap-b__g ap-k--prox"><span class="ap-b__celdas" aria-hidden="true"><i></i></span><small>la próxima</small></li>
-      </ol>
-
-      <!-- C · La celda grande se llena con la parte que ya llegó; al lado, el desglose -->
-      <div class="ap-c3" th:style="'--nivel:' + ${tot == 0 ? 0 : lle * 100 / tot} + '%'">
-        <div class="ap-c3__celda" role="img" th:attr="aria-label=${lle + ' de ' + tot + ' ya llegaron'}">
-          <span class="ap-c3__lleno" aria-hidden="true"></span>
-          <b class="c-num" th:text="${lle}">2</b><small th:text="'de ' + ${tot} + ' llegaron'">de 7 llegaron</small>
-        </div>
-        <ul class="ap-c3__lista">
-          <li class="ap-k--llego" th:style="'--p:' + ${tot == 0 ? 0 : lle * 100 / tot}"><span>Llegaron</span><b class="c-mono" th:text="${lle}">2</b><i></i></li>
-          <li class="ap-k--camino" th:style="'--p:' + ${tot == 0 ? 0 : cam * 100 / tot}"><span>En camino</span><b class="c-mono" th:text="${cam}">1</b><i></i></li>
-          <li class="ap-k--proceso" th:style="'--p:' + ${tot == 0 ? 0 : pro * 100 / tot}"><span>En el depósito</span><b class="c-mono" th:text="${pro}">4</b><i></i></li>
-          <li class="ap-k--corte" th:if="${cor > 0}" th:style="'--p:' + ${cor * 100 / tot}"><span>Sin entregar</span><b class="c-mono" th:text="${cor}">1</b><i></i></li>
-        </ul>
+      <!-- Tarjeta de la celda tocada: una por estado, con sus donaciones (código, bien, entidad y el aviso) -->
+      <div class="ap-det" id="ap-det" role="region" aria-label="Detalle del estado elegido" hidden>
+        <th:block th:each="k : ${ {'llego', 'camino', 'proceso', 'corte'} }">
+          <section class="ap-det__p" th:attr="data-celda=${k}" hidden
+                   th:with="lista=${e.datos.detalle.get(k)}">
+            <header class="ap-det__cab">
+              <div>
+                <h3 th:text="${k == 'llego'} ? 'Ya llegaron' : (${k == 'camino'} ? 'En camino' : (${k == 'proceso'} ? 'En el depósito' : 'Sin entregar'))">En camino</h3>
+                <p th:text="${k == 'llego'} ? 'Cada una llenó una celda de miel.' : (${k == 'camino'} ? 'Salieron del depósito y van hacia su entidad.' : (${k == 'proceso'} ? 'Las recibimos; la celda se termina de armar cuando tienen destino.' : 'Esta vez no llegaron a destino. En cada una te contamos qué pasó.'))">Salieron del depósito.</p>
+              </div>
+              <button type="button" class="ap-det__cerrar" data-cerrar aria-label="Cerrar el detalle">×</button>
+            </header>
+            <ul class="ap-det__lista" th:if="${!lista.isEmpty()}">
+              <li class="ap-tarj" th:each="a : ${lista}">
+                <span class="ap-tarj__cod" th:text="${a.codigo}">DT3250</span>
+                <b class="ap-tarj__bien" th:text="${a.descripcion}">Frazadas</b>
+                <span class="ap-tarj__ent" th:text="${a.entidad != null} ? ${a.entidad} : ${a.detalle}">Comedor San Juan</span>
+                <span class="ap-tarj__msg" th:text="${a.mensaje}">¡Tu donación está en camino!</span>
+                <a class="ap-tarj__mas" th:href="@{/donante/donaciones/{id}(id=${a.id})}"><span th:replace="~{fragments/iconos :: icono('flecha', 14)}"></span>Más detalles</a>
+              </li>
+            </ul>
+            <p class="ap-det__vacio" th:if="${lista.isEmpty()}"
+               th:text="${k == 'llego'} ? 'Todavía no llegó ninguna. Cuando llegue una, esta celda se llena de miel.' : (${k == 'camino'} ? 'No hay ninguna en camino ahora.' : (${k == 'proceso'} ? 'No hay ninguna esperando en el depósito.' : '¡Ninguna sin entregar! La celda sigue limpia.'))">No hay ninguna.</p>
+          </section>
+        </th:block>
       </div>
+      <script th:src="@{/js/i-aporte.js}" defer></script>
     </section>
 
     <section class="dh-monte" aria-labelledby="t-monte" th:unless="${abejas and e.ok()}">

@@ -172,65 +172,104 @@ path.i-t:not([class*="i-f-"]) { fill: none; }
 .cm__ley .is-media::before { background: linear-gradient(to top, var(--h-saffron) 50%, var(--i-cera) 50%); }
 .cm__ley .is-llena::before { background: var(--h-saffron); }
 
-/* ===== Panel · Tu colmena: una celda por donación · prueba A/B/C (html[data-aporte]) ===== */
+/* ===== Panel · Tu colmena: una celda por estado · prueba A/B (html[data-aporte]) =====
+ * El panal se lee sin tocarlo: llena de miel = llegó, con miel a medias = en camino, abierta = en el depósito (se está
+ * armando). Al tocar una celda se abre debajo la tarjeta con sus donaciones (js/i-aporte.js).
+ * La celda "sin entregar" tiene dos diseños: A (por defecto) telarañas, B celda en pausa con la abeja esperando. */
 
 .ap { --k-llego: var(--h-saffron); --k-camino: var(--i-cera); --k-proceso: var(--h-shell-3); --k-corte: var(--h-failed); }
 .ap.dh-monte { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); align-items: center; gap: 18px 32px; background: var(--h-celadon); }
 .ap__titulo { display: grid; gap: 2px; font-size: clamp(1.15rem, 0.9rem + 0.8vw, 1.5rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; text-transform: uppercase; color: var(--h-slate-2); }
 .ap__titulo b { font-size: clamp(5.5rem, 3.6rem + 6vw, 9.5rem); line-height: 0.82; letter-spacing: -0.05em; }
 .ap__msg { margin-top: 16px; font-size: 1.05rem; max-width: 26em; }
-/* Muestras de color por estado, compartidas por las tres versiones */
-.ap-k--llego { --k: var(--k-llego); }
-.ap-k--camino { --k: var(--k-camino); }
-.ap-k--proceso { --k: var(--k-proceso); }
-.ap-k--corte { --k: var(--k-corte); }
-.ap-b, .ap-c3 { display: none; }
-[data-aporte="b"] .ap-a, [data-aporte="c"] .ap-a { display: none; }
-[data-aporte="b"] .ap-b { display: flex; }
-[data-aporte="c"] .ap-c3 { display: grid; }
 
-/* A · Panal */
-.ap-a { display: grid; gap: 14px; justify-items: center; }
-.ap-a__panal { width: 100%; max-width: 300px; max-height: 260px; overflow: visible; }
-.ap-c { stroke: var(--h-saffron-deep); stroke-width: 2.4; stroke-linejoin: round; }
-.ap-c--llego { fill: var(--h-saffron); filter: url(#h-arena); }
-.ap-c--camino { fill: var(--i-cera); }
-.ap-c--proceso { fill: var(--h-shell-3); }
-.ap-c--corte { fill: var(--h-failed); }
-.ap-c--prox { fill: none; stroke: var(--h-slate-2); stroke-dasharray: 4 4; opacity: 0.6; }
-.ap__ley { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; }
-.ap__ley li { display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 8px; border-radius: 10px; background: var(--h-veil); font-size: 0.875rem; }
-.ap__ley li::before, .ap-c3__lista li::before { content: ""; flex: none; width: 13px; height: 15px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: var(--k); box-shadow: inset 0 0 0 1.5px var(--h-saffron-deep); }
+.ap-a { display: grid; justify-items: center; gap: 6px; }
+.ap-a__panal { width: 100%; max-width: 480px; overflow: visible; font-family: inherit; }
+.ap__pista { font-size: 0.8125rem; color: var(--h-ink-2); }
 
-/* B · Tira: grupos de celdas en fila */
-.ap-b { flex-wrap: wrap; align-items: flex-start; gap: 18px 14px; }
-.ap-b__g { display: grid; gap: 8px; }
-.ap-b__celdas { display: flex; flex-wrap: wrap; gap: 4px; max-width: 220px; }
-.ap-b__celdas i { position: relative; width: 40px; height: 46px; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: var(--h-saffron-deep); }
-.ap-b__celdas i::before { content: ""; position: absolute; inset: 2.5px; clip-path: inherit; background: var(--k); }
-.ap-b__g.ap-k--llego i::before { background: var(--h-grano-fino) 0 0 / 80px, var(--h-saffron); }
-.ap-b__g.ap-k--prox i { background: transparent; }
-.ap-b__g.ap-k--prox i::before { inset: 0; background: var(--i-hueco) center / 100% 100% no-repeat; }
-.ap-b__g small { font-size: 0.875rem; color: var(--h-ink-2); }
-.ap-b__g small b { font-size: 1.05rem; color: var(--h-ink); }
+/* Las celdas son botones: se agrandan un poco al pasar y se marcan al elegirlas */
+.ap-h { cursor: pointer; outline: none; transform-box: fill-box; transform-origin: center; transition: scale 160ms ease, filter 160ms; }
+.ap-h:hover, .ap-h:focus-visible { scale: 1.04; filter: drop-shadow(0 3px 0 var(--h-line-soft)); }
+.ap-h:focus-visible .ap-h__borde, .ap-h:focus-visible .ap-h__abierta { stroke: var(--h-graphite); }
+.ap-h.is-sel .ap-h__borde, .ap-h.is-sel .ap-h__abierta { stroke: var(--h-graphite); }
+.ap-h.is-sel { scale: 1.05; }
+.ap-h text, .ap-h textPath { pointer-events: none; }
 
-/* C · Número dentro de la celda */
-.ap-c3 { grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 22px; }
-.ap-c3__celda { position: relative; display: grid; place-content: center; justify-items: center; width: 150px; aspect-ratio: 1 / 1.1547; clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); background: var(--i-cera); isolation: isolate; text-align: center; }
-.ap-c3__lleno { position: absolute; inset: auto 0 0; height: var(--nivel); z-index: -1; background: var(--h-grano-fino) 0 0 / 120px, var(--h-saffron); }
-.ap-c3__celda b { font-size: 3.4rem; line-height: 0.9; color: var(--h-slate-2); }
-.ap-c3__celda small { font-size: 0.8125rem; font-weight: 600; }
-.ap-c3__lista { display: grid; gap: 10px; }
-.ap-c3__lista li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px 10px; font-size: 0.9375rem; }
-.ap-c3__lista li i { grid-column: 2 / -1; height: 6px; border-radius: 4px; background: linear-gradient(var(--h-saffron-deep), var(--h-saffron-deep)) 0 0 / calc(var(--p) * 1%) 100% no-repeat, var(--h-veil-soft); }
-.ap-c3__lista b { font-size: 1.05rem; }
+.ap-h__fondo { fill: var(--i-cera); }
+.ap-h__borde { fill: none; stroke: var(--h-saffron); stroke-width: 7; stroke-linejoin: round; paint-order: stroke; }
+.ap-h--llego .ap-h__fondo { fill: var(--h-saffron-100); }
+.ap-h__ola { fill: var(--h-saffron); opacity: 0.85; }
+.ap-h__brillo { fill: none; stroke: var(--h-shell-3); stroke-width: 4; stroke-linecap: round; opacity: 0.85; }
+.ap-h__num { font-size: 46px; font-weight: 800; letter-spacing: -0.04em; fill: var(--h-saffron-deep); font-variant-numeric: tabular-nums; }
+.ap-h--llego .ap-h__num { fill: var(--h-saffron-2); }
+.ap-h--camino .ap-h__num { fill: var(--h-graphite-2); }
+.ap-h__etq { font-size: 8px; font-weight: 700; letter-spacing: 0.1em; fill: var(--h-slate-2); }
+.ap-h__rastro { fill: none; stroke: var(--h-graphite); stroke-width: 1.2; stroke-dasharray: 3 4; opacity: 0.55; }
+.ap-h--proceso .ap-h__num { fill: var(--h-saffron-2); }
+/* La celda abierta no tiene relleno, pero la zona tocable sí: si no, solo se podría tocar el borde */
+.ap-h__zona { fill: transparent; }
+.ap-h__abierta { fill: none; stroke: var(--h-saffron); stroke-width: 4; stroke-linejoin: round; stroke-linecap: round; }
+
+/* Sin entregar: más clara y menos sombreada que las otras, para que no pese */
+.ap-h--corte .ap-h__fondo { fill: var(--i-cera); opacity: 0.7; }
+.ap-h--corte .ap-h__borde { stroke: var(--h-saffron); opacity: 0.7; stroke-width: 5; }
+.ap-h--corte .ap-h__num { fill: var(--h-ink-2); }
+.ap-h--corte.is-cero .ap-h__num { opacity: 0.35; }
+.ap-v-b { display: none; }
+/* A · telarañas */
+.ap-h__tela path { fill: none; stroke: var(--h-ink-2); stroke-width: 1.2; stroke-linecap: round; opacity: 0.55; }
+/* B · celda en pausa: contorno punteado, flecha de vuelta y la abeja esperando al lado */
+[data-aporte="b"] .ap-v-a { display: none; }
+[data-aporte="b"] .ap-v-b { display: inline; }
+[data-aporte="b"] .ap-h--corte .ap-h__borde { stroke-dasharray: 9 7; stroke-linecap: round; stroke-width: 4.5; opacity: 0.85; }
+[data-aporte="b"] .ap-h--corte .ap-h__fondo { opacity: 0.45; }
+.ap-h__vuelta path { fill: none; stroke: var(--h-saffron-deep); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.ap-h--corte.is-cero .ap-h__vuelta { opacity: 0.35; }
+
+.ap-bicho { color: var(--h-graphite); overflow: visible; pointer-events: none; }
+.ap-zz { font-size: 9px; font-weight: 800; fill: var(--h-graphite); opacity: 0.8; pointer-events: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .ap-bicho--vuela, .ap-bicho--lleva { animation: i-flota 3.2s ease-in-out infinite alternate; }
+  .ap-bicho--duerme { animation: i-flota 6s ease-in-out infinite alternate; }
+  .ap-bicho--espera { animation: i-flota 4.4s ease-in-out infinite alternate; }
+  .ap-h__ola { animation: ap-ola 5s linear infinite; }
+}
+@keyframes ap-ola { to { translate: 50px 0; } }
+
+/* Tarjeta de detalle: borde de miel, una ficha por donación (como la de seguimiento).
+ * En escritorio ocupa el lugar del número grande mientras está abierta, así la sección no cambia de alto ni estira
+ * la tarjeta de categoría de al lado; en celular se abre debajo. */
+.ap__txt, .ap-det { grid-column: 1; grid-row: 1; }
+.ap-a { grid-column: 2; grid-row: 1; }
+.ap:has(.ap-det:not([hidden])) .ap__txt { visibility: hidden; }
+.ap:has(.ap-det:not([hidden])) .ap__txt > * { display: none; }
+.ap-det { align-self: stretch; display: flex; flex-direction: column; min-height: 0; padding: clamp(14px, 1.8vw, 22px); border: 3px solid var(--h-saffron-deep); border-radius: var(--c-r-l); background: var(--h-shell-3); animation: ap-abre 220ms ease-out both; }
+.ap-det[hidden], .ap-det__p[hidden] { display: none; }
+.ap-det__p { display: flex; flex-direction: column; min-height: 0; }
+@keyframes ap-abre { from { opacity: 0; scale: 0.97; } to { opacity: 1; scale: 1; } }
+.ap-det__cab { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.ap-det__cab h3 { font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; color: var(--h-saffron-deep); }
+.ap-det__cab p { margin-top: 2px; font-size: 0.9375rem; color: var(--h-ink-2); }
+.ap-det__cerrar { flex: none; width: 36px; height: 36px; border-radius: 50%; font-size: 1.5rem; line-height: 1; color: var(--h-ink); background: var(--h-veil); }
+.ap-det__cerrar:hover { background: var(--h-veil-soft); }
+.ap-det__cerrar:focus-visible { outline: 3px solid var(--h-graphite); outline-offset: 2px; }
+.ap-det__lista { display: grid; gap: 10px; max-height: 196px; overflow-y: auto; padding: 2px; }
+.ap-tarj { position: relative; display: grid; gap: 3px; padding: 12px 16px; border: 2px solid var(--h-saffron); border-radius: 18px; background: var(--h-shell-3); }
+.ap-tarj__cod { position: absolute; top: 10px; right: 14px; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; color: var(--h-saffron-deep); }
+.ap-tarj__bien { padding-right: 56px; font-size: 1.05rem; line-height: 1.2; color: var(--h-saffron-deep); }
+.ap-tarj__ent { font-size: 0.9375rem; color: var(--h-ink-2); }
+.ap-tarj__msg { margin-top: 4px; font-size: 0.9375rem; font-weight: 600; color: var(--h-saffron-2); }
+.ap-tarj__mas { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 0.9375rem; font-weight: 700; color: var(--h-ink); text-decoration: none; }
+.ap-tarj__mas:hover { text-decoration: underline; }
+.ap-det__vacio { padding: 10px 2px; font-size: 1rem; }
 
 @media (max-width: 760px) {
   .ap.dh-monte { grid-template-columns: minmax(0, 1fr); }
+  .ap__txt, .ap-det, .ap-a { grid-column: 1; grid-row: auto; }
+  .ap:has(.ap-det:not([hidden])) .ap__txt { visibility: visible; }
+  .ap:has(.ap-det:not([hidden])) .ap__txt > * { display: revert; }
   .ap__titulo { grid-template-columns: auto minmax(0, 1fr); align-items: end; column-gap: 12px; }
   .ap__titulo b { font-size: 5.5rem; }
-  .ap-c3 { grid-template-columns: minmax(0, 1fr); justify-items: center; }
-  .ap-c3__lista { width: 100%; }
 }
 
 /* ===== Incentivos: potes de miel cada vez más grandes ===== */

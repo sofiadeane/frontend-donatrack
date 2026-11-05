@@ -4,6 +4,7 @@ import grupo5.clienteliviano.integracion.donaciones.DonacionesPort;
 import grupo5.clienteliviano.integracion.donaciones.DonacionesPort.FiltroDonaciones;
 import grupo5.clienteliviano.integracion.donaciones.dto.CambioEstadoDIResponseDTO;
 import grupo5.clienteliviano.integracion.donaciones.dto.DonacionIndependienteResponseDTO;
+import grupo5.clienteliviano.integracion.entidades.EntidadesPort;
 import grupo5.clienteliviano.integracion.error.BackendException;
 import grupo5.clienteliviano.integracion.incentivos.IncentivosDTOs.DonantePerfilDTO;
 import grupo5.clienteliviano.integracion.incentivos.IncentivosDTOs.MetricasDonanteDTO;
@@ -20,6 +21,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -67,13 +70,34 @@ public class PanelDonanteService {
       Bloque<Impacto> impacto,
       Seccion<NotificacionVista> notificaciones) {}
 
-  /** Totales de donaciones-service (fuente de las cifras del hero). */
+  /**
+   * Totales de donaciones-service (fuente de las cifras del hero) y, por cada estado del panal, las
+   * donaciones que lo forman (se muestran al tocar una celda).
+   */
   public record Entregas(
-      int total, int entregadas, int enCamino, int enProceso, int interrumpidas) {
+      int total,
+      int entregadas,
+      int enCamino,
+      int enProceso,
+      int interrumpidas,
+      Map<String, List<Aporte>> detalle) {
     public int sinEntregar() {
       return enCamino + enProceso;
     }
   }
+
+  /**
+   * Una donación dentro de una celda del panal. {@code mensaje} es el aviso que le corresponde a su
+   * estado; {@code entidad} es nula mientras no tenga destino.
+   */
+  public record Aporte(
+      UUID id,
+      String codigo,
+      String descripcion,
+      String detalle,
+      String mensaje,
+      String entidad,
+      String cuando) {}
 
   /** Datos de incentivos-service. {@code mision} y {@code proximaCategoria} pueden ser nulos. */
   public record Impacto(
@@ -133,6 +157,7 @@ public class PanelDonanteService {
   private final DonacionesPort donaciones;
   private final IncentivosPort incentivos;
   private final NotificacionesPort notificaciones;
+  private final EntidadesPort entidades;
   private final TraductorErrores traductor;
   private final CargadorSecciones cargador;
   private final VistaDonaciones vista;
@@ -142,6 +167,7 @@ public class PanelDonanteService {
       DonacionesPort donaciones,
       IncentivosPort incentivos,
       NotificacionesPort notificaciones,
+      EntidadesPort entidades,
       TraductorErrores traductor,
       CargadorSecciones cargador,
       VistaDonaciones vista,
@@ -149,6 +175,7 @@ public class PanelDonanteService {
     this.donaciones = donaciones;
     this.incentivos = incentivos;
     this.notificaciones = notificaciones;
+    this.entidades = entidades;
     this.traductor = traductor;
     this.cargador = cargador;
     this.vista = vista;
@@ -158,7 +185,7 @@ public class PanelDonanteService {
   public Panel panel(SesionDemo sesion) {
     Bloque<List<DonacionIndependienteResponseDTO>> propias = propias(sesion.donanteId());
     Bloque<Recorrido> recorrido = derivar(propias, this::recorrido);
-    Bloque<Entregas> entregas = derivar(propias, PanelDonanteService::entregas);
+    Bloque<Entregas> entregas = derivar(propias, this::entregas);
     return new Panel(
         mensaje(propias),
         mensajeCercano(propias),
@@ -270,20 +297,65 @@ public class PanelDonanteService {
 
   // ----- Entregas (tile B) -----
 
-  private static Entregas entregas(List<DonacionIndependienteResponseDTO> lista) {
-    int entregadas = 0;
-    int enCamino = 0;
-    int enProceso = 0;
-    int interrumpidas = 0;
-    for (DonacionIndependienteResponseDTO d : lista) {
-      switch (EstadoDonacionVista.faseDe(d.estadoActual())) {
-        case COMPLETADA -> entregadas++;
-        case EN_CAMINO -> enCamino++;
-        case EN_ESPERA, ASIGNADA -> enProceso++;
-        case INTERRUMPIDA -> interrumpidas++;
-      }
+  private Entregas entregas(List<DonacionIndependienteResponseDTO> lista) {
+    Map<String, String> nombres = new HashMap<>();
+    Map<UUID, UUID> destino = new HashMap<>();
+    if (!lista.isEmpty()) {
+      entidades.entidades().forEach(e -> nombres.put(e.id().toString(), e.nombre()));
+      entidades.asignaciones().forEach(a -> destino.put(a.donacionId(), a.entidadId()));
     }
-    return new Entregas(lista.size(), entregadas, enCamino, enProceso, interrumpidas);
+    Map<String, List<Aporte>> detalle = new LinkedHashMap<>();
+    for (String k : List.of("llego", "camino", "proceso", "corte")) {
+      detalle.put(k, new ArrayList<>());
+    }
+    for (DonacionIndependienteResponseDTO d : lista) {
+      String celda =
+          switch (EstadoDonacionVista.faseDe(d.estadoActual())) {
+            case COMPLETADA -> "llego";
+            case EN_CAMINO -> "camino";
+            case EN_ESPERA, ASIGNADA -> "proceso";
+            case INTERRUMPIDA -> "corte";
+          };
+      UUID entidad = destino.get(d.id());
+      detalle
+          .get(celda)
+          .add(
+              new Aporte(
+                  d.id(),
+                  codigo(d.id()),
+                  d.descripcion(),
+                  vista.resumen(d).detalle(),
+                  avisoDelEstado(d.estadoActual()),
+                  entidad == null ? null : nombres.get(entidad.toString()),
+                  d.fechaRegistro() == null ? "" : fechaCorta(d.fechaRegistro())));
+    }
+    return new Entregas(
+        lista.size(),
+        detalle.get("llego").size(),
+        detalle.get("camino").size(),
+        detalle.get("proceso").size(),
+        detalle.get("corte").size(),
+        detalle);
+  }
+
+  /** "DT" y los últimos cuatro caracteres del id: alcanza para reconocer la donación. */
+  private static String codigo(UUID id) {
+    String s = id.toString();
+    return "DT" + s.substring(s.length() - 4).toUpperCase(ES);
+  }
+
+  /** El aviso de la donación según dónde está, con el mismo tono que el del encabezado. */
+  private static String avisoDelEstado(String estado) {
+    return switch (estado) {
+      case "EN_DEPOSITO" -> "Ya está en el depósito, esperando su asignación.";
+      case "ASIGNACION_REALIZADA" -> "Ya tiene destino: una organización la espera.";
+      case "LISTA_PARA_ENTREGAR" -> "Está lista para salir hacia su entidad.";
+      case "EN_TRASLADO" -> "¡Tu donación está en camino!";
+      case "ENTREGADA" -> "Llegó a destino. ¡Gracias por sumarte!";
+      case "ENTREGA_FALLIDA" -> "No pudimos entregarla y volvió al depósito.";
+      case "VENCIDA" -> "Venció antes de poder entregarse.";
+      default -> "Seguimos de cerca esta donación.";
+    };
   }
 
   // ----- Recorrido de la última donación -----
