@@ -79,6 +79,7 @@ public class PublicoController {
   @GetMapping("/v1")
   public String inicioAnterior(Model model) {
     cargarLanding(model);
+    model.addAttribute("enlaceIngresar", "/donante/v1");
     return "publico/inicio";
   }
 

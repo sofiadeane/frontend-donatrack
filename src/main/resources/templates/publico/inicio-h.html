@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layouts/publico-h :: layout(~{::title}, ~{::contenido})}">
-<head><title th:text="|DonaTrack — ${voc.tuAporte} puede llegar más lejos|">DonaTrack — Tu granito de arena puede llegar más lejos</title></head>
+<head><title th:text="${abejas} ? 'DonaTrack — Seguí tu donación hasta que llega' : |DonaTrack — ${voc.tuAporte} puede llegar más lejos|">DonaTrack — Tu granito de arena puede llegar más lejos</title></head>
 <body>
 <th:block th:fragment="contenido">
 
@@ -10,8 +10,14 @@
     <div class="ch__arriba">
       <div class="ch__texto">
         <p class="c-kicker">Trazabilidad de donaciones</p>
+        <th:block th:if="${abejas}">
+        <h1 id="titulo-hero" class="c-display ch__titulo">Seguí tu donación <em>hasta que llega</em></h1>
+        <p class="ch__lead">En una colmena, cada abeja sabe dónde hace falta ir y qué trabajo hacer. DonaTrack hace lo mismo con las donaciones: conecta a donantes y organizaciones para que cada aporte llegue a donde se necesita, y se pueda seguir su recorrido de principio a fin.</p>
+        </th:block>
+        <th:block th:unless="${abejas}">
         <h1 id="titulo-hero" class="c-display ch__titulo"><th:block th:text="${voc.tuAporte}">Tu granito de arena</th:block> puede llegar <em>más lejos</em></h1>
         <p class="ch__lead">Con DonaTrack, conectá con organizaciones que necesitan tu ayuda y seguí el recorrido de tu donación de principio a fin.</p>
+        </th:block>
         <div class="ch__acciones">
           <a class="c-btn" th:href="@{/registro(tipo='humana')}">Quiero ser parte del cambio<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>
           <a class="c-btn c-btn--white" th:href="@{/registro(tipo='entidad')}">Soy una entidad<span class="c-btn__dot"><span th:replace="~{fragments/iconos :: icono('flecha', 16)}"></span></span></a>

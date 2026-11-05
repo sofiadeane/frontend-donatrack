@@ -26,7 +26,7 @@
     </nav>
     <div class="barra-publica__sesion">
       <th:block th:if="${sesion == null}">
-        <a class="barra-publica__ingresar" th:href="@{/ingresar}">Iniciar sesión</a>
+        <a class="barra-publica__ingresar" th:href="@{${enlaceIngresar} ?: '/ingresar'}">Iniciar sesión</a>
         <a class="boton boton--primario boton--chico" th:href="@{/registro}">Registrarse</a>
       </th:block>
       <a th:if="${sesion != null}" class="boton boton--primario boton--chico" th:href="@{${sesion.rol.inicio}}">Ir a mi panel</a>
@@ -49,7 +49,7 @@
       <div>
         <h2>Plataforma</h2>
         <ul>
-          <li><a th:href="@{/ingresar}">Iniciar sesión</a></li>
+          <li><a th:href="@{${enlaceIngresar} ?: '/ingresar'}">Iniciar sesión</a></li>
           <li><a th:href="@{/registro}">Registrarse</a></li>
           <li><a th:href="@{/privacidad}">Privacidad</a></li>
         </ul>

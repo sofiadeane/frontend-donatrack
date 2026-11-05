@@ -29,7 +29,7 @@ public class DonanteInicioController {
   }
 
   /** El tablero anterior (layout privado), para comparar. */
-  @GetMapping("/donante/anterior")
+  @GetMapping({"/donante/anterior", "/donante/v1"})
   public String inicioAnterior(HttpServletRequest request, Model model) {
     sessionPort.actual(request).ifPresent(s -> model.addAttribute("panel", servicio.panel(s)));
     return "donante/inicio";
