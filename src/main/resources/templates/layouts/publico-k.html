@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!-- Layout público de la variante K. Uso: <html th:replace="~{layouts/publico-k :: layout(~{::title}, ~{::contenido})}"> -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
+<head th:replace="~{fragments/cabeza-k :: cabeza(${titulo})}"></head>
+<body class="k">
+<a class="k-saltar" href="#contenido">Saltar al contenido</a>
+<svg th:replace="~{fragments/ilustraciones-k :: defs}"></svg>
+
+<header class="k-barra">
+  <div class="k-env k-barra__fila">
+    <a th:replace="~{fragments/cabeza-k :: marca('/k')}"></a>
+    <nav class="k-nav" aria-label="Secciones">
+      <a th:href="@{/k}+'#como'">Cómo funciona</a>
+      <a th:href="@{/k}+'#impacto'">Impacto</a>
+      <a th:href="@{/k}+'#quien'">Quién participa</a>
+      <a th:href="@{/donaciones-entregadas}">Donaciones entregadas</a>
+      <a th:href="@{/k}+'#preguntas'">Preguntas</a>
+    </nav>
+    <div class="k-barra__fin">
+      <button th:replace="~{fragments/cabeza-k :: modo}"></button>
+      <th:block th:if="${sesion == null}">
+        <a class="k-ingresar" th:href="@{/ingresar}">Ingresar</a>
+        <a class="k-btn k-btn--chico" th:href="@{/registro}">Registrarme</a>
+      </th:block>
+      <a th:if="${sesion != null}" class="k-btn k-btn--chico" th:href="@{${sesion.rol.name() == 'DONANTE'} ? '/donante/huerta' : ${sesion.rol.inicio}}">Ir a mi huerta</a>
+    </div>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1" th:insert="${contenido}"></main>
+
+<footer class="k-pie">
+  <div class="k-pie__raices" aria-hidden="true">
+    <svg viewBox="0 0 1200 70" preserveAspectRatio="none"><path class="k-raiz k-raiz--fina" d="M0 6 H1200"/><path class="k-raiz k-raiz--fina" d="M180 6 C180 30 150 40 120 64 M520 6 C520 26 560 40 600 60 M880 6 C880 34 840 44 820 64 M1040 6 C1040 24 1070 34 1100 58"/></svg>
+  </div>
+  <div class="k-env">
+    <div style="display:grid;gap:12px">
+      <p class="k-pie__lema">Lo que donás <em>echa raíces.</em></p>
+      <p>Plataforma de gestión y trazabilidad de donaciones para organizaciones solidarias. Conecta a quien dona, a las entidades que reciben y a la administración del depósito.</p>
+    </div>
+    <ul>
+      <li><a th:href="@{/ingresar}">Ingresar</a></li>
+      <li><a th:href="@{/registro}">Registrarme</a></li>
+      <li><a th:href="@{/donaciones-entregadas}">Donaciones entregadas</a></li>
+      <li><a th:href="@{/privacidad}">Privacidad</a></li>
+      <li><span>contacto@donatrack.edu</span></li>
+    </ul>
+    <p class="k-pie__legal">© 2026 DonaTrack · Proyecto académico UTN-FRBA · Diseño de Sistemas · Maqueta, variante K «Huerta con abejas»</p>
+  </div>
+</footer>
+</body>
+</html>

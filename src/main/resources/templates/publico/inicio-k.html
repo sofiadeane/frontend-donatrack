@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/publico-k :: layout(~{::title}, ~{::contenido})}">
+<head><title>DonaTrack · Tu huerta crece con cada entrega</title></head>
+<body>
+<th:block th:fragment="contenido">
+
+  <!-- ===== Hero: tres láminas y el enjambre que hace la logística ===== -->
+  <section class="k-hero" aria-labelledby="t-hero">
+    <div class="k-env k-hero__grilla">
+      <div class="k-hero__texto">
+        <p class="k-kicker">Trazabilidad de donaciones</p>
+        <h1 id="t-hero">Tu huerta crece <em>con cada entrega.</em></h1>
+        <p class="k-lead">Registrá lo que donás, vos o tu empresa, y seguilo hasta la entidad que lo pidió. Cada entrega confirmada da un fruto en tu huerta.</p>
+        <div class="k-hero__acc">
+          <a class="k-btn" th:href="@{/registro(tipo='humana')}">Quiero donar</a>
+          <a class="k-btn k-btn--linea" th:href="@{/registro(tipo='entidad')}">Soy una entidad</a>
+        </div>
+      </div>
+      <div class="k-hero__comp" role="img" aria-label="Tres láminas de plantas en macetas, con frutos, y un enjambre de abejas que lleva paquetes">
+        <article class="k-lam"><div class="k-lam__marco"><svg th:replace="~{fragments/lamina-k :: dibujo('pilea', 'llego')}"></svg></div></article>
+        <article class="k-lam"><div class="k-lam__marco"><svg th:replace="~{fragments/lamina-k :: dibujo('zanahoria', 'llego')}"></svg></div></article>
+        <article class="k-lam"><div class="k-lam__marco"><svg th:replace="~{fragments/lamina-k :: dibujo('banano', 'camino')}"></svg></div></article>
+        <div class="k-enjambre" aria-hidden="true">
+          <svg viewBox="0 0 400 120">
+            <path class="k-ruta" d="M6 104 C30 70 50 90 70 60"/><use class="k-ab" href="#k-abeja-paquete" x="62" y="40" width="24" height="28"/>
+            <path class="k-ruta" d="M150 110 C170 80 200 96 222 70"/><use class="k-ab" href="#k-abeja-paquete" x="214" y="52" width="22" height="26"/>
+            <path class="k-ruta" d="M290 40 C320 20 340 50 368 26"/><use class="k-ab" href="#k-abeja-paquete" x="360" y="8" width="24" height="28"/>
+            <path class="k-ruta" d="M110 30 C130 10 150 30 168 12"/><use class="k-ab" href="#k-abeja" x="160" y="-4" width="20" height="24"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Cómo funciona: las abejas son la logística, la colmena es el depósito.
+       Los pasos aparecen de a uno al scrollear; el árbol del paso 4 queda plantado en la tierra de Bajo tierra. ===== -->
+  <section class="k-env k-seccion k-como" id="como" aria-labelledby="t-como">
+    <header>
+      <p class="k-kicker">Cómo funciona</p>
+      <h2 id="t-como">Las abejas <em>hacen el camino.</em></h2>
+      <p class="k-lead">Vos donás; la logística la llevan otros. Cada paso queda registrado con fecha, y lo ves en tu huerta sin preguntar.</p>
+    </header>
+    <!-- El árbol (paso 4) ocupa la columna de la raíz principal; los pasos bajan en la columna del texto de Bajo tierra. -->
+    <div class="k-como__grilla">
+      <div class="k-como__arbol k-revela k-revela--crece">
+        <!-- Solo la parte de arriba del dibujo: el suelo y las raíces los pone la sección que sigue. -->
+        <svg viewBox="0 0 213.29 179.9" aria-hidden="true" focusable="false"><use href="#k-como-4" width="213.29" height="251.65"/></svg>
+      </div>
+      <ol class="k-pasos">
+        <li class="k-paso k-revela">
+          <div class="k-paso__dibujo"><svg aria-hidden="true" focusable="false"><use href="#k-como-1"/></svg></div>
+          <div class="k-paso__texto">
+            <span class="k-paso__num">PASO 1</span>
+            <h3>Registrás lo que donás</h3>
+            <p>Alimentos, ropa, útiles o muebles, con su cantidad y vencimiento. A tu nombre o al de tu empresa. Es la semilla.</p>
+          </div>
+        </li>
+        <li class="k-paso k-revela">
+          <div class="k-paso__dibujo"><svg aria-hidden="true" focusable="false"><use href="#k-como-2"/></svg></div>
+          <div class="k-paso__texto">
+            <span class="k-paso__num">PASO 2</span>
+            <h3>La recibimos en el depósito</h3>
+            <p>La administración la registra al recibirla y la asigna a lo que una entidad pidió. Brota.</p>
+          </div>
+        </li>
+        <li class="k-paso k-revela">
+          <div class="k-paso__dibujo"><svg aria-hidden="true" focusable="false"><use href="#k-como-3"/></svg></div>
+          <div class="k-paso__texto">
+            <span class="k-paso__num">PASO 3</span>
+            <h3>Las abejas la llevan</h3>
+            <p>Sale en camión, con su ruta, paradas y horario. La entidad sabe qué viene y cuándo.</p>
+          </div>
+        </li>
+        <li class="k-paso k-paso--final k-revela">
+          <div class="k-paso__dibujo" aria-hidden="true"><span class="k-paso__marca"></span></div>
+          <div class="k-paso__texto">
+            <span class="k-paso__num">PASO 4</span>
+            <h3>La entidad confirma y echa raíces</h3>
+            <p>Con fecha, hora y una foto de lo recibido. En tu huerta, la planta da su fruto, y abajo se ve hasta dónde llegó.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ===== Bajo tierra: hasta dónde se ramifica lo que se dona. La raíz principal sigue el tronco del paso 4. ===== -->
+  <section class="k-tierra" aria-labelledby="t-raices">
+    <div class="k-env k-tierra__grilla">
+      <div th:replace="~{fragments/raices-k :: arbol(${raicesMuestra}, 'Una donación que se ramifica en raíces: primero por categoría, después por subcategoría y por último hasta cada tipo de entidad', false)}"></div>
+      <div class="k-tierra__texto">
+        <p class="k-kicker">Bajo tierra</p>
+        <h2 id="t-raices">Cada entrega <em>echa raíces.</em></h2>
+        <p>Arriba ves el árbol; abajo, hasta dónde llegó. Lo que donás se ramifica por categoría, después por lo que se pidió, y termina en comedores, escuelas, hogares y merenderos.</p>
+        <p class="k-tierra__nota">En tu huerta, cada raíz es una entidad real que recibió lo tuyo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Impacto ===== -->
+  <section class="k-env k-seccion" id="impacto" aria-labelledby="t-impacto">
+    <header>
+      <p class="k-kicker">Impacto</p>
+      <h2 id="t-impacto">Lo que ya <em>dio frutos.</em></h2>
+      <span class="k-demo" th:if="${metricas.demo}" style="justify-self:start">Cifras de demostración</span>
+    </header>
+    <ul class="k-cifras k-anima">
+      <li class="k-cifra" th:each="m, it : ${metricas.valores}">
+        <svg class="k-cifra__arbol" viewBox="0 0 120 150" aria-hidden="true" focusable="false"><use th:href="|#k-arbol-${it.index % 4 + 1}|" href="#k-arbol-1"/></svg>
+        <b th:text="${#numbers.formatInteger(m.valor, 1, 'POINT')}">128</b>
+        <span class="k-cifra__etq" th:text="${m.etiqueta}">Donaciones entregadas</span>
+        <span class="k-cifra__det"><b style="font:inherit;font-weight:700" th:text="${m.detalleTitulo}">+23 este mes</b> <span th:text="${m.detalleTexto}">Detalle</span></span>
+      </li>
+    </ul>
+    <div class="k-tabla-caja">
+      <header>
+        <h3>Entregadas en el último mes</h3>
+        <span class="k-demo" th:if="${destacadas.demo}">Datos de demostración</span>
+        <a class="k-link" th:href="@{/donaciones-entregadas}">Ver todas</a>
+      </header>
+      <div class="k-tabla-scroll" th:if="${destacadas.ok()}">
+      <table>
+        <caption class="sr-only">Donaciones entregadas en los últimos 30 días</caption>
+        <thead><tr><th scope="col">Fecha</th><th scope="col">Donación</th><th scope="col">Categoría</th><th scope="col">Donó</th></tr></thead>
+        <tbody>
+          <tr th:each="d : ${destacadas.datos}">
+            <td class="k-fecha"><time th:datetime="${#temporals.formatISO(d.entregadaEl)}" th:text="${#temporals.format(d.entregadaEl, 'dd/MM')}">12/09</time></td>
+            <th scope="row" th:text="${d.titulo}">Cajas de arroz</th>
+            <td th:text="${d.categoria}">Alimentos</td>
+            <td th:text="${d.donante != null} ? ${d.donante} : '—'">Cooperativa La Huerta</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      <p class="k-vacio" style="padding:0 18px 18px" th:if="${destacadas.vacia()}">Este mes todavía no hay entregas registradas.</p>
+      <p class="k-error" role="alert" th:if="${destacadas.conError()}" th:text="${destacadas.error.mensaje}">No pudimos cargar las donaciones.</p>
+    </div>
+  </section>
+
+  <!-- ===== Quién participa: elegís tu planta y ves qué te toca. Pestañas accesibles (k.js); sin JS se ven los tres paneles. ===== -->
+  <section class="k-env k-seccion" id="quien" aria-labelledby="t-quien">
+    <header>
+      <p class="k-kicker">Quién participa</p>
+      <h2 id="t-quien">¿Qué planta <em>sos vos?</em></h2>
+      <p class="k-lead">Tocá una y mirá qué te toca hacer. Registrarte lleva dos minutos.</p>
+    </header>
+    <div class="k-elige" data-k-elige>
+      <div class="k-elige__plantas" role="tablist" aria-label="Cómo querés participar">
+        <button type="button" class="k-elige__planta" role="tab" id="tab-persona" aria-controls="panel-persona" aria-selected="true">
+          <svg aria-hidden="true" focusable="false"><use href="#k-planta-naranjero"/></svg>
+          <span class="k-elige__etq">Quiero donar</span>
+        </button>
+        <button type="button" class="k-elige__planta" role="tab" id="tab-empresa" aria-controls="panel-empresa" aria-selected="false" tabindex="-1">
+          <svg aria-hidden="true" focusable="false"><use href="#k-planta-algodon"/></svg>
+          <span class="k-elige__etq">Tengo una empresa</span>
+        </button>
+        <button type="button" class="k-elige__planta" role="tab" id="tab-entidad" aria-controls="panel-entidad" aria-selected="false" tabindex="-1">
+          <svg aria-hidden="true" focusable="false"><use href="#k-planta-helecho"/></svg>
+          <span class="k-elige__etq">Soy una entidad</span>
+        </button>
+      </div>
+
+      <div class="k-tarjeta k-elige__panel is-activo" role="tabpanel" id="panel-persona" aria-labelledby="tab-persona">
+        <p class="k-kicker">Personas que donan</p>
+        <h3>Donás y ves dónde da fruto.</h3>
+        <ul class="k-elige__lista">
+          <li>Registrás lo que tenés, con cantidad y vencimiento.</li>
+          <li>Seguís cada donación hasta la entidad que la pidió.</li>
+          <li>Tu huerta guarda todo lo que diste y a quién le llegó.</li>
+        </ul>
+        <div class="k-muestra" aria-label="Ejemplo de aviso en tu huerta">
+          <span class="k-chip" data-estado="llego">Llegó</span>
+          <p><b>6 cajas de arroz</b> llegaron a Comedor Los Girasoles.</p>
+          <span class="k-muestra__fecha">14/10 · 11:20 · con foto de la recepción</span>
+        </div>
+        <a class="k-btn" th:href="@{/registro(tipo='humana')}">Quiero donar</a>
+      </div>
+
+      <div class="k-tarjeta k-elige__panel" role="tabpanel" id="panel-empresa" aria-labelledby="tab-empresa">
+        <p class="k-kicker">Empresas</p>
+        <h3>Tu empresa dona con constancia.</h3>
+        <ul class="k-elige__lista">
+          <li>Registrás las donaciones a nombre de la empresa.</li>
+          <li>Cada entrega confirmada genera una constancia.</li>
+          <li>La sumás tal cual a tu informe de impacto.</li>
+        </ul>
+        <div class="k-constancia" aria-label="Ejemplo de constancia de entrega">
+          <b>Constancia de entrega · DT3261</b>
+          <dl>
+            <dt>Entidad</dt><dd>Hogar Casa Ejemplo</dd>
+            <dt>Recibida en el depósito</dt><dd>12/10/2026</dd>
+            <dt>Entregada en recepción</dt><dd>14/10/2026, 11:20</dd>
+          </dl>
+        </div>
+        <a class="k-btn" th:href="@{/registro(tipo='juridica')}">Registrar mi empresa</a>
+      </div>
+
+      <div class="k-tarjeta k-elige__panel" role="tabpanel" id="panel-entidad" aria-labelledby="tab-entidad">
+        <p class="k-kicker">Comedores, escuelas y hogares</p>
+        <h3>Pedís lo que falta y lo recibís.</h3>
+        <ul class="k-elige__lista">
+          <li>Cargás lo que necesitás, con la cantidad.</li>
+          <li>Ves qué se te asignó y cuándo llega el camión.</li>
+          <li>Confirmás cada recepción en un paso.</li>
+        </ul>
+        <div class="k-muestra" aria-label="Ejemplo de una necesidad cargada">
+          <p><b>Leche en polvo</b> · 40 kg pedidos</p>
+          <div class="k-barra-prog" style="--p:70%"><i></i></div>
+          <span class="k-muestra__fecha">28 kg asignados · llegan el jueves</span>
+        </div>
+        <a class="k-btn" th:href="@{/registro(tipo='entidad')}">Registrar mi entidad</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Preguntas ===== -->
+  <section class="k-env k-seccion" id="preguntas" aria-labelledby="t-faq">
+    <div class="k-faq">
+      <header style="display:grid;gap:12px;align-content:start">
+        <p class="k-kicker">Preguntas frecuentes</p>
+        <h2 id="t-faq">Lo que <em>más nos preguntan.</em></h2>
+        <p class="k-lead">Si no está acá, escribinos a contacto@donatrack.edu.</p>
+      </header>
+      <div class="k-faq__lista">
+        <details open><summary>¿Qué puedo donar?</summary><p>Alimentos, bebidas, vestimenta, mobiliario, útiles escolares y artículos de higiene. Cada donación se registra con su categoría, cantidad y vencimiento.</p></details>
+        <details><summary>¿Cómo sé que mi donación llegó?</summary><p>Cada cambio de estado queda con fecha. Cuando la entidad confirma la recepción, lo ves en tu huerta con la fecha y la hora.</p></details>
+        <details><summary>¿Tengo que llevarla al depósito?</summary><p>Sí. La administración la registra al recibirla y desde ahí se asigna a una necesidad y se traslada en camión.</p></details>
+        <details><summary>¿Qué pasa si una entrega no llega?</summary><p>La donación vuelve al depósito y se reprograma. Te avisamos qué pasó y cuándo sale de nuevo.</p></details>
+        <details><summary>¿Quién ve la información?</summary><p>Quien dona, las entidades y la administración ven lo que les corresponde. La galería pública solo muestra donaciones ya entregadas.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Cierre ===== -->
+  <section class="k-env k-cierre" aria-labelledby="t-cierre">
+    <div class="k-cierre__fila">
+      <svg class="k-cierre__planta" aria-hidden="true" focusable="false"><use href="#k-planta-monstera"/></svg>
+      <h2 id="t-cierre">Empezá tu huerta <em>hoy.</em></h2>
+      <div class="k-cierre__acc">
+        <a class="k-btn" th:href="@{/registro(tipo='humana')}">Quiero donar</a>
+        <a class="k-btn k-btn--linea" th:href="@{/registro(tipo='entidad')}">Soy una entidad</a>
+      </div>
+    </div>
+  </section>
+</th:block>
+</body>
+</html>

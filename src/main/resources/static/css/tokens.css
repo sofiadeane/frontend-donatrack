@@ -623,4 +623,131 @@
   --i-vidrio: rgb(255 250 240 / 0.55);
   --i-te: #c9772a;
   --i-hueco: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 115.47' preserveAspectRatio='none'%3E%3Cpath d='M50 3 L96 29.7 V85.8 L50 112.5 L4 85.8 V29.7Z' fill='none' stroke='%23484349' stroke-opacity='0.5' stroke-width='2.5' stroke-dasharray='6 6'/%3E%3C/svg%3E");
+  /* Tema jardín (j-theme.css): paleta Oliva del prototipo Raíces. Papel cálido, tinta, tierra en tres verdes oliva,
+     raíces color paja y frutos mandarina; la miel queda para las abejas, que acompañan. */
+  --j-papel: #f2ebd7;
+  --j-papel-hondo: #e8e0c6;
+  --j-papel-claro: #faf6ea;
+  --j-tinta: #22231a;
+  --j-tinta-2: #3d3e31;
+  --j-tinta-suave: #515243;
+  --j-acento: #3d5a2a;
+  --j-acento-hondo: #2a411b;
+  --j-acento-claro: #dbdcae;
+  --j-hoja: #b0bf78;
+  --j-hoja-2: #93a35a;
+  --j-hoja-100: #e3e7c4;
+  --j-suelo: #56633a;
+  --j-suelo-medio: #4a562e;
+  --j-suelo-hondo: #343d20;
+  --j-texto-suelo: #f5eedb;
+  --j-raiz: #f3d68c;
+  --j-raiz-2: #d9b65a;
+  --j-raiz-100: #f8ecc4;
+  --j-fruto: #e8822a;
+  --j-fruto-hondo: #96460b;
+  --j-fruto-100: #f8dcc0;
+  --j-miel: #eab53a;
+  --j-problema: #f3d9d2;
+  --j-grafito: #2c2d22;
+  --j-line: rgb(34 35 26 / 0.22);
+  --j-line-soft: rgb(34 35 26 / 0.12);
+  --j-dots: rgb(34 35 26 / 0.35);
+  --j-dots-strong: rgb(34 35 26 / 0.45);
+  --j-veil: rgb(250 246 234 / 0.92);
+  --j-veil-soft: rgb(250 246 234 / 0.5);
+  --j-lift: 0 1px 0 rgb(34 35 26 / 0.12), 0 10px 30px -18px rgb(34 35 26 / 0.35);
+}
+
+/*
+ * ===== Variante K · "Huerta con abejas" (exploración 2026-11-06, rondas 1 a 4 del muestrario) =====
+ * Papel de cera, tinta, albahaca para actuar, hoja para lo vivo, paja para las raíces, miel solo para las abejas y
+ * zanahoria solo para los frutos. Cada color tiene un trabajo y una cuota; el modo oscuro cambia el papel por tinta
+ * y la línea por crema, y deja el color solo en frutos, raíces y abejas.
+ */
+:root {
+  --k-papel: #fbf2d3;
+  --k-claro: #fffaea;
+  --k-papel-hondo: #efe0ad;
+  --k-tinta: #2a2a22;
+  --k-tinta-2: #5d5c4c;
+  --k-linea: #2a2a22;
+  --k-filete: rgb(42 42 34 / 0.16);
+  --k-filete-suave: rgb(42 42 34 / 0.08);
+  --k-accion: #2f7d3b;
+  --k-accion-honda: #23602c;
+  --k-sobre-accion: #fffaea;
+  --k-hoja: #8fcb4a;
+  --k-hoja-clara: #e4efc9;
+  --k-relleno: #fffaea;
+  --k-miel: #f6a609;
+  --k-paja: #f4c844;
+  --k-zanahoria: #ef7a16;
+  --k-tierra: #3b3527;
+  --k-texto-tierra: #fbf2d3;
+  --k-maceta: #2a2a22;
+  --k-veta: #fbf2d3;
+  --k-ala: rgb(255 250 234 / 0.9);
+  --k-abeja-tinta: #2a2a22;
+  --k-sombra: rgb(0 0 0 / 0.16);
+  --k-lift: 0 1px 0 rgb(0 0 0 / 0.1), 0 16px 26px -20px rgb(0 0 0 / 0.6);
+  --k-deposito-fondo: #f3e2a9;
+  --k-deposito-texto: #5a4300;
+  --k-camino-fondo: #fde3a6;
+  --k-camino-texto: #7a4a00;
+  --k-entregada-fondo: #d4edbd;
+  --k-entregada-texto: #1f5a2a;
+  --k-problema-fondo: #f6d0c4;
+  --k-problema-texto: #962f16;
+  /* Alas de las ilustraciones de Cómo funciona, árboles planos de Impacto y sombra granulada */
+  --k-ala-celeste: #c8e9ed;
+  --k-arbol-claro: #c3dc5e;
+  --k-arbol: #8fcb4a;
+  --k-arbol-hondo: #3f8f3f;
+  --k-tronco: #4a4a30;
+  --k-sombra-grano: #2a2a22;
+  --k-sombra-grano-opacidad: 0.42;
+  --k-fruto-hondo: #ce6528;
+  --k-hoja-honda: #307d3d;
+  --k-algodon-sombra: #ededed;
+}
+:root[data-modo="oscuro"] {
+  --k-papel: #1f201a;
+  --k-claro: #2a2a22;
+  --k-papel-hondo: #45463a;
+  --k-tinta: #fbf2d3;
+  --k-tinta-2: #c9c4a8;
+  --k-linea: #f1e6c4;
+  --k-filete: rgb(251 242 211 / 0.16);
+  --k-filete-suave: rgb(251 242 211 / 0.08);
+  --k-accion: #8fcb4a;
+  --k-accion-honda: #a6d86a;
+  --k-sobre-accion: #1f201a;
+  --k-hoja: #2a2a22;
+  --k-hoja-clara: #2e3824;
+  --k-relleno: #2a2a22;
+  --k-tierra: #14150f;
+  --k-maceta: #f1e6c4;
+  --k-veta: #2a2a22;
+  --k-sombra: rgb(0 0 0 / 0.4);
+  --k-lift: 0 1px 0 rgb(0 0 0 / 0.3), 0 16px 26px -20px rgb(0 0 0 / 0.9);
+  --k-deposito-fondo: #4a3f1c;
+  --k-deposito-texto: #f6dd94;
+  --k-camino-fondo: #4f3a12;
+  --k-camino-texto: #fbd27c;
+  --k-entregada-fondo: #2c4a22;
+  --k-entregada-texto: #c6eba9;
+  --k-problema-fondo: #4f2418;
+  --k-problema-texto: #f8b9a5;
+  --k-ala-celeste: #9fc9cf;
+  --k-arbol-claro: #a9cb52;
+  --k-arbol: #6fa83c;
+  --k-arbol-hondo: #2f6e35;
+  --k-tronco: #c9b98a;
+  --k-sombra-grano: #000000;
+  --k-sombra-grano-opacidad: 0.7;
+  --k-fruto-hondo: #e0874a;
+  --k-hoja-honda: #2a2a22;
+  --k-algodon-sombra: #3a3a30;
+  color-scheme: dark;
 }

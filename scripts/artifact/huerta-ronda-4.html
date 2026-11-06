@@ -1,0 +1,547 @@
+<title>Huerta con abejas · ronda 4</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<style>
+/* Ronda 4: misma carpeta de láminas. Cada categoría del catálogo es una planta cuyo fruto es lo que se donó;
+   las abejas son la logística y la colmena es el depósito. Los modos se pintan por clase, fijos. */
+:root {
+  --fondo: #fbf2d3;
+  --hoja-papel: #fffaea;
+  --tinta: #2a2a22;
+  --tinta-2: #5d5c4c;
+  --linea: rgb(42 42 34 / 0.16);
+  --acento: #2f7d3b;
+  --sobre-acento: #fffaea;
+  --miel: #f6a609;
+  --suave: #e4efc9;
+  --titulo: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --texto: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --fondo: #1d1e17; --hoja-papel: #26271f; --tinta: #f1ead2; --tinta-2: #bdb9a2; --linea: rgb(241 234 210 / 0.15);
+  --acento: #9fd166; --sobre-acento: #1d1e17; --miel: #f7b636; --suave: #2e3824; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --fondo: #1d1e17; --hoja-papel: #26271f; --tinta: #f1ead2; --tinta-2: #bdb9a2; --linea: rgb(241 234 210 / 0.15);
+  --acento: #9fd166; --sobre-acento: #1d1e17; --miel: #f7b636; --suave: #2e3824; color-scheme: dark; }
+
+.modo-claro { --m-tierra: #3b3527; }
+.modo-oscuro { --m-tierra: #14150f; }
+.modo-claro { --m-fondo: #fbf2d3; --m-tarjeta: #fffaea; --m-linea: #2a2a22; --m-relleno: #fffaea; --m-hoja: #8fcb4a; --m-texto: #2a2a22; --m-texto-2: #5d5c4c; --m-accion: #2f7d3b; --m-sobre: #fffaea; --m-sombra-btn: #8fcb4a; --m-maceta: #2a2a22; --m-veta: #fbf2d3; --m-filete: rgb(42 42 34 / 0.16); }
+.modo-oscuro { --m-fondo: #1f201a; --m-tarjeta: #2a2a22; --m-linea: #f1e6c4; --m-relleno: #2a2a22; --m-hoja: #2a2a22; --m-texto: #fbf2d3; --m-texto-2: #c9c4a8; --m-accion: #8fcb4a; --m-sobre: #1f201a; --m-sombra-btn: #2f7d3b; --m-maceta: #f1e6c4; --m-veta: #2a2a22; --m-filete: rgb(251 242 211 / 0.16); }
+.modo-claro .solo-oscuro, .modo-oscuro .solo-claro { display: none; }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--fondo); color: var(--tinta); font: 400 15px/1.55 var(--texto); }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+.envoltorio { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--titulo); font-stretch: 118%; line-height: 1.02; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.2rem, 1.4rem + 3.6vw, 4rem); font-weight: 850; letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em; }
+h3 { font-size: 1.1rem; font-weight: 800; }
+p { margin: 0; max-width: 66ch; }
+.rotulo { font-family: var(--titulo); font-stretch: 112%; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acento); }
+.cabeza { padding-block: 40px 10px; display: grid; gap: 14px; }
+.cabeza .bajada { font-size: 1.08rem; color: var(--tinta-2); }
+.parte { padding-block: 32px 16px; display: grid; gap: 20px; }
+.parte > header { display: grid; gap: 8px; }
+.tomado { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+.tomado li { padding: 12px 14px; border-radius: 12px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); font-size: 0.92rem; }
+.tomado b { display: block; font: 700 0.74rem/1.3 var(--titulo); letter-spacing: 0.1em; text-transform: uppercase; color: var(--acento); }
+
+/* Tabla de categorías */
+.tabla-caja { overflow-x: auto; border-radius: 12px; box-shadow: inset 0 0 0 1px var(--linea); background: var(--hoja-papel); }
+table { border-collapse: collapse; width: 100%; min-width: 680px; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--linea); }
+thead th { font: 700 0.72rem/1.2 var(--titulo); letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-2); }
+tbody th { font-weight: 800; white-space: nowrap; }
+tbody tr:last-child > * { border-bottom: 0; }
+td.sub { color: var(--tinta-2); }
+
+/* Trazo */
+.pl { fill: none; stroke: var(--m-linea); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.hj { fill: var(--m-hoja); stroke: var(--m-linea); stroke-width: 1.5; stroke-linejoin: round; }
+.hj-2 { fill: var(--m-relleno); stroke: var(--m-linea); stroke-width: 1.5; stroke-linejoin: round; }
+.fr { fill: #ef7a16; stroke: var(--m-linea); stroke-width: 1.3; stroke-linejoin: round; }
+.fr-linea { fill: none; stroke: var(--m-linea); stroke-width: 1; stroke-linecap: round; }
+.bo { fill: #fffaea; stroke: var(--m-linea); stroke-width: 1.1; }
+.maceta { fill: var(--m-maceta); }
+.tierra { fill: var(--m-tierra); stroke: var(--m-maceta); stroke-width: 1.5; }
+.raiz { fill: none; stroke: #f4c844; stroke-width: 2.2; stroke-linecap: round; }
+.raiz-punta { fill: #f4c844; stroke: var(--m-tierra); stroke-width: 1; }
+.raiz-larga { fill: none; stroke: #f4c844; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.suelo { fill: var(--m-tierra); }
+.nodo { fill: #f4c844; stroke: var(--m-linea); stroke-width: 1.4; }
+.txt-suelo { fill: #fbf2d3; font-family: var(--titulo); font-weight: 700; }
+@media (prefers-reduced-motion: no-preference) {
+  .aparece .raiz-larga { stroke-dasharray: 1; stroke-dashoffset: 1; animation: dibuja 1.8s ease-out forwards; }
+}
+@keyframes dibuja { to { stroke-dashoffset: 0; } }
+.veta { fill: var(--m-veta); }
+.ruta { fill: none; stroke: var(--m-linea); stroke-width: 1.2; stroke-dasharray: 1 6; stroke-linecap: round; opacity: 0.6; }
+.flecha { fill: none; stroke: var(--m-linea); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; }
+.txt { fill: var(--m-texto); font-family: var(--mono); }
+.viento { transform-box: view-box; transform-origin: 100px 198px; }
+@media (prefers-reduced-motion: no-preference) {
+  .viento { animation: viento 6.5s ease-in-out infinite alternate; }
+  .lam:nth-child(2n) .viento { animation-duration: 7.5s; animation-delay: -2s; }
+  .lam:nth-child(3n) .viento { animation-duration: 5.8s; animation-delay: -4s; }
+  .ab { animation: ab 4s ease-in-out infinite alternate; }
+  .ab:nth-of-type(2n) { animation-duration: 5s; animation-delay: -2s; }
+  /* Los frutos aparecen una sola vez, cuando la lámina entra en pantalla */
+  .aparece .fruto { transform-box: fill-box; transform-origin: 50% 0; animation: aparece 900ms cubic-bezier(0.3, 1.4, 0.5, 1) both; }
+  .aparece .fruto:nth-of-type(2n) { animation-delay: 150ms; }
+  .aparece .fruto:nth-of-type(3n) { animation-delay: 300ms; }
+}
+@keyframes viento { from { rotate: -1.4deg; } to { rotate: 1.6deg; } }
+@keyframes ab { from { transform: translate(0, 0); } to { transform: translate(4px, -5px); } }
+@keyframes aparece { from { scale: 0; } to { scale: 1; } }
+
+/* Lámina */
+.lam { position: relative; display: grid; background: var(--m-tarjeta); color: var(--m-texto); box-shadow: 0 1px 0 rgb(0 0 0 / 0.1), 0 16px 26px -20px rgb(0 0 0 / 0.65); }
+.lam::before { content: ""; position: absolute; z-index: 1; left: 50%; top: -10px; width: 60px; height: 22px; translate: -50% 0; rotate: -2deg; background: #f4c844; opacity: 0.85; }
+.lam svg { display: block; width: 100%; height: auto; }
+.lam__marco { padding: 12px 12px 0; }
+.lam__pie { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; padding: 8px 12px 11px; font-size: 0.78rem; }
+.lam__pie b { font: 800 0.92rem/1.15 var(--titulo); font-stretch: 112%; }
+.lam__pie span { color: var(--m-texto-2); }
+.lam__pie .num { font-family: var(--mono); font-size: 0.72rem; }
+.chip { justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; background: var(--bg); color: var(--fg); }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+.modos { display: inline-flex; gap: 0; padding: 4px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); background: var(--hoja-papel); justify-self: start; }
+.modos button { border: 0; padding: 7px 14px; border-radius: 7px; background: transparent; font-weight: 700; cursor: pointer; }
+.modos button[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); }
+.vitrina { padding: 26px 18px 22px; border-radius: 14px; background: var(--m-fondo); }
+.grilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 30px 18px; }
+
+/* Landing */
+.maq { border-radius: 14px; overflow: hidden; background: var(--m-fondo); color: var(--m-texto); box-shadow: inset 0 0 0 1px var(--linea); }
+.maq__barra { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--m-filete); }
+.maq__marca { font: 850 1.05rem/1 var(--titulo); font-stretch: 118%; }
+.maq__marca em { font-style: normal; color: var(--m-accion); }
+.maq__nav { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.82rem; color: var(--m-texto-2); }
+.maq__modo { font: 700 0.7rem/1 var(--titulo); letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--m-filete); color: var(--m-texto-2); }
+.maq__hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; padding: clamp(20px, 3vw, 40px) clamp(18px, 3vw, 40px) 28px; align-items: center; }
+.maq__hero h3 { font-size: clamp(1.8rem, 1.2rem + 2.4vw, 3.2rem); font-weight: 850; font-stretch: 125%; letter-spacing: -0.035em; line-height: 0.95; }
+.maq__hero h3 em { font-style: normal; color: var(--m-accion); }
+.maq__hero p { margin-top: 14px; color: var(--m-texto-2); font-size: 1rem; }
+.maq__btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.maq__btn { padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; background: var(--m-accion); color: var(--m-sobre); box-shadow: 4px 4px 0 var(--m-sombra-btn); }
+.maq__btn--2 { background: transparent; color: var(--m-texto); box-shadow: inset 0 0 0 2px var(--m-texto); }
+.maq__comp { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: end; padding-top: 30px; }
+.maq__comp .lam:nth-child(1) { rotate: -3deg; translate: 8px 14px; }
+.maq__comp .lam:nth-child(2) { z-index: 1; translate: 0 -6px; }
+.maq__comp .lam:nth-child(3) { rotate: 2.5deg; translate: -8px 18px; }
+.maq__comp .lam__pie { display: none; }
+.maq__enjambre { position: absolute; inset: -6px 0 auto 0; z-index: 2; pointer-events: none; }
+.maq__enjambre svg { width: 100%; height: auto; display: block; }
+.maq__raices svg { display: block; width: 100%; height: auto; }
+.maq__logistica { border-top: 1px solid var(--m-filete); padding: 14px clamp(18px, 3vw, 40px) 16px; }
+.maq__logistica svg { width: 100%; height: auto; display: block; }
+@media (max-width: 760px) { .maq__hero { grid-template-columns: minmax(0, 1fr); } .maq__nav { display: none; } }
+
+/* Reporte */
+.reporte { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); max-width: 900px; background: #fffaea; color: #2a2a22; box-shadow: 0 1px 0 rgb(0 0 0 / 0.1), 0 22px 40px -26px rgb(0 0 0 / 0.7); }
+.reporte__dibujo { border-right: 1px solid rgb(42 42 34 / 0.16); }
+.reporte__dibujo svg { display: block; width: 100%; height: auto; }
+.reporte__datos { display: grid; gap: 14px; align-content: start; padding: 22px; }
+.reporte__datos h3 { font-size: 1.6rem; font-weight: 850; font-stretch: 122%; letter-spacing: -0.02em; }
+.reporte dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 0.9rem; }
+.reporte dt { color: #5d5c4c; }
+.reporte dd { margin: 0; font-weight: 700; font-variant-numeric: tabular-nums; }
+.reporte__firma { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; padding-top: 10px; border-top: 1px solid rgb(42 42 34 / 0.16); font: 0.76rem/1.4 var(--mono); color: #5d5c4c; }
+@media (max-width: 700px) { .reporte { grid-template-columns: minmax(0, 1fr); } .reporte__dibujo { border-right: 0; border-bottom: 1px solid rgb(42 42 34 / 0.16); } }
+
+/* Preguntas */
+.grupo { display: grid; gap: 18px; padding: 20px; border-radius: 16px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.preguntas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 22px 32px; }
+.preg { display: grid; gap: 8px; align-content: start; margin: 0; padding: 0; border: 0; min-width: 0; }
+.preg legend, .preg > label { padding: 0; font-weight: 700; font-size: 1rem; line-height: 1.35; }
+.preg__num { display: inline-block; min-width: 1.9em; color: var(--acento); font: 800 0.9rem/1 var(--titulo); font-variant-numeric: tabular-nums; }
+.opciones { display: grid; gap: 6px; }
+.opciones label { position: relative; }
+.opciones input { position: absolute; opacity: 0; pointer-events: none; }
+.opciones span { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); cursor: pointer; line-height: 1.35; }
+.opciones span::before { content: ""; flex: none; width: 14px; height: 14px; margin-top: 2px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--tinta-2); }
+.opciones.multi span::before { border-radius: 3px; }
+.opciones input:checked + span { background: var(--suave); box-shadow: inset 0 0 0 2px var(--acento); }
+.opciones input:checked + span::before { box-shadow: inset 0 0 0 4px var(--acento); }
+.opciones input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.escala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.escala label { position: relative; }
+.escala input { position: absolute; opacity: 0; pointer-events: none; }
+.escala span { display: grid; place-items: center; height: 40px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); font-weight: 800; cursor: pointer; }
+.escala input:checked + span { background: var(--acento); color: var(--sobre-acento); box-shadow: none; }
+.escala input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.escala__fin { display: flex; justify-content: space-between; gap: 12px; font-size: 0.78rem; color: var(--tinta-2); }
+textarea { width: 100%; min-height: 76px; padding: 10px 12px; border: 0; border-radius: 10px; background: var(--fondo); box-shadow: inset 0 0 0 1px var(--linea); resize: vertical; }
+.envio { position: sticky; bottom: 0; z-index: 3; margin-top: 18px; background: var(--fondo); box-shadow: 0 -1px 0 var(--linea); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.envio .envoltorio { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; padding-block: 12px; }
+.envio__progreso { display: grid; gap: 4px; min-width: 200px; flex: 1; }
+.envio__progreso p { font-size: 0.85rem; color: var(--tinta-2); }
+.barra { height: 6px; border-radius: 3px; background: var(--linea); overflow: hidden; max-width: 360px; }
+.barra i { display: block; height: 100%; width: var(--p, 0%); background: var(--miel); transition: width 240ms; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { min-height: 42px; padding: 0 18px; border: 0; border-radius: 10px; font-weight: 700; cursor: pointer; background: var(--hoja-papel); box-shadow: inset 0 0 0 1.5px var(--tinta); }
+.btn--fuerte { background: var(--acento); color: var(--sobre-acento); box-shadow: none; }
+.btn[disabled] { opacity: 0.45; cursor: default; }
+.estado { font-size: 0.85rem; color: var(--tinta-2); }
+.estado.is-ok { color: var(--acento); font-weight: 700; }
+.copia { display: grid; gap: 8px; padding-block: 0 18px; }
+.copia textarea { min-height: 140px; font: 0.8rem/1.4 var(--mono); }
+.pie { padding-block: 24px 40px; font-size: 0.85rem; color: var(--tinta-2); }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="grano-osc" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .16 0 0 0 0 .16 0 0 0 0 .13 -7 0 0 0 3.3"/></filter>
+    <filter id="grano-cla" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .98 0 0 0 0 .95 0 0 0 0 .83 -7 0 0 0 3.3"/></filter>
+    <filter id="aspero"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="5"/></filter>
+    <radialGradient id="fondo-cla" cx=".5" cy=".75" r=".85"><stop offset="0" stop-color="#fffaea"/><stop offset="1" stop-color="#efe0ad"/></radialGradient>
+    <radialGradient id="fondo-osc" cx=".5" cy=".75" r=".85"><stop offset="0" stop-color="#45463a"/><stop offset="1" stop-color="#1f201a"/></radialGradient>
+    <clipPath id="clip-hex"><path d="M74 198 H126 L140 228 L126 258 H74 L60 228Z"/></clipPath>
+    <clipPath id="clip-ventana"><path d="M80 204 H120 L132 228 L120 252 H80 L68 228Z"/></clipPath>
+  </defs>
+</svg>
+
+<header class="envoltorio cabeza">
+  <span class="rotulo">DonaTrack · tema huerta con abejas · ronda 4</span>
+  <h1>Lo que donás es el fruto</h1>
+  <p class="bajada">Cada categoría del catálogo es una planta, y lo que se donó cuelga de ella como fruto. Las abejas son la logística y la colmena es el depósito.</p>
+</header>
+
+<main id="formulario">
+  <section class="envoltorio parte" aria-labelledby="t-tomado">
+    <header><span class="rotulo">De tus respuestas</span><h2 id="t-tomado">Qué cambié</h2></header>
+    <ul class="tomado">
+      <li><b>La imagen es la donación</b>Cada planta da lo que se donó: remeras, cartones de leche, cuadernos, jabones, sillas. Alimentos queda con zanahoria y lechuga, que ya son comida.</li>
+      <li><b>Plantas orgánicas</b>Tallos curvos y hojas redondeadas con relleno, como en las referencias. Nada de líneas rectas ni puntas.</li>
+      <li><b>Una sola maceta</b>La hexagonal con pinceladas, en los dos modos. En claro es de tinta; en oscuro, crema.</li>
+      <li><b>Modo oscuro sin verde</b>Línea crema sobre tinta, y color solo en los frutos y las abejas.</li>
+      <li><b>Sin loops</b>Los frutos aparecen una vez, cuando la lámina entra en pantalla. Lo único que se mueve siempre es un viento sutil.</li>
+      <li><b>Abejas con rol visible</b>Cargan un paquete y cada una tiene su propia ruta, que termina en ella. La colmena es el depósito.</li>
+      <li><b>Entrega fallida</b>La abeja vuelve con el paquete al depósito por una ruta con flecha. Se lee como logística, no como pérdida.</li>
+      <li><b>Raíces a la vista</b>La maceta tiene una ventana de corte: se ve la tierra y las raíces, que crecen con cada estado. En la landing, una franja de tierra muestra cómo cada entrega echa raíz en una entidad.</li>
+      <li><b>Constancia</b>Fecha de recepción en el depósito y fecha y hora de la entrega, en lugar del recorrido y de «Confirmó».</li>
+    </ul>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-cat">
+    <header>
+      <span class="rotulo">Parte 1</span>
+      <h2 id="t-cat">Las categorías del catálogo</h2>
+      <p>Estas son las categorías y subcategorías que hoy tiene el catálogo de DonaTrack, con la planta que propongo para cada una y una alternativa por si el híbrido se ve infantil. Higiene aparece en las preguntas frecuentes, todavía sin subcategorías cargadas.</p>
+    </header>
+    <div class="tabla-caja">
+      <table>
+        <thead><tr><th scope="col">Categoría</th><th scope="col">Subcategorías hoy</th><th scope="col">Propuesta</th><th scope="col">Alternativa</th></tr></thead>
+        <tbody id="tabla-cat"></tbody>
+      </table>
+    </div>
+    <div class="modos" role="group" aria-label="Modo de las láminas"><button type="button" data-modo="claro" aria-pressed="true">Claro</button><button type="button" data-modo="oscuro" aria-pressed="false">Oscuro</button></div>
+    <div class="vitrina modo-claro"><div class="grilla" id="categorias"></div></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-landing">
+    <header><span class="rotulo">Parte 2</span><h2 id="t-landing">La landing</h2><p>Claro por defecto. Debajo del hero, una franja explica el rol de las abejas sin palabras de más.</p></header>
+    <div id="landings" style="display:grid;gap:24px"></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-est">
+    <header>
+      <span class="rotulo">Parte 3</span>
+      <h2 id="t-est">Los estados, con las abejas trabajando</h2>
+      <p>Mismo ejemplo, vestimenta. Las abejas muestran qué está pasando con la donación; la planta, cuánto falta.</p>
+    </header>
+    <div class="modos" role="group" aria-label="Modo de los estados"><button type="button" data-modo="claro" aria-pressed="true">Claro</button><button type="button" data-modo="oscuro" aria-pressed="false">Oscuro</button></div>
+    <div class="vitrina modo-claro"><div class="grilla" id="estados"></div></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-rep">
+    <header><span class="rotulo">Parte 4</span><h2 id="t-rep">La constancia, corregida</h2></header>
+    <div class="reporte modo-claro" id="reporte"></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-preg">
+    <header><span class="rotulo">Parte 5</span><h2 id="t-preg">Nueve preguntas</h2></header>
+    <div class="grupo"><div class="preguntas" id="preguntas"></div></div>
+  </section>
+</main>
+
+<section class="envio" aria-label="Guardar respuestas">
+  <div class="envoltorio">
+    <div class="envio__progreso"><p id="progreso" aria-live="polite">0 de 9 respondidas</p><div class="barra"><i id="barra"></i></div></div>
+    <div class="acciones">
+      <span class="estado" id="estado" role="status"></span>
+      <button type="button" class="btn" id="ver-copia">Copiar como texto</button>
+      <button type="button" class="btn btn--fuerte" id="guardar">Guardar respuestas</button>
+    </div>
+  </div>
+  <div class="envoltorio copia" id="copia" hidden>
+    <label for="texto-copia" class="estado">Si no podés guardar desde acá, copiá esto y pegámelo en el chat.</label>
+    <textarea id="texto-copia" readonly></textarea>
+  </div>
+</section>
+
+<footer class="envoltorio pie">DonaTrack, UTN-FRBA, Diseño de Sistemas 2026. Ronda 4 del tema huerta con abejas.</footer>
+
+<script>
+const $ = (s, e = document) => e.querySelector(s);
+const el = (tag, attrs = {}, ...hijos) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k === "style") n.style.cssText = v; else if (k === "html") n.innerHTML = v; else n.setAttribute(k, v);
+  }
+  for (const h of hijos) if (h != null) n.append(h);
+  return n;
+};
+const f = n => (+n).toFixed(1);
+
+/* ===== Piezas orgánicas ===== */
+/* Hoja redondeada que nace en (0,0) y apunta hacia arriba; el nervio es una curva suave */
+const hoja = (x, y, ang, largo, ancho, cl = "hj") =>
+  `<g transform="translate(${f(x)} ${f(y)}) rotate(${f(ang)})"><path class="${cl}" d="M0 0 C${f(-ancho)} ${f(-largo * 0.2)} ${f(-ancho * 0.9)} ${f(-largo * 0.9)} 0 ${f(-largo)} C${f(ancho * 0.9)} ${f(-largo * 0.9)} ${f(ancho)} ${f(-largo * 0.2)} 0 0Z"/><path class="pl" style="stroke-width:1" d="M0 -2 Q${f(ancho * 0.18)} ${f(-largo * 0.5)} 0 ${f(-largo * 0.82)}"/></g>`;
+const colgante = (x, y, largo, objeto) => `<path class="pl" d="M${f(x)} ${f(y)} q1 ${f(largo * 0.6)} 0 ${f(largo)}"/><g class="fruto" transform="translate(${f(x)} ${f(y + largo)})">${objeto}</g>`;
+const OBJ = {
+  remera: `<path class="fr" d="M-8 0 L-3 -2 Q0 1 3 -2 L8 0 L10 6 L6 7 L6 17 L-6 17 L-6 7 L-10 6Z"/>`,
+  leche: `<path class="fr" d="M-6 2 L-3 -3 H3 L6 2 V18 H-6Z"/><path class="fr-linea" d="M-6 2 H6 M-3 -3 V-5 H3 V-3 M-3 9 H3"/>`,
+  cuaderno: `<rect class="fr" x="-6" y="0" width="13" height="16" rx="1.5"/><path class="fr-linea" d="M-3 0 V16 M0 5 H5 M0 9 H5"/>`,
+  jabon: `<rect class="fr" x="-8" y="0" width="16" height="9" rx="4"/><circle class="bo" cx="9" cy="-3" r="2.4"/><circle class="bo" cx="12" cy="-8" r="1.6"/>`,
+  silla: `<path class="fr" d="M-5 -2 h3 v8 h8 v10 h-3 v-6 h-5 v6 h-3Z"/>`
+};
+function zanahoria() {
+  let s = `<g class="fruto"><path class="fr" d="M88 199 C88 192 112 192 112 199 C112 206 104 214 100 216 C96 214 88 206 88 199Z"/></g>`;
+  [[-34, 92], [-16, 104], [0, 112], [16, 102], [34, 90]].forEach(([a, L]) => {
+    const r = a * Math.PI / 180, cx = 100 + Math.sin(r) * L * 0.6 + (a < 0 ? -8 : 8), cy = 194 - L * 0.55, x2 = 100 + Math.sin(r) * L, y2 = 194 - Math.cos(r) * L;
+    s += `<path class="pl" d="M100 194 Q${f(cx)} ${f(cy)} ${f(x2)} ${f(y2)}"/>`;
+    for (let t = 0.45; t <= 1.01; t += 0.18) {
+      const x = 100 + (x2 - 100) * t, y = 194 + (y2 - 194) * t;
+      s += hoja(x, y, a - 34, 11, 5) + hoja(x, y, a + 34, 11, 5);
+    }
+    s += hoja(x2, y2, a, 13, 6);
+  });
+  return s;
+}
+function lechuga() {
+  let s = "";
+  [-64, 64, -42, 42, -20, 20, 0].forEach(a => {
+    const L = 76 - Math.abs(a) * 0.32;
+    s += `<g transform="translate(100 198) rotate(${a})"><path class="${Math.abs(a) > 30 ? "hj-2" : "hj"}" d="M0 0 C-30 -8 -38 -${f(L * 0.7)} -20 -${f(L * 0.95)} C-12 -${f(L * 1.05)} -4 -${f(L * 0.98)} 0 -${f(L * 0.9)} C4 -${f(L * 0.98)} 12 -${f(L * 1.05)} 20 -${f(L * 0.95)} C38 -${f(L * 0.7)} 30 -8 0 0Z"/><path class="pl" style="stroke-width:1" d="M0 -2 V-${f(L * 0.8)} M0 -${f(L * 0.35)} Q-8 -${f(L * 0.45)} -14 -${f(L * 0.6)} M0 -${f(L * 0.35)} Q8 -${f(L * 0.45)} 14 -${f(L * 0.6)}"/></g>`;
+  });
+  return s;
+}
+function planta(tallo, hojas, colgantes) { return tallo + hojas.map(h => hoja(...h)).join("") + colgantes.map(c => colgante(...c)).join(""); }
+const ESPECIES = {
+  zanahoria: () => zanahoria(),
+  lechuga: () => lechuga(),
+  vestimenta: () => planta(`<path class="pl" d="M100 198 C96 172 106 150 100 122 C95 100 104 84 100 62 M101 150 C88 140 76 136 64 122 M100 120 C114 110 126 106 138 94"/>`,
+    [[100, 62, -8, 26, 13], [64, 122, -50, 22, 12], [138, 94, 46, 22, 12], [100, 176, -60, 24, 13], [101, 166, 58, 22, 12], [100, 100, -48, 20, 11], [100, 92, 40, 20, 11]],
+    [[80, 134, 8, OBJ.remera], [120, 108, 8, OBJ.remera], [104, 128, 10, OBJ.remera]]),
+  bebidas: () => planta(`<path class="pl" d="M100 198 C104 170 94 146 100 118 C105 96 96 80 100 64"/>`,
+    [[100, 64, 6, 28, 15], [100, 178, -58, 26, 15], [100, 170, 54, 24, 14], [99, 138, -50, 24, 14], [100, 128, 52, 24, 14], [101, 96, -40, 22, 13], [100, 88, 42, 20, 12]],
+    [[100, 150, 6, OBJ.leche], [100, 108, 6, OBJ.leche]].map(([x, y, l, o], i) => [x + (i ? -12 : 12), y, l, o])),
+  utiles: () => planta(`<path class="pl" d="M100 198 C98 170 102 140 100 110 C98 92 102 78 100 66 M100 140 C112 132 120 124 126 112 M100 118 C88 112 80 104 74 92"/>`,
+    [[100, 66, 0, 24, 15], [126, 112, 40, 20, 13], [74, 92, -40, 20, 13], [100, 180, -56, 24, 15], [100, 172, 56, 24, 15], [100, 96, -60, 18, 12], [100, 90, 60, 18, 12]],
+    [[116, 128, 8, OBJ.cuaderno], [84, 110, 8, OBJ.cuaderno]]),
+  higiene: () => planta(`<path class="pl" d="M100 198 C99 170 101 130 100 80"/>`,
+    [[100, 182, -62, 30, 13], [100, 182, 62, 30, 13], [100, 156, -58, 27, 12], [100, 156, 58, 27, 12], [100, 130, -54, 23, 11], [100, 130, 54, 23, 11], [100, 106, -48, 18, 9], [100, 106, 48, 18, 9], [100, 80, 0, 16, 8]],
+    [[112, 142, 6, OBJ.jabon], [88, 118, 6, OBJ.jabon]]),
+  mobiliario: () => {
+    let s = `<path class="pl" style="stroke-width:3" d="M100 198 C97 180 105 164 100 146 C96 132 88 122 74 112 M100 146 C110 132 122 124 136 114 M100 150 C100 128 104 110 100 88"/>`;
+    [[74, 112, -70], [80, 116, -20], [88, 124, -60], [136, 114, 70], [128, 118, 20], [116, 126, 60], [100, 88, 0], [102, 100, 40], [98, 106, -40], [104, 120, 30], [70, 108, -110], [140, 110, 110]].forEach(([x, y, a]) => { s += hoja(x, y, a, 15, 5); });
+    s += colgante(88, 126, 6, OBJ.silla) + colgante(122, 120, 6, OBJ.silla);
+    return s;
+  }
+};
+const brote = () => `<path class="pl" d="M100 198 C98 188 102 180 100 170"/>` + hoja(100, 178, -56, 18, 10) + hoja(100, 174, 56, 18, 10);
+
+/* Abeja: siempre lleva un paquete, porque es la logística */
+const abeja = (x, y, s = 1, paquete = true) => `<g class="ab"><g transform="translate(${f(x)} ${f(y)}) scale(${s})">${paquete ? `<path d="M8 10 v3" stroke="#2a2a22" stroke-width=".8"/><rect x="4" y="12.5" width="8" height="6.5" rx="1" fill="#f4c844" stroke="#2a2a22" stroke-width=".8"/><path d="M8 12.5 v6.5" stroke="#2a2a22" stroke-width=".6"/>` : ""}<ellipse cx="7" cy="-2" rx="3.4" ry="4.8" transform="rotate(-20 7 -2)" fill="#fffaea" fill-opacity=".9" stroke="#2a2a22" stroke-width=".8"/><ellipse cx="8" cy="5" rx="7" ry="5" fill="#f6a609"/><path d="M5 .5c-1.4 2.6-1.4 6.4 0 9l2 .4c-1.4-3-1.4-6.4 0-9.6zM10 0c-1.4 3-1.4 7 0 10l2-.6c-1.2-2.6-1.2-6 0-8.8z" fill="#2a2a22"/><circle cx="16" cy="4.4" r="3.2" fill="#2a2a22"/></g></g>`;
+/* Una abeja con su propia ruta: la línea punteada termina en la abeja */
+const conRuta = (d, x, y, s, paquete) => `<path class="ruta" d="${d}"/>${abeja(x, y, s, paquete)}`;
+
+/* La maceta tiene una ventana de corte: se ve la tierra y las raíces, que crecen con el estado (1 a 3) */
+const RAICES = [
+  ["M100 206 C100 214 98 220 100 230"],
+  ["M100 214 C94 220 86 224 80 234", "M100 216 C106 222 114 226 120 236"],
+  ["M100 230 C100 238 98 244 100 252", "M84 228 C80 234 74 238 70 242", "M116 230 C120 236 126 240 130 244", "M92 220 C90 226 88 230 89 236", "M108 222 C110 228 112 232 111 238"]
+];
+const PUNTAS = [[[100, 230]], [[80, 234], [120, 236]], [[100, 252], [70, 242], [130, 244]]];
+function maceta(nivel = 3) {
+  let r = "";
+  for (let i = 0; i < nivel; i++) r += RAICES[i].map(d => `<path class="raiz" d="${d}"/>`).join("") + PUNTAS[i].map(([x, y]) => `<circle class="raiz-punta" cx="${x}" cy="${y}" r="2.6"/>`).join("");
+  return `<path class="maceta" d="M74 198 H126 L140 228 L126 258 H74 L60 228Z" filter="url(#aspero)"/>
+    <g clip-path="url(#clip-hex)" class="veta" filter="url(#aspero)"><path d="M54 212 L104 200 L106 204 L58 218Z"/><path d="M110 252 L148 242 L148 245 L112 256Z"/></g>
+    <path class="tierra" d="M80 204 H120 L132 228 L120 252 H80 L68 228Z"/>
+    <g clip-path="url(#clip-ventana)">${r}</g>`;
+}
+
+function svgLamina(plantaSvg, extra = "", nivel = 3) {
+  return `<svg viewBox="0 0 200 270" aria-hidden="true">
+    <rect width="200" height="270" fill="url(#fondo-cla)" class="solo-claro"/><rect width="200" height="270" fill="url(#fondo-osc)" class="solo-oscuro"/>
+    <rect width="200" height="270" filter="url(#grano-osc)" opacity=".14" class="solo-claro"/><rect width="200" height="270" filter="url(#grano-cla)" opacity=".16" class="solo-oscuro"/>
+    <ellipse cx="114" cy="262" rx="42" ry="5" fill="#000" opacity=".16"/>
+    <g class="viento">${plantaSvg}</g>${maceta(nivel)}${extra}</svg>`;
+}
+function lamina(svg, num, titulo, detalle, chip) {
+  const pie = el("div", { class: "lam__pie" }, el("b", { text: titulo }), el("span", { class: "num", text: `Lámina ${String(num).padStart(2, "0")}` }), el("span", { text: detalle }), el("span", { class: "num", text: "Primavera" }));
+  if (chip) pie.append(el("span", { class: "chip", style: `--bg:${chip[1]};--fg:${chip[2]};grid-column:1/-1;margin-top:4px`, text: chip[0] }));
+  return el("article", { class: "lam" }, el("div", { class: "lam__marco", html: svg }), pie);
+}
+
+/* ===== Parte 1: categorías ===== */
+const CATS = [
+  ["Alimentos", "Arroz, fideos secos, legumbres secas, conservas", "Zanahoria o lechuga: ya son comida", "Una mata de porotos con vainas", "zanahoria", "Zanahoria · Alimentos"],
+  ["Alimentos", "", "", "", "lechuga", "Lechuga · Alimentos"],
+  ["Bebidas", "Leche larga vida", "Planta que da cartones de leche", "Una vid o un limonero", "bebidas", "Bebidas"],
+  ["Vestimenta", "Camperas de abrigo, frazadas", "Planta que da remeras y abrigos", "Algodón, con sus capullos", "vestimenta", "Vestimenta"],
+  ["Mobiliario", "Sillas", "Olivo joven que da sillas", "Olivo solo: la madera ya dice mueble", "mobiliario", "Mobiliario"],
+  ["Útiles escolares", "Cuadernos", "Planta que da cuadernos", "Girasol, el de la escuela", "utiles", "Útiles escolares"],
+  ["Higiene", "Sin subcategorías cargadas", "Albahaca que da jabones", "Lavanda o albahaca sola: aromáticas", "higiene", "Higiene"]
+];
+CATS.forEach(([cat, sub, prop, alt], i) => { if (prop) $("#tabla-cat").append(el("tr", {}, el("th", { scope: "row", text: cat }), el("td", { class: "sub", text: sub }), el("td", { text: prop }), el("td", { class: "sub", text: alt }))); });
+CATS.forEach(([cat, sub, , , k, titulo], i) => $("#categorias").append(lamina(svgLamina(ESPECIES[k]()), i + 1, titulo, sub || CATS[0][1], null)));
+
+/* ===== Parte 2: landing ===== */
+function logistica() {
+  /* Colmena = depósito, camión, entidad; una abeja con paquete en cada tramo */
+  return `<svg viewBox="0 0 900 110" aria-hidden="true">
+    <g transform="translate(70 18)"><path class="hj-2" d="M0 20 L20 8 L40 20 V44 L20 56 L0 44Z"/><path class="pl" d="M0 30 H40 M14 44 v12 M26 44 v12" style="opacity:.6"/><rect class="maceta" x="15" y="34" width="10" height="9" rx="4"/></g>
+    <g transform="translate(400 30)"><path class="hj-2" d="M0 10 H52 V40 H0Z M52 20 H70 L80 30 V40 H52Z"/><circle class="hj-2" cx="16" cy="42" r="7"/><circle class="hj-2" cx="64" cy="42" r="7"/></g>
+    <g transform="translate(760 18)"><path class="hj-2" d="M0 24 L26 4 L52 24 V58 H0Z"/><path class="pl" d="M20 58 V38 H32 V58"/></g>
+    ${conRuta("M120 52 C190 20 280 70 360 40", 360, 30, 1.2)}${conRuta("M490 52 C560 20 640 70 720 40", 720, 30, 1.2)}
+    <text class="txt" x="90" y="100" text-anchor="middle" font-size="12">Recibimos en el depósito</text>
+    <text class="txt" x="440" y="100" text-anchor="middle" font-size="12">Llevamos en camión</text>
+    <text class="txt" x="786" y="100" text-anchor="middle" font-size="12">Entregamos en la entidad</text>
+  </svg>`;
+}
+/* Franja de raíces: debajo de las láminas, cada una echa raíz hasta la entidad que recibió */
+function raicesLanding() {
+  const R = [
+    ["M560 0 V40 Q560 60 540 60 H150 Q130 60 130 80 V108", 130, "Comedor Los Girasoles"],
+    ["M680 0 V60 Q680 80 660 80 H350 Q330 80 330 100 V108", 330, "Escuela N.º 12"],
+    ["M800 0 V26 Q800 46 780 46 H550 Q530 46 530 66 V108", 530, "Merendero Sur"],
+    ["M800 0 V70 Q800 90 780 90 H740 Q730 90 730 100 V108", 730, "Hogar Casa Ejemplo"]
+  ];
+  return `<svg viewBox="0 0 900 150" aria-hidden="true"><rect class="suelo" width="900" height="150"/><rect width="900" height="150" filter="url(#grano-cla)" opacity=".1"/>
+    ${R.map(([d]) => `<path class="raiz-larga" pathLength="1" d="${d}"/>`).join("")}
+    ${R.map(([, x, n]) => `<circle class="nodo" cx="${x}" cy="110" r="7"/><text class="txt-suelo" x="${x}" y="134" text-anchor="middle" font-size="13">${n}</text>`).join("")}
+    <text class="txt-suelo" x="24" y="30" font-size="15">Cada entrega echa raíces en una entidad.</text></svg>`;
+}
+for (const modo of ["claro", "oscuro"]) {
+  const comp = el("div", { class: "maq__comp" },
+    lamina(svgLamina(ESPECIES.vestimenta()), 7, "", "", null), lamina(svgLamina(ESPECIES.zanahoria()), 8, "", "", null), lamina(svgLamina(ESPECIES.utiles()), 9, "", "", null),
+    el("div", { class: "maq__enjambre", html: `<svg viewBox="0 0 400 120" aria-hidden="true">${conRuta("M6 104 C30 70 50 90 70 60", 70, 50, 1)}${conRuta("M150 110 C170 80 200 96 222 70", 222, 60, 0.9)}${conRuta("M290 40 C320 20 340 50 368 26", 368, 16, 1)}${conRuta("M110 30 C130 10 150 30 168 12", 168, 4, 0.8, false)}</svg>` }));
+  $("#landings").append(el("div", { class: `maq modo-${modo}`, role: "img", "aria-label": `Maqueta de la landing en modo ${modo}` },
+    el("div", { class: "maq__barra" }, el("span", { class: "maq__marca", html: "Dona<em>Track</em>" }), el("span", { class: "maq__nav", html: "<span>Cómo funciona</span><span>Entidades</span><span>Impacto</span><span>Ingresar</span>" }), el("span", { class: "maq__modo", text: modo === "claro" ? "Modo claro · por defecto" : "Modo oscuro" })),
+    el("div", { class: "maq__hero" },
+      el("div", {}, el("h3", { html: "Tu huerta crece <em>con cada entrega.</em>" }), el("p", { text: "Registrá lo que donás, vos o tu empresa, y seguilo hasta la entidad que lo pidió. Cada entrega confirmada da un fruto en tu huerta." }), el("div", { class: "maq__btns", html: `<span class="maq__btn">Quiero donar</span><span class="maq__btn maq__btn--2">Soy una entidad</span>` })),
+      comp),
+    el("div", { class: "maq__raices", html: raicesLanding() }),
+    el("div", { class: "maq__logistica", html: logistica() })));
+}
+
+/* ===== Parte 3: estados ===== */
+const EST = { deposito: ["En el depósito", "#f3e2a9", "#5a4300"], camino: ["En camino", "#fde3a6", "#7a4a00"], entregada: ["Entregada", "#d4edbd", "#1f5a2a"], fallida: ["No llegó · vuelve al depósito", "#f6d0c4", "#962f16"] };
+const sinFrutos = s => s.replace(/<g class="fruto"[\s\S]*?<\/g>/g, "").replace(/<path class="pl" d="M[\d.]+ [\d.]+ q1 [\d.]+ 0 [\d.]+"\/>/g, "");
+const colmena = `<g transform="translate(14 150)"><path class="hj-2" d="M0 14 L14 6 L28 14 V32 L14 40 L0 32Z"/><rect class="maceta" x="10" y="24" width="8" height="7" rx="3"/></g>`;
+$("#estados").append(
+  lamina(svgLamina(brote(), colmena + abeja(46, 160, 0.9), 1), 10, "Camperas · 12 u", "Recibida el 01/11", EST.deposito),
+  lamina(svgLamina(sinFrutos(ESPECIES.vestimenta()), conRuta("M14 140 C40 90 70 110 100 70 S140 40 150 44", 150, 34, 0.95), 2), 11, "Camperas · 12 u", "Salió en camión el 03/11", EST.camino),
+  lamina(svgLamina(ESPECIES.vestimenta(), conRuta("M120 60 C140 40 160 56 178 32", 178, 22, 0.85, false)), 12, "Camperas · 12 u", "Entregada el 04/11, 11:20", EST.entregada),
+  lamina(svgLamina(brote(), `<path class="flecha" d="M176 70 C130 40 70 70 40 136"/><path class="flecha" d="M36 124 L40 137 L51 130"/>` + colmena + abeja(120, 64, 0.95), 1), 13, "Camperas · 12 u", "No pudo entrar el camión. Se reprograma.", EST.fallida)
+);
+
+/* ===== Parte 4: constancia ===== */
+$("#reporte").append(
+  el("div", { class: "reporte__dibujo", html: svgLamina(ESPECIES.vestimenta(), conRuta("M120 60 C140 40 160 56 178 32", 178, 22, 0.85, false)) }),
+  el("div", { class: "reporte__datos" },
+    el("span", { class: "rotulo", text: "Constancia de entrega · Lámina 23" }),
+    el("h3", { text: "Frazadas y camperas de abrigo" }),
+    el("dl", { html: "<dt>Donó</dt><dd>Distribuidora Ejemplo SA</dd><dt>Entidad</dt><dd>Hogar Casa Ejemplo, Villa Lugano</dd><dt>Cantidad</dt><dd>120 frazadas · 80 camperas</dd><dt>Recibida en el depósito</dt><dd>12/10/2026</dd><dt>Entregada en recepción</dt><dd>14/10/2026, 11:20</dd><dt>Código</dt><dd>DT3261</dd>" }),
+    el("div", { class: "reporte__firma", html: "<span>Primavera 2026 · vestimenta</span><span>Verificable en DonaTrack con el código</span>" })));
+
+/* Los frutos aparecen una vez, al entrar en pantalla */
+const io = "IntersectionObserver" in window ? new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("aparece"); io.unobserve(e.target); } }), { threshold: 0.4 }) : null;
+if (io) document.querySelectorAll(".lam, .reporte__dibujo, .maq__raices").forEach(l => io.observe(l));
+
+document.querySelectorAll(".modos").forEach(g => g.addEventListener("click", e => {
+  const b = e.target.closest("button[data-modo]"); if (!b) return;
+  g.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  const v = g.nextElementSibling;
+  v.classList.toggle("modo-claro", b.dataset.modo === "claro"); v.classList.toggle("modo-oscuro", b.dataset.modo === "oscuro");
+}));
+
+/* ===== Preguntas ===== */
+const PREG = [
+  ["t_categorias", "¿En qué categorías la planta deja claro qué se donó?", "multi", ["Alimentos (zanahoria)", "Alimentos (lechuga)", "Bebidas (cartones de leche)", "Vestimenta (remeras)", "Mobiliario (sillas)", "Útiles (cuadernos)", "Higiene (jabones)"]],
+  ["t_hibrido", "Las plantas que dan objetos, ¿se ven infantiles?", "uno", ["No, funcionan", "Algunas sí (contame cuáles)", "Sí: prefiero las alternativas de la tabla"]],
+  ["t_organico", "¿Las plantas ya son lo bastante orgánicas?", "uno", ["Sí", "Mejor, pero todavía rígidas", "Me gustaban más las de antes"]],
+  ["t_abejas", "¿Ahora se entiende que las abejas son la logística?", "uno", ["Sí, con el paquete y la franja de abajo", "Solo con la franja", "Todavía no"]],
+  ["t_rutas", "Las rutas punteadas, una por abeja, ¿cómo quedaron?", "uno", ["Bien", "Las sacaría", "Más cortas todavía"]],
+  ["t_fallida", "La entrega fallida (la abeja vuelve con el paquete), ¿se entiende?", "uno", ["Sí", "Más o menos", "No"]],
+  ["t_raices", "¿Cuánto peso le damos a las raíces?", "uno", ["Así: ventana en la maceta y franja en la landing", "Más: que las raíces sean protagonistas, como en Raíces", "Menos: solo en la landing"]],
+  ["t_oscuro", "El modo oscuro con línea crema, ¿mejora?", "uno", ["Sí", "Prefiero otra cosa (contame)"]],
+  ["t_libre", "¿Algo más?", "texto"]
+];
+let numero = 0;
+function pregunta([id, texto, tipo, opc]) {
+  numero++;
+  const cab = [el("span", { class: "preg__num", text: String(numero).padStart(2, "0") }), texto];
+  if (tipo === "texto") return el("div", { class: "preg" }, el("label", { for: id }, ...cab), el("textarea", { id, name: id }));
+  const fs = el("fieldset", { class: "preg" }, el("legend", {}, ...cab));
+  const o = el("div", { class: "opciones" + (tipo === "multi" ? " multi" : "") });
+  opc.forEach((t, i) => o.append(el("label", {}, el("input", { type: tipo === "multi" ? "checkbox" : "radio", name: id, id: `${id}_${i}`, value: t }), el("span", { text: t }))));
+  fs.append(o, el("textarea", { id: `${id}_nota`, name: `${id}_nota`, placeholder: "Comentario (opcional)", style: "min-height:44px" }));
+  return fs;
+}
+PREG.forEach(q => $("#preguntas").append(pregunta(q)));
+function leer() {
+  const r = {};
+  for (const [id, , tipo] of PREG) {
+    if (tipo === "texto") { const t = $("#" + id).value.trim(); if (t) r[id] = t; continue; }
+    const m = [...document.querySelectorAll(`input[name="${id}"]:checked`)].map(i => i.value);
+    if (m.length) r[id] = tipo === "multi" ? m : m[0];
+    const nota = $(`#${id}_nota`)?.value.trim(); if (nota) r[id + "_nota"] = nota;
+  }
+  return r;
+}
+function aplicar(r) {
+  if (!r) return;
+  for (const [id, v] of Object.entries(r)) {
+    const t = document.getElementById(id); if (t && t.tagName === "TEXTAREA") { t.value = v; continue; }
+    for (const val of [].concat(v)) { const i = [...document.querySelectorAll(`input[name="${id}"]`)].find(x => x.value === String(val)); if (i) i.checked = true; }
+  }
+}
+function contar() { const r = leer(); const h = PREG.filter(([id]) => r[id] != null).length; $("#progreso").textContent = `${h} de ${PREG.length} respondidas`; $("#barra").style.setProperty("--p", (h / PREG.length * 100) + "%"); return r; }
+function comoTexto(r) { const l = ["Huerta con abejas · ronda 4", ""]; PREG.forEach(([id, t], i) => { const v = r[id], no = r[id + "_nota"]; if (v == null && !no) return; l.push(`${i + 1}. ${t}`); if (v != null) l.push(`   ${[].concat(v).join(" / ")}`); if (no) l.push(`   Nota: ${no}`); }); return l.join("\n"); }
+const BORRADOR = "huerta-ronda-4";
+try { aplicar(JSON.parse(localStorage.getItem(BORRADOR) || "null")); } catch (e) {}
+contar();
+$("#formulario").addEventListener("input", () => { const r = contar(); $("#estado").textContent = "Cambios sin guardar"; $("#estado").classList.remove("is-ok"); try { localStorage.setItem(BORRADOR, JSON.stringify(r)); } catch (e) {} if (!$("#copia").hidden) $("#texto-copia").value = comoTexto(r); });
+$("#ver-copia").addEventListener("click", async () => { const t = comoTexto(contar()); $("#copia").hidden = false; $("#texto-copia").value = t; try { await navigator.clipboard.writeText(t); $("#estado").textContent = "Texto copiado"; } catch (e) { $("#texto-copia").select(); $("#estado").textContent = "Seleccioná el texto y copialo"; } });
+let db = null, uid = null;
+const guardar = $("#guardar"); guardar.disabled = true;
+(async () => {
+  try {
+    const [d, u] = await Promise.all([window.claude?.use?.("db"), window.claude?.use?.("user")]);
+    if (!d || !u) throw 0; uid = await u.id(); if (!uid) throw 0; db = d;
+    const snap = await db.doc("ronda4/" + uid).get();
+    let hay = false; try { hay = !!localStorage.getItem(BORRADOR); } catch (e) {}
+    if (snap.exists && !hay) { aplicar(snap.data().respuestas); contar(); }
+    guardar.disabled = false;
+    if (snap.exists) $("#estado").textContent = "Ya guardaste respuestas; podés cambiarlas";
+  } catch (e) { $("#estado").textContent = "No se puede guardar desde esta vista: usá «Copiar como texto»"; }
+})();
+guardar.addEventListener("click", async () => {
+  if (!db) return; guardar.disabled = true; $("#estado").textContent = "Guardando…";
+  try { await db.doc("ronda4/" + uid).set({ respuestas: contar(), guardado: new Date().toISOString() }); $("#estado").textContent = "Guardado. Avisame en el chat y sigo."; $("#estado").classList.add("is-ok"); }
+  catch (e) { $("#estado").textContent = "No se guardó (" + (e?.code || "error") + "). Usá «Copiar como texto»."; }
+  finally { guardar.disabled = false; }
+});
+</script>

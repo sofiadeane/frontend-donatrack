@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- Layout del panel de la variante K: barra con la navegación del rol arriba y navegación inferior en celular. -->
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
+<head th:replace="~{fragments/cabeza-k :: cabeza(${titulo})}"></head>
+<body class="k k-panel" th:with="inicioK=${sesion.rol.name() == 'DONANTE'} ? '/donante/huerta' : ${sesion.rol.inicio}">
+<a class="k-saltar" href="#contenido">Saltar al contenido</a>
+<svg th:replace="~{fragments/ilustraciones-k :: defs}"></svg>
+
+<header class="k-barra">
+  <div class="k-env k-barra__fila">
+    <a th:replace="~{fragments/cabeza-k :: marca(${inicioK})}"></a>
+    <nav class="k-panel-nav" aria-label="Secciones">
+      <a th:each="item : ${nav}" th:href="@{${item.href == sesion.rol.inicio} ? ${inicioK} : ${item.href}}"
+         th:attr="aria-current=${item.href == sesion.rol.inicio} ? (${rutaActual == inicioK} ? 'page' : null) : (${item.activo} ? 'page' : null)">
+        <span th:replace="~{fragments/iconos :: icono(${item.icono}, 18)}"></span><span th:text="${item.etiqueta}">Sección</span>
+      </a>
+    </nav>
+    <div class="k-barra__fin">
+      <button th:replace="~{fragments/cabeza-k :: modo}"></button>
+      <details class="k-cuenta">
+        <summary th:aria-label="'Cuenta de ' + ${sesion.nombre}" th:text="${sesion.iniciales}">NP</summary>
+        <div class="k-cuenta__menu">
+          <p><b th:text="${sesion.nombre}">Nombre</b><span th:text="${sesion.rol.etiqueta} + ' · sesión de demostración'">Rol</span></p>
+          <form th:unless="${exportEstatico}" th:action="@{/salir}" method="post"><button class="k-btn k-btn--linea k-btn--chico" type="submit">Salir</button></form>
+          <a th:if="${exportEstatico}" class="k-btn k-btn--linea k-btn--chico" th:href="@{/ingresar}">Cambiar de perfil</a>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1" th:insert="${contenido}"></main>
+
+<nav class="k-inferior" aria-label="Navegación principal">
+  <a th:each="item : ${navMovil}" th:href="@{${item.href == sesion.rol.inicio} ? ${inicioK} : ${item.href}}"
+     th:attr="aria-current=${item.href == sesion.rol.inicio} ? (${rutaActual == inicioK} ? 'page' : null) : (${item.activo} ? 'page' : null)">
+    <span th:replace="~{fragments/iconos :: icono(${item.icono}, 22)}"></span>
+    <span th:text="${item.etiquetaMovil}">Sección</span>
+  </a>
+</nav>
+</body>
+</html>

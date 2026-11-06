@@ -32,7 +32,7 @@
           <svg class="dh-cats__hormiga" th:if="${c.estado == 'actual'}" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
           </th:block>
           <!-- Abejas: cada categoría guarda más miel · pote de barro, frasco con té, barril con oso -->
-          <svg class="dh-cats__miel" th:if="${abejas}" aria-hidden="true"><use th:href="${ {'#i-pote','#i-frasco-te','#i-barril-oso'}[it.index % 3] }" href="#i-pote"/></svg>
+          <svg class="dh-cats__miel" th:if="${abejas}" aria-hidden="true"><use th:href="${plantas ? {'#j-maceta','#j-regadera','#j-canasta'}[it.index % 3] : {'#i-pote','#i-frasco-te','#i-barril-oso'}[it.index % 3]}" href="#i-pote"/></svg>
           <svg class="dh-cats__hormiga" th:if="${abejas and c.estado == 'actual'}" aria-hidden="true"><use href="#h-hormiga"/></svg>
           <b th:text="${c.etiqueta}">Colaborador</b>
           <small th:if="${c.desde != null}" th:text="'desde ' + ${#temporals.format(c.desde, 'MMM yyyy')}">desde abr 2026</small>

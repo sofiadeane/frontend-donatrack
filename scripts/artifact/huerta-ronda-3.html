@@ -1,0 +1,496 @@
+<title>Huerta con abejas · ronda 3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<style>
+/* Ronda 3: la carpeta de láminas ya aplicada. Cada maqueta lleva su modo (claro = estilo 1 invertido, oscuro =
+   estilo 2 invertido) como una clase propia, independiente del tema de quien mira la página. */
+:root {
+  --fondo: #fbf2d3;
+  --hoja-papel: #fffaea;
+  --tinta: #2a2a22;
+  --tinta-2: #5d5c4c;
+  --linea: rgb(42 42 34 / 0.16);
+  --acento: #2f7d3b;
+  --sobre-acento: #fffaea;
+  --miel: #f6a609;
+  --suave: #e4efc9;
+  --titulo: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --texto: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --fondo: #1d1e17; --hoja-papel: #26271f; --tinta: #f1ead2; --tinta-2: #bdb9a2; --linea: rgb(241 234 210 / 0.15);
+  --acento: #9fd166; --sobre-acento: #1d1e17; --miel: #f7b636; --suave: #2e3824; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --fondo: #1d1e17; --hoja-papel: #26271f; --tinta: #f1ead2; --tinta-2: #bdb9a2; --linea: rgb(241 234 210 / 0.15);
+  --acento: #9fd166; --sobre-acento: #1d1e17; --miel: #f7b636; --suave: #2e3824; color-scheme: dark; }
+
+/* Los dos modos de la huerta: valores fijos, porque son lo que se está mostrando */
+.modo-claro { --m-fondo: #fbf2d3; --m-fondo-2: #f1e2b2; --m-tarjeta: #fffaea; --m-linea: #2a2a22; --m-texto: #2a2a22; --m-texto-2: #5d5c4c; --m-accion: #2f7d3b; --m-sobre: #fffaea; --m-sombra-btn: #8fcb4a; --m-maceta: #fffaea; --m-mancha: #2a2a22; --m-filete: rgb(42 42 34 / 0.16); }
+.modo-oscuro { --m-fondo: #1f201a; --m-fondo-2: #3a3b2f; --m-tarjeta: #2a2a22; --m-linea: #8fcb4a; --m-texto: #fbf2d3; --m-texto-2: #c9c4a8; --m-accion: #8fcb4a; --m-sobre: #1f201a; --m-sombra-btn: #2f7d3b; --m-maceta: #fbf2d3; --m-mancha: #2a2a22; --m-filete: rgb(251 242 211 / 0.16); }
+.modo-claro .solo-oscuro, .modo-oscuro .solo-claro { display: none; }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--fondo); color: var(--tinta); font: 400 15px/1.55 var(--texto); }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+.envoltorio { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--titulo); font-stretch: 118%; line-height: 1.02; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.2rem, 1.4rem + 3.6vw, 4rem); font-weight: 850; letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em; }
+h3 { font-size: 1.1rem; font-weight: 800; }
+p { margin: 0; max-width: 66ch; }
+.rotulo { font-family: var(--titulo); font-stretch: 112%; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acento); }
+.cabeza { padding-block: 40px 10px; display: grid; gap: 14px; }
+.cabeza .bajada { font-size: 1.08rem; color: var(--tinta-2); }
+.parte { padding-block: 32px 16px; display: grid; gap: 20px; }
+.parte > header { display: grid; gap: 8px; }
+.tomado { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+.tomado li { padding: 12px 14px; border-radius: 12px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); font-size: 0.92rem; }
+.tomado b { display: block; font: 700 0.74rem/1.3 var(--titulo); letter-spacing: 0.1em; text-transform: uppercase; color: var(--acento); }
+
+/* Trazo de las plantas */
+.pl { fill: none; stroke: var(--m-linea); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.pl-f { fill: var(--m-fondo); stroke: var(--m-linea); stroke-width: 1.6; stroke-linejoin: round; }
+.fr { fill: #ef7a16; stroke: var(--m-linea); stroke-width: 1.2; }
+.fl { fill: #f6a609; stroke: var(--m-linea); stroke-width: 1.1; }
+.bo { fill: #fffaea; stroke: var(--m-linea); stroke-width: 1.2; }
+.maceta { fill: var(--m-maceta); }
+.mancha { fill: var(--m-mancha); }
+.ruta { fill: none; stroke: var(--m-linea); stroke-width: 1; stroke-dasharray: 1 5; stroke-linecap: round; opacity: 0.55; }
+.txt { fill: var(--m-texto); font-family: var(--mono); }
+.en-camino .fr { display: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .ab { animation: ab 3.6s ease-in-out infinite alternate; }
+  .ab:nth-of-type(2n) { animation-duration: 4.6s; animation-delay: -1.8s; }
+  .ab:nth-of-type(3n) { animation-duration: 5.4s; animation-delay: -0.8s; }
+  .crece { transform-box: fill-box; transform-origin: 50% 100%; animation: crece 5s ease-in-out infinite; }
+  .fr-anim { transform-box: fill-box; transform-origin: center; animation: madura 5s ease-in-out infinite; }
+}
+@keyframes ab { from { transform: translate(0, 0); } to { transform: translate(5px, -6px); } }
+@keyframes crece { 0%, 15% { scale: 0.2; opacity: 0; } 40%, 100% { scale: 1; opacity: 1; } }
+@keyframes madura { 0%, 25% { scale: 0.2; } 50%, 100% { scale: 1; } }
+
+/* Lámina */
+.lam { position: relative; display: grid; background: var(--m-tarjeta); color: var(--m-texto); box-shadow: 0 1px 0 rgb(0 0 0 / 0.1), 0 16px 26px -20px rgb(0 0 0 / 0.65); }
+.lam::before { content: ""; position: absolute; z-index: 1; left: 50%; top: -10px; width: 60px; height: 22px; translate: -50% 0; rotate: -2deg; background: #f4c844; opacity: 0.85; }
+.lam svg { display: block; width: 100%; height: auto; }
+.lam__marco { padding: 12px 12px 0; }
+.lam__pie { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 8px; padding: 8px 12px 11px; font-size: 0.78rem; }
+.lam__pie b { font: 800 0.92rem/1.15 var(--titulo); font-stretch: 112%; }
+.lam__pie span { color: var(--m-texto-2); }
+.lam__pie .num { font-family: var(--mono); font-size: 0.72rem; color: var(--m-texto-2); }
+.chip { justify-self: start; display: inline-flex; align-items: center; gap: 6px; padding: 2px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; background: var(--bg); color: var(--fg); }
+.chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* Maqueta de la landing */
+.maq { border-radius: 14px; overflow: hidden; background: var(--m-fondo); color: var(--m-texto); box-shadow: inset 0 0 0 1px var(--linea); }
+.maq__barra { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--m-filete); }
+.maq__marca { font: 850 1.05rem/1 var(--titulo); font-stretch: 118%; }
+.maq__marca em { font-style: normal; color: var(--m-accion); }
+.maq__nav { display: flex; flex-wrap: wrap; gap: 16px; font-size: 0.82rem; color: var(--m-texto-2); }
+.maq__modo { font: 700 0.7rem/1 var(--titulo); letter-spacing: 0.12em; text-transform: uppercase; padding: 5px 9px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--m-filete); color: var(--m-texto-2); }
+.maq__hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; padding: clamp(20px, 3vw, 40px) clamp(18px, 3vw, 40px) 28px; align-items: center; }
+.maq__hero h3 { font-size: clamp(1.8rem, 1.2rem + 2.4vw, 3.2rem); font-weight: 850; font-stretch: 125%; letter-spacing: -0.035em; line-height: 0.95; }
+.maq__hero h3 em { font-style: normal; color: var(--m-accion); }
+.maq__hero p { margin-top: 14px; color: var(--m-texto-2); font-size: 1rem; }
+.maq__btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.maq__btn { padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 0.9rem; background: var(--m-accion); color: var(--m-sobre); box-shadow: 4px 4px 0 var(--m-sombra-btn); }
+.maq__btn--2 { background: transparent; color: var(--m-texto); box-shadow: inset 0 0 0 2px var(--m-texto); }
+.maq__comp { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; align-items: end; padding-top: 20px; }
+.maq__comp .lam:nth-child(1) { rotate: -3deg; translate: 8px 14px; }
+.maq__comp .lam:nth-child(2) { z-index: 1; translate: 0 -6px; }
+.maq__comp .lam:nth-child(3) { rotate: 2.5deg; translate: -8px 18px; }
+.maq__comp .lam__pie { display: none; }
+.maq__enjambre { position: absolute; inset: -10px 0 auto 0; z-index: 2; height: 70%; pointer-events: none; }
+.maq__enjambre svg { width: 100%; height: 100%; }
+.maq__datos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); border-top: 1px solid var(--m-filete); }
+.maq__datos div { display: grid; gap: 2px; padding: 14px 18px; border-right: 1px solid var(--m-filete); }
+.maq__datos div:last-child { border-right: 0; }
+.maq__datos b { font: 850 1.6rem/1 var(--titulo); font-stretch: 125%; font-variant-numeric: tabular-nums; }
+.maq__datos span { font-size: 0.82rem; color: var(--m-texto-2); }
+@media (max-width: 760px) { .maq__hero { grid-template-columns: minmax(0, 1fr); } .maq__nav { display: none; } .maq__datos div { padding: 10px; } .maq__datos b { font-size: 1.25rem; } }
+
+/* Selector de modo para las grillas */
+.modos { display: inline-flex; gap: 0; padding: 4px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); background: var(--hoja-papel); justify-self: start; }
+.modos button { border: 0; padding: 7px 14px; border-radius: 7px; background: transparent; font-weight: 700; cursor: pointer; }
+.modos button[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); }
+.vitrina { padding: 26px 18px 22px; border-radius: 14px; background: var(--m-fondo); }
+.especies { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 30px 18px; }
+.estados { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 30px 18px; }
+
+/* Reporte para empresas */
+.reporte { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); max-width: 900px; background: #fffaea; color: #2a2a22; box-shadow: 0 1px 0 rgb(0 0 0 / 0.1), 0 22px 40px -26px rgb(0 0 0 / 0.7); }
+.reporte__dibujo { border-right: 1px solid rgb(42 42 34 / 0.16); }
+.reporte__dibujo svg { display: block; width: 100%; height: auto; }
+.reporte__datos { display: grid; gap: 14px; align-content: start; padding: 22px; }
+.reporte__datos h3 { font-size: 1.6rem; font-weight: 850; font-stretch: 122%; letter-spacing: -0.02em; }
+.reporte dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 16px; margin: 0; font-size: 0.9rem; }
+.reporte dt { color: #5d5c4c; }
+.reporte dd { margin: 0; font-weight: 700; }
+.reporte__firma { display: flex; justify-content: space-between; gap: 12px; padding-top: 10px; border-top: 1px solid rgb(42 42 34 / 0.16); font: 0.76rem/1.4 var(--mono); color: #5d5c4c; }
+@media (max-width: 700px) { .reporte { grid-template-columns: minmax(0, 1fr); } .reporte__dibujo { border-right: 0; border-bottom: 1px solid rgb(42 42 34 / 0.16); } }
+
+/* Preguntas */
+.grupo { display: grid; gap: 18px; padding: 20px; border-radius: 16px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.preguntas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 22px 32px; }
+.preg { display: grid; gap: 8px; align-content: start; margin: 0; padding: 0; border: 0; min-width: 0; }
+.preg legend, .preg > label { padding: 0; font-weight: 700; font-size: 1rem; line-height: 1.35; }
+.preg__num { display: inline-block; min-width: 1.9em; color: var(--acento); font: 800 0.9rem/1 var(--titulo); font-variant-numeric: tabular-nums; }
+.opciones { display: grid; gap: 6px; }
+.opciones label { position: relative; }
+.opciones input { position: absolute; opacity: 0; pointer-events: none; }
+.opciones span { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); cursor: pointer; line-height: 1.35; }
+.opciones span::before { content: ""; flex: none; width: 14px; height: 14px; margin-top: 2px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--tinta-2); }
+.opciones.multi span::before { border-radius: 3px; }
+.opciones input:checked + span { background: var(--suave); box-shadow: inset 0 0 0 2px var(--acento); }
+.opciones input:checked + span::before { box-shadow: inset 0 0 0 4px var(--acento); }
+.opciones input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.escala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.escala label { position: relative; }
+.escala input { position: absolute; opacity: 0; pointer-events: none; }
+.escala span { display: grid; place-items: center; height: 40px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); font-weight: 800; cursor: pointer; }
+.escala input:checked + span { background: var(--acento); color: var(--sobre-acento); box-shadow: none; }
+.escala input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.escala__fin { display: flex; justify-content: space-between; gap: 12px; font-size: 0.78rem; color: var(--tinta-2); }
+textarea { width: 100%; min-height: 76px; padding: 10px 12px; border: 0; border-radius: 10px; background: var(--fondo); box-shadow: inset 0 0 0 1px var(--linea); resize: vertical; }
+.envio { position: sticky; bottom: 0; z-index: 3; margin-top: 18px; background: var(--fondo); box-shadow: 0 -1px 0 var(--linea); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.envio .envoltorio { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; padding-block: 12px; }
+.envio__progreso { display: grid; gap: 4px; min-width: 200px; flex: 1; }
+.envio__progreso p { font-size: 0.85rem; color: var(--tinta-2); }
+.barra { height: 6px; border-radius: 3px; background: var(--linea); overflow: hidden; max-width: 360px; }
+.barra i { display: block; height: 100%; width: var(--p, 0%); background: var(--miel); transition: width 240ms; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { min-height: 42px; padding: 0 18px; border: 0; border-radius: 10px; font-weight: 700; cursor: pointer; background: var(--hoja-papel); box-shadow: inset 0 0 0 1.5px var(--tinta); }
+.btn--fuerte { background: var(--acento); color: var(--sobre-acento); box-shadow: none; }
+.btn[disabled] { opacity: 0.45; cursor: default; }
+.estado { font-size: 0.85rem; color: var(--tinta-2); }
+.estado.is-ok { color: var(--acento); font-weight: 700; }
+.copia { display: grid; gap: 8px; padding-block: 0 18px; }
+.copia textarea { min-height: 140px; font: 0.8rem/1.4 var(--mono); }
+.pie { padding-block: 24px 40px; font-size: 0.85rem; color: var(--tinta-2); }
+</style>
+
+<!-- Piezas compartidas por todas las láminas -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <filter id="grano-osc" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .16 0 0 0 0 .16 0 0 0 0 .13 -7 0 0 0 3.3"/></filter>
+    <filter id="grano-cla" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 .98 0 0 0 0 .95 0 0 0 0 .83 -7 0 0 0 3.3"/></filter>
+    <filter id="aspero"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="6"/></filter>
+    <radialGradient id="fondo-cla" cx=".5" cy=".75" r=".85"><stop offset="0" stop-color="#fffaea"/><stop offset="1" stop-color="#efe0ad"/></radialGradient>
+    <radialGradient id="fondo-osc" cx=".5" cy=".75" r=".85"><stop offset="0" stop-color="#45463a"/><stop offset="1" stop-color="#1f201a"/></radialGradient>
+    <clipPath id="clip-vasija"><path d="M100 198 C128 198 138 216 134 234 C130 252 114 258 100 258 C86 258 70 252 66 234 C62 216 72 198 100 198Z"/></clipPath>
+    <clipPath id="clip-hex"><path d="M74 198 H126 L140 228 L126 258 H74 L60 228Z"/></clipPath>
+  </defs>
+</svg>
+
+<header class="envoltorio cabeza">
+  <span class="rotulo">DonaTrack · tema huerta con abejas · ronda 3</span>
+  <h1>Tu huerta crece con cada entrega</h1>
+  <p class="bajada">La dirección de la ronda 2 ya aplicada: la landing en los dos modos, siete especies (una por tipo de donación), los estados con la entrega fallida rediseñada y la lámina como constancia para empresas.</p>
+</header>
+
+<main id="formulario">
+  <section class="envoltorio parte" aria-labelledby="t-tomado">
+    <header><span class="rotulo">De tus respuestas</span><h2 id="t-tomado">Qué cambié</h2></header>
+    <ul class="tomado">
+      <li><b>Dos modos</b>Leí «1 en claro y 2 en oscuro» como invertir cada estilo: el 1 (línea fina, vasija moteada) pasa a tinta sobre papel, y el 2 (riso, maceta hexagonal) a verde sobre tinta. Si no era eso, decímelo en la pregunta 1.</li>
+      <li><b>Más especies</b>Ya no es siempre la misma planta: cada tipo de donación tiene la suya.</li>
+      <li><b>Frutos junto al tallo</b>Los frutos salen de los nudos del tallo, nunca de la punta de una hoja.</li>
+      <li><b>Entrega fallida</b>La tierra seca era triste y no se entendía. Ahora la donación vuelve a su sobre de semillas, marcado «se vuelve a sembrar».</li>
+      <li><b>Más abejas</b>Enjambre en 4 de 5: más abejas chicas, cada una en su ruta punteada.</li>
+      <li><b>De la propuesta 2</b>El plano quedó muy técnico y frío: seguimos con las láminas. Me llevo el aviso claro con un detalle mínimo (el sobre) y el invierno con un perenne nevado, para que no se confunda con una entrega fallida.</li>
+      <li><b>Lo demás, igual</b>Archivo en títulos, láminas numeradas como hilo, estaciones sutiles (solo en el pie de cada lámina) y el reporte para empresas.</li>
+    </ul>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-landing">
+    <header><span class="rotulo">Parte 1</span><h2 id="t-landing">La landing en los dos modos</h2></header>
+    <div id="landings" style="display:grid;gap:24px"></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-esp">
+    <header>
+      <span class="rotulo">Parte 2</span>
+      <h2 id="t-esp">Siete especies, una por tipo de donación</h2>
+      <p>La especie dice qué se donó sin leer: alimentos son hortalizas, la ropa es algodón, los muebles son un olivo joven. Todas se dibujan con la misma línea y la misma maceta.</p>
+      <div class="modos" role="group" aria-label="Modo de las láminas"><button type="button" data-modo="claro" aria-pressed="true">Claro</button><button type="button" data-modo="oscuro" aria-pressed="false">Oscuro</button></div>
+    </header>
+    <div class="vitrina modo-claro" id="vitrina-especies"><div class="especies" id="especies"></div></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-estados">
+    <header>
+      <span class="rotulo">Parte 3</span>
+      <h2 id="t-estados">Los estados de una donación</h2>
+      <p>De izquierda a derecha, el recorrido: brote en el depósito, planta que crece mientras viaja, fruto al entregarse. La fallida vuelve a su sobre.</p>
+      <div class="modos" role="group" aria-label="Modo de los estados"><button type="button" data-modo="claro" aria-pressed="true">Claro</button><button type="button" data-modo="oscuro" aria-pressed="false">Oscuro</button></div>
+    </header>
+    <div class="vitrina modo-claro" id="vitrina-estados"><div class="estados" id="estados"></div></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-rep">
+    <header>
+      <span class="rotulo">Parte 4</span>
+      <h2 id="t-rep">La lámina como constancia para empresas</h2>
+      <p>Una lámina por entrega confirmada, con los datos que una empresa pone en su informe de impacto. Siempre en modo claro, porque se imprime o se pega en un documento.</p>
+    </header>
+    <div class="reporte modo-claro" id="reporte"></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-preg">
+    <header><span class="rotulo">Parte 5</span><h2 id="t-preg">Nueve preguntas</h2></header>
+    <div class="grupo"><div class="preguntas" id="preguntas"></div></div>
+  </section>
+</main>
+
+<section class="envio" aria-label="Guardar respuestas">
+  <div class="envoltorio">
+    <div class="envio__progreso"><p id="progreso" aria-live="polite">0 de 9 respondidas</p><div class="barra"><i id="barra"></i></div></div>
+    <div class="acciones">
+      <span class="estado" id="estado" role="status"></span>
+      <button type="button" class="btn" id="ver-copia">Copiar como texto</button>
+      <button type="button" class="btn btn--fuerte" id="guardar">Guardar respuestas</button>
+    </div>
+  </div>
+  <div class="envoltorio copia" id="copia" hidden>
+    <label for="texto-copia" class="estado">Si no podés guardar desde acá, copiá esto y pegámelo en el chat.</label>
+    <textarea id="texto-copia" readonly></textarea>
+  </div>
+</section>
+
+<footer class="envoltorio pie">DonaTrack, UTN-FRBA, Diseño de Sistemas 2026. Ronda 3 del tema huerta con abejas.</footer>
+
+<script>
+const $ = (s, e = document) => e.querySelector(s);
+const el = (tag, attrs = {}, ...hijos) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k === "style") n.style.cssText = v; else if (k === "html") n.innerHTML = v; else n.setAttribute(k, v);
+  }
+  for (const h of hijos) if (h != null) n.append(h);
+  return n;
+};
+const r1 = n => n.toFixed(1);
+
+/* ===== Especies: todas crecen desde (100, 198), la boca de la maceta ===== */
+function tomate() {
+  let s = `<path class="pl" d="M100 198 C98 172 104 150 100 124 C97 104 103 88 100 64"/>`;
+  [[100, 178, -1], [101, 156, 1], [100, 132, -1], [100, 108, 1], [100, 84, -1]].forEach(([x, y, d]) => {
+    s += `<path class="pl" d="M${x} ${y} q${d * 14} -6 ${d * 32} -18"/>`;
+    [[12, -6], [22, -11], [32, -18]].forEach(([dx, dy], i) => { s += `<ellipse class="pl-f" cx="${x + d * dx}" cy="${y + dy - 3}" rx="${i === 2 ? 6 : 5}" ry="3.2" transform="rotate(${d * -30} ${x + d * dx} ${y + dy - 3})"/>`; });
+  });
+  s += `<g class="fr-anim"><circle class="fr" cx="110" cy="146" r="7"/><circle class="fr" cx="106" cy="160" r="6"/><path class="pl" d="M110 139 l-3 -3 M110 139 l3 -3 M106 154 l-2 -3 M106 154 l3 -2"/></g>`;
+  s += `<g class="fr-anim"><circle class="fr" cx="91" cy="118" r="6.5"/><path class="pl" d="M91 111.5 l-3 -3 M91 111.5 l3 -3"/></g>`;
+  return s;
+}
+function lechuga() {
+  let s = "";
+  [-62, -40, -18, 0, 20, 42, 64].forEach((a, i) => {
+    const k = 1 - Math.abs(a) / 140;
+    s += `<g transform="translate(100 198) rotate(${a}) scale(${r1(k)})"><path class="pl-f" d="M0 0 C-24 -8 -32 -50 -16 -72 C-10 -66 -4 -60 0 -52 C4 -60 10 -66 16 -72 C32 -50 24 -8 0 0Z"/><path class="pl" d="M0 -2 V-56 M0 -22 L-10 -34 M0 -22 L10 -34 M0 -38 L-8 -50 M0 -38 L8 -50"/></g>`;
+  });
+  return s;
+}
+function albahaca() {
+  let s = `<path class="pl" d="M100 198 V72"/>`;
+  [[180, 1.1], [154, 1], [128, 0.85], [104, 0.7]].forEach(([y, k]) => {
+    for (const d of [-1, 1]) s += `<g transform="translate(100 ${y}) scale(${d * k} ${k})"><path class="pl-f" d="M0 0 C8 -12 28 -14 36 -2 C28 8 8 8 0 0Z"/><path class="pl" d="M2 -1 H30"/></g>`;
+  });
+  for (let i = 0; i < 4; i++) s += `<ellipse class="bo" cx="${i % 2 ? 103 : 97}" cy="${84 - i * 6}" rx="2.6" ry="2"/>`;
+  return s;
+}
+function zanahoria() {
+  let s = `<ellipse class="fr" cx="100" cy="199" rx="12" ry="7"/>`;
+  [-36, -18, 0, 18, 36].forEach(a => {
+    const L = 108 - Math.abs(a) * 0.8, rad = a * Math.PI / 180;
+    const x2 = 100 + Math.sin(rad) * L, y2 = 194 - Math.cos(rad) * L;
+    s += `<path class="pl" d="M100 194 L${r1(x2)} ${r1(y2)}"/>`;
+    for (let t = 0.35; t < 1; t += 0.13) {
+      const x = 100 + Math.sin(rad) * L * t, y = 194 - Math.cos(rad) * L * t;
+      for (const d of [-1, 1]) { const b = rad + d * 0.9; s += `<path class="pl" d="M${r1(x)} ${r1(y)} l${r1(Math.sin(b) * 8)} ${r1(-Math.cos(b) * 8)}"/>`; }
+    }
+  });
+  return s;
+}
+function girasol() {
+  let s = `<path class="pl" d="M100 198 C98 160 103 120 100 74"/>`;
+  s += `<g transform="translate(100 166)"><path class="pl-f" d="M0 0 C-10 -4 -38 -2 -44 -20 C-32 -28 -12 -22 0 0Z"/><path class="pl" d="M-2 -2 L-36 -18"/></g>`;
+  s += `<g transform="translate(100 134) scale(-1 1)"><path class="pl-f" d="M0 0 C-10 -4 -38 -2 -44 -20 C-32 -28 -12 -22 0 0Z"/><path class="pl" d="M-2 -2 L-36 -18"/></g>`;
+  let p = ""; for (let i = 0; i < 14; i++) p += `<ellipse class="fl" cx="0" cy="-17" rx="4" ry="10" transform="rotate(${i * 360 / 14})"/>`;
+  s += `<g transform="translate(100 60)">${p}<circle class="pl-f" r="11"/><path class="pl" d="M-6 -4 l12 8 M-6 4 l12 -8 M0 -8 v16" style="stroke-width:1"/></g>`;
+  return s;
+}
+function algodon() {
+  let s = `<path class="pl" d="M100 198 C100 170 98 150 100 110 C99 96 101 86 100 76 M100 160 C88 146 78 140 70 128 M100 138 C112 124 122 118 132 106"/>`;
+  const lobulo = `<path class="pl-f" d="M0 0 C-12 -6 -16 -18 -9 -26 C-5 -21 -2 -19 0 -21 C2 -19 5 -21 9 -26 C16 -18 12 -6 0 0Z"/><path class="pl" d="M0 -1 V-18"/>`;
+  [[100, 180, -50], [100, 150, 40], [86, 144, -40], [116, 122, 50], [100, 100, -20]].forEach(([x, y, a]) => { s += `<g transform="translate(${x} ${y}) rotate(${a})">${lobulo}</g>`; });
+  [[72, 124], [130, 102], [100, 72]].forEach(([x, y]) => { s += `<g class="fr-anim"><circle class="bo" cx="${x - 5}" cy="${y}" r="6"/><circle class="bo" cx="${x + 5}" cy="${y}" r="6"/><circle class="bo" cx="${x}" cy="${y - 6}" r="6"/><path class="pl" d="M${x - 7} ${y + 6} l7 -3 l7 3"/></g>`; });
+  return s;
+}
+function olivo() {
+  let s = `<path class="pl" d="M100 198 C98 180 104 164 100 146 C96 130 88 120 74 110 M100 146 C110 130 122 122 134 112 M100 150 C100 128 103 110 100 88" style="stroke-width:2.4"/>`;
+  const hojas = [[78, 112, -60], [86, 120, 30], [92, 128, -40], [128, 114, 60], [118, 120, -30], [110, 128, 40], [100, 92, 0], [104, 104, 40], [96, 110, -40], [74, 106, -100], [136, 108, 100]];
+  hojas.forEach(([x, y, a]) => { s += `<ellipse class="pl-f" cx="${x}" cy="${y - 8}" rx="2.8" ry="9" transform="rotate(${a} ${x} ${y})"/>`; });
+  [[92, 124], [122, 124], [101, 120]].forEach(([x, y]) => { s += `<ellipse class="fr fr-anim" cx="${x}" cy="${y}" rx="3.4" ry="4.4"/>`; });
+  return s;
+}
+function brote() {
+  return `<path class="pl" d="M100 198 V170"/><path class="pl-f" d="M100 178 C92 178 82 172 80 164 C90 162 98 168 100 178Z"/><path class="pl-f" d="M100 174 C108 174 118 168 120 160 C110 158 102 164 100 174Z"/>`;
+}
+const ESPECIES = {
+  tomate: ["Tomate", "Alimentos frescos", tomate], lechuga: ["Lechuga", "Verduras y hortalizas", lechuga], zanahoria: ["Zanahoria", "Alimentos secos y conservas", zanahoria],
+  albahaca: ["Albahaca", "Higiene y limpieza", albahaca], girasol: ["Girasol", "Útiles escolares", girasol], algodon: ["Algodón", "Ropa y frazadas", algodon], olivo: ["Olivo joven", "Muebles", olivo]
+};
+
+function abeja(x, y, s = 1) {
+  return `<g class="ab"><g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="7" cy="-2" rx="3.4" ry="4.8" transform="rotate(-20 7 -2)" fill="#fffaea" fill-opacity=".9" stroke="#2a2a22" stroke-width=".8"/><ellipse cx="8" cy="5" rx="7" ry="5" fill="#f6a609"/><path d="M5 .5c-1.4 2.6-1.4 6.4 0 9l2 .4c-1.4-3-1.4-6.4 0-9.6zM10 0c-1.4 3-1.4 7 0 10l2-.6c-1.2-2.6-1.2-6 0-8.8z" fill="#2a2a22"/><circle cx="16" cy="4.4" r="3.2" fill="#2a2a22"/></g></g>`;
+}
+const MACETAS = `
+  <g class="solo-claro"><path class="maceta" d="M100 198 C128 198 138 216 134 234 C130 252 114 258 100 258 C86 258 70 252 66 234 C62 216 72 198 100 198Z" stroke="#2a2a22" stroke-width="1.2"/>
+    <g clip-path="url(#clip-vasija)" class="mancha"><path d="M78 212c6-5 13-1 11 5c-2 6-12 6-13 1z"/><path d="M106 206c5-2 10 2 8 6c-3 4-10 2-8-6z"/><path d="M118 226c7-3 12 3 9 8c-3 5-12 3-9-8z"/><path d="M84 232c4-3 9 0 8 5c-2 5-9 3-8-5zM70 246c6-2 9 3 6 7c-4 3-8 0-6-7z"/><path d="M100 246c6-4 13 0 10 6c-3 5-11 4-10-6z"/><path d="M124 246c4 0 6 4 3 7c-4 2-6-2-3-7z"/><circle cx="96" cy="220" r="2"/><circle cx="112" cy="240" r="2.4"/></g></g>
+  <g class="solo-oscuro"><path class="maceta" d="M74 198 H126 L140 228 L126 258 H74 L60 228Z" filter="url(#aspero)"/>
+    <g clip-path="url(#clip-hex)" class="mancha" filter="url(#aspero)"><path d="M54 212 L104 200 L106 204 L58 218Z"/><path d="M70 230 L140 208 L142 214 L76 238Z"/><path d="M80 248 L150 226 L150 231 L86 254Z"/><path d="M110 252 L148 242 L148 245 L112 256Z"/></g></g>`;
+
+function svgLamina(planta, { abejas = [], ruta = null, clase = "" } = {}) {
+  return `<svg viewBox="0 0 200 270" class="${clase}" aria-hidden="true">
+    <rect width="200" height="270" fill="url(#fondo-cla)" class="solo-claro"/><rect width="200" height="270" fill="url(#fondo-osc)" class="solo-oscuro"/>
+    <rect width="200" height="270" filter="url(#grano-osc)" opacity=".16" class="solo-claro"/><rect width="200" height="270" filter="url(#grano-cla)" opacity=".18" class="solo-oscuro"/>
+    <ellipse cx="116" cy="262" rx="44" ry="5" fill="#000" opacity=".16"/>
+    ${ruta ? `<path class="ruta" d="${ruta}"/>` : ""}${planta}${MACETAS}${abejas.map(([x, y, s]) => abeja(x, y, s)).join("")}
+  </svg>`;
+}
+function lamina(especie, num, titulo, detalle, estado, opts = {}) {
+  const planta = opts.planta ?? ESPECIES[especie][2]();
+  const pie = el("div", { class: "lam__pie" }, el("b", { text: titulo }), el("span", { class: "num", text: `Lámina ${String(num).padStart(2, "0")}` }), el("span", { text: detalle }), el("span", { class: "num", text: "Primavera" }));
+  if (estado) pie.append(el("span", { class: "chip", style: `--bg:${estado[1]};--fg:${estado[2]};grid-column:1/-1;margin-top:4px`, text: estado[0] }));
+  return el("article", { class: "lam" }, el("div", { class: "lam__marco", html: svgLamina(planta, opts) }), pie);
+}
+
+/* ===== Landing en los dos modos ===== */
+for (const modo of ["claro", "oscuro"]) {
+  const comp = el("div", { class: "maq__comp" },
+    lamina("tomate", 7, "", "", null, { clase: "" }), lamina("girasol", 8, "", "", null), lamina("algodon", 9, "", "", null),
+    el("div", { class: "maq__enjambre", html: `<svg viewBox="0 0 400 220" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><path class="ruta" d="M10 120 C60 60 120 90 170 50 S260 20 320 60 S380 110 396 80"/><path class="ruta" d="M30 30 C90 20 120 50 180 26"/><path class="ruta" d="M220 120 C260 100 300 130 360 104"/>${abeja(14, 112, 1)}${abeja(96, 74, 0.8)}${abeja(168, 44, 1.1)}${abeja(250, 26, 0.85)}${abeja(318, 56, 1)}${abeja(42, 26, 0.75)}${abeja(176, 22, 0.7)}${abeja(296, 116, 0.8)}${abeja(360, 98, 0.9)}</svg>` }));
+  const maq = el("div", { class: `maq modo-${modo}`, role: "img", "aria-label": `Maqueta de la landing en modo ${modo}` },
+    el("div", { class: "maq__barra" }, el("span", { class: "maq__marca", html: "Dona<em>Track</em>" }), el("span", { class: "maq__nav", html: "<span>Cómo funciona</span><span>Entidades</span><span>Impacto</span><span>Ingresar</span>" }), el("span", { class: "maq__modo", text: `Modo ${modo}` })),
+    el("div", { class: "maq__hero" },
+      el("div", {}, el("h3", { html: "Tu huerta crece <em>con cada entrega.</em>" }), el("p", { text: "Registrá lo que donás, vos o tu empresa, y seguilo hasta la entidad que lo pidió. Cada entrega confirmada suma una lámina a tu huerta." }), el("div", { class: "maq__btns", html: `<span class="maq__btn">Quiero donar</span><span class="maq__btn maq__btn--2">Soy una entidad</span>` })),
+      comp),
+    el("div", { class: "maq__datos", html: "<div><b>128</b><span>donaciones entregadas</span></div><div><b>34</b><span>entidades ayudadas</span></div><div><b>86</b><span>huertas activas</span></div>" }));
+  $("#landings").append(maq);
+}
+
+/* ===== Especies ===== */
+let n = 1;
+for (const [k, [nombre, cat]] of Object.entries(ESPECIES)) $("#especies").append(lamina(k, n++, nombre, cat, null, { abejas: k === "girasol" ? [[150, 40, 0.9], [30, 90, 0.75]] : k === "tomate" ? [[150, 70, 0.8]] : [] }));
+
+/* ===== Estados ===== */
+const EST = { deposito: ["En el depósito", "#f3e2a9", "#5a4300"], camino: ["En camino", "#fde3a6", "#7a4a00"], entregada: ["Entregada", "#d4edbd", "#1f5a2a"], fallida: ["No llegó · se vuelve a sembrar", "#f6d0c4", "#962f16"] };
+const sobre = `<g transform="translate(0 6)"><path class="pl-f" d="M70 92 H130 V196 H70Z"/><path class="pl" d="M70 92 L76 86 L82 92 L88 86 L94 92 L100 86 L106 92 L112 86 L118 92 L124 86 L130 92"/>
+  <path class="pl" d="M100 152 V126"/><path class="pl-f" d="M100 138 C92 138 84 132 82 126 C92 124 98 130 100 138Z"/><path class="pl-f" d="M100 134 C108 134 116 128 118 122 C108 120 102 126 100 134Z"/>
+  <path class="pl" d="M76 162 H124 M76 172 H112"/><text class="txt" x="100" y="188" text-anchor="middle" font-size="8">SE VUELVE A SEMBRAR</text></g>
+  <path class="pl" d="M146 128 A18 18 0 1 1 140 112" /><path class="pl" d="M134 110 L141 112 L139 119"/>`;
+$("#estados").append(
+  lamina("tomate", 10, "Lentejas 15 kg", "Comedor Los Girasoles", EST.deposito, { planta: brote() }),
+  lamina("tomate", 11, "Conservas 24 kg", "Merendero Ejemplo Sur", EST.camino, { planta: `<g class="en-camino">${tomate()}</g><g class="crece"><path class="pl" d="M100 64 V50"/><ellipse class="pl-f" cx="94" cy="48" rx="6" ry="3.2" transform="rotate(30 94 48)"/><ellipse class="pl-f" cx="106" cy="46" rx="6" ry="3.2" transform="rotate(-30 106 46)"/></g>`, abejas: [[140, 60, 0.8]], ruta: "M20 80 C60 40 110 70 150 56" }),
+  lamina("tomate", 12, "Arroz 50 kg", "Comedor Los Girasoles", EST.entregada, { abejas: [[146, 40, 0.8], [30, 70, 0.7]] }),
+  lamina("tomate", 13, "Leche 24 u", "Hogar Casa Ejemplo", EST.fallida, { planta: sobre }),
+  lamina("olivo", 14, "Invierno, no es una falla", "El olivo es perenne: sigue verde, con nieve", ["Entregada · invierno", "#d4edbd", "#1f5a2a"], { planta: olivo() + [[78, 100], [128, 104], [100, 80], [90, 116], [116, 116]].map(([x, y]) => `<ellipse class="bo" cx="${x}" cy="${y}" rx="6" ry="2.6"/>`).join("") + [[30, 40], [60, 90], [150, 60], [170, 130], [40, 150], [120, 30], [80, 50]].map(([x, y]) => `<circle class="bo" cx="${x}" cy="${y}" r="1.8"/>`).join("") })
+);
+
+/* ===== Reporte ===== */
+$("#reporte").append(
+  el("div", { class: "reporte__dibujo", html: svgLamina(algodon(), { abejas: [[140, 50, 0.9], [30, 80, 0.75]], ruta: "M14 90 C50 50 100 70 150 52" }) }),
+  el("div", { class: "reporte__datos" },
+    el("span", { class: "rotulo", text: "Constancia de entrega · Lámina 23" }),
+    el("h3", { text: "Frazadas y ropa de abrigo" }),
+    el("dl", { html: "<dt>Donó</dt><dd>Distribuidora Ejemplo SA</dd><dt>Entidad</dt><dd>Hogar Casa Ejemplo, Villa Lugano</dd><dt>Cantidad</dt><dd>120 frazadas · 80 camperas</dd><dt>Recorrido</dt><dd>Depósito 12/10 → camión 2, 14/10 → recibida 14/10</dd><dt>Confirmó</dt><dd>Marta G., con foto de la recepción</dd><dt>Código</dt><dd>DT3261</dd>" }),
+    el("div", { class: "reporte__firma", html: "<span>Primavera 2026 · algodón = ropa</span><span>donatrack · verificable con el código</span>" })));
+
+/* Selectores de modo */
+document.querySelectorAll(".modos").forEach(g => g.addEventListener("click", e => {
+  const b = e.target.closest("button[data-modo]"); if (!b) return;
+  g.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+  const v = g.closest(".parte").querySelector(".vitrina");
+  v.classList.toggle("modo-claro", b.dataset.modo === "claro"); v.classList.toggle("modo-oscuro", b.dataset.modo === "oscuro");
+}));
+
+/* ===== Preguntas ===== */
+const PREG = [
+  ["s_modos", "¿Leí bien «1 en claro y 2 en oscuro»?", "uno", ["Sí, es eso", "No, quería otra cosa (contame en el comentario)"]],
+  ["s_modo_def", "¿Qué modo ve alguien que entra por primera vez?", "uno", ["Claro", "Oscuro", "El que tenga su dispositivo"]],
+  ["s_especies", "¿Qué especies te gustan? Podés marcar varias.", "multi", Object.values(ESPECIES).map(e => e[0])],
+  ["s_categoria", "¿Una especie por tipo de donación?", "uno", ["Sí, así", "Sí, pero cambiaría alguna (contame)", "No: que la especie sea al azar o la elija quien dona"]],
+  ["s_fallida", "La entrega fallida como sobre de semillas, ¿se entiende?", "uno", ["Sí, clara y sin drama", "Se entiende, pero quedó muy alegre para algo que falló", "Sigue sin entenderse"]],
+  ["s_enjambre", "¿Cómo está la cantidad de abejas en la landing?", "escala", ["Sobran", "Faltan"]],
+  ["s_abejas", "En las dos propuestas las abejas funcionaron con roles distintos. ¿Cuál queda?", "uno", ["La logística: depósito, camiones y gente que lleva", "Los donantes, que llevan su parte sin ver todo el recorrido", "Las dos: cada donante es una abeja y el enjambre es la logística"]],
+  ["s_reporte", "¿Qué le falta a la constancia para empresas?", "texto"],
+  ["s_libre", "¿Algo más?", "texto"]
+];
+let numero = 0;
+function pregunta([id, texto, tipo, opc]) {
+  numero++;
+  const cab = [el("span", { class: "preg__num", text: String(numero).padStart(2, "0") }), texto];
+  if (tipo === "texto") return el("div", { class: "preg" }, el("label", { for: id }, ...cab), el("textarea", { id, name: id }));
+  const f = el("fieldset", { class: "preg" }, el("legend", {}, ...cab));
+  if (tipo === "escala") {
+    const e = el("div", { class: "escala" });
+    for (let i = 1; i <= 5; i++) e.append(el("label", {}, el("input", { type: "radio", name: id, id: `${id}_${i}`, value: String(i), "aria-label": `${i} de 5` }), el("span", { text: String(i) })));
+    f.append(e, el("div", { class: "escala__fin" }, el("span", { text: opc[0] }), el("span", { text: opc[1] })));
+  } else {
+    const o = el("div", { class: "opciones" + (tipo === "multi" ? " multi" : "") });
+    opc.forEach((t, i) => o.append(el("label", {}, el("input", { type: tipo === "multi" ? "checkbox" : "radio", name: id, id: `${id}_${i}`, value: t }), el("span", { text: t }))));
+    f.append(o);
+  }
+  f.append(el("textarea", { id: `${id}_nota`, name: `${id}_nota`, placeholder: "Comentario (opcional)", style: "min-height:44px" }));
+  return f;
+}
+PREG.forEach(q => $("#preguntas").append(pregunta(q)));
+function leer() {
+  const r = {};
+  for (const [id, , tipo] of PREG) {
+    if (tipo === "texto") { const t = $("#" + id).value.trim(); if (t) r[id] = t; continue; }
+    const m = [...document.querySelectorAll(`input[name="${id}"]:checked`)].map(i => tipo === "escala" ? Number(i.value) : i.value);
+    if (m.length) r[id] = tipo === "multi" ? m : m[0];
+    const nota = $(`#${id}_nota`)?.value.trim(); if (nota) r[id + "_nota"] = nota;
+  }
+  return r;
+}
+function aplicar(r) {
+  if (!r) return;
+  for (const [id, v] of Object.entries(r)) {
+    const t = document.getElementById(id); if (t && t.tagName === "TEXTAREA") { t.value = v; continue; }
+    for (const val of [].concat(v)) { const i = [...document.querySelectorAll(`input[name="${id}"]`)].find(x => x.value === String(val)); if (i) i.checked = true; }
+  }
+}
+function contar() { const r = leer(); const h = PREG.filter(([id]) => r[id] != null).length; $("#progreso").textContent = `${h} de ${PREG.length} respondidas`; $("#barra").style.setProperty("--p", (h / PREG.length * 100) + "%"); return r; }
+function comoTexto(r) { const l = ["Huerta con abejas · ronda 3", ""]; PREG.forEach(([id, t], i) => { const v = r[id], no = r[id + "_nota"]; if (v == null && !no) return; l.push(`${i + 1}. ${t}`); if (v != null) l.push(`   ${[].concat(v).join(" / ")}`); if (no) l.push(`   Nota: ${no}`); }); return l.join("\n"); }
+const BORRADOR = "huerta-ronda-3";
+try { aplicar(JSON.parse(localStorage.getItem(BORRADOR) || "null")); } catch (e) {}
+contar();
+$("#formulario").addEventListener("input", () => { const r = contar(); $("#estado").textContent = "Cambios sin guardar"; $("#estado").classList.remove("is-ok"); try { localStorage.setItem(BORRADOR, JSON.stringify(r)); } catch (e) {} if (!$("#copia").hidden) $("#texto-copia").value = comoTexto(r); });
+$("#ver-copia").addEventListener("click", async () => { const t = comoTexto(contar()); $("#copia").hidden = false; $("#texto-copia").value = t; try { await navigator.clipboard.writeText(t); $("#estado").textContent = "Texto copiado"; } catch (e) { $("#texto-copia").select(); $("#estado").textContent = "Seleccioná el texto y copialo"; } });
+let db = null, uid = null;
+const guardar = $("#guardar"); guardar.disabled = true;
+(async () => {
+  try {
+    const [d, u] = await Promise.all([window.claude?.use?.("db"), window.claude?.use?.("user")]);
+    if (!d || !u) throw 0; uid = await u.id(); if (!uid) throw 0; db = d;
+    const snap = await db.doc("ronda3/" + uid).get();
+    let hay = false; try { hay = !!localStorage.getItem(BORRADOR); } catch (e) {}
+    if (snap.exists && !hay) { aplicar(snap.data().respuestas); contar(); }
+    guardar.disabled = false;
+    if (snap.exists) $("#estado").textContent = "Ya guardaste respuestas; podés cambiarlas";
+  } catch (e) { $("#estado").textContent = "No se puede guardar desde esta vista: usá «Copiar como texto»"; }
+})();
+guardar.addEventListener("click", async () => {
+  if (!db) return; guardar.disabled = true; $("#estado").textContent = "Guardando…";
+  try { await db.doc("ronda3/" + uid).set({ respuestas: contar(), guardado: new Date().toISOString() }); $("#estado").textContent = "Guardado. Avisame en el chat y sigo."; $("#estado").classList.add("is-ok"); }
+  catch (e) { $("#estado").textContent = "No se guardó (" + (e?.code || "error") + "). Usá «Copiar como texto»."; }
+  finally { guardar.disabled = false; }
+});
+</script>

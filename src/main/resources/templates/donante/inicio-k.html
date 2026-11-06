@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/panel-k :: layout(~{::title}, ~{::contenido})}">
+<head><title>Tu huerta · Persona donante · DonaTrack</title></head>
+<body>
+<th:block th:fragment="contenido">
+<div class="k-env" th:with="p=${panel}, e=${panel.entregas}, i=${panel.impacto}, r=${panel.recorrido}">
+
+  <p class="k-aviso" role="status" th:if="${aviso == 'sin-permiso'}">Esa sección no corresponde a tu perfil, así que te trajimos a tu inicio.</p>
+
+  <!-- Saludo -->
+  <header class="k-saludo">
+    <div>
+      <p class="k-kicker">Tu huerta</p>
+      <h1 th:text="'Hola, ' + ${sesion.primerNombre} + '.'">Hola, Nicolás.</h1>
+      <p class="k-lead" th:text="${p.mensaje}">Tu última donación ya está en el depósito.</p>
+    </div>
+    <div class="k-saludo__acc">
+      <span class="k-demo" th:if="${e.demo or i.demo or p.notificaciones.demo}">Datos de demostración</span>
+      <a class="k-btn k-btn--linea k-btn--chico" th:href="@{/donante/donaciones}">Mis donaciones</a>
+      <a class="k-btn k-btn--chico" th:href="@{/donante/seguimiento}">Ver seguimiento</a>
+    </div>
+  </header>
+
+  <!-- Resumen: cifras claras, sin metáfora -->
+  <div class="k-resumen" th:if="${e.ok()}">
+    <div><b th:text="${e.datos.total}">7</b><span>donaciones</span></div>
+    <div><b th:text="${e.datos.entregadas}">3</b><span>entregadas</span></div>
+    <div><b th:text="${e.datos.enCamino}">2</b><span>en camino</span></div>
+    <div><b th:text="${e.datos.enProceso}">1</b><span>en el depósito</span></div>
+    <div><b th:text="${e.datos.interrumpidas}">1</b><span>se reprograman</span></div>
+  </div>
+  <p class="k-error" role="alert" th:if="${e.conError()}" th:text="${e.error.mensaje}">No pudimos cargar tus donaciones.</p>
+
+  <!-- La huerta: una lámina por donación. La planta es decoración; el estado lo dicen el chip y las abejas. -->
+  <section class="k-seccion" style="padding-top:44px" aria-labelledby="t-huerta" th:if="${e.ok()}">
+    <header>
+      <h2 id="t-huerta">Lo que <em>ya dio fruto.</em></h2>
+      <p class="k-lead">Cada donación es una lámina. Cuando la entidad confirma la entrega, la planta da su fruto.</p>
+    </header>
+    <p class="k-vacio" th:if="${e.datos.laminas().isEmpty()}">Todavía no registraste donaciones. Cuando lo hagas, van a aparecer acá.</p>
+    <div class="k-huerta-grilla" th:unless="${e.datos.laminas().isEmpty()}">
+      <article class="k-lam" th:each="l, it : ${e.datos.laminas()}"
+               th:with="a=${l.aporte}, plantas=${ {'pilea','zanahoria','albahaca','banano','lechuga','olivo'} }">
+        <div class="k-lam__marco"><svg th:replace="~{fragments/lamina-k :: dibujo(${plantas[it.index % 6]}, ${l.estado})}"></svg></div>
+        <div class="k-lam__pie">
+          <b th:text="${a.descripcion}">Arroz largo fino</b>
+          <span th:text="${a.entidad != null} ? ${a.entidad} : ${a.detalle}">Comedor Los Girasoles</span>
+          <span th:if="${l.estado == 'corte'}" th:text="${a.mensaje}">No pudo entrar el camión. Se reprograma.</span>
+          <span class="k-chip" th:attr="data-estado=${l.estado}"
+                th:text="${l.estado == 'llego'} ? 'Entregada' : (${l.estado == 'camino'} ? 'En camino' : (${l.estado == 'proceso'} ? 'En el depósito' : 'Se reprograma'))">En camino</span>
+          <a class="k-lam__mas" th:href="@{/donante/donaciones/{id}(id=${a.id})}" th:text="${a.codigo} + ' · Ver detalle'">DT3250 · Ver detalle</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <div class="k-dos k-seccion">
+    <!-- Raíces: hasta dónde llegó lo que donaste -->
+    <section class="k-caja k-tierra-caja" aria-labelledby="t-raices" th:if="${e.ok()}" th:with="rs=${e.datos.raices()}, n=${e.datos.entidadesAlcanzadas()}">
+      <div th:unless="${rs.vacio()}" th:replace="~{fragments/raices-k :: arbol(${rs}, |Raíces desde tus donaciones, por categoría y subcategoría, hasta ${n} entidades|, true)}"></div>
+      <div class="k-tierra-caja__texto">
+        <p class="k-kicker">Raíces de tu impacto</p>
+        <h2 id="t-raices" th:text="${n == 0} ? 'Tus raíces van a crecer acá.' : (${n == 1} ? 'Llegaste a 1 entidad.' : 'Llegaste a ' + ${n} + ' entidades.')">Llegaste a 4 entidades.</h2>
+        <p th:if="${n == 0}">Cuando una de tus donaciones se asigne a una entidad, su raíz va a aparecer acá.</p>
+        <p th:unless="${n == 0}">De lo que donaste, por categoría y subcategoría, hasta cada entidad. Las raíces punteadas todavía van en camino.</p>
+      </div>
+    </section>
+
+    <div style="display:grid;gap:28px">
+      <!-- Categoría y misión -->
+      <section class="k-caja" aria-labelledby="t-cat" th:if="${i.ok()}">
+        <header><p class="k-kicker">Tu categoría</p><a class="k-link" th:href="@{/donante/incentivos}">Ver incentivos</a></header>
+        <p class="k-categoria" id="t-cat" th:text="${#strings.capitalize(#strings.toLowerCase(i.datos.categoria))}">Colaborador</p>
+        <div class="k-mision" th:if="${i.datos.mision != null}">
+          <b th:text="${i.datos.mision.nombre}">Donante constante</b>
+          <span class="k-vacio" th:text="${i.datos.mision.descripcion}">Doná durante tres meses seguidos</span>
+          <div class="k-barra-prog" role="img" th:attr="aria-label=|${i.datos.mision.progreso} de ${i.datos.mision.objetivo}|"><i th:style="'--p:' + ${i.datos.mision.porcentaje} + '%'"></i></div>
+          <span class="k-vacio" th:text="|${i.datos.mision.progreso} de ${i.datos.mision.objetivo} · ${i.datos.mision.falta}|">2 de 3 · falta 1 paso</span>
+        </div>
+        <p class="k-vacio" th:if="${i.datos.proximaCategoria != null}" th:text="'Próxima: ' + ${#strings.capitalize(#strings.toLowerCase(i.datos.proximaCategoria))}">Próxima: Sostenedor</p>
+      </section>
+      <p class="k-error" role="alert" th:if="${i.conError()}" th:text="${i.error.mensaje}">No pudimos cargar tus incentivos.</p>
+
+      <!-- Avisos -->
+      <section class="k-caja" aria-labelledby="t-notis">
+        <header><h3 id="t-notis">Avisos</h3><a class="k-link" th:href="@{/donante/notificaciones}">Ver todos</a></header>
+        <ul class="k-notis" th:if="${p.notificaciones.estado.name() == 'OK'}">
+          <li th:each="n : ${p.notificaciones.datos}"><b style="font-weight:600" th:text="${n.mensaje}">Tu donación salió del depósito.</b><span th:text="${n.cuando}">hace 2 horas</span></li>
+        </ul>
+        <p class="k-vacio" th:if="${p.notificaciones.estado.name() == 'VACIO'}">No tenés avisos nuevos.</p>
+        <p class="k-error" role="alert" th:if="${p.notificaciones.estado.name() == 'ERROR'}" th:text="${p.notificaciones.error.mensaje}">No pudimos cargar tus avisos.</p>
+      </section>
+    </div>
+  </div>
+
+  <!-- Recorrido de la última donación: la abeja está en el paso actual -->
+  <section class="k-caja k-seccion" style="margin-top:28px;margin-bottom:56px" aria-labelledby="t-rec" th:if="${r.ok()}">
+    <header>
+      <div><p class="k-kicker">Tu última donación</p><h3 id="t-rec" th:text="${r.datos.descripcion + ' · ' + r.datos.detalle}">Lentejas · 15 kg</h3></div>
+      <a class="k-link" th:href="@{/donante/donaciones/{id}(id=${r.datos.id})}">Ver el detalle</a>
+    </header>
+    <ol class="k-recorrido" th:style="'--n:' + ${#lists.size(r.datos.pasos)}">
+      <li th:each="s : ${r.datos.pasos}" th:classappend="${s.clase == 'hecho'} ? 'is-hecho' : (${s.clase == 'actual'} ? 'is-actual' : (${s.clase == 'interrumpido'} ? 'is-interrumpido'))">
+        <span class="k-recorrido__abeja"><svg th:if="${s.actual()}" viewBox="-3 -8 26 30" aria-hidden="true"><use class="k-ab" href="#k-abeja-paquete" x="-3" y="-8" width="26" height="30"/></svg></span>
+        <span class="k-recorrido__punto" aria-hidden="true"></span>
+        <b th:text="${s.etiqueta}">En depósito</b>
+        <span th:text="${s.cuando}">01/10</span>
+      </li>
+    </ol>
+  </section>
+</div>
+</th:block>
+</body>
+</html>

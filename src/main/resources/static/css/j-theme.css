@@ -1,0 +1,211 @@
+/*
+ * Variante H · tema jardín ("Raíces + Colmena"). Se carga después de h-theme.css e i-theme.css, solo con body.j
+ * (que también lleva .i): toma la identidad del prototipo Raíces (paleta Oliva, papel risográfico, títulos de afiche
+ * en Archivo ancha con la segunda tinta corrida) y pone a las plantas de protagonistas. Las abejas siguen, de apoyo:
+ * polinizan, llevan el aporte de un lado al otro y vigilan los canteros, pero la metáfora es la de Raíces:
+ * lo que se dona es una semilla, echa raíces en una entidad y cada entrega confirmada es un fruto.
+ */
+body.j, .j.c-app {
+  /* Paleta Oliva sobre los tokens del hormiguero: así todo lo que ya usa --h-* cambia solo */
+  --h-shell: var(--j-papel);
+  --h-shell-2: var(--j-papel-hondo);
+  --h-shell-3: var(--j-papel-claro);
+  --h-saffron: var(--j-hoja);
+  --h-saffron-2: var(--j-hoja-2);
+  --h-saffron-mid: var(--j-hoja-2);
+  --h-saffron-deep: var(--j-suelo);
+  --h-saffron-100: var(--j-acento-claro);
+  --h-celadon: var(--j-raiz);
+  --h-celadon-2: var(--j-raiz-2);
+  --h-celadon-100: var(--j-raiz-100);
+  --h-slate: var(--j-acento);
+  --h-slate-2: var(--j-acento-hondo);
+  --h-slate-100: var(--j-hoja-100);
+  --h-graphite: var(--j-grafito);
+  --h-graphite-2: var(--j-tinta);
+  --h-ink: var(--j-tinta);
+  --h-ink-2: var(--j-tinta-2);
+  --h-ink-3: var(--j-tinta-suave);
+  --h-line: var(--j-line);
+  --h-line-soft: var(--j-line-soft);
+  --h-dots: var(--j-dots);
+  --h-dots-strong: var(--j-dots-strong);
+  --h-veil: var(--j-veil);
+  --h-veil-soft: var(--j-veil-soft);
+  --h-lift: var(--j-lift);
+  --h-coral: var(--j-fruto);
+  --h-failed: var(--j-problema);
+  --h-soil: var(--j-raiz);
+  --h-soil-deep: var(--j-raiz-2);
+  --i-shell: var(--j-papel);
+  --i-shell-2: var(--j-papel-hondo);
+  --i-shell-3: var(--j-papel-claro);
+  --i-cera: var(--j-hoja-100);
+  /* La sombra granular, en verde oliva hondo en lugar de grafito */
+  --h-sombra: var(--j-suelo-hondo);
+  /* Estados: en camino en paja, entregada en mandarina (un fruto) */
+  --cs-deposito: var(--j-papel-hondo);
+  --cs-asignada: var(--j-hoja-100);
+  --cs-lista: var(--j-raiz-100);
+  --cs-traslado: var(--j-acento);
+  --cs-entregada: var(--j-fruto-100);
+  --cs-fallida: var(--j-problema);
+  /* Papel con polvo de risografía y unas ramitas tenues (en lugar de los racimos de celdas) */
+  background: url("../img/j-hojas-fondo.svg") 0 0 / 1200px 1400px, url("../img/j-riso.svg") 0 0 / 200px, var(--j-papel);
+}
+
+/* ===== Las abejas conservan su miel: son las únicas piezas amarillas ===== */
+.j :is(.i-abeja__cuerpo, .i-flor__centro) { fill: var(--j-miel); }
+.j .h-ant__grano, .j .ei-polen { fill: var(--j-raiz); }
+.j .i-flor__petalos ellipse { fill: var(--j-papel-claro); stroke: var(--h-line); }
+
+/* ===== Piezas de planta (ilustraciones-j) ===== */
+.j-tallo, .jm-tallo, .jm-rama { fill: none; stroke: var(--j-acento); stroke-width: 3; stroke-linecap: round; }
+.j-hoja { fill: var(--j-hoja); stroke: var(--j-tinta); stroke-width: 1.4; stroke-linejoin: round; }
+.j-hoja--tinta { fill: var(--j-acento); }
+.j-nervio { fill: none; stroke: var(--j-acento); stroke-width: 1.2; stroke-linecap: round; opacity: 0.7; }
+.j-fruto__tinta { fill: var(--j-fruto-hondo); }
+.j-fruto__disco { fill: var(--j-fruto); stroke: var(--j-tinta); stroke-width: 1.4; }
+.j-fruto__hoja { fill: var(--j-acento); }
+.j-semilla { fill: var(--j-raiz-2); stroke: var(--j-tinta); stroke-width: 1.4; }
+/* El fruto en camino: el contorno punteado de la segunda tinta, todavía sin color */
+.j-hueco { fill: var(--j-papel-claro); stroke: var(--j-fruto-hondo); stroke-width: 2; stroke-dasharray: 3 4; }
+.j-t { stroke: var(--j-tinta); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+.j-t--fino { fill: none; stroke-width: 1.5; }
+.j-t--rama { fill: none; stroke: var(--j-acento); stroke-width: 4; }
+.j-f-maceta { fill: var(--j-fruto-hondo); }
+.j-f-maceta-borde { fill: var(--j-fruto); }
+.j-f-lata { fill: var(--j-acento); }
+.j-f-canasta { fill: var(--j-raiz-2); }
+.j-gotas { fill: none; stroke: var(--j-acento); stroke-width: 2.4; stroke-linecap: round; opacity: 0.6; }
+.j-abejita { color: var(--h-graphite); }
+
+/* ===== Títulos de afiche, como Raíces: tinta, en minúscula, con la segunda tinta corrida en el énfasis ===== */
+.j :is(.ch__titulo, .ca__cab h2, .ci__cab h2, .cf__cab h2, .faq__cab h2, .cp h2, .ck__gran, .pc-cab h1) {
+  background: none; color: var(--j-tinta); -webkit-background-clip: border-box; background-clip: border-box;
+  text-transform: none; font-stretch: 125%; letter-spacing: -0.035em; line-height: 0.94;
+}
+.j :is(.ch__titulo, .ca__cab h2, .ci__cab h2, .cf__cab h2, .faq__cab h2, .cp h2, .ck__gran) em {
+  background: none; color: var(--j-acento); -webkit-background-clip: border-box; background-clip: border-box;
+  text-shadow: 0.035em 0.03em 0 var(--j-hoja);
+}
+.j .ck__lado--donar .ck__gran em { background: none; color: var(--j-tinta); text-shadow: 0.035em 0.03em 0 var(--j-papel-claro); }
+.j .c-kicker { color: var(--j-acento); }
+.j .c-kicker::before { border-radius: 50% 0; background: var(--j-hoja); box-shadow: 0 0 0 3px var(--j-acento-claro); }
+.j .c-marca em { color: var(--j-acento); font-weight: 400; }
+.j .cl-pie__lema { text-transform: none; }
+
+/* Botones: esquina suave y sombra plana de hoja; se hunden al apretar como un sello */
+.j .c-btn { --btn-bg: var(--j-acento); --btn-fg: var(--j-papel-claro); --btn-dot: var(--j-hoja); --btn-dot-fg: var(--j-acento-hondo); border-radius: 10px; box-shadow: 4px 4px 0 var(--j-hoja); }
+.j .c-btn:active { box-shadow: none; translate: 4px 4px; }
+.j .c-btn--lime { --btn-bg: var(--j-raiz); --btn-fg: var(--j-tinta); --btn-dot: var(--j-acento); --btn-dot-fg: var(--j-papel-claro); }
+.j .c-btn--white { --btn-bg: var(--j-papel-claro); box-shadow: inset 0 0 0 2px var(--j-acento), 4px 4px 0 var(--j-hoja); --btn-fg: var(--j-acento-hondo); --btn-dot: var(--j-acento); }
+
+/* ===== Hero: la planta echa raíces y da frutos ===== */
+.jm-sol { fill: var(--j-raiz); opacity: 0.75; }
+.jm-suelo { fill: var(--j-suelo); }
+.jm-horizonte { fill: none; stroke: var(--j-tinta); stroke-width: 2.5; }
+.jm-raiz { fill: none; stroke: var(--j-raiz); stroke-width: 5; stroke-linecap: round; }
+.jm-raiz--fina { stroke-width: 2.5; opacity: 0.8; }
+.jm-cruce { fill: var(--j-raiz); stroke: var(--j-suelo-hondo); stroke-width: 2; }
+.jm-nudo circle { fill: var(--j-raiz); stroke: var(--j-tinta); stroke-width: 1.5; }
+.jm-nudo .jm-nudo__tinta { fill: var(--j-suelo-hondo); stroke: none; }
+.jm-escena .im-abeja { color: var(--h-graphite); }
+.jm-copa, .jm-copa * { transform-box: view-box; }
+@media (prefers-reduced-motion: no-preference) {
+  .jm-raiz { stroke-dasharray: 1; stroke-dashoffset: 1; animation: jm-crece 2.2s cubic-bezier(0.3, 0.6, 0.2, 1) 0.2s forwards; }
+  .jm-raiz:nth-child(2) { animation-delay: 0.7s; }
+  .jm-raiz:nth-child(3) { animation-delay: 0.9s; }
+  .jm-raiz:nth-child(4) { animation-delay: 1.3s; }
+  .jm-raiz:nth-child(5) { animation-delay: 1.5s; }
+  .jm-raiz:nth-child(6) { animation-delay: 1.9s; }
+  .jm-nudo, .jm-fruto { transform-box: fill-box; transform-origin: center; scale: 0; animation: jm-brota 600ms cubic-bezier(0.3, 1.5, 0.5, 1) forwards; }
+  .jm-nudo { animation-delay: calc(2s + var(--o) * 0.25s); }
+  .jm-fruto { animation-delay: calc(2.8s + var(--o) * 0.3s); }
+  .jm-copa { transform-origin: 368px 300px; animation: jm-viento 7s ease-in-out infinite alternate; }
+}
+@keyframes jm-crece { to { stroke-dashoffset: 0; } }
+@keyframes jm-brota { to { scale: 1; } }
+@keyframes jm-viento { from { rotate: -1.4deg; } to { rotate: 1.6deg; } }
+.j .ficha { border: 2px solid var(--j-tinta); }
+.j .ficha__ico { background: var(--j-hoja-100); }
+.j .ficha__barra i.is-on { background: var(--j-fruto); }
+
+/* ===== Recorrido: siembra, abeja que poliniza, abeja que lleva, fruto ===== */
+.j .ruta__est:nth-child(1) { --bg: var(--j-raiz-100); }
+.j .ruta__est:nth-child(2) { --bg: var(--j-hoja-100); }
+.j .ruta__est:nth-child(3) { --bg: var(--j-acento-claro); }
+.j .ruta__est:nth-child(4) { --bg: var(--j-fruto-100); }
+/* 1 · La semilla cae en la tierra y brota */
+.esc-siembra__tierra { fill: var(--j-suelo); }
+.esc-siembra__semilla { animation: esc-semilla 4.6s ease-in infinite; }
+.esc-siembra__brote { transform-origin: 80px 50px; animation: esc-brote 4.6s ease-out infinite; }
+@keyframes esc-semilla { 0% { transform: translateY(-16px); opacity: 0; } 8% { opacity: 1; } 34% { transform: translateY(34px); opacity: 1; } 42%, 100% { transform: translateY(40px); opacity: 0; } }
+@keyframes esc-brote { 0%, 38% { transform: scale(0); } 62%, 88% { transform: scale(1); opacity: 1; } 100% { transform: scale(1); opacity: 0; } }
+/* 4 · El fruto madura cuando llega la abeja */
+.ej--fruto .ei__panal { overflow: visible; }
+.ej-fruto { transform-box: fill-box; transform-origin: 50% 0; }
+.ruta__est.is-act .ej-fruto { animation: ej-madura 2.6s ease-in-out both; }
+@keyframes ej-madura { 0%, 50% { scale: 0.3; filter: saturate(0) brightness(1.4); } 85% { scale: 1.12; } 100% { scale: 1; filter: none; } }
+
+/* ===== Divisor y problema: tierra con raíces ===== */
+.j .h-sendero i { width: 12px; height: 16px; border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: var(--j-raiz-2); box-shadow: inset 0 0 0 1.5px var(--j-tinta); }
+.j .cp { background: url("../img/j-tierra.svg") 0 0 / 260px, var(--j-suelo); color: var(--j-texto-suelo); }
+.j .cp h2 { color: var(--j-texto-suelo); }
+.j .cp h2 em { color: var(--j-raiz); text-shadow: 0.035em 0.03em 0 var(--j-suelo-hondo); }
+.j .cp .c-kicker { color: var(--j-raiz); }
+.j .cp .c-kicker::before { box-shadow: 0 0 0 3px var(--j-suelo-medio); }
+.j .cp__texto { color: var(--j-texto-suelo); }
+.j .pq__rol { background: var(--j-suelo-hondo); box-shadow: none; }
+.j .pq__rol label { color: var(--j-texto-suelo); }
+.j .pq__pulgar { background: var(--j-raiz); }
+.j .pq__rol input:checked + label { color: var(--j-tinta); }
+.j .pq__titulo { color: var(--j-raiz); }
+/* La semilla que falta: un contorno punteado con forma de semilla */
+.j .pq__grano { width: 18px; height: 24px; border: 2px dashed var(--j-fruto-hondo); border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; background: none; }
+.j .pq__gana { background: var(--j-suelo-hondo); box-shadow: inset 0 0 0 2px var(--j-raiz); }
+.j .pq__gana-etq { color: var(--j-raiz); }
+
+/* ===== Tarjetas destacadas: hojas en la esquina en lugar del panal ===== */
+.j :is(.actor--donante, .ck__lado--donar, .dh-cat) { background: url("../img/j-hojas-esquina.svg") right -40px bottom -40px / 300px auto no-repeat, var(--j-hoja); }
+[data-tarjeta="b"] .j :is(.actor--donante, .ck__lado--donar, .dh-cat) { background: url("../img/j-hojas-esquina.svg") right -40px bottom -40px / 300px auto no-repeat, var(--j-hoja); padding-top: revert-layer; }
+.j .actor--admin, .j .cl-pie, .j .c-dark { background-color: var(--j-suelo-hondo); }
+.j .cl-pie__marca { color: var(--j-suelo-medio); }
+.j .cl-pie__lema em { color: var(--j-raiz); }
+
+/* ===== Impacto: de la semilla a la canasta ===== */
+.j .cifra--1 .cifra__miel, .j .cifra--2 .cifra__miel, .j .cifra--3 .cifra__miel { width: 112px; height: 72px; top: 22px; }
+
+/* ===== Cierre: brotes al pie de las tarjetas ===== */
+.j .ck__flores svg { bottom: -14px; }
+.j .ck__flores .ck__abeja { bottom: 46px; }
+
+/* ===== Panel: los canteros (la misma grilla de celdas, ahora con hojas y frutos) ===== */
+.j .ap.dh-monte { background: var(--j-hoja-100); }
+.j .ap-h__borde { stroke: var(--j-acento); stroke-width: 6; }
+.j .ap-h__fondo { fill: var(--j-papel-claro); }
+.j .ap-h__ola { fill: var(--j-hoja); }
+.j .ap-h--llego .ap-h__fondo { fill: var(--j-fruto); }
+.j .ap-h--llego .ap-h__borde { stroke: var(--j-fruto-hondo); }
+.j .ap-h--llego .ap-h__num { fill: var(--j-papel-claro); }
+.j .ap-h__num { fill: var(--j-acento-hondo); }
+.j .ap-h__abierta { stroke: var(--j-acento); stroke-dasharray: 2 7; }
+.j .ap-h--corte .ap-h__borde { stroke: var(--j-suelo); }
+.j .ap-det { border-color: var(--j-acento); }
+.j .ap-det__cab h3, .j .ap-tarj__cod, .j .ap-tarj__bien { color: var(--j-acento-hondo); }
+.j .ap-tarj { border-color: var(--j-hoja); }
+.j .ap-tarj__msg { color: var(--j-fruto-hondo); }
+.j .cm__celda::before { background: var(--j-acento); }
+.j .cm__celda.is-llena > a { background: var(--j-fruto-100); }
+.j .cm__ley .is-llena::before { background: var(--j-fruto-100); }
+
+@media (prefers-reduced-motion: reduce) {
+  .esc-siembra__semilla { display: none; }
+  .esc-siembra__brote { animation: none; }
+  .ruta__est.is-act .ej-fruto { animation: none; }
+}
+
+/* Ajustes: las tarjetas claras sobre la tierra vuelven a la tinta; en el panel oscuro, "en traslado" en hoja */
+.j .pq__perdidas li { color: var(--j-tinta); }
+.j .actor__flujo i[data-estado="EN_TRASLADO"], .j .actor__ley li[data-estado="EN_TRASLADO"]::before { background: var(--j-hoja); }
+.j .dh-cat { background-size: 190px auto, auto; background-position: right -46px bottom -58px, 0 0; }

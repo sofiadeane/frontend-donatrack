@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layouts/publico-h :: layout(~{::title}, ~{::contenido})}">
-<head><title th:text="${abejas} ? 'DonaTrack — Seguí tu donación hasta que llega' : |DonaTrack — ${voc.tuAporte} puede llegar más lejos|">DonaTrack — Tu granito de arena puede llegar más lejos</title></head>
+<head><title th:text="${plantas} ? 'DonaTrack — Lo que donás echa raíces en tu comunidad' : (${abejas} ? 'DonaTrack — Seguí tu donación hasta que llega' : |DonaTrack — ${voc.tuAporte} puede llegar más lejos|)">DonaTrack — Tu granito de arena puede llegar más lejos</title></head>
 <body>
 <th:block th:fragment="contenido">
 
@@ -10,7 +10,11 @@
     <div class="ch__arriba">
       <div class="ch__texto">
         <p class="c-kicker">Trazabilidad de donaciones</p>
-        <th:block th:if="${abejas}">
+        <th:block th:if="${plantas}">
+        <h1 id="titulo-hero" class="c-display ch__titulo">Lo que donás echa raíces <em>en tu comunidad.</em></h1>
+        <p class="ch__lead">Cada donación es una semilla. DonaTrack la sigue desde el depósito hasta la entidad que la pidió, y cuando llega, da su fruto. Las abejas hacen su parte en el medio: llevan cada aporte hasta donde hace falta.</p>
+        </th:block>
+        <th:block th:if="${abejas and !plantas}">
         <h1 id="titulo-hero" class="c-display ch__titulo">Seguí tu donación <em>hasta que llega</em></h1>
         <p class="ch__lead">En una colmena, cada abeja sabe dónde hace falta ir y qué trabajo hacer. DonaTrack hace lo mismo con las donaciones: conecta a donantes y organizaciones para que cada aporte llegue a donde se necesita, y se pueda seguir su recorrido de principio a fin.</p>
         </th:block>
@@ -25,7 +29,64 @@
       </div>
 
       <div class="ch__ilus">
-        <svg class="hm-escena im-escena" th:if="${abejas}" viewBox="0 0 600 470" role="img" aria-label="Abejas que vuelan de las flores a un panal que se llena de miel">
+        <svg class="hm-escena jm-escena" th:if="${plantas}" viewBox="0 0 600 470" role="img" aria-label="Una planta que echa raíces hacia varias entidades y da frutos; una abeja vuela entre las flores">
+          <path class="jm-sol" d="M13 300 A140 140 0 0 1 293 300Z"/>
+          <path class="jm-suelo" d="M0 302 C120 294 240 306 368 298 S540 294 600 302 V470 H0Z"/>
+          <path class="jm-horizonte" d="M0 302 C120 294 240 306 368 298 S540 294 600 302"/>
+          <g transform="translate(-215 0)">
+          <!-- Raíces: se dibujan de a una y terminan en una entidad (el nudo color paja) -->
+          <g class="jm-raices">
+            <path class="jm-raiz" pathLength="1" d="M368 300 C368 350 364 400 368 466"/>
+            <path class="jm-raiz" pathLength="1" d="M368 336 C336 352 300 356 270 384 C252 402 244 420 240 440"/>
+            <path class="jm-raiz" pathLength="1" d="M368 336 C402 352 440 358 470 388 C486 404 492 420 494 436"/>
+            <path class="jm-raiz" pathLength="1" d="M368 392 C346 404 326 418 318 450"/>
+            <path class="jm-raiz" pathLength="1" d="M368 392 C392 404 414 420 424 456"/>
+            <path class="jm-raiz jm-raiz--fina" pathLength="1" d="M286 372 C268 366 252 368 232 360 M470 388 C482 376 498 372 516 374 M368 430 C380 436 388 446 392 458"/>
+            <circle class="jm-cruce" cx="368" cy="336" r="6"/>
+            <circle class="jm-cruce" cx="368" cy="392" r="5"/>
+          </g>
+          <g class="jm-nudos">
+            <g class="jm-nudo" style="--o:0"><circle class="jm-nudo__tinta" cx="243" cy="443" r="9"/><circle cx="240" cy="440" r="9"/></g>
+            <g class="jm-nudo" style="--o:1"><circle class="jm-nudo__tinta" cx="497" cy="439" r="9"/><circle cx="494" cy="436" r="9"/></g>
+            <g class="jm-nudo" style="--o:2"><circle class="jm-nudo__tinta" cx="321" cy="453" r="8"/><circle cx="318" cy="450" r="8"/></g>
+            <g class="jm-nudo" style="--o:3"><circle class="jm-nudo__tinta" cx="427" cy="459" r="8"/><circle cx="424" cy="456" r="8"/></g>
+          </g>
+          <!-- La planta: tallo, ramas y hojas que se mecen; tres frutos (entregas confirmadas) y uno en camino -->
+          <g class="jm-copa">
+            <path class="jm-tallo" d="M368 300 C364 250 372 190 366 92"/>
+            <path class="jm-rama" d="M367 252 C346 242 322 226 306 204"/>
+            <path class="jm-rama" d="M368 214 C390 204 414 190 428 170"/>
+            <path class="jm-rama" d="M367 160 C350 150 336 136 328 118"/>
+            <path class="jm-rama" d="M367 128 C380 116 394 108 408 104"/>
+            <use href="#j-hoja" x="300" y="226" width="52" height="28" transform="rotate(-150 326 240)"/>
+            <use href="#j-hoja" x="372" y="226" width="52" height="28" transform="rotate(-20 398 240)"/>
+            <use href="#j-hoja" x="312" y="168" width="48" height="26" transform="rotate(-160 336 181)"/>
+            <use href="#j-hoja" x="378" y="140" width="48" height="26" transform="rotate(-30 402 153)"/>
+            <use href="#j-hoja" x="346" y="64" width="44" height="24" transform="rotate(-90 368 76)"/>
+            <use href="#j-hoja" x="330" y="96" width="40" height="22" transform="rotate(-130 350 107)"/>
+            <use class="jm-fruto" style="--o:0" href="#j-fruto" x="288" y="192" width="38" height="45"/>
+            <use class="jm-fruto" style="--o:1" href="#j-fruto" x="412" y="158" width="38" height="45"/>
+            <use class="jm-fruto" style="--o:2" href="#j-fruto" x="312" y="104" width="34" height="40"/>
+            <circle class="j-hueco" cx="412" cy="112" r="13"/>
+          </g>
+          </g>
+          <!-- Flores para las abejas, a la derecha -->
+          <path class="im-tallo" d="M492 300 C486 270 500 250 494 222"/>
+          <path class="im-tallo" d="M550 300 C544 276 558 262 552 244"/>
+          <path class="im-tallo" d="M448 300 C442 282 454 270 450 256"/>
+          <use href="#i-flor" x="466" y="190" width="58" height="58"/>
+          <use href="#i-flor" x="528" y="220" width="46" height="46"/>
+          <use href="#i-flor" x="430" y="236" width="38" height="38"/>
+          <use href="#j-brote" x="330" y="262" width="34" height="40"/>
+          <use href="#j-brote" x="392" y="270" width="28" height="32"/>
+          <!-- La abeja, de apoyo: va de las flores a la planta y vuelve -->
+          <path id="jm-vuelo" class="hm-camino" d="M494 214 C470 140 400 110 350 140 S300 200 270 170 S230 120 200 150"/>
+          <g class="im-abeja">
+            <use href="#h-hormiga-grano" x="-22" y="-22" width="44" height="36"/>
+            <animateMotion dur="22s" begin="0s" repeatCount="indefinite" calcMode="spline" keyPoints="0;1;0" keyTimes="0;0.5;1" keySplines="0.45 0 0.55 1;0.45 0 0.55 1"><mpath href="#jm-vuelo"/></animateMotion>
+          </g>
+        </svg>
+        <svg class="hm-escena im-escena" th:if="${abejas and !plantas}" viewBox="0 0 600 470" role="img" aria-label="Abejas que vuelan de las flores a un panal que se llena de miel">
           <ellipse class="hm-suelo" cx="330" cy="430" rx="270" ry="34"/>
           <g class="im-panal" transform="translate(-10 -62)">
             <path class="im-celda im-celda--media" d="M380.0 171.0 L409.4 188.0 L409.4 222.0 L380.0 239.0 L350.6 222.0 L350.6 188.0Z"/>
@@ -128,7 +189,12 @@
 
     <ol class="ruta" aria-label="Recorrido de una donación en cuatro estaciones">
       <li class="ruta__est" data-estacion="0" data-estado="EN_DEPOSITO" data-destino="Sin asignar todavía">
-        <div class="ei ei--flor" th:if="${abejas}" aria-hidden="true">
+        <svg class="ruta__escena esc-siembra" th:if="${plantas}" viewBox="0 0 160 56" aria-hidden="true">
+          <path class="esc-siembra__tierra" d="M40 56 C52 44 108 44 120 56Z"/>
+          <g class="esc-siembra__brote"><use href="#j-brote" x="66" y="16" width="28" height="30"/></g>
+          <use class="esc-siembra__semilla" href="#j-semilla" x="74" y="0" width="12" height="16"/>
+        </svg>
+        <div class="ei ei--flor" th:if="${abejas and !plantas}" aria-hidden="true">
           <svg class="ei__flor" viewBox="0 0 40 64"><path class="im-tallo" d="M20 64 C18 54 22 46 20 36"/><use href="#i-flor" x="4" y="6" width="32" height="32"/></svg>
           <svg class="ei__abeja" viewBox="0 -10 66 50"><use href="#h-hormiga" x="0" y="-10" width="66" height="50"/></svg>
         </div>
@@ -177,7 +243,16 @@
         <p class="ruta__texto">Rutas, paradas y horarios a la vista de quien espera.</p>
       </li>
       <li class="ruta__est" data-estacion="3" data-estado="ENTREGADA" data-destino="Comedor Los Girasoles · recibida">
-        <div class="ei ei--panal" th:if="${abejas}" aria-hidden="true">
+        <div class="ei ei--panal ej--fruto" th:if="${plantas}" aria-hidden="true">
+          <svg class="ei__panal" viewBox="0 0 72 64">
+            <path class="j-tallo" d="M36 64 C34 50 38 36 36 18"/>
+            <use href="#j-hoja" x="8" y="34" width="28" height="15" transform="rotate(-160 22 41)"/>
+            <use href="#j-hoja" x="36" y="26" width="28" height="15" transform="rotate(-25 50 33)"/>
+            <g class="ej-fruto"><use href="#j-fruto" x="24" y="0" width="26" height="31"/></g>
+          </svg>
+          <svg class="ei__abeja" viewBox="0 -14 66 54"><use href="#h-hormiga-grano" x="0" y="-14" width="66" height="54"/></svg>
+        </div>
+        <div class="ei ei--panal" th:if="${abejas and !plantas}" aria-hidden="true">
           <svg class="ei__panal" viewBox="0 0 72 64">
             <path class="im-celda im-celda--miel" d="M30 4 L44 12 V28 L30 36 L16 28 V12Z"/>
             <path class="im-celda im-celda--media" d="M58 4 L72 12 V28 L58 36 L44 28 V12Z"/>
@@ -330,7 +405,7 @@
         <svg class="cifra__pila" viewBox="0 0 160 70" preserveAspectRatio="none" aria-hidden="true"><path class="hm-montana" d="M2 70 C22 40 48 6 82 6 C112 6 140 38 158 70Z"/></svg>
         <svg class="cifra__hormiga" th:if="${it.index == 0}" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
         </th:block>
-        <svg class="cifra__miel" th:if="${abejas}" aria-hidden="true"><use th:href="${ {'#i-panal-gotea','#i-frascos','#i-cucharon','#i-enjambre'}[it.index % 4] }" href="#i-panal-gotea"/></svg>
+        <svg class="cifra__miel" th:if="${abejas}" aria-hidden="true"><use th:href="${plantas ? {'#j-rama','#j-maceta','#j-regadera','#j-canasta'}[it.index % 4] : {'#i-panal-gotea','#i-frascos','#i-cucharon','#i-enjambre'}[it.index % 4]}" href="#i-panal-gotea"/></svg>
       </li>
     </ul>
 
@@ -443,10 +518,11 @@
     <h2 id="titulo-cta" class="sr-only">Sumate</h2>
     <a class="ck__lado ck__lado--donar" th:href="@{/registro(tipo='humana')}">
       <span class="ck__etq">Si querés ayudar</span>
-      <span class="ck__gran c-display">Sumá tu <em th:text="${voc.unidad}">granito</em></span>
+      <span class="ck__gran c-display"><th:block th:text="${voc.suma}">Sumá tu</th:block> <em th:text="${voc.unidad}">granito</em></span>
       <span class="c-btn__dot ck__flecha"><span th:replace="~{fragments/iconos :: icono('flecha', 22)}"></span></span>
       <svg class="ck__duna" th:unless="${abejas}" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 48 C140 38 290 40 440 45 S560 50 600 42 V120 H0Z"/></svg>
-      <span class="ck__flores" th:if="${abejas}" aria-hidden="true"><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg class="ck__abeja"><use href="#h-hormiga-grano"/></svg></span>
+      <span class="ck__flores" th:if="${plantas}" aria-hidden="true"><svg><use href="#j-brote"/></svg><svg><use href="#i-flor"/></svg><svg><use href="#j-brote"/></svg><svg class="ck__abeja"><use href="#h-hormiga-grano"/></svg></span>
+      <span class="ck__flores" th:if="${abejas and !plantas}" aria-hidden="true"><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg class="ck__abeja"><use href="#h-hormiga-grano"/></svg></span>
       <span class="ck__hormigas" th:unless="${abejas}" aria-hidden="true"><svg class="ck__h ck__h--1"><use href="#h-hormiga-grano"/></svg><svg class="ck__h ck__h--2"><use href="#h-hormiga-grano"/></svg><svg class="ck__h ck__h--3"><use href="#h-hormiga"/></svg><svg class="ck__h ck__h--4"><use href="#h-hormiga-grano"/></svg></span>
     </a>
     <a class="ck__lado ck__lado--ayuda" th:href="@{/registro(tipo='entidad')}">
@@ -454,7 +530,8 @@
       <span class="ck__gran c-display">Registrá <em>tu entidad</em></span>
       <span class="c-btn__dot ck__flecha"><span th:replace="~{fragments/iconos :: icono('flecha', 22)}"></span></span>
       <svg class="ck__duna" th:unless="${abejas}" viewBox="0 0 600 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 50 C110 90 230 96 330 60 S520 18 600 64 V120 H0Z"/></svg>
-      <span class="ck__flores" th:if="${abejas}" aria-hidden="true"><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg></span>
+      <span class="ck__flores" th:if="${plantas}" aria-hidden="true"><svg><use href="#j-brote"/></svg><svg><use href="#j-brote"/></svg><svg><use href="#j-fruto"/></svg></span>
+      <span class="ck__flores" th:if="${abejas and !plantas}" aria-hidden="true"><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg><svg><use href="#i-flor"/></svg></span>
     </a>
   </section>
 </th:block>

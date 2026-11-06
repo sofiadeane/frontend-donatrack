@@ -1,0 +1,19 @@
+<!--
+  Lámina de la variante K: la planta (decorativa) en su maceta, con lo que hacen las abejas según el estado.
+  estado: llego (con frutos), camino (sin frutos; una abeja trae el paquete), proceso (brote; el paquete espera
+  junto a la maceta) o corte (la ilustración de reintento). planta: pilea, banano, lechuga, albahaca,
+  zanahoria u olivo.
+-->
+<svg th:fragment="dibujo(planta, estado)" viewBox="0 0 200 290" aria-hidden="true" focusable="false"
+     th:classappend="'is-' + ${estado}">
+  <ellipse class="k-sombra-suelo" cx="112" cy="281" rx="46" ry="5"/>
+  <g th:if="${estado == 'camino'}"><path class="k-ruta" d="M10 150 C40 96 70 118 100 76 S140 44 150 48"/><use class="k-ab" href="#k-abeja-paquete" x="140" y="26" width="28" height="32"/></g>
+  <g th:if="${estado == 'llego'}"><path class="k-ruta" d="M118 66 C140 44 160 60 178 34"/><use class="k-ab" href="#k-abeja" x="172" y="18" width="24" height="28"/></g>
+  <th:block th:unless="${estado == 'corte'}">
+    <use class="k-viento" th:href="${estado == 'proceso'} ? '#k-p-brote' : '#k-p-' + ${planta}" href="#k-p-pilea" x="0" y="0" width="200" height="224"/>
+    <use href="#k-maceta" x="40" y="196" width="120" height="80"/>
+  </th:block>
+  <g th:if="${estado == 'proceso'}"><use href="#k-colmena" x="12" y="214" width="34" height="38"/><use class="k-ab" href="#k-abeja-paquete" x="150" y="210" width="26" height="30"/></g>
+  <!-- Reintento (ilustración de Sofía): maceta hexagonal, brote caído y la flecha circular con la "i". -->
+  <use th:if="${estado == 'corte'}" href="#k-reintento" x="35" y="132" width="130" height="144"/>
+</svg>

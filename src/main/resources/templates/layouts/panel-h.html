@@ -2,9 +2,10 @@
 <!-- Layout del panel de la variante H: misma estructura que G (riel, barra con buscador, navegación inferior en celular) con la paleta y el grano de H. -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
 <head th:replace="~{fragments/cabeza-h :: cabeza(${titulo}, 'c-panel')}"></head>
-<body class="c h c-app" th:classappend="${abejas} ? 'i'">
+<body class="c h c-app" th:classappend="${plantas} ? 'i j' : (${abejas} ? 'i')">
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
 <svg th:replace="~{${abejas ? 'fragments/ilustraciones-i' : 'fragments/ilustraciones-h'} :: defs}"></svg>
+<th:block th:if="${plantas}"><svg th:replace="~{fragments/ilustraciones-j :: defs}"></svg></th:block>
 
 <div class="pc-app">
   <nav class="pc-riel" aria-label="Secciones">

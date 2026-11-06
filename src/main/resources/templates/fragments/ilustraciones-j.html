@@ -1,0 +1,71 @@
+<!-- Variante H, tema jardín · se suma a ilustraciones-i (que pone la abeja, la flor y la celda): acá van las plantas,
+     protagonistas del tema. Dibujo de afiche como en Raíces: contorno de tinta, rellenos planos y una segunda tinta
+     corrida (el fruto lleva su sombra mandarina oscura desplazada, como una impresión de dos pasadas). -->
+<svg th:fragment="defs" class="h-defs" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Hoja suelta, acostada: la punta a la derecha, 48 × 24 -->
+    <symbol id="j-hoja" viewBox="-2 -2 52 28">
+      <path class="j-hoja" d="M0 12 C12 -2 34 -3 48 12 C34 27 12 26 0 12Z"/>
+      <path class="j-nervio" d="M3 12 H40"/>
+    </symbol>
+
+    <!-- Brote de Raíces: tallo y tres hojas, una con la segunda tinta -->
+    <symbol id="j-brote" viewBox="4 18 52 54">
+      <path class="j-tallo" d="M30 70V28"/>
+      <path class="j-hoja" d="M32 42C22 42 10 35 8 24C20 24 30 31 32 42Z"/>
+      <path class="j-hoja j-hoja--tinta" d="M30 40C20 40 8 33 6 22C18 22 28 29 30 40Z"/>
+      <path class="j-hoja" d="M30 40C40 40 52 33 54 22C42 22 32 29 30 40Z"/>
+    </symbol>
+
+    <!-- Fruto: una entrega confirmada. Disco mandarina, su tinta corrida y una hojita -->
+    <symbol id="j-fruto" viewBox="-15 -23 33 39">
+      <circle class="j-fruto__tinta" cx="3" cy="3" r="12.5"/>
+      <circle class="j-fruto__disco" r="12.5"/>
+      <path class="j-fruto__hoja" d="M1 -12C4 -19 10 -21 15 -20C12 -14 7 -11 1 -12Z"/>
+    </symbol>
+
+    <!-- Semilla -->
+    <symbol id="j-semilla" viewBox="-8 -11 16 22">
+      <path class="j-semilla" d="M0 -10 C7 -6 7 6 0 10 C-7 6 -7 -6 0 -10Z"/>
+      <path class="j-nervio" d="M0 -6 V6"/>
+    </symbol>
+
+    <!-- ===== Impacto e incentivos: lo que crece ===== -->
+    <!-- Rama con frutos (la cifra grande): tres maduros, uno en camino punteado y una abeja que poliniza -->
+    <symbol id="j-rama" viewBox="0 0 220 150">
+      <path class="j-t j-t--rama" d="M218 146 C176 120 150 92 120 70 C96 52 64 40 22 38"/>
+      <path class="j-t j-t--fino" d="M150 94 C150 74 160 58 176 48 M98 56 C92 40 94 24 104 12"/>
+      <use href="#j-hoja" x="130" y="86" width="44" height="24" transform="rotate(28 152 98)"/>
+      <use href="#j-hoja" x="54" y="26" width="40" height="22" transform="rotate(-18 74 37)"/>
+      <use href="#j-hoja" x="160" y="34" width="38" height="20" transform="rotate(-40 179 44)"/>
+      <use href="#j-hoja" x="84" y="2" width="36" height="20" transform="rotate(-70 102 12)"/>
+      <use href="#j-fruto" x="176" y="44" width="30" height="36"/>
+      <use href="#j-fruto" x="88" y="54" width="34" height="40"/>
+      <use href="#j-fruto" x="8" y="34" width="30" height="36"/>
+      <circle class="j-hueco" cx="138" cy="120" r="12"/>
+      <use href="#h-hormiga" class="j-abejita" x="40" y="88" width="44" height="34"/>
+    </symbol>
+    <!-- Maceta con brote -->
+    <symbol id="j-maceta" viewBox="0 0 120 76">
+      <use href="#j-brote" x="36" y="0" width="48" height="50"/>
+      <path class="j-t j-f-maceta" d="M38 48 H82 L77 74 H43Z"/>
+      <rect class="j-t j-f-maceta-borde" x="34" y="42" width="52" height="9" rx="2"/>
+    </symbol>
+    <!-- Regadera que riega un brote -->
+    <symbol id="j-regadera" viewBox="0 0 120 76">
+      <path class="j-t j-t--fino" d="M28 30 C28 10 62 10 62 30"/>
+      <path class="j-t j-f-lata" d="M22 30 H68 L64 72 H26Z"/>
+      <path class="j-t j-f-lata" d="M66 46 L98 22 L104 28 L70 58Z"/>
+      <path class="j-gotas" d="M106 34 v6 M112 30 v6 M110 44 v6"/>
+      <use href="#j-brote" x="92" y="46" width="24" height="28"/>
+    </symbol>
+    <!-- Canasta de frutos cosechados -->
+    <symbol id="j-canasta" viewBox="0 0 120 76">
+      <use href="#j-fruto" x="24" y="10" width="28" height="33"/>
+      <use href="#j-fruto" x="46" y="4" width="28" height="33"/>
+      <use href="#j-fruto" x="68" y="12" width="28" height="33"/>
+      <path class="j-t j-f-canasta" d="M12 38 H108 L98 72 H22Z"/>
+      <path class="j-t j-t--fino" d="M18 50 H102 M22 61 H98 M42 38 L46 72 M60 38 V72 M78 38 L74 72"/>
+    </symbol>
+  </defs>
+</svg>

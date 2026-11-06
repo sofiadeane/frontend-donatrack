@@ -84,7 +84,53 @@ public class PanelDonanteService {
     public int sinEntregar() {
       return enCamino + enProceso;
     }
+
+    /**
+     * Hasta dónde se ramificó lo que donó esta persona: categoría → subcategoría → entidad, con
+     * cuántas donaciones recibió cada entidad y cuántas van en camino (raíces de la variante K).
+     */
+    public ArbolRaices raices() {
+      List<ArbolRaices.Hoja> hojas = new ArrayList<>();
+      for (String estado : List.of("llego", "camino")) {
+        boolean llego = "llego".equals(estado);
+        for (Aporte a : detalle.getOrDefault(estado, List.of())) {
+          if (a.entidad() != null) {
+            hojas.add(
+                new ArbolRaices.Hoja(
+                    a.categoria(), a.subcategoria(), a.entidad(), llego ? 1 : 0, llego ? 0 : 1));
+          }
+        }
+      }
+      return ArbolRaices.de(hojas, 600);
+    }
+
+    /** Cuántas entidades distintas recibieron o están por recibir algo de esta persona. */
+    public long entidadesAlcanzadas() {
+      return detalle.entrySet().stream()
+          .filter(e -> List.of("llego", "camino").contains(e.getKey()))
+          .flatMap(e -> e.getValue().stream())
+          .map(Aporte::entidad)
+          .filter(java.util.Objects::nonNull)
+          .distinct()
+          .count();
+    }
+
+    /**
+     * Todas las donaciones de las celdas en orden: llegaron, en camino, en el depósito, cortadas.
+     */
+    public List<Lamina> laminas() {
+      List<Lamina> todas = new ArrayList<>();
+      for (String estado : List.of("llego", "camino", "proceso", "corte")) {
+        for (Aporte a : detalle.getOrDefault(estado, List.of())) {
+          todas.add(new Lamina(a, estado));
+        }
+      }
+      return todas;
+    }
   }
+
+  /** Una donación en la huerta, con el estado de su celda (llego, camino, proceso o corte). */
+  public record Lamina(Aporte aporte, String estado) {}
 
   /**
    * Una donación dentro de una celda del panal. {@code mensaje} es el aviso que le corresponde a su
@@ -97,7 +143,9 @@ public class PanelDonanteService {
       String detalle,
       String mensaje,
       String entidad,
-      String cuando) {}
+      String cuando,
+      String categoria,
+      String subcategoria) {}
 
   /** Datos de incentivos-service. {@code mision} y {@code proximaCategoria} pueden ser nulos. */
   public record Impacto(
@@ -297,6 +345,24 @@ public class PanelDonanteService {
 
   // ----- Entregas (tile B) -----
 
+  /** Categoría ({@code true}) o subcategoría del primer bien de la donación; nula si no la trae. */
+  private static String primerBien(DonacionIndependienteResponseDTO d, boolean categoria) {
+    if (d.items() == null) {
+      return null;
+    }
+    return d.items().stream()
+        .map(i -> i.bien())
+        .filter(java.util.Objects::nonNull)
+        .map(
+            b ->
+                categoria
+                    ? (b.categoria() == null ? null : b.categoria().nombre())
+                    : (b.subcategoria() == null ? null : b.subcategoria().nombre()))
+        .filter(java.util.Objects::nonNull)
+        .findFirst()
+        .orElse(null);
+  }
+
   private Entregas entregas(List<DonacionIndependienteResponseDTO> lista) {
     Map<String, String> nombres = new HashMap<>();
     Map<UUID, UUID> destino = new HashMap<>();
@@ -327,7 +393,9 @@ public class PanelDonanteService {
                   vista.resumen(d).detalle(),
                   avisoDelEstado(d.estadoActual()),
                   entidad == null ? null : nombres.get(entidad.toString()),
-                  d.fechaRegistro() == null ? "" : fechaCorta(d.fechaRegistro())));
+                  d.fechaRegistro() == null ? "" : fechaCorta(d.fechaRegistro()),
+                  primerBien(d, true),
+                  primerBien(d, false)));
     }
     return new Entregas(
         lista.size(),

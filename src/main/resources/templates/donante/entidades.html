@@ -75,7 +75,7 @@
                     n=${#lists.size(h.datos) > 36 ? 36 : #lists.size(h.datos)},
                     anillo=${n == 0 ? 0 : (n <= 6 ? 1 : (n <= 18 ? 2 : 3))}"
            th:style="|--anillo: ${anillo}|">
-        <svg class="cm__flor cm__flor--1" aria-hidden="true"><use href="#i-flor"/></svg>
+        <svg class="cm__flor cm__flor--1" aria-hidden="true"><use th:href="${plantas} ? '#j-brote' : '#i-flor'" href="#i-flor"/></svg>
         <svg class="cm__abeja" aria-hidden="true"><use href="#h-hormiga-grano"/></svg>
         <ol class="cm__panal">
           <li th:each="c, it : ${h.datos}" th:if="${it.index < 36}" class="cm__celda"
@@ -131,7 +131,7 @@
         <p class="hg__abiertas" th:text="${sel.entidad.necesidadesAbiertas == 1} ? '1 necesidad abierta' : ${sel.entidad.necesidadesAbiertas + ' necesidades abiertas'}">3 necesidades abiertas</p>
       </aside>
       <div class="hg__ficha dh-vacio" th:if="${sel == null and h.vacia()}">
-        <b th:text="${abejas} ? 'Todavía no hay celdas en tu colmena.' : 'Todavía no se cavó ninguna cámara.'">Todavía no se cavó ninguna cámara.</b> <th:block th:text="|Cuando una de tus donaciones se asigne a una entidad, va a aparecer acá su ${voc.lugar}.|">Cuando una de tus donaciones se asigne a una entidad, va a aparecer acá su cámara.</th:block>
+        <b th:text="${plantas} ? 'Todavía no hay canteros en tu huerta.' : (${abejas} ? 'Todavía no hay celdas en tu colmena.' : 'Todavía no se cavó ninguna cámara.')">Todavía no se cavó ninguna cámara.</b> <th:block th:text="|Cuando una de tus donaciones se asigne a una entidad, va a aparecer acá su ${voc.lugar}.|">Cuando una de tus donaciones se asigne a una entidad, va a aparecer acá su cámara.</th:block>
       </div>
     </div>
   </section>

@@ -1,6 +1,8 @@
 package grupo5.clienteliviano.web;
 
+import grupo5.clienteliviano.aplicacion.ArbolRaices;
 import grupo5.clienteliviano.aplicacion.LandingService;
+import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,6 +41,38 @@ public class PublicoController {
     cargarLanding(model);
     return "publico/inicio-h";
   }
+
+  /**
+   * Variante H con el tema jardín: plantas, raíces y frutos (paleta Oliva de Raíces) con las abejas
+   * como polinizadoras de apoyo.
+   */
+  @GetMapping("/j")
+  public String inicioJ(Model model) {
+    cargarLanding(model);
+    return "publico/inicio-h";
+  }
+
+  /**
+   * Landing de la variante K, "Huerta con abejas": láminas botánicas como decoración, raíces para
+   * el alcance del impacto y abejas como la logística.
+   */
+  @GetMapping("/k")
+  public String inicioK(Model model) {
+    cargarLanding(model);
+    model.addAttribute("raicesMuestra", RAICES_MUESTRA);
+    return "publico/inicio-k";
+  }
+
+  /** Ilustración de la landing K: cómo se ramifica una donación (sin cifras, no son datos). */
+  private static final ArbolRaices RAICES_MUESTRA =
+      ArbolRaices.de(
+          List.of(
+              new ArbolRaices.Hoja("Alimentos", "Secos", "Comedores", -1, 0),
+              new ArbolRaices.Hoja("Alimentos", "Secos", "Merenderos", -1, 0),
+              new ArbolRaices.Hoja("Alimentos", "Lácteos", "Hogares", -1, 0),
+              new ArbolRaices.Hoja("Útiles", "Escolares", "Escuelas", -1, 0),
+              new ArbolRaices.Hoja("Ropa", "Abrigo", "Cooperativas", -1, 0)),
+          660);
 
   /** Landing de la variante visual F, "Cristal" (v5). */
   @GetMapping("/f")

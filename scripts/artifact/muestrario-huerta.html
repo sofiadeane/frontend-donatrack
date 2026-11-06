@@ -1,0 +1,487 @@
+<title>Huerta con abejas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<style>
+/* Muestrario como una mesa de semillero: cada token es un sobre de semillas con su nombre y su código;
+   las dos propuestas van lado a lado, y abajo las preguntas de concepto, agrupadas por lo que deciden. */
+:root {
+  --fondo: #f3eedf;
+  --hoja-papel: #fbf8ee;
+  --tinta: #24261d;
+  --tinta-2: #5a5c4c;
+  --linea: rgb(36 38 29 / 0.16);
+  --acento: #2f6b25;
+  --sobre-acento: #fbf8ee;
+  --marca: #f3b81d;
+  --ok: #3f8a3a;
+  --suave: #e6edcf;
+  --titulo: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --texto: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --fondo: #1b1d16; --hoja-papel: #24271e; --tinta: #eeeadb; --tinta-2: #b9b8a5; --linea: rgb(238 234 219 / 0.15);
+  --acento: #a7d36b; --sobre-acento: #1b1d16; --marca: #f3c33f; --ok: #9bd38f; --suave: #2f3826; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --fondo: #1b1d16; --hoja-papel: #24271e; --tinta: #eeeadb; --tinta-2: #b9b8a5; --linea: rgb(238 234 219 / 0.15);
+  --acento: #a7d36b; --sobre-acento: #1b1d16; --marca: #f3c33f; --ok: #9bd38f; --suave: #2f3826; color-scheme: dark; }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--fondo); color: var(--tinta); font: 400 15px/1.55 var(--texto); }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+.envoltorio { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--titulo); font-stretch: 118%; line-height: 1.02; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.2rem, 1.4rem + 3.6vw, 4rem); font-weight: 850; letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em; }
+h3 { font-size: 1.15rem; font-weight: 800; }
+p { margin: 0; max-width: 66ch; }
+.rotulo { font-family: var(--titulo); font-stretch: 112%; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acento); }
+
+/* Cabecera */
+.cabeza { padding-block: 40px 28px; display: grid; gap: 14px; }
+.cabeza .bajada { font-size: 1.08rem; color: var(--tinta-2); }
+.cabeza .pasos { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 12px 0 0; margin: 0; list-style: none; border-top: 2px solid var(--tinta); font-size: 0.9rem; color: var(--tinta-2); }
+.cabeza .pasos b { color: var(--tinta); }
+
+.seccion { padding-block: 28px 20px; display: grid; gap: 22px; }
+.seccion > header { display: grid; gap: 8px; }
+
+/* Las dos propuestas */
+.propuestas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 500px), 1fr)); gap: 22px; }
+.prop { display: grid; gap: 16px; align-content: start; min-width: 0; padding: 18px; border-radius: 16px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.prop__cab { display: flex; align-items: baseline; gap: 12px; }
+.prop__letra { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--tinta); color: var(--hoja-papel); font: 850 1.2rem/1 var(--titulo); }
+.prop__idea { color: var(--tinta-2); font-size: 0.94rem; }
+
+/* Mini maqueta: se pinta con los colores de la propuesta (son contenido, no tema de la página) */
+.maq { border-radius: 14px; overflow: hidden; background: var(--m-papel); color: var(--m-tinta); box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.08); }
+.maq__arriba { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: 10px; padding: 18px 18px 0; align-items: end; }
+.maq__kick { font: 700 0.62rem/1 var(--titulo); letter-spacing: 0.14em; text-transform: uppercase; color: var(--m-accion); }
+.maq__tit { margin-top: 6px; font: 850 clamp(1.2rem, 0.9rem + 1.2vw, 1.6rem)/0.98 var(--titulo); font-stretch: 122%; letter-spacing: -0.03em; color: var(--m-tinta); }
+.maq__tit em { font-style: normal; color: var(--m-accion); text-shadow: 0.04em 0.035em 0 var(--m-hoja); }
+.maq__btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.maq__btn { padding: 7px 12px; border-radius: 8px; font-size: 0.78rem; font-weight: 700; background: var(--m-accion); color: var(--m-claro); box-shadow: 3px 3px 0 var(--m-hoja); }
+.maq__btn--2 { background: var(--m-claro); color: var(--m-accion); box-shadow: inset 0 0 0 2px var(--m-accion), 3px 3px 0 var(--m-hoja); }
+.maq svg { display: block; width: 100%; height: auto; }
+.maq__franja { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 18px 14px; background: var(--m-seccion); }
+.maq__tag { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; background: var(--bg); color: var(--fg); }
+.maq__tag::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.maq__pie { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 18px; background: var(--m-oscuro); color: var(--m-claro); font: 800 0.95rem/1.1 var(--titulo); font-stretch: 118%; }
+.maq__pie em { font-style: normal; color: var(--m-miel); }
+.abeja-cuerpo { fill: var(--m-miel); }
+.abeja-franja { fill: var(--m-tinta); }
+.abeja-ala { fill: rgb(255 255 255 / 0.75); stroke: var(--m-tinta); stroke-width: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .abejita { animation: vuela 3.4s ease-in-out infinite alternate; }
+  .abejita--2 { animation-duration: 4.4s; animation-delay: -1.6s; }
+}
+@keyframes vuela { from { transform: translate(0, 0); } to { transform: translate(6px, -7px); } }
+
+/* Sobres de semillas */
+.sobres { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+.sobre { display: grid; grid-template-rows: auto 1fr auto; min-width: 0; border-radius: 10px; overflow: hidden; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.sobre__color { position: relative; height: 66px; background: var(--c); }
+.sobre__color::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 9px; background: repeating-linear-gradient(90deg, transparent 0 6px, rgb(0 0 0 / 0.12) 6px 7px); }
+.sobre__texto { display: grid; gap: 1px; padding: 8px 10px 4px; }
+.sobre__nombre { font: 800 0.92rem/1.15 var(--titulo); font-stretch: 110%; }
+.sobre__hex { font-size: 0.78rem; font-variant-numeric: tabular-nums; color: var(--tinta-2); font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.sobre__rol { font-size: 0.78rem; color: var(--tinta-2); line-height: 1.3; }
+.sobre__voto { display: flex; gap: 4px; padding: 6px 8px 8px; }
+.sobre__voto label { flex: 1; position: relative; }
+.sobre__voto input { position: absolute; opacity: 0; pointer-events: none; }
+.sobre__voto span { display: block; padding: 4px 0; text-align: center; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; box-shadow: inset 0 0 0 1px var(--linea); }
+.sobre__voto input:checked + span { background: var(--tinta); color: var(--hoja-papel); box-shadow: none; }
+.sobre__voto input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 1px; }
+
+.contraste { display: grid; gap: 4px; padding: 0; margin: 0; list-style: none; font-size: 0.82rem; }
+.contraste li { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.contraste .par { display: grid; place-items: center; height: 22px; border-radius: 5px; font-weight: 800; font-size: 0.72rem; background: var(--bg); color: var(--fg); box-shadow: inset 0 0 0 1px var(--linea); }
+.contraste .nota { font-variant-numeric: tabular-nums; font-weight: 700; }
+.contraste .nota.is-mal { color: #b3361f; }
+:root[data-theme="dark"] .contraste .nota.is-mal { color: #ff8f78; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .contraste .nota.is-mal { color: #ff8f78; } }
+
+/* Preguntas */
+.grupo { display: grid; gap: 18px; padding: 20px; border-radius: 16px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.grupo > h3 { padding-bottom: 8px; border-bottom: 2px solid var(--tinta); }
+.preguntas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 22px 32px; }
+.preg { display: grid; gap: 8px; align-content: start; margin: 0; padding: 0; border: 0; min-width: 0; }
+.preg legend, .preg > label { padding: 0; font-weight: 700; font-size: 1rem; line-height: 1.35; }
+.preg__num { display: inline-block; min-width: 1.9em; color: var(--acento); font: 800 0.9rem/1 var(--titulo); font-variant-numeric: tabular-nums; }
+.preg__ayuda { font-size: 0.85rem; color: var(--tinta-2); margin-top: -2px; }
+.opciones { display: grid; gap: 6px; }
+.opciones label { position: relative; }
+.opciones input { position: absolute; opacity: 0; pointer-events: none; }
+.opciones span { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); cursor: pointer; line-height: 1.35; }
+.opciones span::before { content: ""; flex: none; width: 14px; height: 14px; margin-top: 2px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--tinta-2); }
+.opciones.multi span::before { border-radius: 3px; }
+.opciones input:checked + span { background: var(--suave); box-shadow: inset 0 0 0 2px var(--acento); }
+.opciones input:checked + span::before { box-shadow: inset 0 0 0 4px var(--acento); }
+.opciones input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.escala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.escala label { position: relative; }
+.escala input { position: absolute; opacity: 0; pointer-events: none; }
+.escala span { display: grid; place-items: center; height: 40px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); font-weight: 800; font-variant-numeric: tabular-nums; cursor: pointer; }
+.escala input:checked + span { background: var(--acento); color: var(--sobre-acento); box-shadow: none; }
+.escala input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.escala__fin { display: flex; justify-content: space-between; gap: 12px; font-size: 0.78rem; color: var(--tinta-2); }
+textarea { width: 100%; min-height: 76px; padding: 10px 12px; border: 0; border-radius: 10px; background: var(--fondo); box-shadow: inset 0 0 0 1px var(--linea); resize: vertical; }
+
+/* Envío */
+.envio { position: sticky; bottom: 0; z-index: 2; margin-top: 18px; background: var(--fondo); box-shadow: 0 -1px 0 var(--linea); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.envio .envoltorio { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; padding-block: 12px; }
+.envio__progreso { display: grid; gap: 4px; min-width: 200px; flex: 1; }
+.envio__progreso p { font-size: 0.85rem; color: var(--tinta-2); }
+.barra { height: 6px; border-radius: 3px; background: var(--linea); overflow: hidden; max-width: 360px; }
+.barra i { display: block; height: 100%; width: var(--p, 0%); background: var(--marca); transition: width 240ms; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { min-height: 42px; padding: 0 18px; border: 0; border-radius: 10px; font-weight: 700; cursor: pointer; background: var(--hoja-papel); box-shadow: inset 0 0 0 1.5px var(--tinta); }
+.btn--fuerte { background: var(--acento); color: var(--sobre-acento); box-shadow: none; }
+.btn[disabled] { opacity: 0.45; cursor: default; }
+.estado { font-size: 0.85rem; color: var(--tinta-2); }
+.estado.is-ok { color: var(--ok); font-weight: 700; }
+.copia { display: grid; gap: 8px; padding-block: 0 18px; }
+.copia textarea { min-height: 140px; font-size: 0.8rem; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+.pie { padding-block: 24px 40px; font-size: 0.85rem; color: var(--tinta-2); }
+
+@media (max-width: 560px) {
+  .maq__arriba { grid-template-columns: minmax(0, 1fr); }
+  .escala span { height: 36px; }
+}
+</style>
+
+<header class="envoltorio cabeza">
+  <span class="rotulo">DonaTrack · tema huerta con abejas · ronda 1</span>
+  <h1>Huerta con abejas</h1>
+  <p class="bajada">Dos paletas que mezclan las abejas con la huerta, cuatro preguntas para elegir entre ellas y dieciséis de concepto para definir qué tiene que comunicar el tema antes de dibujarlo. Con tus respuestas arranco a diseñar.</p>
+  <ul class="pasos">
+    <li><b>1.</b> Mirá las dos paletas y marcá cada color</li>
+    <li><b>2.</b> Elegí A, B o una mezcla</li>
+    <li><b>3.</b> Respondé las preguntas de concepto</li>
+    <li><b>4.</b> Guardá: las respuestas me llegan directo</li>
+  </ul>
+</header>
+
+<main id="formulario">
+  <section class="envoltorio seccion" aria-labelledby="t-paletas">
+    <header>
+      <span class="rotulo">Parte 1 · prueba A/B</span>
+      <h2 id="t-paletas">Las dos paletas</h2>
+      <p>A parte de la paleta de las abejas y le suma verdes. B parte de la paleta Oliva de la huerta, más saturada y con más variedad de cultivos. En las dos, la abeja es chica y amarilla. Cada sobre tiene «Va» o «No va» para que marques color por color.</p>
+    </header>
+    <div class="propuestas" id="propuestas"></div>
+  </section>
+
+  <section class="envoltorio seccion" aria-labelledby="t-ab">
+    <div class="grupo">
+      <h3 id="t-ab">Qué paleta va</h3>
+      <div class="preguntas" id="preguntas-ab"></div>
+    </div>
+  </section>
+
+  <section class="envoltorio seccion" aria-labelledby="t-concepto">
+    <header>
+      <span class="rotulo">Parte 2 · concepto</span>
+      <h2 id="t-concepto">Qué tiene que comunicar</h2>
+      <p>No hay respuestas correctas. Si ninguna opción encaja, dejala sin marcar y escribí en el campo de la pregunta o en el final.</p>
+    </header>
+    <div id="grupos-concepto" style="display:grid;gap:22px"></div>
+  </section>
+</main>
+
+<section class="envio" aria-label="Guardar respuestas">
+  <div class="envoltorio">
+    <div class="envio__progreso">
+      <p id="progreso" aria-live="polite">0 de 0 respondidas</p>
+      <div class="barra"><i id="barra"></i></div>
+    </div>
+    <div class="acciones">
+      <span class="estado" id="estado" role="status"></span>
+      <button type="button" class="btn" id="ver-copia">Copiar como texto</button>
+      <button type="button" class="btn btn--fuerte" id="guardar">Guardar respuestas</button>
+    </div>
+  </div>
+  <div class="envoltorio copia" id="copia" hidden>
+    <label for="texto-copia" class="estado">Si no podés guardar desde acá, copiá esto y pegámelo en el chat.</label>
+    <textarea id="texto-copia" readonly></textarea>
+  </div>
+</section>
+
+<footer class="envoltorio pie">
+  DonaTrack, UTN-FRBA, Diseño de Sistemas 2026. Las paletas salen del tema abejas (variante I) y del tema jardín (variante J, paleta Oliva de Raíces).
+</footer>
+
+<script>
+const PALETAS = {
+  A: {
+    nombre: "Colmena entre verdes",
+    idea: "La base amarilla de las abejas, con la miel intacta, y tres verdes nuevos que reemplazan al celadón y al pizarra: albahaca para actuar, brote para lo vivo, eucalipto para lo oscuro.",
+    m: { papel: "#fbf2d3", claro: "#fffaea", tinta: "#2a2a22", accion: "#2f7d3b", hoja: "#8fcb4a", seccion: "#d4edbd", miel: "#f6a609", fruto: "#e2552e", oscuro: "#2b5d55", suelo: "#5b8a3c" },
+    estados: { deposito: ["#f3e2a9", "#5a4300"], camino: ["#fde3a6", "#7a4a00"], entregada: ["#d4edbd", "#1f5a2a"], problema: ["#f6d0c4", "#962f16"] },
+    tokens: [
+      ["papel", "Papel de cera", "#fbf2d3", "Fondo de la página"],
+      ["claro", "Panal claro", "#fffaea", "Tarjetas"],
+      ["miel", "Miel", "#f6a609", "Abejas y destacados"],
+      ["miel-tostada", "Miel tostada", "#b86b00", "Bordes y énfasis cálido"],
+      ["albahaca", "Albahaca", "#2f7d3b", "Botones y énfasis de títulos"],
+      ["brote", "Brote", "#8fcb4a", "Hojas, sombra de botones"],
+      ["menta", "Menta", "#d4edbd", "Fondos de sección"],
+      ["eucalipto", "Eucalipto", "#2b5d55", "Panel oscuro y pie"],
+      ["tinta", "Tinta", "#2a2a22", "Texto"],
+      ["tomate", "Tomate", "#e2552e", "Frutos: entregas confirmadas"]
+    ]
+  },
+  B: {
+    nombre: "Huerta viva",
+    idea: "La paleta Oliva subida de saturación y con más cultivos: hojas más vivas, paja dorada para las abejas y las raíces, zanahoria para los frutos y remolacha para dar contraste.",
+    m: { papel: "#f5edd3", claro: "#fcf7e6", tinta: "#1e2417", accion: "#2d6a1e", hoja: "#86b832", seccion: "#d3e98a", miel: "#f4c844", fruto: "#ef7a16", oscuro: "#2b3612", suelo: "#4c5a1f" },
+    estados: { deposito: ["#ebe3c4", "#4b4a32"], camino: ["#f8e3a0", "#6a4f05"], entregada: ["#d3e98a", "#24521a"], problema: ["#f1cfdc", "#86244c"] },
+    tokens: [
+      ["papel", "Papel de semillero", "#f5edd3", "Fondo de la página"],
+      ["claro", "Papel claro", "#fcf7e6", "Tarjetas"],
+      ["hoja-honda", "Hoja honda", "#2d6a1e", "Botones y énfasis de títulos"],
+      ["hoja", "Hoja", "#86b832", "Ilustración, sombra de botones"],
+      ["lechuga", "Lechuga", "#d3e98a", "Fondos de sección"],
+      ["tierra", "Tierra", "#4c5a1f", "Bandas de suelo"],
+      ["tierra-honda", "Tierra honda", "#2b3612", "Pie y panel oscuro"],
+      ["paja", "Paja", "#f4c844", "Abejas y raíces"],
+      ["zanahoria", "Zanahoria", "#ef7a16", "Frutos: entregas confirmadas"],
+      ["remolacha", "Remolacha", "#a3305f", "Contraste y alertas"],
+      ["tinta", "Tinta", "#1e2417", "Texto"]
+    ]
+  }
+};
+
+/* Preguntas: [id, texto, tipo, opciones | extremos, ayuda] */
+const AB = [
+  ["ab_eleccion", "¿Cuál paleta se acerca más a lo que querés?", "uno", ["A · Colmena entre verdes", "B · Huerta viva", "Una mezcla: base de una con colores de la otra", "Ninguna todavía"]],
+  ["ab_mezcla", "Si mezclarías, ¿qué tomarías de cada una?", "texto", null, "Por ejemplo: el papel y la miel de A con las hojas y la zanahoria de B."],
+  ["ab_verde", "¿Cuánto verde querés en la pantalla, frente al amarillo?", "escala", ["Casi todo amarillo", "Casi todo verde"]],
+  ["ab_saturacion", "¿Qué tan saturados querés los colores?", "escala", ["Apagados, de papel", "Vivos, de cartel"]]
+];
+
+const GRUPOS = [
+  ["Lo que tiene que sentir quien llega", [
+    ["c_sentir", "En los primeros cinco segundos, ¿qué tiene que sentir alguien que entra por primera vez?", "uno", ["Confianza: acá se ve a dónde va lo que doné", "Calidez: es algo de mi barrio, de mi comunidad", "Ganas de sumarme: es lindo y fácil participar", "Seriedad: es un sistema prolijo, institucional"]],
+    ["c_publico", "¿Quién tiene que verse reflejado primero?", "multi", ["Una persona que dona", "Una empresa que dona", "Una entidad que recibe (comedor, escuela, hogar)", "La administración del depósito", "El jurado o la cátedra que evalúa el TP"]],
+    ["c_nunca", "¿Qué no tiene que transmitir nunca?", "multi", ["Caridad lastimosa", "Juego infantil", "Marketing verde o «ecológico» que no somos", "Burocracia fría", "Promesas que el sistema no cumple"]]
+  ]],
+  ["La metáfora", [
+    ["c_huerta", "¿Qué es la huerta en esta historia?", "uno", ["La comunidad entera: todas las entidades y donantes", "DonaTrack: el lugar donde se cuida que todo crezca", "Cada entidad es un cantero que se va llenando", "Cada donante tiene su propia huerta personal"]],
+    ["c_abejas", "¿Qué hacen las abejas?", "uno", ["Son las donaciones viajando de un lado al otro", "Son la logística: depósito, camiones y gente que lleva", "Son los donantes, que polinizan sin ver todo el recorrido", "Solo dan vida a la escena, sin significado propio"]],
+    ["c_cuantas", "¿Cómo aparecen las abejas chicas?", "uno", ["Una sola, recurrente, casi una mascota", "Un enjambre chiquito, disperso por la página", "Solo cuando pasa algo (una entrega, un cambio de estado)"]],
+    ["c_entregada", "¿Cómo se ve una donación que llegó?", "uno", ["Un fruto maduro en la planta", "Una flor que se abre", "Una canasta de cosecha que se llena", "Una planta que creció un poco más"]],
+    ["c_problema", "¿Cómo se ve algo que salió mal (vencida, entrega fallida)?", "uno", ["Sin metáfora: un aviso claro y nada más", "Una hoja seca o una planta marchita", "Una abeja que espera o vuelve", "Tierra seca, un cantero vacío"]],
+    ["c_palabras", "Las palabras de la metáfora (semilla, cantero, fruto), ¿dónde van?", "uno", ["En toda la interfaz, también en botones y estados", "En títulos y mensajes; los datos con nombres claros", "Solo en lo visual: el texto dice «donación», «entrega»"]]
+  ]],
+  ["Cómo se ve y cómo se mueve", [
+    ["c_ilustracion", "¿Cuánta ilustración querés?", "escala", ["Íconos sobrios", "La ilustración es protagonista"]],
+    ["c_edad", "¿Hacia qué edad apunta el tono visual?", "escala", ["Infantil, de cuento", "Adulto, de afiche"]],
+    ["c_movimiento", "¿Cuánto se mueve la página?", "escala", ["Quieta", "Muy animada"]],
+    ["c_letra", "¿Qué letra te imaginás para los títulos?", "uno", ["La de ahora: Archivo ancha y pesada, de afiche", "Algo más orgánico, como rotulado a mano", "Una serif cálida, de libro de jardinería"]],
+    ["c_tiempo", "¿La huerta cambia con el tiempo para mostrar progreso?", "uno", ["Sí, con estaciones o meses en toda la página", "Solo en el panel de cada donante", "No, siempre igual"]]
+  ]],
+  ["Para terminar", [
+    ["c_referencias", "¿Qué referencias te inspiran? Sitios, marcas, libros, objetos.", "texto", null, "Por ejemplo: sobres de semillas, láminas de botánica, un mercado de barrio."],
+    ["c_libre", "¿Algo más que tenga que saber antes de diseñar?", "texto"]
+  ]]
+];
+
+const $ = (s, el = document) => el.querySelector(s);
+const el = (tag, attrs = {}, ...hijos) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k === "style") n.style.cssText = v; else n.setAttribute(k, v);
+  }
+  for (const h of hijos) if (h != null) n.append(h);
+  return n;
+};
+
+/* Contraste WCAG */
+const lum = hex => { const c = hex.match(/\w\w/g).map(x => parseInt(x, 16) / 255).map(v => v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; };
+const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+
+function maqueta(k, p) {
+  const m = p.m;
+  const caja = el("div", { class: "maq", style: Object.entries(m).map(([n, v]) => `--m-${n}:${v}`).join(";") });
+  const texto = el("div", {},
+    el("div", { class: "maq__kick", text: "Trazabilidad de donaciones" }),
+    el("div", { class: "maq__tit" }, "Lo que donás echa raíces ", el("em", { text: "en tu comunidad." })),
+    el("div", { class: "maq__btns" }, el("span", { class: "maq__btn", text: "Quiero donar" }), el("span", { class: "maq__btn maq__btn--2", text: "Soy una entidad" }))
+  );
+  const svg = `<svg viewBox="0 0 220 150" aria-hidden="true">
+    <path d="M40 104 A62 62 0 0 1 164 104Z" fill="${m.miel}" opacity=".35"/>
+    <rect x="0" y="104" width="220" height="46" fill="${m.suelo}"/>
+    <path d="M102 106 C102 120 98 132 102 150 M102 118 C90 124 82 128 76 140 M102 118 C114 124 124 130 128 142" fill="none" stroke="${m.miel}" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M102 106 C100 84 104 62 102 34" fill="none" stroke="${m.accion}" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M102 84 C88 84 76 76 72 64 C86 64 98 72 102 84Z" fill="${m.hoja}" stroke="${m.tinta}" stroke-width="1"/>
+    <path d="M102 70 C116 70 128 62 132 50 C118 50 106 58 102 70Z" fill="${m.accion}" stroke="${m.tinta}" stroke-width="1"/>
+    <path d="M102 50 C92 48 84 40 82 30 C92 32 100 40 102 50Z" fill="${m.hoja}" stroke="${m.tinta}" stroke-width="1"/>
+    <circle cx="74" cy="62" r="8" fill="${m.tinta}" opacity=".35"/><circle cx="72" cy="60" r="8" fill="${m.fruto}" stroke="${m.tinta}" stroke-width="1"/>
+    <circle cx="134" cy="48" r="8" fill="${m.tinta}" opacity=".35"/><circle cx="132" cy="46" r="8" fill="${m.fruto}" stroke="${m.tinta}" stroke-width="1"/>
+    <circle cx="104" cy="26" r="7" fill="${m.claro}" stroke="${m.fruto}" stroke-width="1.5" stroke-dasharray="2 3"/>
+    <g class="abejita"><g transform="translate(150 22)"><ellipse class="abeja-ala" cx="7" cy="-1" rx="3.4" ry="5" transform="rotate(-20 7 -1)"/><ellipse class="abeja-cuerpo" cx="8" cy="6" rx="7" ry="5.2"/><path class="abeja-franja" d="M5 1.4 C3.6 4 3.6 8 5 10.6 L7 11 C5.6 8 5.6 4 7 1Z M10 1 C8.6 4 8.6 8 10 11 L12 10.4 C10.8 8 10.8 4 12 1.6Z"/><circle class="abeja-franja" cx="16" cy="5.4" r="3.2"/></g></g>
+    <g class="abejita abejita--2"><g transform="translate(40 52) scale(.8)"><ellipse class="abeja-ala" cx="7" cy="-1" rx="3.4" ry="5" transform="rotate(-20 7 -1)"/><ellipse class="abeja-cuerpo" cx="8" cy="6" rx="7" ry="5.2"/><path class="abeja-franja" d="M5 1.4 C3.6 4 3.6 8 5 10.6 L7 11 C5.6 8 5.6 4 7 1Z M10 1 C8.6 4 8.6 8 10 11 L12 10.4 C10.8 8 10.8 4 12 1.6Z"/><circle class="abeja-franja" cx="16" cy="5.4" r="3.2"/></g></g>
+    <path d="M0 104 H220" stroke="${m.tinta}" stroke-width="1.5"/>
+  </svg>`;
+  const dibujo = el("div"); dibujo.innerHTML = svg;
+  caja.append(el("div", { class: "maq__arriba" }, texto, dibujo));
+  const e = p.estados;
+  caja.append(el("div", { class: "maq__franja" },
+    ...[["En depósito", e.deposito], ["En camino", e.camino], ["Entregada", e.entregada], ["Entrega fallida", e.problema]]
+      .map(([t, [bg, fg]]) => el("span", { class: "maq__tag", style: `--bg:${bg};--fg:${fg}`, text: t }))));
+  caja.append(el("div", { class: "maq__pie" }, el("span", {}, "Semilla a semilla, ", el("em", { text: "llega a destino." }))));
+  return caja;
+}
+
+function tarjeta(k) {
+  const p = PALETAS[k], m = p.m;
+  const sobres = el("ul", { class: "sobres", "aria-label": `Colores de la propuesta ${k}` });
+  for (const [id, nombre, hex, rol] of p.tokens) {
+    const nombreInput = `t_${k}_${id}`;
+    const voto = el("div", { class: "sobre__voto", role: "radiogroup", "aria-label": `${nombre}: ¿va?` });
+    for (const [v, t] of [["si", "Va"], ["no", "No va"]]) {
+      voto.append(el("label", {}, el("input", { type: "radio", name: nombreInput, id: `${nombreInput}_${v}`, value: v }), el("span", { text: t })));
+    }
+    sobres.append(el("li", { class: "sobre" },
+      el("div", { class: "sobre__color", style: `--c:${hex}` }),
+      el("div", { class: "sobre__texto" }, el("span", { class: "sobre__nombre", text: nombre }), el("span", { class: "sobre__hex", text: hex }), el("span", { class: "sobre__rol", text: rol })),
+      voto));
+  }
+  const pares = [["Texto sobre fondo", m.tinta, m.papel], ["Botón", m.claro, m.accion], ["Texto sobre sección", m.tinta, m.seccion], ["Pie oscuro", m.claro, m.oscuro], ["Texto sobre miel", m.tinta, m.miel]];
+  const contraste = el("ul", { class: "contraste", "aria-label": "Contraste de los pares principales" },
+    ...pares.map(([t, fg, bg]) => { const r = ratio(fg, bg); return el("li", {}, el("span", { class: "par", style: `--fg:${fg};--bg:${bg}`, text: "Aa" }), el("span", { text: t }), el("span", { class: "nota" + (r < 4.5 ? " is-mal" : ""), text: `${r.toFixed(1)} : 1 ${r >= 7 ? "AAA" : r >= 4.5 ? "AA" : "bajo"}` })); }));
+  return el("article", { class: "prop", "aria-labelledby": `t-prop-${k}` },
+    el("div", { class: "prop__cab" }, el("span", { class: "prop__letra", text: k }), el("div", {}, el("h3", { id: `t-prop-${k}`, text: p.nombre }), el("p", { class: "prop__idea", text: p.idea }))),
+    maqueta(k, p), sobres, el("div", {}, el("p", { class: "rotulo", text: "Contraste" }), contraste));
+}
+
+let numero = 0;
+function pregunta([id, texto, tipo, opc, ayuda]) {
+  numero++;
+  const cab = [el("span", { class: "preg__num", text: String(numero).padStart(2, "0") }), texto];
+  if (tipo === "texto") {
+    const f = el("div", { class: "preg" }, el("label", { for: id }, ...cab));
+    if (ayuda) f.append(el("p", { class: "preg__ayuda", text: ayuda }));
+    f.append(el("textarea", { id, name: id }));
+    return f;
+  }
+  const f = el("fieldset", { class: "preg" }, el("legend", {}, ...cab));
+  if (ayuda) f.append(el("p", { class: "preg__ayuda", text: ayuda }));
+  if (tipo === "escala") {
+    const e = el("div", { class: "escala" });
+    for (let i = 1; i <= 5; i++) e.append(el("label", {}, el("input", { type: "radio", name: id, id: `${id}_${i}`, value: String(i), "aria-label": `${i} de 5` }), el("span", { text: String(i) })));
+    f.append(e, el("div", { class: "escala__fin" }, el("span", { text: opc[0] }), el("span", { text: opc[1] })));
+  } else {
+    const o = el("div", { class: "opciones" + (tipo === "multi" ? " multi" : "") });
+    opc.forEach((t, i) => o.append(el("label", {}, el("input", { type: tipo === "multi" ? "checkbox" : "radio", name: id, id: `${id}_${i}`, value: t }), el("span", { text: t }))));
+    f.append(o);
+    f.append(el("textarea", { id: `${id}_nota`, name: `${id}_nota`, placeholder: "Comentario (opcional)", style: "min-height:44px" }));
+  }
+  return f;
+}
+
+/* Render */
+$("#propuestas").append(tarjeta("A"), tarjeta("B"));
+AB.forEach(q => $("#preguntas-ab").append(pregunta(q)));
+for (const [titulo, qs] of GRUPOS) {
+  const g = el("div", { class: "grupo" }, el("h3", { text: titulo }));
+  const lista = el("div", { class: "preguntas" });
+  qs.forEach(q => lista.append(pregunta(q)));
+  g.append(lista);
+  $("#grupos-concepto").append(g);
+}
+const TODAS = [...AB, ...GRUPOS.flatMap(g => g[1])];
+
+/* Estado */
+function leer() {
+  const r = { tokens: {}, respuestas: {} };
+  for (const k of Object.keys(PALETAS)) for (const [id] of PALETAS[k].tokens) {
+    const v = document.querySelector(`input[name="t_${k}_${id}"]:checked`); if (v) r.tokens[`${k}.${id}`] = v.value;
+  }
+  for (const [id, , tipo] of TODAS) {
+    if (tipo === "texto") { const t = $("#" + id).value.trim(); if (t) r.respuestas[id] = t; continue; }
+    const marcadas = [...document.querySelectorAll(`input[name="${id}"]:checked`)].map(i => tipo === "escala" ? Number(i.value) : i.value);
+    if (marcadas.length) r.respuestas[id] = tipo === "multi" ? marcadas : marcadas[0];
+    const nota = $(`#${id}_nota`)?.value.trim(); if (nota) r.respuestas[id + "_nota"] = nota;
+  }
+  return r;
+}
+function aplicar(r) {
+  if (!r) return;
+  for (const [clave, v] of Object.entries(r.tokens || {})) { const [k, id] = clave.split("."); const i = document.getElementById(`t_${k}_${id}_${v}`); if (i) i.checked = true; }
+  for (const [id, v] of Object.entries(r.respuestas || {})) {
+    if (id.endsWith("_nota")) { const t = document.getElementById(id); if (t) t.value = v; continue; }
+    const t = document.getElementById(id); if (t && t.tagName === "TEXTAREA") { t.value = v; continue; }
+    for (const val of [].concat(v)) { const i = [...document.querySelectorAll(`input[name="${id}"]`)].find(x => x.value === String(val)); if (i) i.checked = true; }
+  }
+}
+function contar() {
+  const r = leer();
+  const hechas = TODAS.filter(([id]) => r.respuestas[id] != null).length;
+  $("#progreso").textContent = `${hechas} de ${TODAS.length} preguntas · ${Object.keys(r.tokens).length} colores marcados`;
+  $("#barra").style.setProperty("--p", (hechas / TODAS.length * 100) + "%");
+  return r;
+}
+function comoTexto(r) {
+  const lineas = ["Huerta con abejas · respuestas", ""];
+  const tk = Object.entries(r.tokens);
+  if (tk.length) { lineas.push("Colores:"); for (const [k, v] of tk) lineas.push(`  ${k}: ${v === "si" ? "va" : "no va"}`); lineas.push(""); }
+  let n = 0;
+  for (const [id, texto] of TODAS) { n++; const v = r.respuestas[id]; const nota = r.respuestas[id + "_nota"]; if (v == null && !nota) continue; lineas.push(`${n}. ${texto}`); if (v != null) lineas.push(`   ${[].concat(v).join(" / ")}`); if (nota) lineas.push(`   Nota: ${nota}`); }
+  return lineas.join("\n");
+}
+
+const BORRADOR = "huerta-abejas-borrador";
+try { aplicar(JSON.parse(localStorage.getItem(BORRADOR) || "null")); } catch (e) {}
+contar();
+let pendiente = false;
+$("#formulario").addEventListener("input", () => {
+  const r = contar(); pendiente = true;
+  $("#estado").textContent = "Cambios sin guardar"; $("#estado").classList.remove("is-ok");
+  try { localStorage.setItem(BORRADOR, JSON.stringify(r)); } catch (e) {}
+  if (!$("#copia").hidden) $("#texto-copia").value = comoTexto(r);
+});
+
+$("#ver-copia").addEventListener("click", async () => {
+  const t = comoTexto(contar());
+  $("#copia").hidden = false; $("#texto-copia").value = t;
+  try { await navigator.clipboard.writeText(t); $("#estado").textContent = "Texto copiado"; }
+  catch (e) { $("#texto-copia").select(); $("#estado").textContent = "Seleccioná el texto y copialo"; }
+});
+
+/* Guardar en la base del artifact: un documento por persona, que yo leo para arrancar a diseñar */
+let db = null, uid = null;
+const guardar = $("#guardar");
+guardar.disabled = true;
+(async () => {
+  try {
+    const [d, u] = await Promise.all([window.claude?.use?.("db"), window.claude?.use?.("user")]);
+    if (!d || !u) throw new Error("sin base");
+    uid = await u.id();
+    if (!uid) throw new Error("sin id");
+    db = d;
+    const snap = await db.doc("respuestas/" + uid).get();
+    if (snap.exists && !localStorage.getItem(BORRADOR)) { aplicar(snap.data()); contar(); }
+    guardar.disabled = false;
+    if (snap.exists) { $("#estado").textContent = "Ya guardaste respuestas; podés cambiarlas"; }
+  } catch (e) {
+    $("#estado").textContent = "No se puede guardar desde esta vista: usá «Copiar como texto»";
+  }
+})();
+guardar.addEventListener("click", async () => {
+  if (!db) return;
+  guardar.disabled = true; $("#estado").textContent = "Guardando…";
+  try {
+    const r = contar();
+    await db.doc("respuestas/" + uid).set({ ...r, guardado: new Date().toISOString() });
+    pendiente = false;
+    $("#estado").textContent = "Guardado. Avisame en el chat y arranco."; $("#estado").classList.add("is-ok");
+  } catch (e) {
+    $("#estado").textContent = "No se guardó (" + (e?.code || "error") + "). Probá de nuevo o usá «Copiar como texto».";
+  } finally { guardar.disabled = false; }
+});
+</script>

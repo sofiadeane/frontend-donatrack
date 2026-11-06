@@ -39,9 +39,10 @@ public class ModeloComunAdvice {
   }
 
   /**
-   * Palabras que cambian entre los temas de la variante H: hormigas y arena, o abejas y polen. El
-   * resto del texto es el mismo; la diferencia visual la ponen {@code ilustraciones-i} e {@code
-   * i-theme.css}.
+   * Palabras que cambian entre los temas de la variante H: hormigas y arena, abejas y miel, o
+   * plantas y semillas (el jardín, con las abejas de apoyo). El resto del texto es el mismo; la
+   * diferencia visual la ponen {@code ilustraciones-i}/{@code -j} e {@code i-theme.css}/{@code
+   * j-theme.css}.
    */
   static final Map<String, Map<String, String>> VOCABULARIO =
       Map.of(
@@ -56,6 +57,7 @@ public class ModeloComunAdvice {
               Map.entry("unidad", "granito"),
               Map.entry("unidades", "granitos"),
               Map.entry("aportados", "aportados"),
+              Map.entry("aportada", "aportado"),
               Map.entry("tuAporte", "Tu granito de arena"),
               Map.entry("suma", "Sumá tu"),
               Map.entry("aPoco", "Grano a grano"),
@@ -72,19 +74,40 @@ public class ModeloComunAdvice {
               Map.entry("unidad", "gota"),
               Map.entry("unidades", "gotas"),
               Map.entry("aportados", "aportadas"),
+              Map.entry("aportada", "aportada"),
               Map.entry("tuAporte", "Tu gota de miel"),
               Map.entry("suma", "Sumá tu"),
               Map.entry("aPoco", "Gota a gota"),
               Map.entry("tuProximo", "tu próxima gota"),
-              Map.entry("cadaUna", "cada celda que se llena es una donación entregada")));
+              Map.entry("cadaUna", "cada celda que se llena es una donación entregada")),
+          "plantas",
+          Map.ofEntries(
+              Map.entry("casa", "huerta"),
+              Map.entry("tuCasa", "Tu huerta"),
+              Map.entry("unaMismaCasa", "una misma huerta"),
+              Map.entry("bicho", "abeja"),
+              Map.entry("lugar", "cantero"),
+              Map.entry("lugares", "canteros"),
+              Map.entry("unidad", "semilla"),
+              Map.entry("unidades", "semillas"),
+              Map.entry("aportados", "sembradas"),
+              Map.entry("aportada", "sembrada"),
+              Map.entry("tuAporte", "Tu semilla"),
+              Map.entry("suma", "Sembrá tu"),
+              Map.entry("aPoco", "Semilla a semilla"),
+              Map.entry("tuProximo", "tu próxima semilla"),
+              Map.entry("cadaUna", "cada fruto es una donación entregada")));
 
   /**
-   * Tema elegido: {@code ?tema=abejas} o {@code ?tema=hormigas} lo guarda en la sesión; por
-   * defecto, hormigas.
+   * Tema elegido: {@code ?tema=abejas}, {@code ?tema=plantas} o {@code ?tema=hormigas} lo guarda en
+   * la sesión; las rutas {@code /h}, {@code /i} y {@code /j} lo eligen solas. Por defecto,
+   * hormigas.
    */
   static String tema(HttpServletRequest request) {
     String pedido = request.getParameter("tema");
-    if (pedido == null && request.getRequestURI().endsWith("/i")) {
+    if (pedido == null && request.getRequestURI().endsWith("/j")) {
+      pedido = "plantas";
+    } else if (pedido == null && request.getRequestURI().endsWith("/i")) {
       pedido = "abejas";
     } else if (pedido == null && request.getRequestURI().endsWith("/h")) {
       pedido = "hormigas";
@@ -103,7 +126,11 @@ public class ModeloComunAdvice {
     String ruta = request.getRequestURI().substring(request.getContextPath().length());
     String tema = tema(request);
     model.addAttribute("tema", tema);
-    model.addAttribute("abejas", "abejas".equals(tema));
+    // El jardín usa las piezas de las abejas como apoyo: "abejas" queda activo y "plantas" cambia
+    // lo protagónico (paleta, hero, recorrido, impacto y cierre).
+    boolean plantas = "plantas".equals(tema);
+    model.addAttribute("abejas", plantas || "abejas".equals(tema));
+    model.addAttribute("plantas", plantas);
     model.addAttribute("voc", VOCABULARIO.get(tema));
     model.addAttribute("rutaActual", ruta);
     // En el export para GitHub Pages no hay servidor: las acciones POST se reemplazan por enlaces.

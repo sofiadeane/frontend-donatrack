@@ -1,0 +1,484 @@
+<title>Huerta con abejas · propuesta 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Source+Serif+4:opsz,wght@8..60,500..800&family=DM+Sans:opsz,wght@9..40,400..700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Propuesta 2: un plano técnico de huerta. Grilla de 12 columnas con filetes finos, regla en el borde, rótulos en
+   mono y ejemplares dibujados en alzado sobre una línea de tierra. Rígido y serio, con la ilustración ordenada en
+   la grilla en vez de suelta. */
+:root {
+  --fondo: #fbf2d3;
+  --hoja-papel: #fffaea;
+  --tinta: #1e2417;
+  --tinta-2: #4f5444;
+  --filete: rgb(30 36 23 / 0.2);
+  --filete-suave: rgb(30 36 23 / 0.09);
+  --acento: #2d6a1e;
+  --sobre-acento: #fffaea;
+  --paja: #f4c844;
+  --suave: #e3eec2;
+  --titulo: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --texto: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --fondo: #171b12; --hoja-papel: #1f2419; --tinta: #eee8cf; --tinta-2: #b8b9a0; --filete: rgb(238 232 207 / 0.22); --filete-suave: rgb(238 232 207 / 0.08);
+  --acento: #9ccd5c; --sobre-acento: #171b12; --paja: #f4c844; --suave: #2a3520; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --fondo: #171b12; --hoja-papel: #1f2419; --tinta: #eee8cf; --tinta-2: #b8b9a0; --filete: rgb(238 232 207 / 0.22); --filete-suave: rgb(238 232 207 / 0.08);
+  --acento: #9ccd5c; --sobre-acento: #171b12; --paja: #f4c844; --suave: #2a3520; color-scheme: dark; }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--fondo); color: var(--tinta); font: 400 15px/1.55 var(--texto); }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+.envoltorio { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--titulo); font-stretch: 118%; line-height: 1.02; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.1rem, 1.3rem + 3.4vw, 3.8rem); font-weight: 850; letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.4rem, 1.15rem + 1.2vw, 2rem); font-weight: 800; letter-spacing: -0.02em; }
+h3 { font-size: 1.05rem; font-weight: 800; }
+p { margin: 0; max-width: 66ch; }
+.mono { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--tinta-2); }
+
+/* Secciones como filas de un plano: número de plano a la izquierda, contenido a la derecha */
+.fila { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 0 28px; padding-block: 30px; border-top: 1.5px solid var(--tinta); }
+.fila__num { display: grid; align-content: start; gap: 4px; }
+.fila__num b { font: 800 2.4rem/1 var(--titulo); font-stretch: 125%; font-variant-numeric: tabular-nums; }
+.fila__cuerpo { display: grid; gap: 18px; min-width: 0; }
+.fila__cuerpo > header { display: grid; gap: 6px; }
+@media (max-width: 760px) { .fila { grid-template-columns: minmax(0, 1fr); gap: 10px; } .fila__num { grid-auto-flow: column; justify-content: start; align-items: baseline; gap: 12px; } }
+
+.cabeza { padding-block: 40px 26px; display: grid; gap: 14px; }
+.cabeza .bajada { font-size: 1.06rem; color: var(--tinta-2); }
+.ficha-tec { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); border: 1.5px solid var(--tinta); }
+.ficha-tec div { display: grid; gap: 2px; padding: 10px 12px; border-right: 1px solid var(--filete); border-bottom: 1px solid var(--filete); }
+.ficha-tec b { font-weight: 700; font-size: 0.92rem; }
+
+/* Comparación con la propuesta 1 */
+.tabla-caja { overflow-x: auto; border: 1.5px solid var(--tinta); background: var(--hoja-papel); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 0.9rem; }
+th, td { text-align: left; vertical-align: top; padding: 9px 12px; border-bottom: 1px solid var(--filete); }
+thead th { font: 500 0.72rem/1.2 var(--mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--tinta-2); border-bottom: 1.5px solid var(--tinta); }
+tbody th { font-weight: 700; white-space: nowrap; }
+td.p2 { background: var(--suave); }
+tbody tr:last-child > * { border-bottom: 0; }
+
+/* Paleta */
+.paleta { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); border: 1.5px solid var(--tinta); }
+.pal { display: grid; grid-template-rows: 64px auto; border-right: 1px solid var(--filete); border-bottom: 1px solid var(--filete); background: var(--hoja-papel); min-width: 0; }
+.pal i { background: var(--c); border-bottom: 1px solid var(--filete); }
+.pal div { display: grid; gap: 1px; padding: 8px 10px 10px; }
+.pal b { font: 800 0.9rem/1.15 var(--titulo); font-stretch: 110%; }
+.pal span { font-size: 0.78rem; color: var(--tinta-2); line-height: 1.3; }
+.pal code { font: 0.76rem/1.3 var(--mono); color: var(--tinta-2); }
+.estados-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 5px 12px 5px 10px; border-radius: 4px; font-size: 0.82rem; font-weight: 700; background: var(--bg); color: var(--fg); }
+.chip::before { content: ""; width: 8px; height: 8px; background: currentColor; }
+.chip.is-camino::before { border-radius: 50%; }
+.chip.is-entregada::before { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.chip.is-problema::before { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+
+/* El plano: la pieza principal, siempre sobre su papel (es contenido, no tema) */
+.plano { background: #fffaea; color: #1e2417; border: 1.5px solid #1e2417; }
+.plano__cab { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 16px; padding: 14px 16px; border-bottom: 1.5px solid #1e2417; align-items: end; }
+.plano__cab h3 { font-size: clamp(1.3rem, 1rem + 1.2vw, 2rem); font-weight: 850; letter-spacing: -0.025em; }
+.plano__cab .mono { color: #4f5444; }
+.plano__dibujo { overflow-x: auto; }
+.plano__dibujo svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.plano__ley { display: flex; flex-wrap: wrap; gap: 8px 22px; padding: 10px 16px 12px; border-top: 1px solid rgb(30 36 23 / 0.2); font-size: 0.82rem; color: #4f5444; }
+.plano__ley span { display: inline-flex; align-items: center; gap: 8px; }
+.plano__ley svg { width: 22px; height: 22px; }
+@media (prefers-reduced-motion: no-preference) {
+  .ab { animation: ab 3.8s ease-in-out infinite alternate; }
+  .ab:nth-of-type(2n) { animation-duration: 4.8s; animation-delay: -2s; }
+  .fruto-madura { transform-box: fill-box; transform-origin: 50% 0; animation: madura 5s ease-in-out infinite; }
+}
+@keyframes ab { from { transform: translate(0, 0); } to { transform: translate(4px, -5px); } }
+@keyframes madura { 0%, 20% { scale: 0.4; } 45%, 100% { scale: 1; } }
+
+/* Maqueta del panel: una tabla rígida con un ejemplar por fila */
+.panel { background: #fbf2d3; color: #1e2417; border: 1.5px solid #1e2417; }
+.panel__barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1.5px solid #1e2417; background: #fffaea; }
+.panel__marca { font: 850 1rem/1 var(--titulo); font-stretch: 118%; }
+.panel__marca em { font-style: normal; color: #2d6a1e; }
+.panel__cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); }
+.panel__resumen { display: grid; align-content: start; gap: 12px; padding: 16px; border-right: 1px solid rgb(30 36 23 / 0.2); }
+.panel__resumen h4 { margin: 0; font: 850 1.6rem/1 var(--titulo); font-stretch: 122%; letter-spacing: -0.02em; }
+.cifras { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid rgb(30 36 23 / 0.2); }
+.cifras div { display: grid; gap: 2px; padding: 10px; border-right: 1px solid rgb(30 36 23 / 0.2); border-bottom: 1px solid rgb(30 36 23 / 0.2); }
+.cifras b { font: 850 1.7rem/1 var(--titulo); font-stretch: 125%; font-variant-numeric: tabular-nums; }
+.cifras span { font-size: 0.78rem; color: #4f5444; }
+.panel__btn { justify-self: start; padding: 9px 14px; background: #2d6a1e; color: #fffaea; font-weight: 700; font-size: 0.86rem; border-radius: 4px; }
+.panel table { min-width: 0; font-size: 0.86rem; color: #1e2417; }
+.panel td, .panel th { border-bottom-color: rgb(30 36 23 / 0.2); }
+.panel thead th { color: #4f5444; border-bottom-color: #1e2417; }
+.panel td.ej { width: 46px; padding: 2px 6px; }
+.panel td.ej svg { width: 40px; height: 40px; display: block; }
+.panel .cod { font: 500 0.78rem/1.2 var(--mono); color: #4f5444; }
+.panel__aviso { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; margin: 12px; padding: 10px 12px; border-left: 4px solid #86244c; background: #f1cfdc; color: #4a1229; font-size: 0.86rem; }
+.panel__aviso b { grid-column: 1 / -1; }
+@media (max-width: 760px) { .panel__cuerpo { grid-template-columns: minmax(0, 1fr); } .panel__resumen { border-right: 0; border-bottom: 1px solid rgb(30 36 23 / 0.2); } .panel .tabla-panel { overflow-x: auto; } .panel table { min-width: 520px; } }
+
+/* Estaciones: cuatro columnas del mismo ejemplar */
+.estac { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1.5px solid #1e2417; background: #fffaea; color: #1e2417; }
+.estac > div { display: grid; gap: 4px; padding: 10px 10px 12px; border-right: 1px solid rgb(30 36 23 / 0.2); }
+.estac > div:last-child { border-right: 0; }
+.estac svg { width: 100%; height: auto; display: block; }
+.estac b { font: 800 0.95rem/1.1 var(--titulo); font-stretch: 112%; }
+.estac span { font-size: 0.8rem; color: #4f5444; }
+.estac .is-hoy { background: #e3eec2; }
+@media (max-width: 640px) { .estac { grid-template-columns: 1fr 1fr; } .estac > div { border-bottom: 1px solid rgb(30 36 23 / 0.2); } }
+
+/* Letras */
+.letras { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); border: 1.5px solid var(--tinta); }
+.letra { display: grid; gap: 10px; align-content: start; padding: 18px; background: var(--hoja-papel); border-right: 1px solid var(--filete); border-bottom: 1px solid var(--filete); min-width: 0; }
+.letra__muestra { font-size: clamp(1.8rem, 1.3rem + 1.6vw, 2.5rem); line-height: 1; text-wrap: balance; }
+.letra__muestra em { font-style: normal; color: var(--acento); }
+.letra--a .letra__muestra { font-family: "Archivo", sans-serif; font-weight: 850; font-stretch: 125%; letter-spacing: -0.035em; }
+.letra--b .letra__muestra { font-family: "Source Serif 4", Georgia, serif; font-weight: 700; font-variation-settings: "opsz" 60; letter-spacing: -0.02em; }
+.letra p:last-child { font-size: 0.86rem; color: var(--tinta-2); }
+
+/* Preguntas */
+.preguntas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 22px 32px; }
+.preg { display: grid; gap: 8px; align-content: start; margin: 0; padding: 0; border: 0; min-width: 0; }
+.preg legend, .preg > label { padding: 0; font-weight: 700; font-size: 1rem; line-height: 1.35; }
+.preg__num { display: inline-block; min-width: 2.2em; color: var(--acento); font: 500 0.82rem/1 var(--mono); }
+.opciones { display: grid; gap: 0; border: 1px solid var(--filete); }
+.opciones label { position: relative; }
+.opciones label + label { border-top: 1px solid var(--filete); }
+.opciones input { position: absolute; opacity: 0; pointer-events: none; }
+.opciones span { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; cursor: pointer; line-height: 1.35; background: var(--hoja-papel); }
+.opciones span::before { content: ""; flex: none; width: 13px; height: 13px; margin-top: 3px; box-shadow: inset 0 0 0 1.5px var(--tinta-2); }
+.opciones:not(.multi) span::before { border-radius: 50%; }
+.opciones input:checked + span { background: var(--suave); }
+.opciones input:checked + span::before { box-shadow: inset 0 0 0 4px var(--acento); }
+.opciones input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: -3px; }
+.escala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border: 1px solid var(--filete); }
+.escala label { position: relative; }
+.escala label + label { border-left: 1px solid var(--filete); }
+.escala input { position: absolute; opacity: 0; pointer-events: none; }
+.escala span { display: grid; place-items: center; height: 40px; font-weight: 700; font-variant-numeric: tabular-nums; cursor: pointer; background: var(--hoja-papel); }
+.escala input:checked + span { background: var(--acento); color: var(--sobre-acento); }
+.escala input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: -3px; }
+.escala__fin { display: flex; justify-content: space-between; gap: 12px; font-size: 0.78rem; color: var(--tinta-2); }
+textarea { width: 100%; min-height: 70px; padding: 10px 12px; border: 1px solid var(--filete); border-radius: 0; background: var(--hoja-papel); resize: vertical; }
+
+.envio { position: sticky; bottom: 0; z-index: 2; background: var(--fondo); border-top: 1.5px solid var(--tinta); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.envio .envoltorio { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; padding-block: 12px; }
+.envio__progreso { display: grid; gap: 4px; min-width: 200px; flex: 1; }
+.envio__progreso p { font-size: 0.85rem; color: var(--tinta-2); }
+.barra { height: 6px; background: var(--filete-suave); border: 1px solid var(--filete); max-width: 360px; }
+.barra i { display: block; height: 100%; width: var(--p, 0%); background: var(--acento); transition: width 240ms; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { min-height: 42px; padding: 0 18px; border: 1.5px solid var(--tinta); border-radius: 4px; font-weight: 700; cursor: pointer; background: var(--hoja-papel); }
+.btn--fuerte { background: var(--acento); color: var(--sobre-acento); border-color: var(--acento); }
+.btn[disabled] { opacity: 0.45; cursor: default; }
+.estado { font-size: 0.85rem; color: var(--tinta-2); }
+.estado.is-ok { color: var(--acento); font-weight: 700; }
+.copia { display: grid; gap: 8px; padding-block: 0 18px; }
+.copia textarea { min-height: 140px; font: 0.8rem/1.4 var(--mono); }
+.pie { padding-block: 24px 40px; font-size: 0.85rem; color: var(--tinta-2); border-top: 1.5px solid var(--tinta); }
+</style>
+
+<header class="envoltorio cabeza">
+  <span class="mono">DonaTrack · tema huerta con abejas · propuesta 2 · plano técnico</span>
+  <h1>La huerta, en plano</h1>
+  <p class="bajada">Segunda propuesta, armada con las respuestas de quien diseñó la huerta original. Misma metáfora, otra actitud: grilla rígida, filetes finos, rótulos técnicos y ejemplares dibujados en alzado, como un plano de cultivo. El dibujo cuenta la historia y el texto habla claro: donación, entrega, entidad.</p>
+  <div class="ficha-tec">
+    <div><span class="mono">Paleta</span><b>B · Huerta viva, con el papel de cera de A</b></div>
+    <div><span class="mono">Sensación</span><b>Confianza 30 · Seriedad 30 · Calidez 25 · Ganas 15</b></div>
+    <div><span class="mono">Las abejas</span><b>Los donantes: polinizan sin ver todo el recorrido</b></div>
+    <div><span class="mono">Entrega</span><b>Fruto maduro · si falla, aviso claro</b></div>
+  </div>
+</header>
+
+<main id="formulario">
+  <section class="envoltorio fila" aria-labelledby="t-comp">
+    <div class="fila__num"><b>01</b><span class="mono">Diferencias</span></div>
+    <div class="fila__cuerpo">
+      <header><h2 id="t-comp">En qué se separa de la propuesta 1</h2><p>Las dos coinciden en lo importante: cada donante tiene su huerta, las estaciones marcan el tiempo y nada puede verse infantil. Cambian estas decisiones.</p></header>
+      <div class="tabla-caja">
+        <table>
+          <thead><tr><th scope="col">Tema</th><th scope="col">Propuesta 1 · láminas</th><th scope="col">Propuesta 2 · plano</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">Paleta</th><td>A, con hoja y zanahoria de B</td><td class="p2">B más saturada, con su verde oscuro y sus colores de estado, sobre el papel de cera de A</td></tr>
+            <tr><th scope="row">Las abejas</th><td>La logística: depósito y camiones</td><td class="p2">Los donantes: llevan su parte y no ven todo el recorrido</td></tr>
+            <tr><th scope="row">Entrega que llegó</th><td>Variantes: crece, fruto, flor</td><td class="p2">Siempre un fruto maduro</td></tr>
+            <tr><th scope="row">Entrega fallida</th><td>Tierra seca, cantero vacío</td><td class="p2">Sin metáfora: un aviso claro</td></tr>
+            <tr><th scope="row">Palabras</th><td>Semilla y fruto en títulos y mensajes</td><td class="p2">Solo en el dibujo; el texto dice donación y entrega</td></tr>
+            <tr><th scope="row">Composición</th><td>Láminas sueltas, grano de impresión</td><td class="p2">Grilla de 12 columnas, filetes y rótulos técnicos, sin grano</td></tr>
+            <tr><th scope="row">Para quién primero</th><td>Empresas y entidades</td><td class="p2">Personas que donan y entidades</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="envoltorio fila" aria-labelledby="t-pal">
+    <div class="fila__num"><b>02</b><span class="mono">Color</span></div>
+    <div class="fila__cuerpo">
+      <header><h2 id="t-pal">Paleta y estados</h2><p>Saturación 4 de 5 y verde y amarillo parejos. Cada estado tiene su color y también su forma (cuadrado, círculo, rombo, triángulo), para que se lea sin depender del color.</p></header>
+      <div class="paleta" id="paleta"></div>
+      <div class="estados-chips" id="chips"></div>
+    </div>
+  </section>
+
+  <section class="envoltorio fila" aria-labelledby="t-plano">
+    <div class="fila__num"><b>03</b><span class="mono">Pieza principal</span></div>
+    <div class="fila__cuerpo">
+      <header><h2 id="t-plano">El plano de una huerta</h2><p>La huerta de un donante, dibujada como un plano de cultivo: cada columna de la grilla es una donación, ordenada por fecha, con su ejemplar según el estado. Las abejas son el donante: vuelan un tramo del recorrido y la línea se corta donde dejan de verlo.</p></header>
+      <figure class="plano" style="margin:0">
+        <div class="plano__cab"><h3>Tus donaciones, de un vistazo</h3><span class="mono">Hoja 1 de 1 · primavera 2026 · esc. 1:1 donación</span></div>
+        <div class="plano__dibujo" id="plano"></div>
+        <figcaption class="plano__ley" id="leyenda"></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="envoltorio fila" aria-labelledby="t-panel">
+    <div class="fila__num"><b>04</b><span class="mono">Aplicación</span></div>
+    <div class="fila__cuerpo">
+      <header><h2 id="t-panel">Así se usa en el panel</h2><p>El mismo ejemplar se achica a ícono en la tabla. La entrega fallida no tiene dibujo: es un aviso con lo que pasó y qué sigue.</p></header>
+      <div class="panel">
+        <div class="panel__barra"><span class="panel__marca">Dona<em>Track</em></span><span class="mono" style="color:#4f5444">Nicolás P. · persona donante</span></div>
+        <div class="panel__cuerpo">
+          <div class="panel__resumen">
+            <span class="mono" style="color:#4f5444">Tu huerta</span>
+            <h4>Hola, Nicolás.</h4>
+            <div class="cifras"><div><b>7</b><span>donaciones</span></div><div><b>3</b><span>entregadas</span></div><div><b>2</b><span>en camino</span></div><div><b>4</b><span>entidades ayudadas</span></div></div>
+            <span class="panel__btn">Registrar una donación</span>
+          </div>
+          <div>
+            <div class="tabla-panel" id="tabla-panel"></div>
+            <div class="panel__aviso" role="note"><b>Entrega fallida · DT3247 · Leche larga vida, 24 u</b><span>El camión no pudo entrar al Hogar Casa Ejemplo el 03/11. La reprogramamos para el 07/11 y te avisamos cuando llegue.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="envoltorio fila" aria-labelledby="t-estac">
+    <div class="fila__num"><b>05</b><span class="mono">Tiempo</span></div>
+    <div class="fila__cuerpo">
+      <header><h2 id="t-estac">El mismo ejemplar, cuatro estaciones</h2><p>Hemisferio sur. Toda la página toma la estación del mes; el dibujo cambia y el sistema de grilla no.</p></header>
+      <div class="estac" id="estac"></div>
+    </div>
+  </section>
+
+  <section class="envoltorio fila" aria-labelledby="t-letras">
+    <div class="fila__num"><b>06</b><span class="mono">Letra</span></div>
+    <div class="fila__cuerpo">
+      <header><h2 id="t-letras">Archivo o una serif sobria</h2><p>Pediste una serif cálida solo si se mantiene profesional. Source Serif es de texto técnico y editorial: firme y sin adornos.</p></header>
+      <div class="letras">
+        <div class="letra letra--a"><span class="mono">A · Archivo ancha</span><p class="letra__muestra">Seguí cada donación <em>hasta que llega.</em></p><p>La de ahora. Grotesca de afiche, la más institucional.</p></div>
+        <div class="letra letra--b"><span class="mono">B · Source Serif 4</span><p class="letra__muestra">Seguí cada donación <em>hasta que llega.</em></p><p>Serif de libro técnico. Cálida por el trazo, seria por la estructura.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="envoltorio fila" aria-labelledby="t-preg">
+    <div class="fila__num"><b>07</b><span class="mono">Opinión</span></div>
+    <div class="fila__cuerpo">
+      <header><h2 id="t-preg">Ocho preguntas</h2></header>
+      <div class="preguntas" id="preguntas"></div>
+    </div>
+  </section>
+</main>
+
+<section class="envio" aria-label="Guardar respuestas">
+  <div class="envoltorio">
+    <div class="envio__progreso"><p id="progreso" aria-live="polite">0 de 8 respondidas</p><div class="barra"><i id="barra"></i></div></div>
+    <div class="acciones">
+      <span class="estado" id="estado" role="status"></span>
+      <button type="button" class="btn" id="ver-copia">Copiar como texto</button>
+      <button type="button" class="btn btn--fuerte" id="guardar">Guardar respuestas</button>
+    </div>
+  </div>
+  <div class="envoltorio copia" id="copia" hidden>
+    <label for="texto-copia" class="estado">Si no podés guardar desde acá, copiá esto y pegalo en el chat del grupo.</label>
+    <textarea id="texto-copia" readonly></textarea>
+  </div>
+</section>
+
+<footer class="envoltorio pie">DonaTrack, UTN-FRBA, Diseño de Sistemas 2026. Propuesta 2 del tema huerta con abejas; la propuesta 1 sigue en su propia página.</footer>
+
+<script>
+const C = { papel: "#fbf2d3", claro: "#fffaea", tinta: "#1e2417", hondo: "#2d6a1e", hoja: "#86b832", paja: "#f4c844", zanahoria: "#ef7a16", tierra: "#4c5a1f" };
+const EST = {
+  deposito: ["En depósito", "#ebe3c4", "#4b4a32", "is-deposito"],
+  camino: ["En camino", "#f8e3a0", "#6a4f05", "is-camino"],
+  entregada: ["Entregada", "#d3e98a", "#24521a", "is-entregada"],
+  problema: ["Entrega fallida", "#f1cfdc", "#86244c", "is-problema"]
+};
+const $ = (s, e = document) => e.querySelector(s);
+const el = (tag, attrs = {}, ...hijos) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k === "style") n.style.cssText = v; else if (k === "html") n.innerHTML = v; else n.setAttribute(k, v);
+  }
+  for (const h of hijos) if (h != null) n.append(h);
+  return n;
+};
+
+/* Paleta */
+const PAL = [
+  ["Papel de cera", C.papel, "Fondo (de la propuesta A)"], ["Papel claro", C.claro, "Tarjetas y planos"], ["Tinta", C.tinta, "Texto, filetes, contornos"],
+  ["Hoja honda", C.hondo, "Botones, títulos, tallos"], ["Hoja", C.hoja, "Hojas de los ejemplares"], ["Tierra", C.tierra, "Línea de suelo y raíces"],
+  ["Paja", C.paja, "Las abejas: los donantes"], ["Zanahoria", C.zanahoria, "Frutos: lo entregado"]
+];
+for (const [n, c, r] of PAL) $("#paleta").append(el("div", { class: "pal" }, el("i", { style: `--c:${c}` }), el("div", {}, el("b", { text: n }), el("code", { text: c }), el("span", { text: r }))));
+for (const [, [t, bg, fg, cl]] of Object.entries(EST)) $("#chips").append(el("span", { class: `chip ${cl}`, style: `--bg:${bg};--fg:${fg}`, text: `${t} · ${bg}` }));
+
+/* Ejemplar en alzado: geométrico y simétrico. etapa 0 semilla, 1 brote, 2 planta, 3 planta con fruto */
+function ejemplar(x, y, etapa, s = 1, temporada = "primavera") {
+  const hojaC = temporada === "otono" ? C.paja : C.hoja;
+  const t = `stroke="${C.tinta}" stroke-width="${1.2 / s}"`;
+  let g = "";
+  if (etapa === 0) {
+    g = `<ellipse cx="0" cy="-5" rx="4" ry="6" fill="${C.paja}" ${t}/><path d="M0 -11 V-15" stroke="${C.hondo}" stroke-width="${1.6 / s}"/>`;
+  } else {
+    const alto = etapa === 1 ? 26 : 70;
+    g += `<path d="M0 0 V-${alto}" stroke="${C.hondo}" stroke-width="${2 / s}"/>`;
+    const pares = etapa === 1 ? [[-18, 1]] : temporada === "invierno" ? [] : [[-20, 1.1], [-38, 1], [-56, 0.85]];
+    for (const [yy, k] of pares) {
+      g += `<path d="M0 ${yy} C-6 ${yy - 2} -16 ${yy - 4 * k} -22 ${yy - 12 * k} C-12 ${yy - 14 * k} -3 ${yy - 8} 0 ${yy}Z" fill="${hojaC}" ${t}/>`;
+      g += `<path d="M0 ${yy} C6 ${yy - 2} 16 ${yy - 4 * k} 22 ${yy - 12 * k} C12 ${yy - 14 * k} 3 ${yy - 8} 0 ${yy}Z" fill="${C.hondo}" ${t}/>`;
+    }
+    if (etapa >= 2 && temporada !== "invierno") g += `<path d="M0 -${alto} C-6 -${alto + 6} -6 -${alto + 16} 0 -${alto + 22} C6 -${alto + 16} 6 -${alto + 6} 0 -${alto}Z" fill="${hojaC}" ${t}/>`;
+    if (temporada === "invierno" && etapa >= 2) g += `<path d="M0 -38 L-12 -50 M0 -54 L10 -64" stroke="${C.hondo}" stroke-width="${1.6 / s}"/>`;
+    if (etapa === 3) g += `<g class="fruto-madura"><path d="M14 -46 V-40" stroke="${C.hondo}" stroke-width="${1.4 / s}"/><circle cx="14" cy="-33" r="7" fill="${C.zanahoria}" ${t}/></g>`;
+    if (temporada === "primavera" && etapa === 2) g += `<g transform="translate(-14 -64)">${[0, 90, 180, 270].map(a => `<ellipse cx="0" cy="-4" rx="2.6" ry="4" transform="rotate(${a})" fill="${C.claro}" ${t}/>`).join("")}<circle r="2.2" fill="${C.paja}"/></g>`;
+  }
+  return `<g transform="translate(${x} ${y}) scale(${s})">${g}</g>`;
+}
+const abeja = (x, y, s = 1) => `<g class="ab"><g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="7" cy="-2" rx="3.4" ry="4.8" transform="rotate(-20 7 -2)" fill="${C.claro}" stroke="${C.tinta}" stroke-width=".8"/><ellipse cx="8" cy="5" rx="7" ry="5" fill="${C.paja}" stroke="${C.tinta}" stroke-width=".8"/><path d="M6 .4 V9.6 M10 0 V10" stroke="${C.tinta}" stroke-width="1.8"/><circle cx="16" cy="4.4" r="3" fill="${C.tinta}"/></g></g>`;
+
+/* El plano */
+const DON = [
+  ["DT3240", "Arroz 50 kg", "02/09", 3, "entregada"], ["DT3241", "Frazadas 12 u", "09/09", 3, "entregada"], ["DT3243", "Útiles escolares", "21/09", 3, "entregada"],
+  ["DT3245", "Conservas 24 kg", "04/10", 2, "camino"], ["DT3247", "Leche 24 u", "15/10", -1, "problema"], ["DT3248", "Sillas 6 u", "22/10", 2, "camino"],
+  ["DT3250", "Lentejas 15 kg", "01/11", 1, "deposito"], ["DT3251", "Ropa de abrigo", "03/11", 0, "deposito"]
+];
+(function plano() {
+  const W = 960, H = 380, base = 268, x0 = 60, paso = 108;
+  let s = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Plano de la huerta de un donante: ocho donaciones en columnas, tres con fruto, dos en camino, dos en el depósito y una con aviso de entrega fallida">`;
+  s += `<rect width="${W}" height="${H}" fill="${C.claro}"/>`;
+  for (let i = 0; i <= 8; i++) s += `<path d="M${x0 - paso / 2 + i * paso} 24 V${H - 20}" stroke="${C.tinta}" stroke-opacity=".12"/>`;
+  for (let i = 0; i <= 96; i++) { const x = 6 + i * 9.9; s += `<path d="M${x} 8 V${i % 10 === 0 ? 20 : i % 5 === 0 ? 16 : 13}" stroke="${C.tinta}" stroke-opacity=".5"/>`; }
+  s += `<path d="M0 24 H${W}" stroke="${C.tinta}" stroke-opacity=".5"/>`;
+  s += `<rect x="0" y="${base}" width="${W}" height="${H - base}" fill="${C.papel}"/><path d="M0 ${base} H${W}" stroke="${C.tierra}" stroke-width="2.5"/>`;
+  DON.forEach(([cod, bien, fecha, etapa, est], i) => {
+    const x = x0 + i * paso;
+    s += `<path d="M${x} ${base + 2} V${base + 18} M${x - 8} ${base + 10} L${x} ${base + 18} L${x + 8} ${base + 10}" stroke="${C.tierra}" stroke-width="1.4" fill="none" opacity=".7"/>`;
+    if (etapa < 0) s += `<rect x="${x - 26}" y="${base - 74}" width="52" height="74" fill="none" stroke="${EST.problema[2]}" stroke-width="1.4" stroke-dasharray="4 4"/><path d="M${x} ${base - 50} l10 18 h-20z" fill="${EST.problema[1]}" stroke="${EST.problema[2]}" stroke-width="1.4"/><path d="M${x} ${base - 44} v6 M${x} ${base - 35} v1" stroke="${EST.problema[2]}" stroke-width="1.6"/>`;
+    else s += ejemplar(x, base, etapa, 1.25);
+    const [t, bg, fg] = EST[est];
+    s += `<text x="${x}" y="${base + 38}" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="${C.tinta}">${cod}</text>`;
+    s += `<text x="${x}" y="${base + 54}" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11.5" font-weight="700" fill="${C.tinta}">${bien}</text>`;
+    s += `<rect x="${x - 44}" y="${base + 62}" width="88" height="17" fill="${bg}"/><text x="${x}" y="${base + 74}" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="10" font-weight="700" fill="${fg}">${t} · ${fecha}</text>`;
+  });
+  s += `<path d="M40 70 C110 40 200 60 280 46 S420 30 470 56" fill="none" stroke="${C.tinta}" stroke-width="1" stroke-dasharray="1 5" stroke-linecap="round" opacity=".7"/>`;
+  s += `<path d="M600 60 C660 36 720 70 780 50" fill="none" stroke="${C.tinta}" stroke-width="1" stroke-dasharray="1 5" stroke-linecap="round" opacity=".7"/>`;
+  s += abeja(26, 62, 1) + abeja(250, 40, 0.85) + abeja(462, 50, 0.95) + abeja(592, 52, 0.85) + abeja(776, 40, 0.9);
+  s += `<text x="${W - 14}" y="${H - 8}" text-anchor="end" font-family="IBM Plex Mono, monospace" font-size="10" fill="${C.tinta}" opacity=".7">Huerta de Nicolás P. · 8 donaciones · sep–nov 2026</text>`;
+  $("#plano").innerHTML = s + "</svg>";
+  const ley = [["Semilla: en el depósito", ejemplar(11, 20, 0, 1)], ["Brote: asignada", ejemplar(11, 21, 1, 0.7)], ["Planta: en camino", ejemplar(11, 22, 2, 0.26)], ["Fruto: entregada", ejemplar(11, 22, 3, 0.26)], ["Abeja: vos, que donás", abeja(1, 6, 1)]];
+  for (const [t, g] of ley) $("#leyenda").append(el("span", { html: `<svg viewBox="0 0 22 22" aria-hidden="true">${g}</svg>` }, t));
+})();
+
+/* Tabla del panel */
+(function tabla() {
+  const filas = DON.slice(2, 8).reverse().filter(d => d[4] !== "problema").slice(0, 4);
+  let h = `<table><thead><tr><th scope="col"><span class="sr" style="position:absolute;left:-9999px">Ejemplar</span></th><th scope="col">Donación</th><th scope="col">Estado</th><th scope="col">Fecha</th></tr></thead><tbody>`;
+  for (const [cod, bien, fecha, etapa, est] of filas) {
+    const [t, bg, fg, cl] = EST[est];
+    h += `<tr><td class="ej"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" fill="${C.claro}"/><path d="M0 36 H40" stroke="${C.tierra}" stroke-width="1.5"/>${ejemplar(20, 36, etapa, etapa >= 2 ? 0.4 : 0.9)}</svg></td><td><b>${bien}</b><br><span class="cod">${cod}</span></td><td><span class="chip ${cl}" style="--bg:${bg};--fg:${fg}">${t}</span></td><td class="cod">${fecha}</td></tr>`;
+  }
+  $("#tabla-panel").innerHTML = h + "</tbody></table>";
+})();
+
+/* Estaciones */
+const ESTAC = [["primavera", "Primavera", "sep. a nov. · flores; las abejas trabajan"], ["verano", "Verano", "dic. a feb. · frutos: lo entregado"], ["otono", "Otoño", "mar. a may. · hojas paja; se cosecha"], ["invierno", "Invierno", "jun. a ago. · tallo y semillas"]];
+ESTAC.forEach(([k, n, d], i) => {
+  const etapa = k === "verano" ? 3 : 2;
+  let svg = `<svg viewBox="0 0 160 120" aria-hidden="true"><path d="M8 104 H152" stroke="${C.tierra}" stroke-width="2"/>${ejemplar(80, 104, etapa, 1, k)}`;
+  if (k === "primavera") svg += abeja(110, 30, 0.8) + abeja(34, 44, 0.7);
+  if (k === "otono") svg += `<path d="M118 100 C114 96 116 92 122 92 C122 98 120 100 118 100Z" fill="${C.paja}" stroke="${C.tinta}" stroke-width=".8"/>`;
+  if (k === "invierno") svg += `<g fill="${C.paja}" stroke="${C.tinta}" stroke-width=".8"><ellipse cx="50" cy="100" rx="2.4" ry="3.4"/><ellipse cx="112" cy="100" rx="2.4" ry="3.4"/></g>`;
+  $("#estac").append(el("div", { class: i === 0 ? "is-hoy" : "" }, el("div", { html: svg + "</svg>" }), el("b", { text: n + (i === 0 ? " · hoy" : "") }), el("span", { text: d })));
+});
+
+/* Preguntas */
+const PREG = [
+  ["p_plano", "¿El plano con grilla es el tono que buscás?", "uno", ["Sí, así de rígido", "Sí, pero un poco más ilustrado", "Muy técnico: se pierde la calidez"]],
+  ["p_ejemplar", "Los ejemplares geométricos, ¿te parecen adultos?", "uno", ["Sí", "Todavía algo infantiles", "Muy fríos"]],
+  ["p_abejas", "¿Se entiende que las abejas son los donantes?", "uno", ["Sí", "Hay que explicarlo con una leyenda", "Prefiero otro rol para las abejas"]],
+  ["p_aviso", "La entrega fallida como aviso, sin dibujo, ¿funciona?", "uno", ["Sí", "Le sumaría un detalle visual mínimo"]],
+  ["p_letra", "¿Qué letra para los títulos?", "uno", ["A · Archivo ancha", "B · Source Serif 4"]],
+  ["p_saturacion", "¿Cómo está la saturación de la paleta?", "escala", ["Le bajaría", "Le subiría"]],
+  ["p_mezcla", "De la propuesta 1, ¿hay algo que sumarías a esta?", "texto"],
+  ["p_libre", "¿Algo más?", "texto"]
+];
+let numero = 0;
+function pregunta([id, texto, tipo, opc]) {
+  numero++;
+  const cab = [el("span", { class: "preg__num", text: "P" + String(numero).padStart(2, "0") }), texto];
+  if (tipo === "texto") return el("div", { class: "preg" }, el("label", { for: id }, ...cab), el("textarea", { id, name: id }));
+  const f = el("fieldset", { class: "preg" }, el("legend", {}, ...cab));
+  if (tipo === "escala") {
+    const e = el("div", { class: "escala" });
+    for (let i = 1; i <= 5; i++) e.append(el("label", {}, el("input", { type: "radio", name: id, id: `${id}_${i}`, value: String(i), "aria-label": `${i} de 5` }), el("span", { text: String(i) })));
+    f.append(e, el("div", { class: "escala__fin" }, el("span", { text: opc[0] }), el("span", { text: opc[1] })));
+  } else {
+    const o = el("div", { class: "opciones" });
+    opc.forEach((t, i) => o.append(el("label", {}, el("input", { type: "radio", name: id, id: `${id}_${i}`, value: t }), el("span", { text: t }))));
+    f.append(o, el("textarea", { id: `${id}_nota`, name: `${id}_nota`, placeholder: "Comentario (opcional)", style: "min-height:44px" }));
+  }
+  return f;
+}
+PREG.forEach(q => $("#preguntas").append(pregunta(q)));
+function leer() {
+  const r = {};
+  for (const [id, , tipo] of PREG) {
+    if (tipo === "texto") { const t = $("#" + id).value.trim(); if (t) r[id] = t; continue; }
+    const m = document.querySelector(`input[name="${id}"]:checked`); if (m) r[id] = tipo === "escala" ? Number(m.value) : m.value;
+    const n = $(`#${id}_nota`)?.value.trim(); if (n) r[id + "_nota"] = n;
+  }
+  return r;
+}
+function aplicar(r) {
+  if (!r) return;
+  for (const [id, v] of Object.entries(r)) {
+    const t = document.getElementById(id); if (t && t.tagName === "TEXTAREA") { t.value = v; continue; }
+    const i = [...document.querySelectorAll(`input[name="${id}"]`)].find(x => x.value === String(v)); if (i) i.checked = true;
+  }
+}
+function contar() { const r = leer(); const h = PREG.filter(([id]) => r[id] != null).length; $("#progreso").textContent = `${h} de ${PREG.length} respondidas`; $("#barra").style.setProperty("--p", (h / PREG.length * 100) + "%"); return r; }
+function comoTexto(r) { const l = ["Huerta con abejas · propuesta 2", ""]; PREG.forEach(([id, t], i) => { const v = r[id], n = r[id + "_nota"]; if (v == null && !n) return; l.push(`${i + 1}. ${t}`); if (v != null) l.push(`   ${v}`); if (n) l.push(`   Nota: ${n}`); }); return l.join("\n"); }
+const BORRADOR = "huerta-propuesta-2";
+try { aplicar(JSON.parse(localStorage.getItem(BORRADOR) || "null")); } catch (e) {}
+contar();
+$("#formulario").addEventListener("input", () => { const r = contar(); $("#estado").textContent = "Cambios sin guardar"; $("#estado").classList.remove("is-ok"); try { localStorage.setItem(BORRADOR, JSON.stringify(r)); } catch (e) {} if (!$("#copia").hidden) $("#texto-copia").value = comoTexto(r); });
+$("#ver-copia").addEventListener("click", async () => { const t = comoTexto(contar()); $("#copia").hidden = false; $("#texto-copia").value = t; try { await navigator.clipboard.writeText(t); $("#estado").textContent = "Texto copiado"; } catch (e) { $("#texto-copia").select(); $("#estado").textContent = "Seleccioná el texto y copialo"; } });
+let db = null, uid = null;
+const guardar = $("#guardar"); guardar.disabled = true;
+(async () => {
+  try {
+    const [d, u] = await Promise.all([window.claude?.use?.("db"), window.claude?.use?.("user")]);
+    if (!d || !u) throw 0; uid = await u.id(); if (!uid) throw 0; db = d;
+    const snap = await db.doc("propuesta2/" + uid).get();
+    let hay = false; try { hay = !!localStorage.getItem(BORRADOR); } catch (e) {}
+    if (snap.exists && !hay) { aplicar(snap.data().respuestas); contar(); }
+    guardar.disabled = false;
+    if (snap.exists) $("#estado").textContent = "Ya guardaste respuestas; podés cambiarlas";
+  } catch (e) { $("#estado").textContent = "No se puede guardar desde esta vista: usá «Copiar como texto»"; }
+})();
+guardar.addEventListener("click", async () => {
+  if (!db) return; guardar.disabled = true; $("#estado").textContent = "Guardando…";
+  try { await db.doc("propuesta2/" + uid).set({ respuestas: contar(), guardado: new Date().toISOString() }); $("#estado").textContent = "Guardado."; $("#estado").classList.add("is-ok"); }
+  catch (e) { $("#estado").textContent = "No se guardó (" + (e?.code || "error") + "). Usá «Copiar como texto»."; }
+  finally { guardar.disabled = false; }
+});
+</script>

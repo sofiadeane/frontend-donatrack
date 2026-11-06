@@ -2,21 +2,22 @@
 <!-- Layout público de la variante H. Uso: <html th:replace="~{layouts/publico-h :: layout(~{::title}, ~{::contenido})}"> -->
 <html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout(titulo, contenido)">
 <head th:replace="~{fragments/cabeza-h :: cabeza(${titulo}, 'c-landing')}"></head>
-<body class="c h" th:classappend="${abejas} ? 'i'">
+<body class="c h" th:with="inicioTema=${plantas ? '/j' : (abejas ? '/i' : '/h')}" th:classappend="${plantas} ? 'i j' : (${abejas} ? 'i')">
 <a class="skip-link" href="#contenido">Saltar al contenido</a>
 
 <svg th:replace="~{${abejas ? 'fragments/ilustraciones-i' : 'fragments/ilustraciones-h'} :: defs}"></svg>
+<th:block th:if="${plantas}"><svg th:replace="~{fragments/ilustraciones-j :: defs}"></svg></th:block>
 
 <header class="cl-barra">
-  <a class="c-marca" th:href="@{/h}" aria-label="DonaTrack, ir al inicio">
+  <a class="c-marca" th:href="@{${inicioTema}}" aria-label="DonaTrack, ir al inicio">
     <span class="c-marca__sello"><img th:src="@{/img/logo.svg}" alt=""></span>
     <span>Dona<em>Track</em></span>
   </a>
   <nav class="cl-nav" aria-label="Secciones">
     <ul>
-      <li><a th:href="@{/h}+'#problema'">Por qué</a></li>
-      <li><a th:href="@{/h}+'#actores'">Quién participa</a></li>
-      <li><a th:href="@{/h}+'#impacto'">Impacto</a></li>
+      <li><a th:href="@{${inicioTema}}+'#problema'">Por qué</a></li>
+      <li><a th:href="@{${inicioTema}}+'#actores'">Quién participa</a></li>
+      <li><a th:href="@{${inicioTema}}+'#impacto'">Impacto</a></li>
       <li><a th:href="@{/donaciones-entregadas}" th:attr="aria-current=${rutaActual == '/donaciones-entregadas'} ? 'page' : null">Donaciones entregadas</a></li>
       <li><a th:href="@{/mapa-de-impacto}">Mapa de impacto</a></li>
     </ul>

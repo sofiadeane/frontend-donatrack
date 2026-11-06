@@ -1,0 +1,527 @@
+<title>Huerta con abejas · ronda 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Gloock&family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<style>
+/* Ronda 2: una carpeta de láminas botánicas. Cada propuesta es una lámina pegada con cinta, numerada como una
+   edición; una línea punteada (el vuelo del enjambre) baja por el margen y une las partes: el hilo conductor. */
+:root {
+  --fondo: #fbf2d3;
+  --hoja-papel: #fffaea;
+  --tinta: #2a2a22;
+  --tinta-2: #5d5c4c;
+  --linea: rgb(42 42 34 / 0.16);
+  --acento: #2f7d3b;
+  --sobre-acento: #fffaea;
+  --miel: #f6a609;
+  --suave: #e4efc9;
+  --mal: #a8381a;
+  --titulo: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --texto: "DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --fondo: #1d1e17; --hoja-papel: #26271f; --tinta: #f1ead2; --tinta-2: #bdb9a2; --linea: rgb(241 234 210 / 0.15);
+  --acento: #9fd166; --sobre-acento: #1d1e17; --miel: #f7b636; --suave: #2e3824; --mal: #ff9373; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --fondo: #1d1e17; --hoja-papel: #26271f; --tinta: #f1ead2; --tinta-2: #bdb9a2; --linea: rgb(241 234 210 / 0.15);
+  --acento: #9fd166; --sobre-acento: #1d1e17; --miel: #f7b636; --suave: #2e3824; --mal: #ff9373; color-scheme: dark; }
+
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--fondo); color: var(--tinta); font: 400 15px/1.55 var(--texto); }
+button, input, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
+.envoltorio { max-width: 1180px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--titulo); font-stretch: 118%; line-height: 1.02; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2.2rem, 1.4rem + 3.6vw, 4rem); font-weight: 850; letter-spacing: -0.03em; }
+h2 { font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.2rem); font-weight: 800; letter-spacing: -0.02em; }
+h3 { font-size: 1.15rem; font-weight: 800; }
+p { margin: 0; max-width: 66ch; }
+.rotulo { font-family: var(--titulo); font-stretch: 112%; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--acento); }
+.chica { font-size: 0.86rem; color: var(--tinta-2); }
+
+/* El hilo: el vuelo punteado del enjambre baja por el margen y une las partes */
+main { position: relative; }
+.parte { position: relative; padding-block: 34px 18px; display: grid; gap: 20px; }
+.parte > header { display: grid; gap: 8px; position: relative; }
+@media (min-width: 900px) {
+  .parte > header { padding-left: 46px; }
+  .parte > header::before { content: ""; position: absolute; left: 10px; top: -34px; bottom: -6px; border-left: 2px dotted var(--tinta-2); opacity: 0.6; }
+  .parte > header::after { content: ""; position: absolute; left: 1px; top: 4px; width: 20px; height: 15px; background: var(--abeja) center / contain no-repeat; }
+}
+:root { --abeja: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-2 -8 24 18'%3E%3Cellipse cx='7' cy='-2' rx='3.6' ry='5' transform='rotate(-20 7 -2)' fill='%23fffaea' stroke='%232a2a22'/%3E%3Cellipse cx='8' cy='5' rx='7' ry='5' fill='%23f6a609'/%3E%3Cpath d='M5 .5c-1.4 2.6-1.4 6.4 0 9l2 .4c-1.4-3-1.4-6.4 0-9.6zM10 0c-1.4 3-1.4 7 0 10l2-.6c-1.2-2.6-1.2-6 0-8.8z' fill='%232a2a22'/%3E%3Ccircle cx='16' cy='4.4' r='3.2' fill='%232a2a22'/%3E%3C/svg%3E"); }
+
+.cabeza { padding-block: 40px 10px; display: grid; gap: 14px; }
+.cabeza .bajada { font-size: 1.08rem; color: var(--tinta-2); }
+
+/* Síntesis */
+.sintesis { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 12px; padding: 0; margin: 0; list-style: none; }
+.sintesis li { display: grid; gap: 4px; align-content: start; padding: 14px 16px; border-radius: 12px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.sintesis b { font-family: var(--titulo); font-stretch: 112%; font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--acento); }
+
+/* Paleta consolidada */
+.paleta { display: grid; gap: 12px; }
+.proporcion { display: flex; height: 54px; border-radius: 10px; overflow: hidden; box-shadow: inset 0 0 0 1px var(--linea); }
+.proporcion i { flex: var(--f); background: var(--c); }
+.sobres { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; padding: 0; margin: 0; list-style: none; }
+.sobre { display: grid; grid-template-rows: auto 1fr; min-width: 0; border-radius: 10px; overflow: hidden; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.sobre__color { position: relative; height: 54px; background: var(--c); }
+.sobre__color::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 8px; background: repeating-linear-gradient(90deg, transparent 0 6px, rgb(0 0 0 / 0.12) 6px 7px); }
+.sobre__texto { display: grid; gap: 1px; padding: 8px 10px 10px; }
+.sobre__nombre { font: 800 0.92rem/1.15 var(--titulo); font-stretch: 110%; }
+.sobre__hex { font: 0.78rem/1.3 ui-monospace, "SF Mono", Menlo, monospace; color: var(--tinta-2); }
+.sobre__rol { font-size: 0.78rem; color: var(--tinta-2); line-height: 1.3; }
+.sobre__pct { font-size: 0.74rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Láminas */
+.laminas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 26px; }
+.lam { display: grid; gap: 12px; align-content: start; min-width: 0; }
+.lam__hoja { position: relative; padding: 16px 16px 12px; background: #fffaea; box-shadow: 0 1px 0 rgb(42 42 34 / 0.12), 0 18px 30px -22px rgb(42 42 34 / 0.6); }
+.lam__hoja::before { content: ""; position: absolute; left: 50%; top: -12px; width: 74px; height: 26px; translate: -50% 0; rotate: -2deg; background: #f4c844; opacity: 0.85; }
+.lam__hoja svg { display: block; width: 100%; height: auto; }
+.lam__pie { display: flex; justify-content: space-between; gap: 8px; padding-top: 8px; font: 500 0.72rem/1 ui-monospace, "SF Mono", Menlo, monospace; color: #5d5c4c; }
+.lam__cab { display: flex; align-items: baseline; gap: 10px; }
+.lam__letra { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--tinta); color: var(--fondo); font: 850 1rem/1 var(--titulo); }
+.lam__ref { font-size: 0.88rem; color: var(--tinta-2); }
+.lam ul { margin: 0; padding-left: 18px; font-size: 0.9rem; display: grid; gap: 2px; }
+
+/* Movimiento: el enjambre vuela un poco (nivel 3 de 5) */
+@media (prefers-reduced-motion: no-preference) {
+  .ab { animation: ab-vuela 3.6s ease-in-out infinite alternate; }
+  .ab:nth-of-type(2n) { animation-duration: 4.6s; animation-delay: -1.8s; }
+  .ab:nth-of-type(3n) { animation-duration: 5.2s; animation-delay: -0.9s; }
+  .crece { transform-box: fill-box; transform-origin: 50% 100%; animation: crece 4.8s ease-in-out infinite; }
+  .madura { transform-box: fill-box; transform-origin: 50% 0; animation: crece 4.8s ease-in-out infinite; }
+  .abre { transform-box: fill-box; transform-origin: center; animation: crece 4.8s ease-in-out infinite; }
+}
+@keyframes ab-vuela { from { transform: translate(0, 0); } to { transform: translate(5px, -6px); } }
+@keyframes crece { 0%, 18% { scale: 0; } 42%, 86% { scale: 1; } 100% { scale: 1; } }
+
+/* Variantes de estado */
+.estados { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); gap: 14px; }
+.estado-v { display: grid; gap: 6px; align-content: start; padding: 12px; border-radius: 12px; background: #fffaea; box-shadow: inset 0 0 0 1px rgb(42 42 34 / 0.12); color: #2a2a22; }
+.estado-v svg { width: 100%; height: auto; display: block; }
+.estado-v b { font: 800 0.95rem/1.15 var(--titulo); font-stretch: 112%; }
+.estado-v span { font-size: 0.82rem; color: #5d5c4c; }
+
+/* Estaciones */
+.estaciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 12px; }
+.est { display: grid; gap: 4px; padding: 10px; border-radius: 12px; background: #fffaea; color: #2a2a22; box-shadow: inset 0 0 0 1px rgb(42 42 34 / 0.12); }
+.est.is-hoy { box-shadow: inset 0 0 0 2px #2f7d3b; }
+.est svg { width: 100%; height: auto; display: block; }
+.est b { font: 800 0.95rem/1.1 var(--titulo); font-stretch: 112%; }
+.est span { font-size: 0.8rem; color: #5d5c4c; }
+
+/* Letras */
+.letras { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 14px; }
+.letra { display: grid; gap: 10px; align-content: start; padding: 18px; border-radius: 14px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); min-width: 0; }
+.letra__muestra { font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.5rem); line-height: 0.98; letter-spacing: -0.02em; text-wrap: balance; }
+.letra__muestra em { font-style: normal; color: var(--acento); }
+.letra__dato { font-size: 0.86rem; color: var(--tinta-2); }
+.letra--a .letra__muestra { font-family: "Archivo", sans-serif; font-weight: 850; font-stretch: 125%; letter-spacing: -0.035em; }
+.letra--b .letra__muestra { font-family: "Bricolage Grotesque", sans-serif; font-weight: 750; font-variation-settings: "wdth" 85, "opsz" 96; letter-spacing: -0.03em; }
+.letra--c .letra__muestra { font-family: "Gloock", Georgia, serif; font-weight: 400; letter-spacing: -0.01em; }
+.letra__nombre { font: 700 0.75rem/1 var(--titulo); letter-spacing: 0.12em; text-transform: uppercase; color: var(--tinta-2); }
+
+/* Hilo conductor */
+.hilo { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; padding: 0; margin: 0; list-style: none; counter-reset: h; }
+.hilo li { display: grid; gap: 4px; align-content: start; padding: 16px; border-radius: 12px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.hilo b { font: 800 1rem/1.2 var(--titulo); font-stretch: 112%; }
+
+/* Preguntas */
+.grupo { display: grid; gap: 18px; padding: 20px; border-radius: 16px; background: var(--hoja-papel); box-shadow: inset 0 0 0 1px var(--linea); }
+.preguntas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 22px 32px; }
+.preg { display: grid; gap: 8px; align-content: start; margin: 0; padding: 0; border: 0; min-width: 0; }
+.preg legend, .preg > label { padding: 0; font-weight: 700; font-size: 1rem; line-height: 1.35; }
+.preg__num { display: inline-block; min-width: 1.9em; color: var(--acento); font: 800 0.9rem/1 var(--titulo); font-variant-numeric: tabular-nums; }
+.preg__ayuda { font-size: 0.85rem; color: var(--tinta-2); margin-top: -2px; }
+.opciones { display: grid; gap: 6px; }
+.opciones label { position: relative; }
+.opciones input { position: absolute; opacity: 0; pointer-events: none; }
+.opciones span { display: flex; align-items: flex-start; gap: 10px; padding: 9px 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); cursor: pointer; line-height: 1.35; }
+.opciones span::before { content: ""; flex: none; width: 14px; height: 14px; margin-top: 2px; border-radius: 50%; box-shadow: inset 0 0 0 2px var(--tinta-2); }
+.opciones.multi span::before { border-radius: 3px; }
+.opciones input:checked + span { background: var(--suave); box-shadow: inset 0 0 0 2px var(--acento); }
+.opciones input:checked + span::before { box-shadow: inset 0 0 0 4px var(--acento); }
+.opciones input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.escala { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.escala label { position: relative; }
+.escala input { position: absolute; opacity: 0; pointer-events: none; }
+.escala span { display: grid; place-items: center; height: 40px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--linea); font-weight: 800; font-variant-numeric: tabular-nums; cursor: pointer; }
+.escala input:checked + span { background: var(--acento); color: var(--sobre-acento); box-shadow: none; }
+.escala input:focus-visible + span { outline: 3px solid var(--acento); outline-offset: 2px; }
+.escala__fin { display: flex; justify-content: space-between; gap: 12px; font-size: 0.78rem; color: var(--tinta-2); }
+textarea { width: 100%; min-height: 76px; padding: 10px 12px; border: 0; border-radius: 10px; background: var(--fondo); box-shadow: inset 0 0 0 1px var(--linea); resize: vertical; }
+
+.envio { position: sticky; bottom: 0; z-index: 2; margin-top: 18px; background: var(--fondo); box-shadow: 0 -1px 0 var(--linea); padding-bottom: env(safe-area-inset-bottom, 0px); }
+.envio .envoltorio { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 18px; padding-block: 12px; }
+.envio__progreso { display: grid; gap: 4px; min-width: 200px; flex: 1; }
+.envio__progreso p { font-size: 0.85rem; color: var(--tinta-2); }
+.barra { height: 6px; border-radius: 3px; background: var(--linea); overflow: hidden; max-width: 360px; }
+.barra i { display: block; height: 100%; width: var(--p, 0%); background: var(--miel); transition: width 240ms; }
+.acciones { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { min-height: 42px; padding: 0 18px; border: 0; border-radius: 10px; font-weight: 700; cursor: pointer; background: var(--hoja-papel); box-shadow: inset 0 0 0 1.5px var(--tinta); }
+.btn--fuerte { background: var(--acento); color: var(--sobre-acento); box-shadow: none; }
+.btn[disabled] { opacity: 0.45; cursor: default; }
+.estado { font-size: 0.85rem; color: var(--tinta-2); }
+.estado.is-ok { color: var(--acento); font-weight: 700; }
+.copia { display: grid; gap: 8px; padding-block: 0 18px; }
+.copia textarea { min-height: 140px; font: 0.8rem/1.4 ui-monospace, "SF Mono", Menlo, monospace; }
+.pie { padding-block: 24px 40px; font-size: 0.85rem; color: var(--tinta-2); }
+</style>
+
+<header class="envoltorio cabeza">
+  <span class="rotulo">DonaTrack · tema huerta con abejas · ronda 2</span>
+  <h1>Tu huerta, lámina por lámina</h1>
+  <p class="bajada">Con tus respuestas y las tres referencias, esta ronda propone una dirección: láminas botánicas de línea, adultas y prolijas, con un enjambre chico de abejas que hace la logística. Probamos tres estilos de lámina, tres letras, cómo se ve una entrega y cómo cambia la huerta con las estaciones.</p>
+</header>
+
+<main id="formulario">
+  <section class="envoltorio parte" aria-labelledby="t-sint">
+    <header>
+      <span class="rotulo">Lo que entendí</span>
+      <h2 id="t-sint">La dirección, en seis puntos</h2>
+    </header>
+    <ul class="sintesis">
+      <li><b>Qué comunica</b>Confianza primero, después seriedad. Prolijo como un sistema, sin caridad lastimosa, sin juego infantil y sin marketing verde.</li>
+      <li><b>Para quién</b>Que una empresa lo use sin vergüenza en un reporte y que una entidad lo sienta propio. La persona que dona no se desmotiva: el tema está, pero adulto.</li>
+      <li><b>La metáfora</b>Cada donante tiene su huerta. Una entrega hace crecer una planta; una entrega fallida deja tierra seca, un cantero vacío.</li>
+      <li><b>Las abejas</b>Son la logística: depósito, camiones, la gente que lleva. Un enjambre chico, disperso, que vuela entre secciones.</li>
+      <li><b>El dibujo</b>Ilustración protagonista (5 de 5) en clave de lámina botánica minimalista y vectorial, con algo de sobre de semillas. Movimiento medio.</li>
+      <li><b>Las palabras</b>Semilla, cantero y fruto van en títulos y mensajes. Los datos usan nombres claros: donación, entrega, entidad.</li>
+    </ul>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-paleta">
+    <header>
+      <span class="rotulo">Parte 1 · paleta</span>
+      <h2 id="t-paleta">La paleta, con proporciones</h2>
+      <p>Quedan solo los colores que marcaste «va», más tu pedido de hoja, zanahoria y papel de cera. Para que no sea un colorinche, cada color tiene un trabajo y una cuota: el papel y la tinta hacen casi todo, y los colores fuertes aparecen poco y siempre con el mismo significado.</p>
+    </header>
+    <div class="paleta">
+      <div class="proporcion" id="proporcion" role="img" aria-label="Proporción de uso de cada color"></div>
+      <ul class="sobres" id="sobres"></ul>
+    </div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-lam">
+    <header>
+      <span class="rotulo">Parte 2 · prueba A/B/C</span>
+      <h2 id="t-lam">Tres estilos de lámina</h2>
+      <p>La misma idea dibujada tres veces, una por referencia, ya con la paleta nueva. La lámina sería la pieza que se repite en todo el sitio: el hero, la ficha de cada donación y el reporte de una empresa.</p>
+    </header>
+    <div class="laminas" id="laminas"></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-est">
+    <header>
+      <span class="rotulo">Parte 3 · estados</span>
+      <h2 id="t-est">Cómo se ve una entrega</h2>
+      <p>Pediste probar variantes para la entrega que llegó. Las tres crecen en loop; la cuarta es la entrega fallida, tierra seca y cantero vacío, sin dramatizar.</p>
+    </header>
+    <div class="estados" id="estados"></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-estac">
+    <header>
+      <span class="rotulo">Parte 4 · tiempo</span>
+      <h2 id="t-estac">La huerta en cuatro estaciones</h2>
+      <p>Estaciones del hemisferio sur. La página toma la del mes en curso y la huerta de cada donante muestra cómo le fue en cada una. Hoy es primavera.</p>
+    </header>
+    <div class="estaciones" id="estaciones"></div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-letras">
+    <header>
+      <span class="rotulo">Parte 5 · letra</span>
+      <h2 id="t-letras">Tres letras para los títulos</h2>
+      <p>El texto corrido sigue en DM Sans en las tres. Cambia solo la voz de los títulos.</p>
+    </header>
+    <div class="letras">
+      <div class="letra letra--a"><span class="letra__nombre">A · Archivo ancha (la actual)</span><p class="letra__muestra">Tu huerta creció <em>este mes.</em></p><p class="letra__dato">Grotesca argentina de afiche. Firme y legible de lejos; la más institucional de las tres.</p></div>
+      <div class="letra letra--b"><span class="letra__nombre">B · Bricolage Grotesque</span><p class="letra__muestra">Tu huerta creció <em>este mes.</em></p><p class="letra__dato">Grotesca con algo de rotulado a mano en las curvas. Más cálida sin volverse infantil.</p></div>
+      <div class="letra letra--c"><span class="letra__nombre">C · Gloock</span><p class="letra__muestra">Tu huerta creció <em>este mes.</em></p><p class="letra__dato">Serif de alto contraste, de libro de botánica. La que más se acerca a una lámina de herbario.</p></div>
+    </div>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-hilo">
+    <header>
+      <span class="rotulo">Parte 6 · hilo conductor</span>
+      <h2 id="t-hilo">Lo que une todo</h2>
+      <p>Propuesta para que el tema no sea decoración: una sola idea que se repite en cada pantalla.</p>
+    </header>
+    <ul class="hilo">
+      <li><b>Cada donación es una lámina</b><span>Con número, como una edición («Lámina 07 de tu huerta»), fecha y estación. La ficha de seguimiento es esa lámina.</span></li>
+      <li><b>La huerta es la colección</b><span>El panel de cada donante muestra sus láminas juntas: lo que creció, lo que está en camino y los canteros vacíos.</span></li>
+      <li><b>El enjambre traza el recorrido</b><span>Una línea punteada, el vuelo de las abejas, une depósito, camión y entidad. Es la misma línea que baja por el margen de esta página.</span></li>
+      <li><b>Para empresas, la lámina es el reporte</b><span>Una lámina por entrega, prolija y sobria, que se puede descargar y sumar a un informe de impacto.</span></li>
+    </ul>
+  </section>
+
+  <section class="envoltorio parte" aria-labelledby="t-preg">
+    <header>
+      <span class="rotulo">Parte 7 · tu opinión</span>
+      <h2 id="t-preg">Diez preguntas para la ronda 3</h2>
+    </header>
+    <div class="grupo"><div class="preguntas" id="preguntas"></div></div>
+  </section>
+</main>
+
+<section class="envio" aria-label="Guardar respuestas">
+  <div class="envoltorio">
+    <div class="envio__progreso">
+      <p id="progreso" aria-live="polite">0 de 10 respondidas</p>
+      <div class="barra"><i id="barra"></i></div>
+    </div>
+    <div class="acciones">
+      <span class="estado" id="estado" role="status"></span>
+      <button type="button" class="btn" id="ver-copia">Copiar como texto</button>
+      <button type="button" class="btn btn--fuerte" id="guardar">Guardar respuestas</button>
+    </div>
+  </div>
+  <div class="envoltorio copia" id="copia" hidden>
+    <label for="texto-copia" class="estado">Si no podés guardar desde acá, copiá esto y pegámelo en el chat.</label>
+    <textarea id="texto-copia" readonly></textarea>
+  </div>
+</section>
+
+<footer class="envoltorio pie">DonaTrack, UTN-FRBA, Diseño de Sistemas 2026. Ronda 2 del tema huerta con abejas, a partir de las respuestas de la ronda 1 y tres láminas de referencia.</footer>
+
+<script>
+const P = { papel: "#fbf2d3", claro: "#fffaea", tinta: "#2a2a22", albahaca: "#2f7d3b", hoja: "#86b832", brote: "#8fcb4a", miel: "#f6a609", paja: "#f4c844", zanahoria: "#ef7a16" };
+
+const TOKENS = [
+  ["papel", "Papel de cera", "Fondo de todas las pantallas", 52],
+  ["claro", "Panal claro", "Tarjetas y láminas", 18],
+  ["tinta", "Tinta", "Texto, líneas y contornos", 12],
+  ["albahaca", "Albahaca", "Botones y énfasis: lo que se puede tocar", 7],
+  ["hoja", "Hoja", "Las plantas: lo que creció", 5],
+  ["brote", "Brote", "Luz de las hojas y lo nuevo", 2],
+  ["miel", "Miel", "Solo las abejas: la logística", 2],
+  ["paja", "Paja", "Raíces, cinta, tierra seca", 1.5],
+  ["zanahoria", "Zanahoria", "Solo frutos y logros", 0.5]
+];
+
+const $ = (s, e = document) => e.querySelector(s);
+const el = (tag, attrs = {}, ...hijos) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v; else if (k === "style") n.style.cssText = v; else if (k === "html") n.innerHTML = v; else n.setAttribute(k, v);
+  }
+  for (const h of hijos) if (h != null) n.append(h);
+  return n;
+};
+
+/* Paleta */
+for (const [k, nombre, rol, pct] of TOKENS) {
+  $("#proporcion").append(el("i", { style: `--f:${pct};--c:${P[k]}`, title: `${nombre} ${pct}%` }));
+  $("#sobres").append(el("li", { class: "sobre" }, el("div", { class: "sobre__color", style: `--c:${P[k]}` }),
+    el("div", { class: "sobre__texto" }, el("span", { class: "sobre__nombre", text: nombre }), el("span", { class: "sobre__hex", text: P[k] }), el("span", { class: "sobre__rol", text: rol }), el("span", { class: "sobre__pct", text: `≈ ${pct} % de la pantalla` }))));
+}
+
+/* ===== Piezas de dibujo ===== */
+const abeja = (x, y, s = 1, ala = P.claro) => `<g class="ab"><g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="7" cy="-2" rx="3.6" ry="5" transform="rotate(-20 7 -2)" fill="${ala}" fill-opacity=".85" stroke="${P.tinta}" stroke-width=".8"/><ellipse cx="8" cy="5" rx="7" ry="5" fill="${P.miel}"/><path d="M5 .5c-1.4 2.6-1.4 6.4 0 9l2 .4c-1.4-3-1.4-6.4 0-9.6zM10 0c-1.4 3-1.4 7 0 10l2-.6c-1.2-2.6-1.2-6 0-8.8z" fill="${P.tinta}"/><circle cx="16" cy="4.4" r="3.2" fill="${P.tinta}"/></g></g>`;
+const ruido = (id, r, g, b, a = -7, c = 3.4, f = 0.9) => `<filter id="${id}" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="${f}" numOctaves="2" stitchTiles="stitch"/><feColorMatrix values="0 0 0 0 ${r} 0 0 0 0 ${g} 0 0 0 0 ${b} ${a} 0 0 0 ${c}"/></filter>`;
+const rgb = h => h.match(/\w\w/g).map(x => (parseInt(x, 16) / 255).toFixed(3));
+const HOJA_LARGA = "M0 0 C-20 -14 -22 -52 0 -72 C22 -52 20 -14 0 0Z";
+const VENAS = "M0 -2 V-66 M0 -16 L-13 -24 M0 -30 L-15 -40 M0 -44 L-12 -53 M0 -22 L13 -30 M0 -36 L14 -46 M0 -50 L9 -58";
+const TALLOS = ["M120 214 C116 176 106 146 90 118", "M120 214 C124 170 140 140 158 112", "M120 214 C121 170 122 130 120 84", "M120 214 C112 192 98 180 76 172", "M120 214 C130 194 146 184 168 178"];
+const POS = [[90, 118, -38], [158, 112, 36], [120, 84, 0]];
+const REDONDAS = [[76, 172, -60], [168, 178, 62], [104, 150, -30], [140, 142, 34]];
+
+/* 1 · Lámina de noche: línea clara sobre degradé granulado, vasija moteada */
+function laminaNoche() {
+  const [r, g, b] = rgb(P.claro);
+  const hojas = POS.map(([x, y, a]) => `<g transform="translate(${x} ${y}) rotate(${a})"><path d="${HOJA_LARGA}"/><path d="${VENAS}"/></g>`).join("");
+  return `<svg viewBox="0 0 240 300" role="img" aria-label="Estilo 1: planta de línea clara sobre fondo oscuro granulado, en una vasija moteada">
+  <defs><radialGradient id="n-fondo" cx=".5" cy=".7" r=".8"><stop offset="0" stop-color="#6b6a58"/><stop offset=".7" stop-color="${P.tinta}"/></radialGradient>${ruido("n-grano", r, g, b, -6, 3.1)}
+  <clipPath id="n-vasija"><path d="M120 212 C150 212 160 232 156 252 C152 272 134 280 120 280 C106 280 88 272 84 252 C80 232 90 212 120 212Z"/></clipPath></defs>
+  <rect width="240" height="300" fill="url(#n-fondo)"/><rect width="240" height="300" filter="url(#n-grano)" opacity=".28"/>
+  <ellipse cx="146" cy="284" rx="46" ry="7" fill="#000" opacity=".3"/>
+  <g fill="none" stroke="${P.claro}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${TALLOS.slice(0, 3).map(d => `<path d="${d}"/>`).join("")}${hojas}</g>
+  <path d="M120 212 C150 212 160 232 156 252 C152 272 134 280 120 280 C106 280 88 272 84 252 C80 232 90 212 120 212Z" fill="${P.claro}"/>
+  <g clip-path="url(#n-vasija)" fill="${P.tinta}"><path d="M96 226c6-5 13-1 11 5c-2 6-12 6-13 1z"/><path d="M128 220c5-2 10 2 8 6c-3 4-10 2-8-6z"/><path d="M140 240c7-3 12 3 9 8c-3 5-12 3-9-8z"/><path d="M104 248c4-3 9 0 8 5c-2 5-9 3-8-5zM88 262c6-2 9 3 6 7c-4 3-8 0-6-7z"/><path d="M120 262c6-4 13 0 10 6c-3 5-11 4-10-6z"/><path d="M146 262c4 0 6 4 3 7c-4 2-6-2-3-7z"/><circle cx="114" cy="234" r="2"/><circle cx="134" cy="254" r="2.4"/><circle cx="98" cy="240" r="1.6"/></g>
+  <path d="M154 238 C156 252 150 268 136 276" fill="none" stroke="#000" stroke-opacity=".18" stroke-width="10"/>
+  <path d="M40 70 C70 40 110 30 150 46 S200 70 214 52" fill="none" stroke="${P.claro}" stroke-width="1" stroke-dasharray="1 5" stroke-linecap="round" opacity=".7"/>
+  ${abeja(32, 64, 0.9, "#fffaea")}${abeja(150, 40, 0.75, "#fffaea")}${abeja(206, 46, 0.85, "#fffaea")}
+  </svg>`;
+}
+
+/* 2 · Riso de dos tintas: planta de línea en hoja, maceta hexagonal de tinta con pinceladas */
+function laminaRiso() {
+  const [r, g, b] = rgb(P.tinta);
+  const redondas = REDONDAS.map(([x, y, a]) => `<g transform="translate(${x} ${y}) rotate(${a})"><ellipse cx="0" cy="-15" rx="11" ry="15"/><path d="M0 0 V-28"/></g>`).join("");
+  const largas = POS.map(([x, y, a]) => `<g transform="translate(${x} ${y}) rotate(${a})"><ellipse cx="0" cy="-17" rx="12.5" ry="17"/><path d="M0 0 V-32"/></g>`).join("");
+  return `<svg viewBox="0 0 240 300" role="img" aria-label="Estilo 2: planta de línea verde en una maceta hexagonal negra con pinceladas, impresión de dos tintas">
+  <defs>${ruido("r-grano", r, g, b, -8, 3.6)}<filter id="r-aspero"><feTurbulence type="fractalNoise" baseFrequency=".06" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="7"/></filter>
+  <clipPath id="r-maceta"><path d="M92 212 H148 L164 244 L148 276 H92 L76 244Z"/></clipPath></defs>
+  <rect width="240" height="300" fill="${P.papel}"/><rect width="240" height="300" filter="url(#r-grano)" opacity=".16"/>
+  <g fill="none" stroke="${P.hoja}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${TALLOS.map(d => `<path d="${d}"/>`).join("")}<path d="M120 190 C112 168 106 160 104 150 M120 182 C128 164 136 152 140 142"/>${redondas}${largas}</g>
+  <ellipse cx="120" cy="281" rx="52" ry="6" fill="${P.tinta}" opacity=".18" filter="url(#r-grano)"/>
+  <path d="M92 212 H148 L164 244 L148 276 H92 L76 244Z" fill="${P.tinta}" filter="url(#r-aspero)"/>
+  <g clip-path="url(#r-maceta)" fill="${P.papel}" filter="url(#r-aspero)"><path d="M70 226 L120 214 L122 218 L74 232Z"/><path d="M90 244 L160 222 L162 228 L96 252Z"/><path d="M100 262 L170 240 L170 245 L106 268Z"/><path d="M78 260 L104 252 L105 255 L80 265Z"/><path d="M128 266 L168 256 L168 259 L130 270Z"/></g>
+  <circle cx="141" cy="150" r="5.5" fill="${P.zanahoria}"/>
+  <path d="M30 118 C60 90 80 96 96 76 S130 40 170 50 S206 80 218 64" fill="none" stroke="${P.tinta}" stroke-width="1" stroke-dasharray="1 5" stroke-linecap="round" opacity=".6"/>
+  ${abeja(24, 112, 0.85)}${abeja(92, 68, 0.7)}${abeja(208, 58, 0.8)}
+  <text x="16" y="292" font-family="ui-monospace, Menlo, monospace" font-size="8" fill="${P.tinta}" opacity=".7">07/50</text>
+  </svg>`;
+}
+
+/* 3 · Herbario de una tinta: varias plantas en albahaca, contornos y siluetas, sobre un cantero punteado */
+function laminaHerbario() {
+  const [r, g, b] = rgb(P.albahaca);
+  const A = P.albahaca;
+  let helecho = "";
+  for (let i = 0; i < 7; i++) { const y = -16 - i * 14; helecho += `<path d="M0 ${y} C-6 ${y - 2} -12 ${y - 1} -14 ${y - 7} C-8 ${y - 9} -3 ${y - 6} 0 ${y}Z M0 ${y - 4} C6 ${y - 6} 12 ${y - 5} 14 ${y - 11} C8 ${y - 13} 3 ${y - 10} 0 ${y - 4}Z"/>`; }
+  let semillas = "";
+  const ramas = [[-18, -70], [-8, -96], [6, -110], [18, -84], [26, -60]];
+  for (const [x, y] of ramas) { semillas += `<path d="M0 0 C${x / 3} ${y / 2} ${x} ${y + 10} ${x} ${y}" fill="none"/>`; for (let k = 0; k < 4; k++) { const a = (k - 1.5) * 0.55; semillas += `<path d="M${x} ${y} l${(Math.sin(a) * 9).toFixed(1)} ${(-Math.cos(a) * 9).toFixed(1)}" fill="none"/><circle cx="${(x + Math.sin(a) * 9).toFixed(1)}" cy="${(y - Math.cos(a) * 9).toFixed(1)}" r="2.6"/>`; } }
+  const brotes = [30, 100, 132, 176, 222].map((x, i) => `<path d="M${x} 252 v-${10 + (i % 2) * 6}" fill="none"/><circle cx="${x}" cy="${248 - 10 - (i % 2) * 6}" r="2.6" fill="none"/>`).join("");
+  return `<svg viewBox="0 0 240 300" role="img" aria-label="Estilo 3: herbario de una sola tinta verde, plantas en contorno y en silueta sobre un cantero de puntos">
+  <defs>${ruido("h-grano", r, g, b, -5, 2.6, 1.1)}<clipPath id="h-suelo"><path d="M6 258 Q120 232 234 258 V300 H6Z"/></clipPath></defs>
+  <rect width="240" height="300" fill="${P.papel}"/>
+  <g fill="none" stroke="${P.claro}" stroke-width="2.4"><path d="M30 120 C10 80 40 40 90 52 C130 62 140 20 190 34 C230 46 236 100 210 120"/><ellipse cx="44" cy="96" rx="18" ry="14"/><ellipse cx="200" cy="64" rx="16" ry="12"/></g>
+  <g stroke="${A}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(40 252)" fill="${A}"><path d="M0 0 C2 -40 -2 -80 4 -116" fill="none"/>${helecho}</g>
+    <g transform="translate(94 252)" fill="${P.papel}"><path d="M0 0 C-14 -40 -14 -110 -4 -150 C8 -110 8 -40 0 0Z" transform="rotate(-6)"/><path d="M-2 -6 L-6 -140" transform="rotate(-6)" fill="none"/><path d="M0 0 C-10 -30 -8 -84 4 -112 C14 -84 12 -30 0 0Z" transform="rotate(10)"/><path d="M0 -6 L4 -104" transform="rotate(10)" fill="none"/><path d="M0 0 C-10 -24 -10 -60 -2 -80 C8 -60 8 -24 0 0Z" transform="rotate(24)"/></g>
+    <g transform="translate(150 252)" fill="${A}"><path d="M0 0 V-40" fill="none"/>${semillas}</g>
+    <g transform="translate(196 252)"><path d="M0 0 C-30 -10 -36 -50 -18 -70 C-24 -84 -10 -100 4 -94 C10 -110 32 -104 30 -84 C44 -76 40 -46 24 -40 C30 -20 18 -6 0 0Z" fill="${A}"/><path d="M0 -2 C4 -30 6 -60 6 -90 M3 -30 L-16 -44 M5 -50 L-12 -66 M5 -40 L22 -52 M6 -64 L22 -78" fill="none" stroke="${P.papel}"/></g>
+    ${brotes}
+  </g>
+  <g clip-path="url(#h-suelo)"><rect width="240" height="300" filter="url(#h-grano)" opacity=".8"/></g>
+  <path d="M6 258 Q120 232 234 258" fill="none" stroke="${A}" stroke-width="2"/>
+  <path d="M18 150 C50 120 70 170 110 140 S170 110 226 130" fill="none" stroke="${P.tinta}" stroke-width="1" stroke-dasharray="1 5" stroke-linecap="round" opacity=".55"/>
+  ${abeja(12, 144, 0.75)}${abeja(108, 132, 0.7)}${abeja(214, 120, 0.8)}
+  </svg>`;
+}
+
+const LAMINAS = [
+  ["1", "Lámina de noche", "Referencia: maceta moteada sobre negro", laminaNoche, ["Línea clara sobre un degradé oscuro con grano.", "La más elegante; sirve para el hero y el pie.", "Riesgo: oscura para pantallas de trabajo."]],
+  ["2", "Riso de dos tintas", "Referencia: planta verde en maceta hexagonal", laminaRiso, ["Línea verde y una maceta de tinta con pinceladas.", "La maceta hexagonal guiña a la celda del panal.", "Numerada como una edición: 07/50."]],
+  ["3", "Herbario de una tinta", "Referencia: plantas azules sobre un montículo", laminaHerbario, ["Una sola tinta, contornos y siluetas mezclados.", "Las plantas crecen de un cantero punteado: la huerta.", "La más rica para escenas grandes y estaciones."]]
+];
+for (const [n, nombre, ref, dibujo, notas] of LAMINAS) {
+  const hoja = el("div", { class: "lam__hoja", html: dibujo() });
+  hoja.append(el("div", { class: "lam__pie" }, el("span", { text: `Lámina ${n.padStart(2, "0")} · Tu huerta` }), el("span", { text: "Primavera · nov. 2026" })));
+  $("#laminas").append(el("article", { class: "lam" }, el("div", { class: "lam__cab" }, el("span", { class: "lam__letra", text: n }), el("div", {}, el("h3", { text: nombre }), el("p", { class: "lam__ref", text: ref }))), hoja, el("ul", {}, ...notas.map(t => el("li", { text: t })))));
+}
+
+/* ===== Estados de una entrega ===== */
+const base = (extra, suelo = P.hoja) => `<svg viewBox="0 0 160 120" aria-hidden="true"><rect width="160" height="120" fill="${P.papel}"/><path d="M20 100 H140" stroke="${P.tinta}" stroke-width="1.5"/><g fill="none" stroke="${suelo}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M80 100 C79 80 81 62 80 46"/><g transform="translate(80 80) rotate(-50)"><ellipse cx="0" cy="-12" rx="8" ry="12"/><path d="M0 0 V-22"/></g><g transform="translate(80 70) rotate(48)"><ellipse cx="0" cy="-12" rx="8" ry="12"/><path d="M0 0 V-22"/></g></g>${extra}${abeja(118, 30, 0.7)}</svg>`;
+const ESTADOS = [
+  ["Crece", "Le sale una hoja nueva. La más sobria.", base(`<g class="crece" fill="none" stroke="${P.hoja}" stroke-width="2" stroke-linecap="round"><path d="M80 46 C80 38 81 32 80 26"/><g transform="translate(80 46) rotate(-8)"><ellipse cx="0" cy="-14" rx="9" ry="14"/><path d="M0 0 V-26"/></g></g>`)],
+  ["Da un fruto", "Aparece un fruto zanahoria. Se lee como logro.", base(`<g class="madura"><path d="M80 56 v6" stroke="${P.hoja}" stroke-width="2"/><circle cx="80" cy="69" r="7" fill="${P.zanahoria}"/></g>`)],
+  ["Florece", "Se abre una flor: la abeja tiene adónde ir.", base(`<g class="abre" transform="translate(80 40)">${[0, 72, 144, 216, 288].map(a => `<ellipse cx="0" cy="-8" rx="4.5" ry="8" transform="rotate(${a})" fill="${P.claro}" stroke="${P.tinta}" stroke-width="1"/>`).join("")}<circle r="4.5" fill="${P.miel}"/></g>`)],
+  ["Entrega fallida", "Tierra seca, cantero vacío y la hoja caída. Sin drama.", `<svg viewBox="0 0 160 120" aria-hidden="true"><rect width="160" height="120" fill="${P.papel}"/><rect x="28" y="70" width="104" height="30" fill="${P.paja}" fill-opacity=".4" stroke="${P.tinta}" stroke-width="1.5"/><path d="M40 80 l10 6 l-4 8 M70 76 l6 10 l10 -2 l4 10 M104 78 l-6 8 l8 6 M116 84 l8 -4" fill="none" stroke="${P.tinta}" stroke-width="1" stroke-linecap="round"/><path d="M80 70 C80 62 82 58 84 56" fill="none" stroke="${P.paja}" stroke-width="2" stroke-linecap="round"/><g transform="translate(96 68) rotate(100)"><ellipse cx="0" cy="-8" rx="5" ry="8" fill="none" stroke="${P.paja}" stroke-width="2"/></g><path d="M30 40 C60 20 90 40 118 30" fill="none" stroke="${P.tinta}" stroke-width="1" stroke-dasharray="1 5" opacity=".5"/>${abeja(118, 24, 0.7)}</svg>`]
+];
+for (const [t, d, svg] of ESTADOS) $("#estados").append(el("div", { class: "estado-v" }, el("div", { html: svg }), el("b", { text: t }), el("span", { text: d })));
+
+/* ===== Estaciones ===== */
+function estacion(hojaColor, extra, desnuda = false) {
+  const tallo = `<path d="M80 92 C79 74 81 58 80 40"/>`;
+  const hojas = desnuda ? "" : [[80, 74, -52], [80, 64, 50], [80, 52, -40], [80, 44, 30]].map(([x, y, a]) => `<g transform="translate(${x} ${y}) rotate(${a})"><ellipse cx="0" cy="-10" rx="7" ry="10" fill="${P.papel}"/><path d="M0 0 V-18"/></g>`).join("");
+  return `<svg viewBox="0 0 160 104" aria-hidden="true"><rect width="160" height="104" fill="${P.papel}"/><path d="M10 96 Q80 84 150 96" fill="none" stroke="${P.albahaca}" stroke-width="1.5"/><g fill="none" stroke="${hojaColor}" stroke-width="2" stroke-linecap="round">${tallo}${hojas}<path d="M40 94 v-10 M120 94 v-8"/></g>${extra}</svg>`;
+}
+const ESTACIONES = [
+  ["Primavera", "sep. a nov.", "Brotes y flores; llegan las primeras abejas.", estacion(P.hoja, `<circle cx="40" cy="81" r="3.5" fill="${P.miel}"/><circle cx="120" cy="83" r="3.5" fill="${P.miel}"/>${abeja(104, 20, 0.6)}${abeja(30, 40, 0.55)}`), true],
+  ["Verano", "dic. a feb.", "La planta llena, con frutos: lo entregado.", estacion(P.hoja, `<circle cx="66" cy="62" r="5" fill="${P.zanahoria}"/><circle cx="95" cy="52" r="5" fill="${P.zanahoria}"/>${abeja(112, 22, 0.6)}`)],
+  ["Otoño", "mar. a may.", "Hojas paja; algunas caen. Se cosecha.", estacion(P.paja, `<g transform="translate(112 92) rotate(80)"><ellipse cx="0" cy="-6" rx="4" ry="6" fill="none" stroke="${P.paja}" stroke-width="2"/></g>`)],
+  ["Invierno", "jun. a ago.", "Tallo desnudo y semillas: lo que viene.", estacion(P.tinta, `<g fill="${P.paja}" stroke="${P.tinta}" stroke-width=".8"><ellipse cx="54" cy="94" rx="2.4" ry="3.4"/><ellipse cx="104" cy="95" rx="2.4" ry="3.4"/><ellipse cx="128" cy="93" rx="2.4" ry="3.4"/></g>`, true)]
+];
+ESTACIONES.forEach(([n, m, d, svg, hoy], i) => $("#estaciones").append(el("div", { class: "est" + (i === 0 ? " is-hoy" : "") }, el("div", { html: svg }), el("b", { text: n + (i === 0 ? " · hoy" : "") }), el("span", { text: `${m} · ${d}` }))));
+
+/* ===== Preguntas ===== */
+const PREG = [
+  ["r_estilo", "¿Qué estilo de lámina seguimos?", "uno", ["1 · Lámina de noche", "2 · Riso de dos tintas", "3 · Herbario de una tinta", "Una mezcla (contame cuál en el comentario)"]],
+  ["r_letra", "¿Qué letra para los títulos?", "uno", ["A · Archivo ancha", "B · Bricolage Grotesque", "C · Gloock"]],
+  ["r_entrega", "¿Qué variantes de entrega te gustan? Podés marcar varias.", "multi", ["Crece: una hoja nueva", "Da un fruto", "Florece"]],
+  ["r_fallida", "La entrega fallida (tierra seca), ¿cómo se lee?", "uno", ["Bien: clara y sin drama", "Demasiado triste", "Demasiado sutil, no se nota que algo falló"]],
+  ["r_paleta", "¿La paleta con proporciones resuelve el colorinche?", "uno", ["Sí", "Casi: ajustaría algún color", "No todavía"]],
+  ["r_enjambre", "¿Cuántas abejas por pantalla?", "escala", ["Dos o tres", "Muchas, bien visibles"]],
+  ["r_estaciones", "¿Qué tan marcadas las estaciones?", "escala", ["Un detalle sutil", "Cambia toda la página"]],
+  ["r_hilo", "¿Te cierra el hilo conductor de las láminas numeradas?", "uno", ["Sí, seguimos por ahí", "Sí, pero cambiaría algo", "No, buscaría otro hilo"]],
+  ["r_empresa", "La lámina descargable como reporte para empresas, ¿suma?", "uno", ["Sí, es clave", "Interesante, pero después", "No hace falta"]],
+  ["r_libre", "¿Algo más para la ronda 3?", "texto"]
+];
+let numero = 0;
+function pregunta([id, texto, tipo, opc]) {
+  numero++;
+  const cab = [el("span", { class: "preg__num", text: String(numero).padStart(2, "0") }), texto];
+  if (tipo === "texto") return el("div", { class: "preg" }, el("label", { for: id }, ...cab), el("textarea", { id, name: id }));
+  const f = el("fieldset", { class: "preg" }, el("legend", {}, ...cab));
+  if (tipo === "escala") {
+    const e = el("div", { class: "escala" });
+    for (let i = 1; i <= 5; i++) e.append(el("label", {}, el("input", { type: "radio", name: id, id: `${id}_${i}`, value: String(i), "aria-label": `${i} de 5` }), el("span", { text: String(i) })));
+    f.append(e, el("div", { class: "escala__fin" }, el("span", { text: opc[0] }), el("span", { text: opc[1] })));
+  } else {
+    const o = el("div", { class: "opciones" + (tipo === "multi" ? " multi" : "") });
+    opc.forEach((t, i) => o.append(el("label", {}, el("input", { type: tipo === "multi" ? "checkbox" : "radio", name: id, id: `${id}_${i}`, value: t }), el("span", { text: t }))));
+    f.append(o);
+  }
+  f.append(el("textarea", { id: `${id}_nota`, name: `${id}_nota`, placeholder: "Comentario (opcional)", style: "min-height:44px" }));
+  return f;
+}
+PREG.forEach(q => $("#preguntas").append(pregunta(q)));
+
+function leer() {
+  const r = {};
+  for (const [id, , tipo] of PREG) {
+    if (tipo === "texto") { const t = $("#" + id).value.trim(); if (t) r[id] = t; continue; }
+    const m = [...document.querySelectorAll(`input[name="${id}"]:checked`)].map(i => tipo === "escala" ? Number(i.value) : i.value);
+    if (m.length) r[id] = tipo === "multi" ? m : m[0];
+    const nota = $(`#${id}_nota`)?.value.trim(); if (nota) r[id + "_nota"] = nota;
+  }
+  return r;
+}
+function aplicar(r) {
+  if (!r) return;
+  for (const [id, v] of Object.entries(r)) {
+    const t = document.getElementById(id); if (t && t.tagName === "TEXTAREA") { t.value = v; continue; }
+    for (const val of [].concat(v)) { const i = [...document.querySelectorAll(`input[name="${id}"]`)].find(x => x.value === String(val)); if (i) i.checked = true; }
+  }
+}
+function contar() {
+  const r = leer(); const hechas = PREG.filter(([id]) => r[id] != null).length;
+  $("#progreso").textContent = `${hechas} de ${PREG.length} respondidas`;
+  $("#barra").style.setProperty("--p", (hechas / PREG.length * 100) + "%");
+  return r;
+}
+function comoTexto(r) {
+  const l = ["Huerta con abejas · ronda 2", ""];
+  PREG.forEach(([id, texto], i) => { const v = r[id], n = r[id + "_nota"]; if (v == null && !n) return; l.push(`${i + 1}. ${texto}`); if (v != null) l.push(`   ${[].concat(v).join(" / ")}`); if (n) l.push(`   Nota: ${n}`); });
+  return l.join("\n");
+}
+const BORRADOR = "huerta-ronda-2";
+try { aplicar(JSON.parse(localStorage.getItem(BORRADOR) || "null")); } catch (e) {}
+contar();
+$("#formulario").addEventListener("input", () => {
+  const r = contar();
+  $("#estado").textContent = "Cambios sin guardar"; $("#estado").classList.remove("is-ok");
+  try { localStorage.setItem(BORRADOR, JSON.stringify(r)); } catch (e) {}
+  if (!$("#copia").hidden) $("#texto-copia").value = comoTexto(r);
+});
+$("#ver-copia").addEventListener("click", async () => {
+  const t = comoTexto(contar()); $("#copia").hidden = false; $("#texto-copia").value = t;
+  try { await navigator.clipboard.writeText(t); $("#estado").textContent = "Texto copiado"; } catch (e) { $("#texto-copia").select(); $("#estado").textContent = "Seleccioná el texto y copialo"; }
+});
+let db = null, uid = null;
+const guardar = $("#guardar"); guardar.disabled = true;
+(async () => {
+  try {
+    const [d, u] = await Promise.all([window.claude?.use?.("db"), window.claude?.use?.("user")]);
+    if (!d || !u) throw 0; uid = await u.id(); if (!uid) throw 0; db = d;
+    const snap = await db.doc("ronda2/" + uid).get();
+    let hayBorrador = false; try { hayBorrador = !!localStorage.getItem(BORRADOR); } catch (e) {}
+    if (snap.exists && !hayBorrador) { aplicar(snap.data().respuestas); contar(); }
+    guardar.disabled = false;
+    if (snap.exists) $("#estado").textContent = "Ya guardaste respuestas; podés cambiarlas";
+  } catch (e) { $("#estado").textContent = "No se puede guardar desde esta vista: usá «Copiar como texto»"; }
+})();
+guardar.addEventListener("click", async () => {
+  if (!db) return; guardar.disabled = true; $("#estado").textContent = "Guardando…";
+  try { await db.doc("ronda2/" + uid).set({ respuestas: contar(), guardado: new Date().toISOString() }); $("#estado").textContent = "Guardado. Avisame en el chat y sigo."; $("#estado").classList.add("is-ok"); }
+  catch (e) { $("#estado").textContent = "No se guardó (" + (e?.code || "error") + "). Usá «Copiar como texto»."; }
+  finally { guardar.disabled = false; }
+});
+</script>

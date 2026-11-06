@@ -29,7 +29,7 @@
              th:with="tot=${e.datos.total}, lle=${e.datos.entregadas}, cam=${e.datos.enCamino}, pro=${e.datos.enProceso}, cor=${e.datos.interrumpidas},
                       n=${(tot > 18 ? 18 : tot) + 1}, anillo=${n <= 1 ? 0 : (n <= 7 ? 1 : 2)}">
       <div class="ap__txt">
-        <h2 id="t-ap" class="ap__titulo"><b class="c-num" th:text="${tot}">7</b> <span th:text="${tot == 1} ? 'gota aportada' : 'gotas aportadas'">gotas aportadas</span></h2>
+        <h2 id="t-ap" class="ap__titulo"><b class="c-num" th:text="${tot}">7</b> <span th:text="${tot == 1} ? |${voc.unidad} ${voc.aportada}| : |${voc.unidades} ${voc.aportados}|">gotas aportadas</span></h2>
         <p class="ap__msg" th:text="${p.mensaje}">Tu última donación ya está en el depósito.</p>
       </div>
 
@@ -100,7 +100,7 @@
           </g>
           <use href="#h-hormiga" class="ap-bicho ap-bicho--lleva" x="248" y="92" width="34" height="26"/>
         </svg>
-        <p class="ap__pista">Tocá una celda para ver sus donaciones</p>
+        <p class="ap__pista" th:text="|Tocá ${plantas ? 'un cantero' : 'una celda'} para ver sus donaciones|">Tocá una celda para ver sus donaciones</p>
       </div>
 
       <!-- Tarjeta de la celda tocada: una por estado, con sus donaciones (código, bien, entidad y el aviso) -->
@@ -111,7 +111,7 @@
             <header class="ap-det__cab">
               <div>
                 <h3 th:text="${k == 'llego'} ? 'Ya llegaron' : (${k == 'camino'} ? 'En camino' : (${k == 'proceso'} ? 'En el depósito' : 'Sin entregar'))">En camino</h3>
-                <p th:text="${k == 'llego'} ? 'Cada una llenó una celda de miel.' : (${k == 'camino'} ? 'Salieron del depósito y van hacia su entidad.' : (${k == 'proceso'} ? 'Las recibimos; la celda se termina de armar cuando tienen destino.' : 'Esta vez no llegaron a destino. En cada una te contamos qué pasó.'))">Salieron del depósito.</p>
+                <p th:text="${k == 'llego'} ? (${plantas} ? 'Cada una ya dio su fruto.' : 'Cada una llenó una celda de miel.') : (${k == 'camino'} ? 'Salieron del depósito y van hacia su entidad.' : (${k == 'proceso'} ? 'Las recibimos; la celda se termina de armar cuando tienen destino.' : 'Esta vez no llegaron a destino. En cada una te contamos qué pasó.'))">Salieron del depósito.</p>
               </div>
               <button type="button" class="ap-det__cerrar" data-cerrar aria-label="Cerrar el detalle">×</button>
             </header>
@@ -125,7 +125,7 @@
               </li>
             </ul>
             <p class="ap-det__vacio" th:if="${lista.isEmpty()}"
-               th:text="${k == 'llego'} ? 'Todavía no llegó ninguna. Cuando llegue una, esta celda se llena de miel.' : (${k == 'camino'} ? 'No hay ninguna en camino ahora.' : (${k == 'proceso'} ? 'No hay ninguna esperando en el depósito.' : '¡Ninguna sin entregar! La celda sigue limpia.'))">No hay ninguna.</p>
+               th:text="${k == 'llego'} ? (${plantas} ? 'Todavía no llegó ninguna. Cuando llegue una, este cantero da su fruto.' : 'Todavía no llegó ninguna. Cuando llegue una, esta celda se llena de miel.') : (${k == 'camino'} ? 'No hay ninguna en camino ahora.' : (${k == 'proceso'} ? 'No hay ninguna esperando en el depósito.' : '¡Ninguna sin entregar! La celda sigue limpia.'))">No hay ninguna.</p>
           </section>
         </th:block>
       </div>

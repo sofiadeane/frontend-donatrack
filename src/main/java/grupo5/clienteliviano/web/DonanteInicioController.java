@@ -28,6 +28,13 @@ public class DonanteInicioController {
     return "donante/inicio-h";
   }
 
+  /** Inicio del donante con la variante K, "Huerta con abejas". */
+  @GetMapping("/donante/huerta")
+  public String inicioHuerta(HttpServletRequest request, Model model) {
+    sessionPort.actual(request).ifPresent(s -> model.addAttribute("panel", servicio.panel(s)));
+    return "donante/inicio-k";
+  }
+
   /** El tablero anterior (layout privado), para comparar. */
   @GetMapping({"/donante/anterior", "/donante/v1"})
   public String inicioAnterior(HttpServletRequest request, Model model) {
