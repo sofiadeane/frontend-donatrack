@@ -41,8 +41,8 @@
     <p class="k-vacio" th:if="${e.datos.laminas().isEmpty()}">Todavía no registraste donaciones. Cuando lo hagas, van a aparecer acá.</p>
     <div class="k-huerta-grilla" th:unless="${e.datos.laminas().isEmpty()}">
       <article class="k-lam" th:each="l, it : ${e.datos.laminas()}"
-               th:with="a=${l.aporte}, plantas=${ {'pilea','zanahoria','albahaca','banano','lechuga','olivo'} }">
-        <div class="k-lam__marco"><svg th:replace="~{fragments/lamina-k :: dibujo(${plantas[it.index % 6]}, ${l.estado})}"></svg></div>
+               th:with="a=${l.aporte}, plantas=${ {'naranjero','helecho','algodon','monstera'} }">
+        <div class="k-lam__marco"><svg th:replace="~{fragments/lamina-k :: dibujo(${plantas[it.index % 4]}, ${l.estado})}"></svg></div>
         <div class="k-lam__pie">
           <b th:text="${a.descripcion}">Arroz largo fino</b>
           <span th:text="${a.entidad != null} ? ${a.entidad} : ${a.detalle}">Comedor Los Girasoles</span>

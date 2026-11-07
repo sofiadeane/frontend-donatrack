@@ -1,14 +1,16 @@
 <!--
   Raíces de la variante K (ArbolRaices): la raíz principal baja desde el borde de la tierra (y = 0) hasta el nudo
   de origen; de él, una raíz por categoría, por subcategoría y por entidad.
-  Con brote, la plantita asoma sobre el borde y el contenedor (.k-raices--brote) se sube con margen negativo para
-  que quede sobre el papel. Sin brote (landing), lo que asoma es el árbol del paso 4 de Cómo funciona.
+  Con brote, el árbol del paso 4 asoma sobre el borde y el contenedor (.k-raices--brote) se sube con margen negativo
+  para que quede sobre el papel. Sin brote (landing), lo que asoma es el árbol del paso 4 de Cómo funciona.
 -->
 <div th:fragment="arbol(arbol, etiqueta, brote)" th:class="|k-raices k-anima${brote ? ' k-raices--brote' : ''}|"
      class="k-raices k-anima" th:style="|--ancho: ${arbol.ancho}|">
-  <svg th:attr="viewBox=${brote} ? |0 -64 ${arbol.ancho} ${arbol.alto + 64}| : |0 0 ${arbol.ancho} ${arbol.alto}|,aria-label=${etiqueta}"
-       viewBox="0 -64 600 394" role="img" focusable="false">
-    <use th:if="${brote}" class="k-raices__brote" href="#k-p-brote" th:attr="x=${arbol.ancho / 2 - 140}" y="-280" width="280" height="313.6"/>
+  <svg th:attr="viewBox=${brote} ? |0 -110 ${arbol.ancho} ${arbol.alto + 110}| : |0 0 ${arbol.ancho} ${arbol.alto}|,aria-label=${etiqueta}"
+       viewBox="0 -110 600 440" role="img" focusable="false">
+    <!-- El árbol del paso 4 (ilustración de Sofía), cortado en la línea del suelo: el tronco cae sobre la raíz principal. -->
+    <svg th:if="${brote}" class="k-raices__brote" th:attr="x=${arbol.ancho / 2 - 65.3}" y="-110" width="130.6" height="110.2"
+         viewBox="0 0 213.29 179.9"><use href="#k-como-4" width="213.29" height="251.65"/></svg>
     <path th:each="t : ${arbol.trazos}" th:attr="d=${t.d},pathLength=${t.enCamino} ? null : 1"
           th:class="|k-raiz k-raiz--${t.nivel}${t.enCamino ? ' k-raiz--camino' : ' k-raiz-dibujo'}|"/>
     <circle th:each="n : ${arbol.nudos}" th:attr="cx=${n.cx},cy=${n.cy},r=${n.r}"
